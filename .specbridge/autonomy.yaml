@@ -1,0 +1,29 @@
+version: 1
+
+profiles:
+  assisted:
+    description: Human approval required before implementation and merge.
+    ask_before_implementation: true
+    autonomous_merge: false
+    autonomous_staging_deploy: false
+    autonomous_production_deploy: false
+
+  vibe_autopilot:
+    description: Execute ordinary development work without step-by-step permission requests.
+    ask_before_implementation: false
+    autonomous_fix_validation_failures: true
+    autonomous_pull_request_updates: true
+    autonomous_merge: false
+    autonomous_staging_deploy: false
+    autonomous_production_deploy: false
+
+  full_autopilot:
+    description: Execute, validate, review, and merge automatically when all gates pass.
+    ask_before_implementation: false
+    autonomous_fix_validation_failures: true
+    autonomous_pull_request_updates: true
+    autonomous_merge: true
+    autonomous_staging_deploy: true
+    autonomous_production_deploy: false
+
+default_profile: vibe_autopilot

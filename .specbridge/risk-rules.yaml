@@ -1,0 +1,41 @@
+version: 1
+
+risk_levels:
+  low:
+    examples:
+      - documentation
+      - tests
+      - isolated_ui_change
+      - small_bugfix
+      - non_critical_refactor
+    autonomous_allowed: true
+
+  medium:
+    examples:
+      - business_logic
+      - api_endpoint
+      - integration_logic
+      - non_destructive_data_model_change
+    autonomous_allowed: true
+
+  high:
+    examples:
+      - authentication
+      - authorization
+      - infrastructure
+      - database_migration
+      - ci_cd_change
+    autonomous_allowed: false
+
+  critical:
+    examples:
+      - secrets
+      - billing
+      - destructive_database_operation
+      - production_data_deletion
+      - disabling_security_controls
+    autonomous_allowed: false
+
+classification_rule:
+  default_when_unclear: high
+  require_block_when_critical: true

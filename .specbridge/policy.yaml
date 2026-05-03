@@ -1,0 +1,63 @@
+version: 1
+
+project:
+  name: specbridge
+  methodology: spec_driven_development
+  default_mode: vibe_autopilot
+  default_branch: main
+
+execution:
+  ask_before_ordinary_steps: false
+  continue_until_complete_or_blocked: true
+  fix_validation_failures_automatically: true
+  require_execution_contract: true
+
+security:
+  protected_files:
+    - .env
+    - .env.*
+    - '**/*.pem'
+    - '**/*.key'
+    - '**/*secret*'
+    - 'secrets/**'
+    - 'infra/prod/**'
+
+  blocked_commands:
+    - 'rm -rf *'
+    - 'sudo *'
+    - 'curl * | bash'
+    - 'chmod -R *'
+    - 'docker system prune *'
+
+  stop_conditions:
+    - secret_access_required
+    - destructive_database_change
+    - production_config_change
+    - billing_change
+    - auth_security_change
+    - ci_cd_security_change
+    - policy_conflict
+    - impossible_acceptance_criteria
+
+quality_gates:
+  require_lint: true
+  require_typecheck: true
+  require_tests: true
+  require_build: true
+  require_policy_validation: true
+  require_codex_review: true
+
+merge:
+  autonomous_merge_enabled: false
+  minimum_conditions:
+    - ci_passed
+    - tests_passed
+    - no_policy_violation
+    - no_protected_files_changed
+    - codex_review_passed
+
+deployment:
+  staging:
+    automatic: false
+  production:
+    automatic: false
