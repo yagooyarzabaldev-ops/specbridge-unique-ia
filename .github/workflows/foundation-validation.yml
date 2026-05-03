@@ -1,0 +1,21 @@
+name: Foundation Validation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-foundation:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run foundation validation
+        shell: pwsh
+        run: ./scripts/validate-foundation.ps1
