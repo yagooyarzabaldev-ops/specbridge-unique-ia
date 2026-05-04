@@ -1,0 +1,101 @@
+name: SpecBridge Task
+description: Create a controlled SpecBridge execution task.
+title: "[SPEC] "
+labels:
+  - specbridge:task
+  - needs:triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to define a task that can later be converted into an execution contract for Claude Code.
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What should be achieved?
+      placeholder: Define the expected result clearly.
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Provide only distilled, task-relevant context. Do not paste raw ChatGPT conversations.
+      placeholder: Relevant product, architecture, or implementation context.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: autonomy_profile
+    attributes:
+      label: Autonomy Profile
+      description: Select how autonomous the execution should be.
+      options:
+        - assisted
+        - vibe_autopilot
+        - full_autopilot
+      default: 1
+    validations:
+      required: true
+
+  - type: dropdown
+    id: risk_level
+    attributes:
+      label: Expected Risk Level
+      description: Initial risk classification. If unclear, choose high.
+      options:
+        - low
+        - medium
+        - high
+        - critical
+      default: 2
+    validations:
+      required: true
+
+  - type: textarea
+    id: allowed_scope
+    attributes:
+      label: Allowed Scope
+      description: Files, directories, or areas the agent may modify.
+      placeholder: Example: docs/**, specs/**, .specbridge/**
+    validations:
+      required: true
+
+  - type: textarea
+    id: blocked_scope
+    attributes:
+      label: Blocked Scope
+      description: Files, directories, or areas the agent must not modify.
+      placeholder: Example: .env, secrets/**, infra/prod/**
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria
+      description: Define measurable completion criteria.
+      placeholder: List concrete pass/fail criteria.
+    validations:
+      required: true
+
+  - type: textarea
+    id: validations
+    attributes:
+      label: Required Validations
+      description: Define validation commands or checks.
+      placeholder: Example: powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1
+    validations:
+      required: true
+
+  - type: textarea
+    id: final_report
+    attributes:
+      label: Expected Final Report
+      description: Define what the final report must include.
+      placeholder: Summary, changed files, validations, policy result, risks, status.
+    validations:
+      required: true
