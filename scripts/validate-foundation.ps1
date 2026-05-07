@@ -40,13 +40,46 @@ foreach ($file in $requiredFiles) {
   }
 }
 
-$mdFiles = Get-ChildItem -Recurse -Filter *.md
+$mdFiles = Get-ChildItem -Recurse -Filter *.md |
+  Where-Object {
+    $_.FullName -notmatch "\\.git\\"
+  }
 
 foreach ($file in $mdFiles) {
   $count = (Select-String -Path $file.FullName -Pattern '^```').Count
   if ($count % 2 -ne 0) {
     Write-Output "FAIL unbalanced markdown fences: $($file.FullName) fences=$count"
     $failed = $true
+  }
+}
+
+$markdownEscapeRules = @(
+  @{
+    Name = "escaped markdown heading marker"
+    Pattern = '^\s*\\#'
+  },
+  @{
+    Name = "escaped markdown list marker"
+    Pattern = '^\s*\\-'
+  },
+  @{
+    Name = "escaped identifier underscore"
+    Pattern = '[A-Za-z0-9]\\_[A-Za-z0-9]'
+  },
+  @{
+    Name = "escaped wildcard marker"
+    Pattern = '\\\*'
+  }
+)
+
+foreach ($file in $mdFiles) {
+  foreach ($rule in $markdownEscapeRules) {
+    $matches = Select-String -Path $file.FullName -Pattern $rule.Pattern -ErrorAction SilentlyContinue
+
+    foreach ($match in $matches) {
+      Write-Output "FAIL accidental markdown escaping: $($file.FullName):$($match.LineNumber) rule=$($rule.Name) text=$($match.Line.Trim())"
+      $failed = $true
+    }
   }
 }
 
@@ -70,7 +103,7 @@ foreach ($path in $blockedImplementationPaths) {
 $blockedImplementationFiles = Get-ChildItem -Recurse -File -Include *.ts,*.tsx,*.js,*.mjs,*.cjs,*.py,*.go,*.rs,*.java,*.cs,*.sql -ErrorAction SilentlyContinue |
   Where-Object {
     $_.FullName -notmatch "\\.git\\" -and
-    $_.FullName -notmatch "\\scripts\\" 
+    $_.FullName -notmatch "\\scripts\\"
   }
 
 foreach ($file in $blockedImplementationFiles) {
