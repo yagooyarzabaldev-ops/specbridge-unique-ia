@@ -1,0 +1,17 @@
+name: Codex Review Example
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  codex-review-example:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Example only
+        run: echo "Codex review workflow is not active yet."

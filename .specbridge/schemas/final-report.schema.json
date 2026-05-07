@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specbridge.local/schemas/final-report.schema.json",
+  "title": "SpecBridge Final Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "summary",
+    "changed_files",
+    "validations",
+    "policy_result",
+    "risk_result",
+    "completion_status"
+  ],
+  "properties": {
+    "summary": {
+      "type": "string"
+    },
+    "changed_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "validations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "policy_result": {
+      "type": "string"
+    },
+    "risk_result": {
+      "type": "string"
+    },
+    "unresolved_risks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "merge_status": {
+      "type": "string"
+    },
+    "deployment_status": {
+      "type": "string"
+    },
+    "completion_status": {
+      "type": "string"
+    }
+  }
+}
