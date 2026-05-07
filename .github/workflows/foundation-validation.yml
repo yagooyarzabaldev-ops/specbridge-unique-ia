@@ -19,3 +19,7 @@ jobs:
       - name: Run foundation validation
         shell: pwsh
         run: ./scripts/validate-foundation.ps1
+
+      - name: Run contract validation
+        shell: pwsh
+        run: ./scripts/validate-contracts.ps1
