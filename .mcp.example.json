@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "specbridge-github": {
+      "command": "node",
+      "args": [
+        "./mcp/specbridge-github-server.js"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}",
+        "SPECBRIDGE_REPOSITORY": "${SPECBRIDGE_REPOSITORY}"
+      }
+    },
+    "specbridge-contracts": {
+      "command": "node",
+      "args": [
+        "./mcp/specbridge-contracts-server.js"
+      ],
+      "env": {
+        "SPECBRIDGE_API_TOKEN": "${SPECBRIDGE_API_TOKEN}"
+      }
+    }
+  }
+}
