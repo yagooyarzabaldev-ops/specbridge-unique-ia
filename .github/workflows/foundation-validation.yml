@@ -23,3 +23,7 @@ jobs:
       - name: Run contract validation
         shell: pwsh
         run: ./scripts/validate-contracts.ps1
+
+      - name: Run schema validation
+        shell: pwsh
+        run: ./scripts/validate-schemas.ps1
