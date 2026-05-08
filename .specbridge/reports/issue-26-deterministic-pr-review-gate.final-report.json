@@ -1,0 +1,24 @@
+{
+  "summary": "Added deterministic PR review gate for SpecBridge foundation-phase governance.",
+  "changed_files": [
+    "scripts/validate-review-gate.ps1",
+    ".github/workflows/specbridge-review-gate.yml",
+    "docs/specbridge-review-gate.md",
+    ".specbridge/contracts/issue-26-deterministic-pr-review-gate.execution.md",
+    ".specbridge/reports/issue-26-deterministic-pr-review-gate.final-report.json"
+  ],
+  "validations": [
+    "validate-foundation",
+    "validate-contracts",
+    "validate-schemas",
+    "validate-final-reports",
+    "specbridge-smoke",
+    "validate-review-gate"
+  ],
+  "policy_result": "No secrets, production config, deployment automation, runtime application code, MCP implementation, or live Claude/Codex workflow activation.",
+  "risk_result": "Low risk. Deterministic governance validation only.",
+  "unresolved_risks": [],
+  "merge_status": "pending_pr",
+  "deployment_status": "not_applicable",
+  "completion_status": "pending_merge"
+}

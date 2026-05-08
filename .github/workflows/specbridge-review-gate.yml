@@ -1,0 +1,20 @@
+name: SpecBridge Review Gate
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  review-gate:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run deterministic review gate
+        shell: pwsh
+        run: ./scripts/validate-review-gate.ps1
