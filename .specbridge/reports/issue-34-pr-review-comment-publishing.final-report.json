@@ -1,0 +1,29 @@
+{
+  "summary": "Added deterministic PR review report comment rendering and publishing.",
+  "changed_files": [
+    "scripts/render-pr-review-comment.ps1",
+    "scripts/publish-pr-review-comment.ps1",
+    ".github/workflows/specbridge-pr-review-report.yml",
+    "docs/specbridge-pr-review-comment-publishing.md",
+    ".specbridge/contracts/issue-34-pr-review-comment-publishing.execution.md",
+    ".specbridge/reports/issue-34-pr-review-comment-publishing.final-report.json"
+  ],
+  "validations": [
+    "validate-foundation",
+    "validate-contracts",
+    "validate-schemas",
+    "validate-final-reports",
+    "validate-pr-review-reports",
+    "specbridge-smoke",
+    "validate-review-gate",
+    "generate-pr-review-report",
+    "validate-generated-pr-review-report",
+    "render-pr-review-comment"
+  ],
+  "policy_result": "No user secrets, production config, deployment automation, runtime application code, MCP implementation, or live Claude/Codex workflow activation.",
+  "risk_result": "Low risk. Deterministic PR comment publishing using GitHub Actions token only.",
+  "unresolved_risks": [],
+  "merge_status": "pending_pr",
+  "deployment_status": "not_applicable",
+  "completion_status": "pending_merge"
+}

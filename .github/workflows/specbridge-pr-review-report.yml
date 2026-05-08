@@ -5,6 +5,11 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
 jobs:
   generate-pr-review-report:
     runs-on: windows-latest
@@ -23,9 +28,21 @@ jobs:
         shell: pwsh
         run: ./scripts/validate-pr-review-reports.ps1 -ReportsPath .specbridge/generated-review-reports
 
+      - name: Render PR review comment
+        shell: pwsh
+        run: ./scripts/render-pr-review-comment.ps1
+
+      - name: Publish PR review comment
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: ./scripts/publish-pr-review-comment.ps1
+
       - name: Upload PR review report artifact
         uses: actions/upload-artifact@v4
         with:
           name: specbridge-pr-review-report
-          path: .specbridge/generated-review-reports/*.review-report.json
+          path: |
+            .specbridge/generated-review-reports/*.review-report.json
+            .specbridge/generated-review-reports/*.md
           if-no-files-found: error
