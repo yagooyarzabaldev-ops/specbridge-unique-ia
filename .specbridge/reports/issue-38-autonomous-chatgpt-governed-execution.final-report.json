@@ -1,0 +1,39 @@
+{
+  "summary": "Added autonomous ChatGPT-governed Claude execution protocol for SpecBridge.",
+  "changed_files": [
+    ".specbridge/context/chatgpt-developer-role.md",
+    ".specbridge/context/claude-code-executor-role.md",
+    ".specbridge/context/autonomy-policy.md",
+    ".specbridge/context/escalation-policy.md",
+    ".specbridge/context/audit-packet-standard.md",
+    ".claude/commands/specbridge-execute.md",
+    ".claude/commands/specbridge-escalate.md",
+    ".claude/rules/specbridge-autonomous-execution.md",
+    "docs/specbridge-chatgpt-governed-execution.md",
+    "scripts/validate-autonomous-execution-protocol.ps1",
+    "scripts/specbridge-smoke.ps1",
+    ".github/workflows/foundation-validation.yml",
+    ".specbridge/contracts/issue-38-autonomous-chatgpt-governed-execution.execution.md",
+    ".specbridge/reports/issue-38-autonomous-chatgpt-governed-execution.final-report.json"
+  ],
+  "validations": [
+    "validate-foundation",
+    "validate-contracts",
+    "validate-schemas",
+    "validate-final-reports",
+    "validate-pr-review-reports",
+    "validate-claude-review-workflow",
+    "validate-autonomous-execution-protocol",
+    "specbridge-smoke",
+    "validate-review-gate"
+  ],
+  "policy_result": "No secrets, production deployment, runtime application code, autonomous merge, autonomous push to main, or MCP implementation.",
+  "risk_result": "Medium risk because it formalizes autonomy, mitigated by contract boundaries, escalation policy, validation, audit packets, and human final merge ownership.",
+  "unresolved_risks": [
+    "Future implementation must ensure Claude Code actually consumes these commands and rules inside Antigravity.",
+    "Future versions may need stronger machine validation of escalation artifacts."
+  ],
+  "merge_status": "pending_pr",
+  "deployment_status": "not_applicable",
+  "completion_status": "pending_merge"
+}

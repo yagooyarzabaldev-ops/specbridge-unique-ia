@@ -40,6 +40,10 @@ jobs:
         shell: pwsh
         run: ./scripts/validate-claude-review-workflow.ps1
 
+      - name: Run autonomous execution protocol validation
+        shell: pwsh
+        run: ./scripts/validate-autonomous-execution-protocol.ps1
+
       - name: Run SpecBridge smoke validation
         shell: pwsh
         run: ./scripts/specbridge-smoke.ps1
