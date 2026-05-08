@@ -1,0 +1,31 @@
+name: SpecBridge PR Review Report
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  generate-pr-review-report:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate deterministic PR review report
+        shell: pwsh
+        run: ./scripts/generate-pr-review-report.ps1
+
+      - name: Validate generated PR review report
+        shell: pwsh
+        run: ./scripts/validate-pr-review-reports.ps1 -ReportsPath .specbridge/generated-review-reports
+
+      - name: Upload PR review report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: specbridge-pr-review-report
+          path: .specbridge/generated-review-reports/*.review-report.json
+          if-no-files-found: error

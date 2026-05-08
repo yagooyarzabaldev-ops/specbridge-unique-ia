@@ -1,8 +1,11 @@
+param(
+  [string] $ReportsPath = ".specbridge/review-reports"
+)
+
 $ErrorActionPreference = "Stop"
 
 Write-Output "SpecBridge PR review report validation started."
 
-$reportsPath = ".specbridge/review-reports"
 $schemaPath = ".specbridge/schemas/claude-review-output.schema.json"
 $failed = $false
 
@@ -11,15 +14,15 @@ if (-not (Test-Path $schemaPath)) {
   exit 1
 }
 
-if (-not (Test-Path $reportsPath)) {
-  Write-Output "FAIL missing review reports directory: $reportsPath"
+if (-not (Test-Path $ReportsPath)) {
+  Write-Output "FAIL missing review reports directory: $ReportsPath"
   exit 1
 }
 
-$reportFiles = Get-ChildItem $reportsPath -Filter "*.review-report.json" -File
+$reportFiles = Get-ChildItem $ReportsPath -Filter "*.review-report.json" -File
 
 if ($reportFiles.Count -le 0) {
-  Write-Output "FAIL no PR review report files found in $reportsPath"
+  Write-Output "FAIL no PR review report files found in $ReportsPath"
   exit 1
 }
 

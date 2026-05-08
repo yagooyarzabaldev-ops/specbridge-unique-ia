@@ -1,0 +1,28 @@
+{
+  "summary": "Added deterministic PR review report generator workflow.",
+  "changed_files": [
+    "scripts/generate-pr-review-report.ps1",
+    "scripts/validate-pr-review-reports.ps1",
+    ".github/workflows/specbridge-pr-review-report.yml",
+    "docs/specbridge-pr-review-report-generator.md",
+    ".specbridge/contracts/issue-32-pr-review-report-generator.execution.md",
+    ".specbridge/reports/issue-32-pr-review-report-generator.final-report.json"
+  ],
+  "validations": [
+    "validate-foundation",
+    "validate-contracts",
+    "validate-schemas",
+    "validate-final-reports",
+    "validate-pr-review-reports",
+    "specbridge-smoke",
+    "validate-review-gate",
+    "generate-pr-review-report",
+    "validate-generated-pr-review-report"
+  ],
+  "policy_result": "No secrets, production config, deployment automation, runtime application code, MCP implementation, or live Claude/Codex workflow activation.",
+  "risk_result": "Low risk. Deterministic CI artifact generation only.",
+  "unresolved_risks": [],
+  "merge_status": "pending_pr",
+  "deployment_status": "not_applicable",
+  "completion_status": "pending_merge"
+}
