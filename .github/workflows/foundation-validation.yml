@@ -27,3 +27,7 @@ jobs:
       - name: Run schema validation
         shell: pwsh
         run: ./scripts/validate-schemas.ps1
+
+      - name: Run SpecBridge smoke validation
+        shell: pwsh
+        run: ./scripts/specbridge-smoke.ps1
