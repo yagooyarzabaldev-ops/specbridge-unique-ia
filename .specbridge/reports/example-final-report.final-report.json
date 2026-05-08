@@ -1,0 +1,21 @@
+{
+  "summary": "Example final report demonstrating the SpecBridge completion evidence format.",
+  "changed_files": [
+    "scripts/validate-final-reports.ps1",
+    "docs/specbridge-final-report-standard.md",
+    ".specbridge/reports/example-final-report.final-report.json"
+  ],
+  "validations": [
+    "validate-foundation: passed",
+    "validate-contracts: passed",
+    "validate-schemas: passed",
+    "validate-final-reports: passed",
+    "specbridge-smoke: passed"
+  ],
+  "policy_result": "No blocked scope modified. No secrets, deployment automation, runtime application code, MCP implementation, or live agent execution activated.",
+  "risk_result": "Low risk. Documentation, validation, and governance artifact only.",
+  "unresolved_risks": [],
+  "merge_status": "not_merged_yet",
+  "deployment_status": "not_applicable",
+  "completion_status": "completed"
+}

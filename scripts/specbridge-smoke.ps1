@@ -8,7 +8,8 @@ Set-Location $repoRoot
 $validationScripts = @(
   "./scripts/validate-foundation.ps1",
   "./scripts/validate-contracts.ps1",
-  "./scripts/validate-schemas.ps1"
+  "./scripts/validate-schemas.ps1",
+  "./scripts/validate-final-reports.ps1"
 )
 
 foreach ($script in $validationScripts) {
