@@ -1,0 +1,17 @@
+{
+  "schema_version": "1",
+  "reviewer": "specbridge-deterministic-review",
+  "summary": "Sample machine-readable PR review report used to validate the review report format before live AI review automation is activated.",
+  "findings": [
+    {
+      "severity": "info",
+      "category": "governance",
+      "file": "docs/specbridge-pr-review-report-standard.md",
+      "line": null,
+      "evidence": "Documentation-only controlled artifact for review report standardization.",
+      "recommendation": "Keep report artifacts machine-readable and schema-conformant.",
+      "blocking": false
+    }
+  ],
+  "result": "pass"
+}

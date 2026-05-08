@@ -1,0 +1,27 @@
+{
+  "summary": "Added deterministic validation for machine-readable PR review report artifacts.",
+  "changed_files": [
+    "scripts/validate-pr-review-reports.ps1",
+    "docs/specbridge-pr-review-report-standard.md",
+    ".specbridge/review-reports/example-pr-review.review-report.json",
+    ".specbridge/contracts/issue-30-pr-review-report-validation.execution.md",
+    ".specbridge/reports/issue-30-pr-review-report-validation.final-report.json",
+    ".github/workflows/foundation-validation.yml",
+    "scripts/specbridge-smoke.ps1"
+  ],
+  "validations": [
+    "validate-foundation",
+    "validate-contracts",
+    "validate-schemas",
+    "validate-final-reports",
+    "validate-pr-review-reports",
+    "specbridge-smoke",
+    "validate-review-gate"
+  ],
+  "policy_result": "No secrets, production config, deployment automation, runtime application code, MCP implementation, or live Claude/Codex workflow activation.",
+  "risk_result": "Low risk. Deterministic review artifact validation only.",
+  "unresolved_risks": [],
+  "merge_status": "pending_pr",
+  "deployment_status": "not_applicable",
+  "completion_status": "pending_merge"
+}

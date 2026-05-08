@@ -32,6 +32,10 @@ jobs:
         shell: pwsh
         run: ./scripts/validate-final-reports.ps1
 
+      - name: Run PR review report validation
+        shell: pwsh
+        run: ./scripts/validate-pr-review-reports.ps1
+
       - name: Run SpecBridge smoke validation
         shell: pwsh
         run: ./scripts/specbridge-smoke.ps1
