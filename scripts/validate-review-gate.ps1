@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Stop"
 
 Write-Output "SpecBridge PR review gate started."
 
@@ -28,6 +28,12 @@ $blockedWorkflowActivationPatterns = @(
   "claude-code-execute.example",
   "codex-review.example"
 )
+
+$approvedWorkflowSecrets = @{
+  ".github/workflows/claude-review-non-blocking.yml" = @(
+    "ANTHROPIC_API_KEY"
+  )
+}
 
 function Get-ChangedFiles {
   $candidates = @()
@@ -82,8 +88,24 @@ foreach ($changedFile in $changedFiles) {
       }
     }
 
-    if ($workflowContent -match "\$\{\{\s*secrets\.") {
-      Write-Output "FAIL workflow uses secrets in review-gated phase: $normalizedPath"
+    $secretMatches = [regex]::Matches($workflowContent, "\$\{\{\s*secrets\.([A-Za-z0-9_]+)\s*\}\}")
+
+    foreach ($secretMatch in $secretMatches) {
+      $secretName = $secretMatch.Groups[1].Value
+      $allowedSecrets = @()
+
+      if ($approvedWorkflowSecrets.ContainsKey($normalizedPath)) {
+        $allowedSecrets = $approvedWorkflowSecrets[$normalizedPath]
+      }
+
+      if ($allowedSecrets -notcontains $secretName) {
+        Write-Output "FAIL workflow uses unapproved secret in review-gated phase: $normalizedPath secret=$secretName"
+        $failed = $true
+      }
+    }
+
+    if ($workflowContent -match "contents:\s+write") {
+      Write-Output "FAIL workflow requests contents write permission during review-gated phase: $normalizedPath"
       $failed = $true
     }
   }
@@ -96,4 +118,3 @@ if ($failed) {
 
 Write-Output "SpecBridge PR review gate passed."
 exit 0
-

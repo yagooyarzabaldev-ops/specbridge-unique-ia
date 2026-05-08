@@ -1,0 +1,74 @@
+name: Claude Review Non Blocking
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  claude-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    continue-on-error: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect Anthropic API key
+        id: claude_secret
+        shell: bash
+        env:
+          HAS_ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+        run: |
+          echo "available=${HAS_ANTHROPIC_API_KEY}" >> "$GITHUB_OUTPUT"
+
+      - name: Record Claude review skip
+        if: steps.claude_secret.outputs.available != 'true'
+        shell: bash
+        run: |
+          {
+            echo "## Claude Review Non Blocking"
+            echo ""
+            echo "Claude review skipped because ANTHROPIC_API_KEY is not configured."
+            echo ""
+            echo "This is non-blocking by design."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Run Claude non-blocking PR review
+        if: steps.claude_secret.outputs.available == 'true'
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ github.token }}
+          prompt: |
+            Review this pull request as a non-blocking SpecBridge reviewer.
+
+            Scope:
+            - Review only.
+            - Do not edit files.
+            - Do not create commits.
+            - Do not push branches.
+            - Do not merge pull requests.
+            - Do not deploy.
+            - Do not request production secrets.
+            - Focus on contract compliance, blocked-scope violations, validation gaps, and security risks.
+
+            Output:
+            - Leave review feedback as PR comments when useful.
+            - Treat findings as advisory unless they identify explicit blocked-scope or security violations.
+          claude_args: |
+            --max-turns 3

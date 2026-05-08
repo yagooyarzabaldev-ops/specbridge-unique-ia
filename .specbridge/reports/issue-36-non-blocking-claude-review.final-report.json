@@ -1,0 +1,32 @@
+{
+  "summary": "Added non-blocking Claude review workflow for pull requests.",
+  "changed_files": [
+    ".github/workflows/claude-review-non-blocking.yml",
+    ".github/workflows/foundation-validation.yml",
+    "scripts/validate-claude-review-workflow.ps1",
+    "scripts/validate-review-gate.ps1",
+    "scripts/specbridge-smoke.ps1",
+    "docs/specbridge-non-blocking-claude-review.md",
+    ".specbridge/contracts/issue-36-non-blocking-claude-review.execution.md",
+    ".specbridge/reports/issue-36-non-blocking-claude-review.final-report.json"
+  ],
+  "validations": [
+    "validate-foundation",
+    "validate-contracts",
+    "validate-schemas",
+    "validate-final-reports",
+    "validate-pr-review-reports",
+    "validate-claude-review-workflow",
+    "specbridge-smoke",
+    "validate-review-gate"
+  ],
+  "policy_result": "No contents write permission, deployment automation, runtime application code, MCP implementation, automatic merge, or automatic push.",
+  "risk_result": "Medium risk because this introduces live AI review when ANTHROPIC_API_KEY is configured; constrained to non-blocking review-only behavior.",
+  "unresolved_risks": [
+    "Requires ANTHROPIC_API_KEY repository secret for live Claude execution.",
+    "Provider availability and API cost are external dependencies."
+  ],
+  "merge_status": "pending_pr",
+  "deployment_status": "not_applicable",
+  "completion_status": "pending_merge"
+}
