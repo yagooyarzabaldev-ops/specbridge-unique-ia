@@ -10,8 +10,8 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 
 - Date: 2026-05-20
 - Environment: local PowerShell workspace
-- Branch: `codex/local-specbridge-cli`
-- Scope: Local SpecBridge CLI for the first file-backed runtime surface
+- Branch: `codex/controlled-implementation-pilot`
+- Scope: Controlled implementation pilot for the local SpecBridge CLI
 
 ## Results
 
@@ -26,6 +26,7 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 | ChatGPT audit validation | passed |
 | Security gate validation | passed |
 | Local CLI validation | passed |
+| Controlled implementation pilot CLI feature | passed |
 | PR review report validation | passed |
 | Claude review workflow validation | passed |
 | Autonomous execution protocol validation | passed |
@@ -62,6 +63,7 @@ The negative validation suite verifies:
 - protected path change fails with the expected security category
 - production configuration path fails with the expected security category
 - local CLI status command passes
+- local CLI status latest artifacts command passes
 - local CLI validation command passes
 - local CLI contract generation passes and validates
 - local CLI final report generation passes and validates
@@ -75,7 +77,7 @@ The negative validation suite verifies:
 
 ## Policy Result
 
-Passed. The change adds the local file-backed CLI, CLI validation fixtures, smoke coverage, documentation, context updates, an execution contract, a scope manifest, audit evidence, audit packet evidence, and a final report only. It does not add secrets, production configuration, deployment automation, billing, hosted dashboard implementation, MCP server implementation, GitHub App implementation, branch protection weakening, dependency installation, or CI/CD security weakening.
+Passed. The change adds a small controlled CLI feature, CLI validation coverage, documentation, context updates, an execution contract, a scope manifest, audit evidence, audit packet evidence, and a final report only. It does not add secrets, production configuration, deployment automation, billing, hosted dashboard implementation, MCP server implementation, GitHub App implementation, database schema implementation, authentication implementation, authorization implementation, branch protection weakening, dependency installation, or CI/CD security weakening.
 
 ## Unresolved Risks
 

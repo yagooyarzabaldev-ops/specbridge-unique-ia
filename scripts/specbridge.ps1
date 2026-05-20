@@ -21,6 +21,7 @@ param(
   [string] $RiskResult = "",
   [string] $CompletionStatus = "draft",
   [string] $Profile = "standard",
+  [switch] $IncludeLatestArtifacts,
   [switch] $Force
 )
 
@@ -222,6 +223,42 @@ function Get-FileCount {
   return @(Get-ChildItem -LiteralPath $Path -Filter $Filter -File).Count
 }
 
+function Get-LatestArtifactPath {
+  param(
+    [string] $Path,
+    [string] $Filter
+  )
+
+  if (-not (Test-Path -LiteralPath $Path)) {
+    return $null
+  }
+
+  $file = Get-ChildItem -LiteralPath $Path -Filter $Filter -File |
+    ForEach-Object {
+      $issueNumber = -1
+
+      if ($_.Name -match "^issue-(\d+)") {
+        $issueNumber = [int] $Matches[1]
+      }
+
+      [pscustomobject]@{
+        File = $_
+        IssueNumber = $issueNumber
+        Name = $_.Name
+      }
+    } |
+    Sort-Object `
+      @{ Expression = "IssueNumber"; Descending = $true },
+      @{ Expression = "Name"; Descending = $true } |
+    Select-Object -First 1 -ExpandProperty File
+
+  if ($null -eq $file) {
+    return $null
+  }
+
+  return Normalize-RepoPath -Path (Join-Path $Path $file.Name) -FieldName "latest_artifact"
+}
+
 function Get-GitValue {
   param(
     [string[]] $Arguments,
@@ -271,6 +308,16 @@ function Invoke-StatusCommand {
       chatgpt_audits = Get-FileCount -Path ".specbridge/audits" -Filter "*.chatgpt-audit.json"
     }
     current_goal_path = ".specbridge/context/CURRENT_GOAL.md"
+  }
+
+  if ($IncludeLatestArtifacts) {
+    $status["latest_artifacts"] = [ordered]@{
+      contract = Get-LatestArtifactPath -Path ".specbridge/contracts" -Filter "*.execution.md"
+      scope = Get-LatestArtifactPath -Path ".specbridge/scopes" -Filter "*.scope.json"
+      final_report = Get-LatestArtifactPath -Path ".specbridge/reports" -Filter "*.final-report.json"
+      audit_packet = Get-LatestArtifactPath -Path ".specbridge/audit-packets" -Filter "*.audit-packet.json"
+      chatgpt_audit = Get-LatestArtifactPath -Path ".specbridge/audits" -Filter "*.chatgpt-audit.json"
+    }
   }
 
   Write-CliJson $status

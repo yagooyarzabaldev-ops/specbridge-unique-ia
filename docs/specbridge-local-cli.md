@@ -24,7 +24,7 @@ specbridge status
 
 | Command | Purpose | Writes files |
 | --- | --- | --- |
-| `status` | Prints repository status, policy mode, branch, commit, and artifact counts as JSON. | No |
+| `status` | Prints repository status, policy mode, branch, commit, artifact counts, and optionally latest artifact paths as JSON. | No |
 | `validate` | Runs deterministic validation profiles. | No |
 | `create-contract` | Creates a draft execution contract at a declared contract path. | Yes |
 | `create-report` | Creates a final report JSON at a declared report path. | Yes |
@@ -44,6 +44,18 @@ specbridge status
 | `smoke` | Runs `scripts/specbridge-smoke.ps1`. |
 
 The default profile is `standard`.
+
+## Status Latest Artifacts
+
+`status` accepts `-IncludeLatestArtifacts`.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 status -IncludeLatestArtifacts
+```
+
+When enabled, the JSON output includes `latest_artifacts` with the newest known contract, scope, final report, audit packet, and ChatGPT audit paths.
+
+The selection is deterministic: artifact names that begin with `issue-<number>` are ordered by issue number first, then by file name.
 
 ## Artifact Commands
 
@@ -102,6 +114,7 @@ The CLI rejects duplicate `exclusive_write` paths inside the decomposition.
 `scripts/test-specbridge-cli.ps1` verifies:
 
 - `status`
+- `status -IncludeLatestArtifacts`
 - `validate`
 - `create-contract`
 - `create-report`

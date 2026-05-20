@@ -1,0 +1,202 @@
+﻿{
+    "schema_version":  "1",
+    "task_id":  "issue-053-controlled-implementation-pilot",
+    "generated_by":  "specbridge-audit-packet-generator",
+    "execution_contract_path":  ".specbridge/contracts/issue-053-controlled-implementation-pilot.execution.md",
+    "changed_files":  [
+                          ".specbridge/audit-packets/issue-053-controlled-implementation-pilot.audit-packet.json",
+                          ".specbridge/audits/issue-053-controlled-implementation-pilot.chatgpt-audit.json",
+                          ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                          ".specbridge/context/CURRENT_GOAL.md",
+                          ".specbridge/contracts/issue-053-controlled-implementation-pilot.execution.md",
+                          ".specbridge/reports/issue-053-controlled-implementation-pilot.final-report.json",
+                          ".specbridge/scopes/issue-053-controlled-implementation-pilot.scope.json",
+                          "docs/specbridge-autonomy-backlog.md",
+                          "docs/specbridge-controlled-implementation-pilot.md",
+                          "docs/specbridge-local-cli.md",
+                          "docs/specbridge-test-matrix.md",
+                          "docs/specbridge-test-results.md",
+                          "scripts/specbridge.ps1",
+                          "scripts/test-specbridge-cli.ps1",
+                          "specs/004-acceptance-tests.md"
+                      ],
+    "diff_summary":  [
+                         {
+                             "file":  ".specbridge/audit-packets/issue-053-controlled-implementation-pilot.audit-packet.json",
+                             "added_lines":  202,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/audits/issue-053-controlled-implementation-pilot.chatgpt-audit.json",
+                             "added_lines":  79,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                             "added_lines":  42,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/CURRENT_GOAL.md",
+                             "added_lines":  1,
+                             "deleted_lines":  1
+                         },
+                         {
+                             "file":  ".specbridge/contracts/issue-053-controlled-implementation-pilot.execution.md",
+                             "added_lines":  166,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/reports/issue-053-controlled-implementation-pilot.final-report.json",
+                             "added_lines":  47,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/scopes/issue-053-controlled-implementation-pilot.scope.json",
+                             "added_lines":  33,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-autonomy-backlog.md",
+                             "added_lines":  6,
+                             "deleted_lines":  2
+                         },
+                         {
+                             "file":  "docs/specbridge-controlled-implementation-pilot.md",
+                             "added_lines":  53,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-local-cli.md",
+                             "added_lines":  14,
+                             "deleted_lines":  1
+                         },
+                         {
+                             "file":  "docs/specbridge-test-matrix.md",
+                             "added_lines":  2,
+                             "deleted_lines":  2
+                         },
+                         {
+                             "file":  "docs/specbridge-test-results.md",
+                             "added_lines":  5,
+                             "deleted_lines":  3
+                         },
+                         {
+                             "file":  "scripts/specbridge.ps1",
+                             "added_lines":  47,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/test-specbridge-cli.ps1",
+                             "added_lines":  5,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "specs/004-acceptance-tests.md",
+                             "added_lines":  6,
+                             "deleted_lines":  0
+                         }
+                     ],
+    "validation_commands":  [
+                                "git diff --check",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 status -IncludeLatestArtifacts",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-autonomous-execution-protocol.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-claude-review-workflow.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-pr-review-reports.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-schemas.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1"
+                            ],
+    "validation_results":  [
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 status -IncludeLatestArtifacts",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-schemas.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-pr-review-reports.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-claude-review-workflow.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-autonomous-execution-protocol.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "git diff --check",
+                                   "result":  "passed"
+                               }
+                           ],
+    "final_report_path":  ".specbridge/reports/issue-053-controlled-implementation-pilot.final-report.json",
+    "ci_status":  "pending",
+    "pr_review_report_path":  null,
+    "policy_result":  "Passed. Scope is limited to a small local CLI status feature, CLI test coverage, documentation, context updates, contract, scope manifest, audit packet, audit artifact, and final report artifacts.",
+    "unresolved_risks":  [
+                             "CI evidence is pending until the branch is pushed and GitHub checks run."
+                         ],
+    "completion_status":  "complete_pending_ci",
+    "source_files":  [
+                         ".specbridge/contracts/issue-053-controlled-implementation-pilot.execution.md",
+                         ".specbridge/reports/issue-053-controlled-implementation-pilot.final-report.json"
+                     ],
+    "secret_omission":  "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

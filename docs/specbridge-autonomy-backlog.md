@@ -171,6 +171,10 @@ Goal:
 
 Run a real small implementation through the intended product loop.
 
+Status:
+
+Implemented as the first small CLI feature pilot. `scripts/specbridge.ps1 status -IncludeLatestArtifacts` now reports the newest known contract, scope, final report, audit packet, and ChatGPT audit paths, with test coverage and audit evidence.
+
 Flow:
 
 1. ChatGPT defines spec and acceptance criteria.
@@ -249,8 +253,8 @@ Acceptance:
 
 ## Current Next Task
 
-After the Local SpecBridge CLI is merged, start with the Controlled Implementation Pilot.
+After the Controlled Implementation Pilot is merged, start with the Multi-Agent Pilot.
 
 Reason:
 
-The CLI now exposes the repository-first governance loop through deterministic local commands. The next product proof is a small controlled implementation pilot that runs through ChatGPT/Codex intent, SpecBridge contract and gates, Claude Code implementation, CI, ChatGPT audit, final report, and automatic merge.
+The controlled pilot proves the single-executor loop with a small real implementation. The next product proof is parallel execution: multiple Claude Code executor sessions inside Antigravity, each bound to a non-overlapping SpecBridge contract, with coordinator evidence and integration review.

@@ -140,6 +140,11 @@ try {
       -ExpectedPattern '"command"\s*:\s*"status"'
 
     Assert-Success `
+      -Name "status-latest-artifacts" `
+      -Result (Invoke-Cli -Arguments @("status", "-IncludeLatestArtifacts")) `
+      -ExpectedPattern '"latest_artifacts"'
+
+    Assert-Success `
       -Name "validate-standard" `
       -Result (Invoke-Cli -Arguments @("validate", "-Profile", "standard")) `
       -ExpectedPattern '"ok"\s*:\s*true'

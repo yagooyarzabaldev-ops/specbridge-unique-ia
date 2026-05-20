@@ -1,0 +1,33 @@
+{
+  "contract_id": "issue-053-controlled-implementation-pilot",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/audit-packets/issue-053-controlled-implementation-pilot.audit-packet.json",
+    ".specbridge/audits/issue-053-controlled-implementation-pilot.chatgpt-audit.json",
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-053-controlled-implementation-pilot.execution.md",
+    ".specbridge/reports/issue-053-controlled-implementation-pilot.final-report.json",
+    ".specbridge/scopes/issue-053-controlled-implementation-pilot.scope.json",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-controlled-implementation-pilot.md",
+    "docs/specbridge-local-cli.md",
+    "docs/specbridge-test-matrix.md",
+    "docs/specbridge-test-results.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "specs/004-acceptance-tests.md"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    "docs/specbridge-v4-product-contract.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-052-local-specbridge-cli"
+  ],
+  "final_report": ".specbridge/reports/issue-053-controlled-implementation-pilot.final-report.json"
+}

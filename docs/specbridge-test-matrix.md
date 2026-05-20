@@ -51,7 +51,7 @@ Out of scope:
 | ST-P006 | Audit Packets | `./scripts/validate-audit-packets.ps1` | Audit packets contain required evidence fields, repository-relative paths, validation summaries, CI status, policy result, and no raw/sensitive content fields. |
 | ST-P007 | ChatGPT Audits | `./scripts/validate-chatgpt-audits.ps1` | ChatGPT audit artifacts contain required outcomes, checked dimensions, file-referenced findings, and merge-blocking semantics. |
 | ST-P008 | Security Gate | `./scripts/validate-security-gates.ps1` | Current changed files do not cross protected security categories. |
-| ST-P009 | Local CLI | `./scripts/test-specbridge-cli.ps1` | The local CLI supports every required command and deterministic failure behavior. |
+| ST-P009 | Local CLI | `./scripts/test-specbridge-cli.ps1` | The local CLI supports every required command, `status -IncludeLatestArtifacts`, and deterministic failure behavior. |
 | ST-P010 | PR Review Reports | `./scripts/validate-pr-review-reports.ps1` | PR review report artifacts are valid. |
 | ST-P011 | Claude Review Workflow | `./scripts/validate-claude-review-workflow.ps1` | Claude review workflow guardrails are present. |
 | ST-P012 | Autonomous Protocol | `./scripts/validate-autonomous-execution-protocol.ps1` | Autonomous execution protocol guardrails are present. |
@@ -92,7 +92,7 @@ Out of scope:
 | ST-F002 | Audit Packets | Generate an audit packet from a fixture contract and final report, then validate it. | Audit packet validation passes. |
 | ST-F003 | ChatGPT Audits | Add a valid approved audit artifact with all required dimensions. | ChatGPT audit validation passes. |
 | ST-F004 | Security Gate | Add safe documentation in a temporary Git repo. | Security gate validation passes. |
-| ST-F005 | Local CLI | Run `status`, `validate`, `create-contract`, `create-report`, `audit-packet`, `decompose-task`, `detect-conflicts`, and `review-gate` in a temporary copy. | CLI validation passes and generated artifacts validate. |
+| ST-F005 | Local CLI | Run `status`, `status -IncludeLatestArtifacts`, `validate`, `create-contract`, `create-report`, `audit-packet`, `decompose-task`, `detect-conflicts`, and `review-gate` in a temporary copy. | CLI validation passes and generated artifacts validate. |
 
 ## Required Command
 

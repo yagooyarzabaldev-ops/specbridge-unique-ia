@@ -144,3 +144,9 @@ scripts/validate-security-gates.ps1 exists, scripts/specbridge-smoke.ps1 include
 Pass condition:
 
 scripts/specbridge.ps1 exists and supports `status`, `validate`, `create-contract`, `create-report`, `audit-packet`, `detect-conflicts`, `decompose-task`, and `review-gate`; commands have deterministic exit codes; artifact commands use declared repository-relative output paths; commands do not require secrets; scripts/test-specbridge-cli.ps1 covers every command; and scripts/specbridge-smoke.ps1 runs the CLI validation suite.
+
+### AT-022 - Controlled implementation pilot exists
+
+Pass condition:
+
+docs/specbridge-controlled-implementation-pilot.md exists; scripts/specbridge.ps1 `status` supports `-IncludeLatestArtifacts`; the output includes deterministic latest contract, scope, final report, audit packet, and ChatGPT audit paths; scripts/test-specbridge-cli.ps1 covers the feature; and issue 053 contract, scope, final report, audit packet, and ChatGPT audit artifacts validate.

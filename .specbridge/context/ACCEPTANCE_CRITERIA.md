@@ -283,3 +283,45 @@ scripts/test-specbridge-cli.ps1 covers every CLI command.
 ### AC-065
 
 scripts/specbridge-smoke.ps1 runs the CLI validation suite.
+
+## Controlled Implementation Pilot Acceptance Criteria
+
+### AC-066
+
+docs/specbridge-controlled-implementation-pilot.md exists and records the first small implementation pilot after the local CLI.
+
+### AC-067
+
+scripts/specbridge.ps1 `status` supports `-IncludeLatestArtifacts`.
+
+### AC-068
+
+`status -IncludeLatestArtifacts` returns a `latest_artifacts` JSON object containing contract, scope, final report, audit packet, and ChatGPT audit paths.
+
+### AC-069
+
+Latest artifact selection is deterministic and orders `issue-<number>` artifact names by issue number before file name.
+
+### AC-070
+
+scripts/test-specbridge-cli.ps1 covers `status -IncludeLatestArtifacts`.
+
+### AC-071
+
+.specbridge/contracts/issue-053-controlled-implementation-pilot.execution.md exists and defines the pilot goal, scope, validations, stop conditions, merge policy, deployment policy, and final report requirements.
+
+### AC-072
+
+.specbridge/reports/issue-053-controlled-implementation-pilot.final-report.json exists and validates against the final report validator.
+
+### AC-073
+
+.specbridge/audit-packets/issue-053-controlled-implementation-pilot.audit-packet.json exists and validates against the audit packet validator.
+
+### AC-074
+
+.specbridge/audits/issue-053-controlled-implementation-pilot.chatgpt-audit.json exists and validates against the ChatGPT audit validator.
+
+### AC-075
+
+The controlled implementation pilot does not add secrets, production configuration, deployment automation, billing, hosted dashboard implementation, MCP server implementation, GitHub App implementation, database schema implementation, authentication implementation, authorization implementation, dependency installation, CI/CD permission escalation, or CI/CD security weakening.
