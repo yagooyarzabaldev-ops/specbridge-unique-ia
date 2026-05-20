@@ -150,3 +150,9 @@ scripts/specbridge.ps1 exists and supports `status`, `validate`, `create-contrac
 Pass condition:
 
 docs/specbridge-controlled-implementation-pilot.md exists; scripts/specbridge.ps1 `status` supports `-IncludeLatestArtifacts`; the output includes deterministic latest contract, scope, final report, audit packet, and ChatGPT audit paths; scripts/test-specbridge-cli.ps1 covers the feature; and issue 053 contract, scope, final report, audit packet, and ChatGPT audit artifacts validate.
+
+### AT-023 - Multi-agent pilot exists
+
+Pass condition:
+
+docs/specbridge-multi-agent-pilot.md exists; issue 054 multi-agent decomposition exists; Agent A, Agent B, and Agent C each have their own execution contract, scope manifest, output artifact, and final report; scripts/test-specbridge-multi-agent-pilot.ps1 proves three disjoint slices and duplicate write-scope rejection; coordinator integration report, final report, audit packet, and ChatGPT audit artifacts validate; and scripts/specbridge-smoke.ps1 runs the multi-agent pilot validation.

@@ -325,3 +325,41 @@ scripts/test-specbridge-cli.ps1 covers `status -IncludeLatestArtifacts`.
 ### AC-075
 
 The controlled implementation pilot does not add secrets, production configuration, deployment automation, billing, hosted dashboard implementation, MCP server implementation, GitHub App implementation, database schema implementation, authentication implementation, authorization implementation, dependency installation, CI/CD permission escalation, or CI/CD security weakening.
+
+## Multi-Agent Pilot Acceptance Criteria
+
+### AC-076
+
+docs/specbridge-multi-agent-pilot.md exists and records the first file-backed multi-agent pilot.
+
+### AC-077
+
+.specbridge/decompositions/issue-054-multi-agent-pilot.decomposition.json exists and declares Agent A, Agent B, and Agent C slices.
+
+### AC-078
+
+Each pilot agent has its own execution contract.
+
+### AC-079
+
+Each pilot agent has its own contract scope manifest with non-overlapping write ownership.
+
+### AC-080
+
+scripts/test-specbridge-multi-agent-pilot.ps1 verifies a successful three-agent decomposition and deterministic duplicate write-scope rejection.
+
+### AC-081
+
+scripts/specbridge-smoke.ps1 runs the multi-agent pilot validation suite.
+
+### AC-082
+
+Each pilot agent produces a final report artifact.
+
+### AC-083
+
+The coordinator produces an integration report, final report, audit packet, and ChatGPT audit artifact.
+
+### AC-084
+
+The multi-agent pilot remains repository-first and does not launch live executor sessions, create product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, touch production, or access secrets.

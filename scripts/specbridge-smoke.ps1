@@ -18,6 +18,7 @@ $validationScripts = @(
   "./scripts/validate-claude-review-workflow.ps1",
   "./scripts/validate-autonomous-execution-protocol.ps1",
   "./scripts/test-specbridge-cli.ps1",
+  "./scripts/test-specbridge-multi-agent-pilot.ps1",
   "./scripts/test-specbridge-negative-validations.ps1"
 )
 

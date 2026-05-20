@@ -12,7 +12,7 @@ Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test
 
 Execute the autonomy backlog in `docs/specbridge-autonomy-backlog.md`.
 
-The Controlled Implementation Pilot is now the active completion target. After it is merged, the next recommended task is the Multi-Agent Pilot.
+The Multi-Agent Pilot is now the active completion target. After it is merged, the next recommended task is live Antigravity executor orchestration.
 
 ## Completion Condition
 

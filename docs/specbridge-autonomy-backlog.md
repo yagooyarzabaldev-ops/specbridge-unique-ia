@@ -199,6 +199,10 @@ Goal:
 
 Prove that several Claude Code executor sessions can work in parallel under SpecBridge governance.
 
+Status:
+
+Implemented as a file-backed pilot with three executor contracts, non-overlapping scope manifests, per-agent final reports, coordinator integration evidence, and deterministic decomposition tests. Live parallel Antigravity sessions remain future runtime work.
+
 Pilot shape:
 
 - Agent A: implementation slice
@@ -253,8 +257,8 @@ Acceptance:
 
 ## Current Next Task
 
-After the Controlled Implementation Pilot is merged, start with the Multi-Agent Pilot.
+After the Multi-Agent Pilot is merged, start live Antigravity executor orchestration.
 
 Reason:
 
-The controlled pilot proves the single-executor loop with a small real implementation. The next product proof is parallel execution: multiple Claude Code executor sessions inside Antigravity, each bound to a non-overlapping SpecBridge contract, with coordinator evidence and integration review.
+The file-backed multi-agent pilot proves decomposition, scopes, per-agent reports, conflict detection, and coordinator evidence. The next product proof is running the same structure through separate Antigravity Claude Code sessions and branch-level PRs.

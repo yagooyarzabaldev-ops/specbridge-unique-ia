@@ -20,6 +20,7 @@ In scope:
 - ChatGPT audit artifacts
 - security review gates
 - local CLI commands
+- multi-agent decomposition pilot
 - schemas
 - final reports
 - PR review reports
@@ -52,11 +53,12 @@ Out of scope:
 | ST-P007 | ChatGPT Audits | `./scripts/validate-chatgpt-audits.ps1` | ChatGPT audit artifacts contain required outcomes, checked dimensions, file-referenced findings, and merge-blocking semantics. |
 | ST-P008 | Security Gate | `./scripts/validate-security-gates.ps1` | Current changed files do not cross protected security categories. |
 | ST-P009 | Local CLI | `./scripts/test-specbridge-cli.ps1` | The local CLI supports every required command, `status -IncludeLatestArtifacts`, and deterministic failure behavior. |
-| ST-P010 | PR Review Reports | `./scripts/validate-pr-review-reports.ps1` | PR review report artifacts are valid. |
-| ST-P011 | Claude Review Workflow | `./scripts/validate-claude-review-workflow.ps1` | Claude review workflow guardrails are present. |
-| ST-P012 | Autonomous Protocol | `./scripts/validate-autonomous-execution-protocol.ps1` | Autonomous execution protocol guardrails are present. |
-| ST-P013 | Review Gate | `./scripts/validate-review-gate.ps1` | Current changed files do not touch blocked paths or blocked workflow permissions. |
-| ST-P014 | Smoke | `./scripts/specbridge-smoke.ps1` | The deterministic validation chain passes. |
+| ST-P010 | Multi-Agent Pilot | `./scripts/test-specbridge-multi-agent-pilot.ps1` | Three-agent decomposition passes, generated write scopes are disjoint, and duplicate write scopes fail before execution. |
+| ST-P011 | PR Review Reports | `./scripts/validate-pr-review-reports.ps1` | PR review report artifacts are valid. |
+| ST-P012 | Claude Review Workflow | `./scripts/validate-claude-review-workflow.ps1` | Claude review workflow guardrails are present. |
+| ST-P013 | Autonomous Protocol | `./scripts/validate-autonomous-execution-protocol.ps1` | Autonomous execution protocol guardrails are present. |
+| ST-P014 | Review Gate | `./scripts/validate-review-gate.ps1` | Current changed files do not touch blocked paths or blocked workflow permissions. |
+| ST-P015 | Smoke | `./scripts/specbridge-smoke.ps1` | The deterministic validation chain passes. |
 
 ## Negative Tests
 
@@ -93,6 +95,7 @@ Out of scope:
 | ST-F003 | ChatGPT Audits | Add a valid approved audit artifact with all required dimensions. | ChatGPT audit validation passes. |
 | ST-F004 | Security Gate | Add safe documentation in a temporary Git repo. | Security gate validation passes. |
 | ST-F005 | Local CLI | Run `status`, `status -IncludeLatestArtifacts`, `validate`, `create-contract`, `create-report`, `audit-packet`, `decompose-task`, `detect-conflicts`, and `review-gate` in a temporary copy. | CLI validation passes and generated artifacts validate. |
+| ST-F006 | Multi-Agent Pilot | Generate a three-agent decomposition in a temporary copy. | Decomposition succeeds with three disjoint write scopes and a duplicate write-scope fixture fails. |
 
 ## Required Command
 

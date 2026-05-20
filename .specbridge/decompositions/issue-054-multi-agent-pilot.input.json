@@ -1,0 +1,26 @@
+{
+  "task_id": "issue-054-multi-agent-pilot",
+  "slices": [
+    {
+      "id": "agent-a-implementation",
+      "goal": "Produce the implementation-slice evidence artifact for the multi-agent pilot.",
+      "exclusive_write": [
+        ".specbridge/pilot/multi-agent/agent-a-implementation-output.md"
+      ]
+    },
+    {
+      "id": "agent-b-tests",
+      "goal": "Produce the test-slice evidence artifact for the multi-agent pilot.",
+      "exclusive_write": [
+        ".specbridge/pilot/multi-agent/agent-b-test-output.md"
+      ]
+    },
+    {
+      "id": "agent-c-documentation",
+      "goal": "Produce the documentation-slice evidence artifact for the multi-agent pilot.",
+      "exclusive_write": [
+        ".specbridge/pilot/multi-agent/agent-c-documentation-output.md"
+      ]
+    }
+  ]
+}

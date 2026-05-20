@@ -1,0 +1,20 @@
+{
+  "contract_id": "issue-055-agent-b-test-slice",
+  "status": "completed",
+  "exclusive_write": [
+    "scripts/test-specbridge-multi-agent-pilot.ps1",
+    ".specbridge/pilot/multi-agent/agent-b-test-output.md",
+    ".specbridge/reports/issue-055-agent-b-test-slice.final-report.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    "scripts/specbridge.ps1",
+    ".specbridge/decompositions/issue-054-multi-agent-pilot.decomposition.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-055-agent-b-test-slice.final-report.json"
+}

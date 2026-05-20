@@ -1,0 +1,44 @@
+{
+  "contract_id": "issue-057-multi-agent-coordinator",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/audit-packets/issue-057-multi-agent-coordinator.audit-packet.json",
+    ".specbridge/audits/issue-057-multi-agent-coordinator.chatgpt-audit.json",
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-054-agent-a-implementation-slice.execution.md",
+    ".specbridge/contracts/issue-055-agent-b-test-slice.execution.md",
+    ".specbridge/contracts/issue-056-agent-c-documentation-slice.execution.md",
+    ".specbridge/contracts/issue-057-multi-agent-coordinator.execution.md",
+    ".specbridge/decompositions/issue-054-multi-agent-pilot.decomposition.json",
+    ".specbridge/decompositions/issue-054-multi-agent-pilot.input.json",
+    ".specbridge/pilot/multi-agent/coordinator-integration-report.md",
+    ".specbridge/reports/issue-057-multi-agent-coordinator.final-report.json",
+    ".specbridge/scopes/issue-054-agent-a-implementation-slice.scope.json",
+    ".specbridge/scopes/issue-055-agent-b-test-slice.scope.json",
+    ".specbridge/scopes/issue-056-agent-c-documentation-slice.scope.json",
+    ".specbridge/scopes/issue-057-multi-agent-coordinator.scope.json",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-test-matrix.md",
+    "docs/specbridge-test-results.md",
+    "scripts/specbridge-smoke.ps1",
+    "specs/004-acceptance-tests.md"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    "docs/specbridge-multi-agent-antigravity-architecture.md",
+    "docs/specbridge-controlled-implementation-pilot.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-054-agent-a-implementation-slice",
+    "issue-055-agent-b-test-slice",
+    "issue-056-agent-c-documentation-slice"
+  ],
+  "final_report": ".specbridge/reports/issue-057-multi-agent-coordinator.final-report.json"
+}

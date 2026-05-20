@@ -1,0 +1,20 @@
+{
+  "contract_id": "issue-056-agent-c-documentation-slice",
+  "status": "completed",
+  "exclusive_write": [
+    "docs/specbridge-multi-agent-pilot.md",
+    ".specbridge/pilot/multi-agent/agent-c-documentation-output.md",
+    ".specbridge/reports/issue-056-agent-c-documentation-slice.final-report.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    "docs/specbridge-multi-agent-antigravity-architecture.md",
+    ".specbridge/decompositions/issue-054-multi-agent-pilot.decomposition.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-056-agent-c-documentation-slice.final-report.json"
+}
