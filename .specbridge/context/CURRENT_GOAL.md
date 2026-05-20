@@ -2,16 +2,16 @@
 
 ## Goal
 
-Close SpecBridge foundation status, complete the repository-first MVP operating loop, define the essential V3 product scope, finish the V4 product contract, and enable gate-controlled automatic merge before adding runtime product implementation code.
+Build the next autonomy layer for SpecBridge: local CLI, contract scope validation, audit packet generation, ChatGPT audit standard, controlled implementation pilot, multi-agent pilot, and stronger security gates.
 
 ## Current Phase
 
-Foundation complete. Repository-first MVP complete as a controlled governance loop. Essential V3 product scope defined. V4 product contract complete at governance level. Full Autopilot is the default policy for gate-controlled automatic merge.
+Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test suite active. Multi-agent Antigravity architecture defined. Current phase is autonomy runtime preparation.
 
 ## Active Work
 
-Maintain explicit context, execution contracts, validation gates, review artifacts, final reports, and phase boundaries so Claude Code can execute governed work without ad-hoc permission requests.
+Execute the autonomy backlog in `docs/specbridge-autonomy-backlog.md`, starting with contract scope validation because safe multi-agent execution requires conflict detection before parallel Claude Code work begins.
 
 ## Completion Condition
 
-The phase completion artifact, MVP operating runbook, V3 essential scope, V4 product contract, automatic merge policy contract, execution contracts, and final reports exist; all deterministic validations pass; runtime product implementation remains blocked until a dedicated execution contract authorizes it.
+The autonomy backlog is recorded as repository memory, then each runtime feature is implemented through a dedicated execution contract with tests, validation evidence, security gates, and final reports.

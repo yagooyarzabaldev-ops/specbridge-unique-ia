@@ -123,3 +123,17 @@ The architecture defines Governor, Coordinator, Executor, Reviewer, parallel exe
 ### AC-028
 
 Product requirements and architecture specs mention multiple Claude Code executors working in parallel inside Antigravity.
+
+## Autonomy Backlog Memory Acceptance Criteria
+
+### AC-029
+
+docs/specbridge-autonomy-backlog.md exists and records the remaining work for local CLI, contract scope validation, audit packet generation, ChatGPT audit standard, controlled implementation pilot, multi-agent pilot, and security gate expansion.
+
+### AC-030
+
+.specbridge/context/CURRENT_GOAL.md identifies the autonomy runtime preparation phase and names the contract scope validator as the recommended next task.
+
+### AC-031
+
+Future agents can determine the next execution order from repository files without relying on chat history.

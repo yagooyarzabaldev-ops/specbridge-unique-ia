@@ -100,3 +100,4 @@ See:
 - `docs/specbridge-v3-essential-product-scope.md`
 - `docs/specbridge-v4-product-contract.md`
 - `docs/specbridge-multi-agent-antigravity-architecture.md`
+- `docs/specbridge-autonomy-backlog.md`
