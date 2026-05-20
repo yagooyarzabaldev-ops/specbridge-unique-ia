@@ -22,6 +22,7 @@ In scope:
 - local CLI commands
 - multi-agent decomposition pilot
 - Antigravity executor handoff packets
+- branch-per-executor orchestration artifacts
 - schemas
 - final reports
 - PR review reports
@@ -39,6 +40,8 @@ Out of scope:
 - live Claude execution
 - live MCP servers
 - live Antigravity session launch
+- live executor branch creation
+- live child PR creation
 - hosted dashboard runtime
 - destructive infrastructure operations
 
@@ -63,6 +66,7 @@ Out of scope:
 | ST-P015 | Autonomous Protocol | `./scripts/validate-autonomous-execution-protocol.ps1` | Autonomous execution protocol guardrails are present. |
 | ST-P016 | Review Gate | `./scripts/validate-review-gate.ps1` | Current changed files do not touch blocked paths or blocked workflow permissions. |
 | ST-P017 | Smoke | `./scripts/specbridge-smoke.ps1` | The deterministic validation chain passes. |
+| ST-P018 | Branch Orchestration | `./scripts/validate-branch-orchestrations.ps1` | Branch plan and coordinator orchestration artifacts are valid, simulation evidence is explicit, and simulated evidence cannot authorize merge. |
 
 ## Negative Tests
 
@@ -89,6 +93,7 @@ Out of scope:
 | ST-N019 | Security Gate | Add a production configuration path in a temporary Git repo. | Security gate fails with `category=production_configuration`. |
 | ST-N020 | Final Reports | Add a final report missing required fields in a temporary copy. | Final report validation fails with missing required property. |
 | ST-N021 | Review Gate | Stage `src/blocked.txt` in a temporary Git repo. | Review gate fails with blocked path changed. |
+| ST-N022 | Branch Orchestration | Add two executor packets with the same branch name in a temporary copy. | Branch planning fails before orchestration with duplicate branch evidence. |
 
 ## Positive Fixtures
 
@@ -101,6 +106,7 @@ Out of scope:
 | ST-F005 | Local CLI | Run `status`, `status -IncludeLatestArtifacts`, `validate`, `create-contract`, `create-report`, `audit-packet`, `decompose-task`, `prepare-executors`, `detect-conflicts`, and `review-gate` in a temporary copy. | CLI validation passes and generated artifacts validate. |
 | ST-F006 | Multi-Agent Pilot | Generate a three-agent decomposition in a temporary copy. | Decomposition succeeds with three disjoint write scopes and a duplicate write-scope fixture fails. |
 | ST-F007 | Executor Handoff | Generate three executor packets in a temporary copy. | Executor packet validation passes and a duplicate branch fixture fails. |
+| ST-F008 | Branch Orchestration | Generate a branch plan and simulation orchestration in a temporary copy. | Branch orchestration validation passes and simulated evidence remains non-mergeable. |
 
 ## Required Command
 

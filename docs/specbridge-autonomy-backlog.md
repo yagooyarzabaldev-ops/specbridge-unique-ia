@@ -43,6 +43,8 @@ Already complete:
 - GitHub CI validation
 - security review gate expansion
 - local SpecBridge CLI
+- live Antigravity executor handoff packets
+- branch-per-executor planning and coordinator simulation evidence
 
 ## Remaining Work
 
@@ -257,11 +259,11 @@ Acceptance:
 
 ## Current Next Task
 
-After the Live Antigravity Executor Handoff is merged, start Real Branch-Per-Executor Orchestration.
+After Branch-Per-Executor Orchestration is merged, start a controlled GitHub evidence run.
 
 Reason:
 
-The handoff packet layer prepares deterministic executor work packages. The next product proof is mapping those packets to separate executor branches and PRs while preserving coordinator evidence.
+The branch plan layer maps executor packets to planned branches and coordinator evidence. The next product proof is replacing simulation evidence with real child PR URLs, real CI status, and real ChatGPT/Codex audit status.
 
 ## Next Runtime Expansion
 
@@ -291,12 +293,32 @@ Run separate executor branches and PRs from the handoff packets.
 
 Status:
 
-Planned.
+Implemented as deterministic branch plans and coordinator orchestration artifacts. Real child branch and PR creation remains blocked until a dedicated runtime contract authorizes that boundary.
 
 Acceptance:
 
 - one branch per executor packet
-- one PR per independently mergeable executor branch
-- coordinator tracks PR URLs and CI status
+- one PR record per independently mergeable executor branch
+- coordinator tracks PR URLs, CI status, and ChatGPT audit status
 - integration waits for all child evidence
 - rollback notes are recorded per executor branch
+- simulation evidence cannot authorize merge
+
+### 10. Controlled GitHub Evidence Run
+
+Goal:
+
+Create real executor branches and child PRs from a branch plan, then coordinate them in GitHub evidence mode.
+
+Status:
+
+Planned.
+
+Acceptance:
+
+- one real GitHub branch exists for each executor branch record
+- one real GitHub PR exists for each executor branch
+- each child PR records CI status from GitHub
+- each child PR records ChatGPT/Codex audit status
+- the coordinator marks integration ready only when every child PR has passed CI and approved audit evidence
+- simulation URLs are not accepted in GitHub evidence mode

@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "plan-executor-branches", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -22,6 +22,10 @@ param(
   [string] $CompletionStatus = "draft",
   [string] $Profile = "standard",
   [string] $BranchPrefix = "claude",
+  [ValidateSet("simulation", "github")]
+  [string] $EvidenceMode = "simulation",
+  [string] $RepositoryUrl = "https://github.com/yagooyarzabaldev-ops/specbridge",
+  [string] $BaseBranch = "main",
   [switch] $IncludeLatestArtifacts,
   [switch] $Force
 )
@@ -190,6 +194,7 @@ function Invoke-ValidationProfile {
     "./scripts/validate-audit-packets.ps1",
     "./scripts/validate-chatgpt-audits.ps1",
     "./scripts/validate-executor-packets.ps1",
+    "./scripts/validate-branch-orchestrations.ps1",
     "./scripts/validate-security-gates.ps1",
     "./scripts/validate-pr-review-reports.ps1",
     "./scripts/validate-claude-review-workflow.ps1",
@@ -918,6 +923,308 @@ function Invoke-PrepareExecutorsCommand {
   exit 0
 }
 
+function Get-JsonObjectFromFile {
+  param(
+    [string] $Path,
+    [string] $Description
+  )
+
+  try {
+    return Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json
+  }
+  catch {
+    Fail "$Description must contain valid JSON: $Path"
+  }
+}
+
+function Get-ExecutorPacketFiles {
+  param(
+    [string] $Path
+  )
+
+  $normalizedInput = Normalize-RepoPath -Path $Path -FieldName "InputPath"
+
+  if (-not (Test-Path -LiteralPath $normalizedInput)) {
+    Fail "InputPath does not exist: $normalizedInput"
+  }
+
+  $item = Get-Item -LiteralPath $normalizedInput
+
+  if ($item.PSIsContainer) {
+    if ($normalizedInput -notmatch "^\.specbridge/executor-packets(/.*)?$") {
+      Fail "InputPath directory must be under .specbridge/executor-packets: $normalizedInput"
+    }
+
+    $files = @(
+      Get-ChildItem -LiteralPath $normalizedInput -Filter "*.executor-packet.json" -File |
+        Sort-Object Name
+    )
+
+    if ($files.Count -le 0) {
+      Fail "InputPath directory contains no executor packets: $normalizedInput"
+    }
+
+    return @(
+      $files |
+        ForEach-Object { Normalize-RepoPath -Path (Join-Path $normalizedInput $_.Name) -FieldName "executor_packet" }
+    )
+  }
+
+  if ($normalizedInput -notmatch "^\.specbridge/executor-packets/.+\.executor-packet\.json$") {
+    Fail "InputPath file must be a .specbridge/executor-packets/*.executor-packet.json file: $normalizedInput"
+  }
+
+  return @($normalizedInput)
+}
+
+function Invoke-PlanExecutorBranchesCommand {
+  $packetPaths = Get-ExecutorPacketFiles -Path $InputPath
+  $output = Assert-OutputPath `
+    -Path $OutputPath `
+    -Pattern "^\.specbridge/branch-plans/.+\.branch-plan\.json$" `
+    -Description "a .specbridge/branch-plans/*.branch-plan.json branch plan"
+
+  $packets = @()
+  $packetIds = @{}
+  $branchNames = @{}
+  $packetTaskIdentifier = ""
+
+  foreach ($packetPath in $packetPaths) {
+    $packet = Get-JsonObjectFromFile -Path $packetPath -Description "executor packet"
+    $context = "executor packet $packetPath"
+
+    foreach ($field in @("packet_id", "task_id", "slice_id", "agent_role", "goal", "branch_name", "execution_contract_path", "final_report_path", "exclusive_write", "required_validations")) {
+      if (-not $packet.PSObject.Properties.Name.Contains($field)) {
+        Fail "$context must include $field"
+      }
+    }
+
+    if ([string]::IsNullOrWhiteSpace($packetTaskIdentifier)) {
+      $packetTaskIdentifier = $packet.task_id
+    }
+    elseif ($packetTaskIdentifier -ne $packet.task_id) {
+      Fail "All executor packets in a branch plan must share one task_id"
+    }
+
+    if ($packetIds.ContainsKey($packet.packet_id)) {
+      Fail "Duplicate packet_id in branch plan input: $($packet.packet_id)"
+    }
+
+    if ($branchNames.ContainsKey($packet.branch_name)) {
+      Fail "Duplicate branch_name in branch plan input: $($packet.branch_name)"
+    }
+
+    $packetIds[$packet.packet_id] = $packetPath
+    $branchNames[$packet.branch_name] = $packetPath
+
+    $packets += [pscustomobject]@{
+      Path = $packetPath
+      Packet = $packet
+    }
+  }
+
+  $executorBranches = @()
+  $sourceTaskId = $packetTaskIdentifier
+  $planTaskId = $sourceTaskId
+
+  if (-not [string]::IsNullOrWhiteSpace($TaskId)) {
+    $planTaskId = $TaskId.Trim()
+  }
+
+  foreach ($entry in @($packets | Sort-Object { $_.Packet.packet_id })) {
+    $packet = $entry.Packet
+    $rollbackNotes = @(
+      "Close the executor PR if it exists.",
+      "Delete or abandon branch $($packet.branch_name) after coordinator review.",
+      "Re-run the coordinator plan before retrying this packet."
+    )
+
+    $executorBranches += [ordered]@{
+      packet_id = $packet.packet_id
+      slice_id = $packet.slice_id
+      agent_role = $packet.agent_role
+      branch_name = $packet.branch_name
+      base_branch = $BaseBranch
+      execution_contract_path = $packet.execution_contract_path
+      final_report_path = $packet.final_report_path
+      exclusive_write = @($packet.exclusive_write)
+      required_validations = @($packet.required_validations)
+      pr_title = "Executor $($packet.slice_id): $($packet.goal)"
+      pr_url = $null
+      pr_status = "not_created"
+      ci_status = "not_collected"
+      chatgpt_audit_status = "not_collected"
+      merge_status = "not_ready"
+      rollback_notes = @($rollbackNotes)
+    }
+  }
+
+  $branchPlan = [ordered]@{
+    schema_version = "1"
+    plan_id = $planTaskId
+    task_id = $planTaskId
+    source_task_id = $sourceTaskId
+    generated_by = "specbridge-cli"
+    repository_url = $RepositoryUrl
+    base_branch = $BaseBranch
+    source_packet_count = @($executorBranches).Count
+    executor_branches = @($executorBranches)
+    coordinator_gates = [ordered]@{
+      one_branch_per_packet = $true
+      one_pr_per_branch_required = $true
+      ci_status_required = "passed"
+      chatgpt_audit_required = "approved"
+      integration_waits_for_all_children = $true
+      simulation_cannot_authorize_merge = $true
+    }
+    status = "planned"
+    source_files = @($packetPaths)
+  }
+
+  Write-Utf8JsonFile -Path $output -Value $branchPlan -Depth 10
+
+  Write-CliJson ([ordered]@{
+    command = "plan-executor-branches"
+    ok = $true
+    output_path = $output
+    branch_count = @($executorBranches).Count
+  })
+
+  exit 0
+}
+
+function Invoke-CoordinateExecutorsCommand {
+  $branchPlanPath = Normalize-RepoPath -Path $InputPath -FieldName "InputPath"
+
+  if ($branchPlanPath -notmatch "^\.specbridge/branch-plans/.+\.branch-plan\.json$") {
+    Fail "InputPath must be a .specbridge/branch-plans/*.branch-plan.json file: $branchPlanPath"
+  }
+
+  if (-not (Test-Path -LiteralPath $branchPlanPath)) {
+    Fail "InputPath does not exist: $branchPlanPath"
+  }
+
+  $output = Assert-OutputPath `
+    -Path $OutputPath `
+    -Pattern "^\.specbridge/orchestrations/.+\.executor-orchestration\.json$" `
+    -Description "a .specbridge/orchestrations/*.executor-orchestration.json orchestration"
+
+  $branchPlan = Get-JsonObjectFromFile -Path $branchPlanPath -Description "branch plan"
+
+  foreach ($field in @("task_id", "repository_url", "base_branch", "executor_branches")) {
+    if (-not $branchPlan.PSObject.Properties.Name.Contains($field)) {
+      Fail "branch plan must include $field"
+    }
+  }
+
+  $children = @()
+  $allGithubEvidencePassed = $true
+
+  foreach ($executor in @($branchPlan.executor_branches | Sort-Object packet_id)) {
+    foreach ($field in @("packet_id", "slice_id", "agent_role", "branch_name", "pr_url", "ci_status", "chatgpt_audit_status", "rollback_notes")) {
+      if (-not $executor.PSObject.Properties.Name.Contains($field)) {
+        Fail "executor branch entry must include $field"
+      }
+    }
+
+    if ($EvidenceMode -eq "simulation") {
+      $children += [ordered]@{
+        packet_id = $executor.packet_id
+        slice_id = $executor.slice_id
+        agent_role = $executor.agent_role
+        branch_name = $executor.branch_name
+        pr_url = "simulation://pull-requests/$($executor.packet_id)"
+        pr_status = "simulated_open"
+        ci_status = "simulated_passed"
+        chatgpt_audit_status = "simulated_approved"
+        merge_allowed = $false
+        merge_blocker = "Simulation evidence cannot authorize merge."
+        rollback_notes = @($executor.rollback_notes)
+      }
+
+      continue
+    }
+
+    if ($null -eq $executor.pr_url -or $executor.pr_url -notmatch "^https://github\.com/.+/.+/pull/[0-9]+$") {
+      $allGithubEvidencePassed = $false
+    }
+
+    if ($executor.ci_status -ne "passed" -or $executor.chatgpt_audit_status -ne "approved") {
+      $allGithubEvidencePassed = $false
+    }
+
+    $children += [ordered]@{
+      packet_id = $executor.packet_id
+      slice_id = $executor.slice_id
+      agent_role = $executor.agent_role
+      branch_name = $executor.branch_name
+      pr_url = $executor.pr_url
+      pr_status = $executor.pr_status
+      ci_status = $executor.ci_status
+      chatgpt_audit_status = $executor.chatgpt_audit_status
+      merge_allowed = ($executor.ci_status -eq "passed" -and $executor.chatgpt_audit_status -eq "approved")
+      merge_blocker = ""
+      rollback_notes = @($executor.rollback_notes)
+    }
+  }
+
+  $integrationDecision = "simulation_only_no_merge"
+  $coordinatorStatus = "simulated"
+  $requiredNextEvidence = @(
+    "Create real executor branches from the branch plan.",
+    "Open one GitHub PR per executor branch.",
+    "Collect real CI status for every child PR.",
+    "Collect a ChatGPT/Codex audit for every child PR.",
+    "Regenerate coordination in github evidence mode before integration merge."
+  )
+
+  if ($EvidenceMode -eq "github") {
+    if ($allGithubEvidencePassed) {
+      $integrationDecision = "ready_for_integration"
+      $coordinatorStatus = "ready_for_integration"
+      $requiredNextEvidence = @()
+    }
+    else {
+      $integrationDecision = "blocked"
+      $coordinatorStatus = "blocked"
+      $requiredNextEvidence = @(
+        "Every executor branch must have a GitHub pull request URL.",
+        "Every executor PR must have CI status passed.",
+        "Every executor PR must have ChatGPT/Codex audit status approved."
+      )
+    }
+  }
+
+  $orchestration = [ordered]@{
+    schema_version = "1"
+    orchestration_id = $branchPlan.task_id
+    task_id = $branchPlan.task_id
+    generated_by = "specbridge-cli"
+    evidence_mode = $EvidenceMode
+    branch_plan_path = $branchPlanPath
+    repository_url = $branchPlan.repository_url
+    base_branch = $branchPlan.base_branch
+    child_results = @($children)
+    integration_decision = $integrationDecision
+    coordinator_status = $coordinatorStatus
+    required_next_evidence = @($requiredNextEvidence)
+    source_files = @($branchPlanPath)
+  }
+
+  Write-Utf8JsonFile -Path $output -Value $orchestration -Depth 10
+
+  Write-CliJson ([ordered]@{
+    command = "coordinate-executors"
+    ok = $true
+    evidence_mode = $EvidenceMode
+    output_path = $output
+    child_count = @($children).Count
+    integration_decision = $integrationDecision
+  })
+
+  exit 0
+}
+
 function Invoke-ReviewGateCommand {
   $security = Invoke-ScriptGate -ScriptPath "./scripts/validate-security-gates.ps1"
   $review = $null
@@ -955,6 +1262,8 @@ switch ($Command) {
   "detect-conflicts" { Invoke-DetectConflictsCommand }
   "decompose-task" { Invoke-DecomposeTaskCommand }
   "prepare-executors" { Invoke-PrepareExecutorsCommand }
+  "plan-executor-branches" { Invoke-PlanExecutorBranchesCommand }
+  "coordinate-executors" { Invoke-CoordinateExecutorsCommand }
   "review-gate" { Invoke-ReviewGateCommand }
   default { Fail "Unsupported command: $Command" }
 }

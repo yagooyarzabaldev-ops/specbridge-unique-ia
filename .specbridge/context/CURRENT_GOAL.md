@@ -12,7 +12,7 @@ Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test
 
 Execute the autonomy backlog in `docs/specbridge-autonomy-backlog.md`.
 
-Live Antigravity executor handoff is now the active completion target. After it is merged, the next recommended task is real branch-per-executor orchestration.
+Branch-per-executor orchestration is now the active completion target. After it is merged, the next recommended task is a controlled GitHub evidence run with real executor branches, child pull requests, CI evidence, and ChatGPT/Codex audit evidence.
 
 ## Completion Condition
 

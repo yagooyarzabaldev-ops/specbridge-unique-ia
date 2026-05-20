@@ -1,0 +1,200 @@
+﻿{
+    "schema_version":  "1",
+    "task_id":  "issue-059-branch-per-executor-orchestration",
+    "generated_by":  "specbridge-audit-packet-generator",
+    "execution_contract_path":  ".specbridge/contracts/issue-059-branch-per-executor-orchestration.execution.md",
+    "changed_files":  [
+                          ".specbridge/audit-packets/issue-059-branch-per-executor-orchestration.audit-packet.json",
+                          ".specbridge/audits/issue-059-branch-per-executor-orchestration.chatgpt-audit.json",
+                          ".specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json",
+                          ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                          ".specbridge/context/CURRENT_GOAL.md",
+                          ".specbridge/contracts/issue-059-branch-per-executor-orchestration.execution.md",
+                          ".specbridge/orchestrations/issue-059-branch-per-executor-orchestration.executor-orchestration.json",
+                          ".specbridge/reports/issue-059-branch-per-executor-orchestration.final-report.json",
+                          ".specbridge/scopes/issue-059-branch-per-executor-orchestration.scope.json",
+                          "docs/specbridge-autonomy-backlog.md",
+                          "docs/specbridge-branch-per-executor-orchestration.md",
+                          "docs/specbridge-local-cli.md",
+                          "docs/specbridge-test-matrix.md",
+                          "docs/specbridge-test-results.md",
+                          "README.md",
+                          "scripts/specbridge.ps1",
+                          "scripts/specbridge-smoke.ps1",
+                          "scripts/test-specbridge-branch-orchestration.ps1",
+                          "scripts/test-specbridge-cli.ps1",
+                          "scripts/validate-branch-orchestrations.ps1",
+                          "specs/004-acceptance-tests.md"
+                      ],
+    "diff_summary":  [
+                         {
+                             "file":  ".specbridge/audit-packets/issue-059-branch-per-executor-orchestration.audit-packet.json",
+                             "added_lines":  200,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/audits/issue-059-branch-per-executor-orchestration.chatgpt-audit.json",
+                             "added_lines":  80,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json",
+                             "added_lines":  105,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                             "added_lines":  50,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/CURRENT_GOAL.md",
+                             "added_lines":  1,
+                             "deleted_lines":  1
+                         },
+                         {
+                             "file":  ".specbridge/contracts/issue-059-branch-per-executor-orchestration.execution.md",
+                             "added_lines":  176,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/orchestrations/issue-059-branch-per-executor-orchestration.executor-orchestration.json",
+                             "added_lines":  75,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/reports/issue-059-branch-per-executor-orchestration.final-report.json",
+                             "added_lines":  47,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/scopes/issue-059-branch-per-executor-orchestration.scope.json",
+                             "added_lines":  42,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-autonomy-backlog.md",
+                             "added_lines":  27,
+                             "deleted_lines":  5
+                         },
+                         {
+                             "file":  "docs/specbridge-branch-per-executor-orchestration.md",
+                             "added_lines":  125,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-local-cli.md",
+                             "added_lines":  27,
+                             "deleted_lines":  1
+                         },
+                         {
+                             "file":  "docs/specbridge-test-matrix.md",
+                             "added_lines":  6,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-test-results.md",
+                             "added_lines":  12,
+                             "deleted_lines":  4
+                         },
+                         {
+                             "file":  "README.md",
+                             "added_lines":  2,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/specbridge.ps1",
+                             "added_lines":  310,
+                             "deleted_lines":  1
+                         },
+                         {
+                             "file":  "scripts/specbridge-smoke.ps1",
+                             "added_lines":  2,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/test-specbridge-branch-orchestration.ps1",
+                             "added_lines":  202,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/test-specbridge-cli.ps1",
+                             "added_lines":  37,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/validate-branch-orchestrations.ps1",
+                             "added_lines":  436,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "specs/004-acceptance-tests.md",
+                             "added_lines":  6,
+                             "deleted_lines":  0
+                         }
+                     ],
+    "validation_commands":  [
+                                "git diff --check",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 coordinate-executors -InputPath .specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json -OutputPath .specbridge/orchestrations/issue-059-branch-per-executor-orchestration.executor-orchestration.json -EvidenceMode simulation -Force",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 plan-executor-branches -TaskId issue-059-branch-per-executor-orchestration -InputPath .specbridge/executor-packets -OutputPath .specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json -Force",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-branch-orchestration.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-branch-orchestrations.ps1"
+                            ],
+    "validation_results":  [
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 plan-executor-branches -TaskId issue-059-branch-per-executor-orchestration -InputPath .specbridge/executor-packets -OutputPath .specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json -Force",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 coordinate-executors -InputPath .specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json -OutputPath .specbridge/orchestrations/issue-059-branch-per-executor-orchestration.executor-orchestration.json -EvidenceMode simulation -Force",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-branch-orchestrations.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-branch-orchestration.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "git diff --check",
+                                   "result":  "passed"
+                               }
+                           ],
+    "final_report_path":  ".specbridge/reports/issue-059-branch-per-executor-orchestration.final-report.json",
+    "ci_status":  "not_collected",
+    "pr_review_report_path":  null,
+    "policy_result":  "Passed. Scope is limited to local CLI branch orchestration, deterministic branch plan and coordinator artifacts, validation scripts, tests, smoke wiring, documentation, context updates, contract, scope manifest, audit packet, audit artifact, and final report artifacts.",
+    "unresolved_risks":  [
+                             "CI evidence is pending until the branch is pushed and GitHub checks run.",
+                             "The coordinator artifact uses simulation evidence and explicitly cannot authorize merge.",
+                             "Real executor branches and child PRs remain a future dedicated runtime task."
+                         ],
+    "completion_status":  "complete_pending_ci",
+    "source_files":  [
+                         ".specbridge/contracts/issue-059-branch-per-executor-orchestration.execution.md",
+                         ".specbridge/reports/issue-059-branch-per-executor-orchestration.final-report.json"
+                     ],
+    "secret_omission":  "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

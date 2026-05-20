@@ -1,0 +1,42 @@
+{
+  "contract_id": "issue-059-branch-per-executor-orchestration",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/audit-packets/issue-059-branch-per-executor-orchestration.audit-packet.json",
+    ".specbridge/audits/issue-059-branch-per-executor-orchestration.chatgpt-audit.json",
+    ".specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json",
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-059-branch-per-executor-orchestration.execution.md",
+    ".specbridge/orchestrations/issue-059-branch-per-executor-orchestration.executor-orchestration.json",
+    ".specbridge/reports/issue-059-branch-per-executor-orchestration.final-report.json",
+    ".specbridge/scopes/issue-059-branch-per-executor-orchestration.scope.json",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-branch-per-executor-orchestration.md",
+    "docs/specbridge-local-cli.md",
+    "docs/specbridge-test-matrix.md",
+    "docs/specbridge-test-results.md",
+    "README.md",
+    "scripts/specbridge.ps1",
+    "scripts/specbridge-smoke.ps1",
+    "scripts/test-specbridge-branch-orchestration.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "scripts/validate-branch-orchestrations.ps1",
+    "specs/004-acceptance-tests.md"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    "docs/specbridge-live-antigravity-executor-handoff.md",
+    "docs/specbridge-multi-agent-antigravity-architecture.md",
+    ".specbridge/executor-packets/issue-058-live-antigravity-executor-handoff-agent-a-implementation.executor-packet.json",
+    ".specbridge/executor-packets/issue-058-live-antigravity-executor-handoff-agent-b-tests.executor-packet.json",
+    ".specbridge/executor-packets/issue-058-live-antigravity-executor-handoff-agent-c-documentation.executor-packet.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-058-live-antigravity-executor-handoff"
+  ],
+  "final_report": ".specbridge/reports/issue-059-branch-per-executor-orchestration.final-report.json"
+}

@@ -32,6 +32,8 @@ specbridge status
 | `detect-conflicts` | Runs contract scope conflict validation. | No |
 | `decompose-task` | Creates a file-backed multi-agent decomposition from a declared JSON input. | Yes |
 | `prepare-executors` | Creates Antigravity executor handoff packets from declared slice inputs. | Yes |
+| `plan-executor-branches` | Creates one planned executor branch record per executor packet. | Yes |
+| `coordinate-executors` | Aggregates executor branch evidence into a coordinator orchestration artifact. | Yes |
 | `review-gate` | Runs security gate validation and PR review gate validation. | No |
 
 ## Validation Profiles
@@ -40,7 +42,7 @@ specbridge status
 
 | Profile | Behavior |
 | --- | --- |
-| `standard` | Runs foundation, contract, scope, schema, final report, audit packet, ChatGPT audit, executor packet, security, review report, Claude workflow, autonomous protocol, and review gate validation. |
+| `standard` | Runs foundation, contract, scope, schema, final report, audit packet, ChatGPT audit, executor packet, branch orchestration, security, review report, Claude workflow, autonomous protocol, and review gate validation. |
 | `full` | Runs the standard profile plus negative validation fixtures. |
 | `smoke` | Runs `scripts/specbridge-smoke.ps1`. |
 
@@ -136,6 +138,28 @@ The command writes `.specbridge/executor-packets/*.executor-packet.json` files a
 
 Generated packets use `manual_antigravity` launch mode. They prepare the handoff for a separate Antigravity Claude Code session but do not start any external process.
 
+## Branch Orchestration
+
+`plan-executor-branches` expects either one executor packet file or a directory under `.specbridge/executor-packets`.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 plan-executor-branches -TaskId issue-059-branch-per-executor-orchestration -InputPath .specbridge/executor-packets -OutputPath .specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json
+```
+
+The output must be declared under `.specbridge/branch-plans/` and end with `.branch-plan.json`.
+
+The command rejects duplicate branch names and records PR, CI, ChatGPT audit, merge, and rollback placeholders for every executor branch.
+
+`coordinate-executors` expects a branch plan file:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 coordinate-executors -InputPath .specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json -OutputPath .specbridge/orchestrations/issue-059-branch-per-executor-orchestration.executor-orchestration.json -EvidenceMode simulation
+```
+
+The output must be declared under `.specbridge/orchestrations/` and end with `.executor-orchestration.json`.
+
+Simulation mode writes explicit simulated PR, CI, and audit evidence and cannot authorize merge. GitHub evidence mode requires real GitHub PR URLs, passed CI, and approved ChatGPT audit status before integration can be marked ready.
+
 ## Test Coverage
 
 `scripts/test-specbridge-cli.ps1` verifies:
@@ -148,6 +172,8 @@ Generated packets use `manual_antigravity` launch mode. They prepare the handoff
 - `audit-packet`
 - `decompose-task`
 - `prepare-executors`
+- `plan-executor-branches`
+- `coordinate-executors`
 - `detect-conflicts`
 - `review-gate`
 - deterministic failure when a required output path is missing

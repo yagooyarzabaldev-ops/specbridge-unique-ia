@@ -314,6 +314,43 @@ try {
     }
 
     Assert-Success `
+      -Name "plan-executor-branches" `
+      -Result (Invoke-Cli -Arguments @(
+        "plan-executor-branches",
+        "-InputPath",
+        ".specbridge/executor-packets/cli-executor-handoff-agent-a-implementation.executor-packet.json",
+        "-OutputPath",
+        ".specbridge/branch-plans/cli-fixture.branch-plan.json",
+        "-Force"
+      )) `
+      -ExpectedPattern '"branch_count"\s*:\s*[1-9]'
+
+    Assert-Success `
+      -Name "coordinate-executors" `
+      -Result (Invoke-Cli -Arguments @(
+        "coordinate-executors",
+        "-InputPath",
+        ".specbridge/branch-plans/cli-fixture.branch-plan.json",
+        "-OutputPath",
+        ".specbridge/orchestrations/cli-fixture.executor-orchestration.json",
+        "-EvidenceMode",
+        "simulation",
+        "-Force"
+      )) `
+      -ExpectedPattern '"integration_decision"\s*:\s*"simulation_only_no_merge"'
+
+    $branchOrchestrationValidation = & powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-branch-orchestrations.ps1 2>&1
+
+    if ($LASTEXITCODE -ne 0) {
+      Write-Output "FAIL CLI-created branch orchestration artifacts did not validate."
+      Write-Output ($branchOrchestrationValidation | Out-String)
+      $failed = $true
+    }
+    else {
+      Write-Output "PASS CLI-created branch orchestration artifacts validate."
+    }
+
+    Assert-Success `
       -Name "detect-conflicts" `
       -Result (Invoke-Cli -Arguments @("detect-conflicts")) `
       -ExpectedPattern '"command"\s*:\s*"detect-conflicts"'

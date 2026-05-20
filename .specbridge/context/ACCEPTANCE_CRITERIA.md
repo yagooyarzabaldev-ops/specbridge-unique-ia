@@ -397,3 +397,53 @@ scripts/specbridge-smoke.ps1 runs executor packet validation and executor handof
 ### AC-092
 
 The handoff task does not launch live sessions, create product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, touch production, or access secrets.
+
+## Branch Per Executor Orchestration Acceptance Criteria
+
+### AC-093
+
+docs/specbridge-branch-per-executor-orchestration.md exists and records the branch plan and coordinator evidence model.
+
+### AC-094
+
+scripts/specbridge.ps1 supports `plan-executor-branches`.
+
+### AC-095
+
+`plan-executor-branches` creates `.specbridge/branch-plans/*.branch-plan.json` files from executor packets.
+
+### AC-096
+
+Each branch plan declares one branch record per executor packet and records PR status, CI status, ChatGPT audit status, required validations, and rollback notes.
+
+### AC-097
+
+scripts/specbridge.ps1 supports `coordinate-executors`.
+
+### AC-098
+
+`coordinate-executors` creates `.specbridge/orchestrations/*.executor-orchestration.json` files from branch plans.
+
+### AC-099
+
+Simulation mode uses explicit simulation PR URLs and cannot authorize merge.
+
+### AC-100
+
+GitHub evidence mode requires real GitHub PR URLs, passed CI, and approved ChatGPT audit status before integration can be marked ready.
+
+### AC-101
+
+scripts/validate-branch-orchestrations.ps1 validates branch plan and coordinator orchestration artifacts.
+
+### AC-102
+
+scripts/test-specbridge-branch-orchestration.ps1 verifies successful branch planning, simulated coordination, validation, duplicate branch rejection, and simulation merge blocking.
+
+### AC-103
+
+scripts/specbridge-smoke.ps1 runs branch orchestration validation and branch orchestration tests.
+
+### AC-104
+
+The branch orchestration task does not launch live sessions, create live executor branches, open child PRs, create product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, touch production, or access protected credentials.

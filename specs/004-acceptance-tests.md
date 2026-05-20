@@ -162,3 +162,9 @@ docs/specbridge-multi-agent-pilot.md exists; issue 054 multi-agent decomposition
 Pass condition:
 
 docs/specbridge-live-antigravity-executor-handoff.md exists; scripts/specbridge.ps1 supports `prepare-executors`; `.specbridge/executor-packets/*.executor-packet.json` files exist for Agent A, Agent B, and Agent C; scripts/validate-executor-packets.ps1 validates required packet fields; scripts/test-specbridge-executor-handoff.ps1 proves successful packet generation and duplicate branch rejection; and scripts/specbridge-smoke.ps1 runs executor packet validation and handoff tests.
+
+### AT-025 - Branch per executor orchestration exists
+
+Pass condition:
+
+docs/specbridge-branch-per-executor-orchestration.md exists; scripts/specbridge.ps1 supports `plan-executor-branches` and `coordinate-executors`; `.specbridge/branch-plans/*.branch-plan.json` records one branch per executor packet; `.specbridge/orchestrations/*.executor-orchestration.json` records child PR, CI, ChatGPT audit, merge, and rollback evidence; scripts/validate-branch-orchestrations.ps1 validates branch plan and orchestration artifacts; scripts/test-specbridge-branch-orchestration.ps1 proves successful planning, simulated coordination, duplicate branch rejection, and simulation merge blocking; and scripts/specbridge-smoke.ps1 runs branch orchestration validation and tests.
