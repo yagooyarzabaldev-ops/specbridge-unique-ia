@@ -126,3 +126,9 @@ scripts/validate-contract-scopes.ps1 exists, validates `.specbridge/scopes/*.sco
 Pass condition:
 
 scripts/generate-audit-packet.ps1 creates deterministic `.specbridge/audit-packets/*.audit-packet.json` files, scripts/validate-audit-packets.ps1 validates the required packet fields, packets reference files by path without embedding raw diffs or file contents, and scripts/specbridge-smoke.ps1 includes audit packet validation.
+
+### AT-019 - ChatGPT audit validation exists
+
+Pass condition:
+
+.specbridge/schemas/chatgpt-audit.schema.json exists, scripts/validate-chatgpt-audits.ps1 validates `.specbridge/audits/*.chatgpt-audit.json`, allowed outcomes are limited to `approved`, `changes_requested`, `blocked`, and `needs_human_decision`, every audit checks the required dimensions, blocking findings prevent merge, and scripts/specbridge-smoke.ps1 includes ChatGPT audit validation.

@@ -193,3 +193,37 @@ Positive fixture generation passes and invalid audit packets fail for expected r
 ### AC-044
 
 scripts/specbridge-smoke.ps1 runs audit packet validation.
+
+## ChatGPT Audit Standard Acceptance Criteria
+
+### AC-045
+
+.specbridge/schemas/chatgpt-audit.schema.json exists and defines the machine-readable ChatGPT audit output.
+
+### AC-046
+
+scripts/validate-chatgpt-audits.ps1 exists and validates `.specbridge/audits/*.chatgpt-audit.json`.
+
+### AC-047
+
+ChatGPT audit outcomes are limited to `approved`, `changes_requested`, `blocked`, and `needs_human_decision`.
+
+### AC-048
+
+Each audit checks spec compliance, acceptance criteria, policy boundaries, security rules, changed file scope, test evidence, CI evidence, and final report honesty.
+
+### AC-049
+
+Audit findings include severity, category, file, line, evidence, recommendation, and blocking status.
+
+### AC-050
+
+Blocking findings or dimensions prevent merge.
+
+### AC-051
+
+Positive audit fixtures pass and invalid audit fixtures fail for expected reasons.
+
+### AC-052
+
+scripts/specbridge-smoke.ps1 runs ChatGPT audit validation.

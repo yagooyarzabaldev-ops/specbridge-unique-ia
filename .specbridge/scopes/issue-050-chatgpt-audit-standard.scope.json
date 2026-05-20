@@ -1,0 +1,36 @@
+{
+  "contract_id": "issue-050-chatgpt-audit-standard",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/audit-packets/issue-050-chatgpt-audit-standard.audit-packet.json",
+    ".specbridge/audits/issue-050-chatgpt-audit-standard.chatgpt-audit.json",
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-050-chatgpt-audit-standard.execution.md",
+    ".specbridge/reports/issue-050-chatgpt-audit-standard.final-report.json",
+    ".specbridge/schemas/chatgpt-audit.schema.json",
+    ".specbridge/scopes/issue-050-chatgpt-audit-standard.scope.json",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-chatgpt-audit-standard.md",
+    "docs/specbridge-test-matrix.md",
+    "docs/specbridge-test-results.md",
+    "scripts/specbridge-smoke.ps1",
+    "scripts/test-specbridge-negative-validations.ps1",
+    "scripts/validate-chatgpt-audits.ps1",
+    "scripts/validate-schemas.ps1",
+    "specs/004-acceptance-tests.md"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/context/audit-packet-standard.md",
+    "docs/specbridge-audit-packet-generator.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-049-audit-packet-generator"
+  ],
+  "final_report": ".specbridge/reports/issue-050-chatgpt-audit-standard.final-report.json"
+}

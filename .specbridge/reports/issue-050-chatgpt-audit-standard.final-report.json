@@ -1,0 +1,46 @@
+{
+  "summary": "Added the ChatGPT audit standard with schema, validation, checked dimensions, file-referenced findings, and merge-blocking semantics.",
+  "changed_files": [
+    "scripts/validate-chatgpt-audits.ps1",
+    "scripts/test-specbridge-negative-validations.ps1",
+    "scripts/specbridge-smoke.ps1",
+    "scripts/validate-schemas.ps1",
+    ".specbridge/schemas/chatgpt-audit.schema.json",
+    ".specbridge/audits/issue-050-chatgpt-audit-standard.chatgpt-audit.json",
+    ".specbridge/audit-packets/issue-050-chatgpt-audit-standard.audit-packet.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    ".specbridge/scopes/issue-050-chatgpt-audit-standard.scope.json",
+    ".specbridge/contracts/issue-050-chatgpt-audit-standard.execution.md",
+    ".specbridge/reports/issue-050-chatgpt-audit-standard.final-report.json",
+    "docs/specbridge-chatgpt-audit-standard.md",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-test-matrix.md",
+    "docs/specbridge-test-results.md",
+    "specs/004-acceptance-tests.md"
+  ],
+  "validations": [
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-schemas.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-pr-review-reports.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-claude-review-workflow.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-autonomous-execution-protocol.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "git diff --check: passed"
+  ],
+  "policy_result": "Passed. Scope is limited to governance schema, validation scripts, tests, documentation, audit artifact, audit packet artifact, context, contract, scope manifest, and final report artifacts.",
+  "risk_result": "Low risk. No runtime product code, secrets, production configuration, billing, authentication, authorization, CI/CD security weakening, branch protection weakening, raw secret capture, raw file content capture, or deployment automation.",
+  "unresolved_risks": [
+    "CI evidence is pending until the branch is pushed and GitHub checks run."
+  ],
+  "merge_status": "Pending pull request and required gates.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_ci"
+}

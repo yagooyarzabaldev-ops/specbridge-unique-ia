@@ -12,7 +12,7 @@ Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test
 
 Execute the autonomy backlog in `docs/specbridge-autonomy-backlog.md`.
 
-The Audit Packet Generator is now the active completion target. After it is merged, the next recommended task is the ChatGPT Audit Standard.
+The ChatGPT Audit Standard is now the active completion target. After it is merged, the next recommended task is Security Review Gate Expansion.
 
 ## Completion Condition
 

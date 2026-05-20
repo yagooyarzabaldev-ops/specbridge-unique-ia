@@ -131,6 +131,10 @@ Goal:
 
 Define the audit result format used when ChatGPT/Codex reviews Claude Code output.
 
+Status:
+
+Implemented as `.specbridge/schemas/chatgpt-audit.schema.json` and `scripts/validate-chatgpt-audits.ps1`, with committed audit evidence under `.specbridge/audits/`.
+
 Allowed outcomes:
 
 - `approved`
@@ -235,8 +239,8 @@ Acceptance:
 
 ## Current Next Task
 
-After the Audit Packet Generator is merged, start with the ChatGPT Audit Standard.
+After the ChatGPT Audit Standard is merged, start with Security Review Gate Expansion.
 
 Reason:
 
-Audit packets provide the evidence bundle that the ChatGPT Audit Standard must consume and judge.
+Security gates should now consume contract scope, audit packet, and audit result evidence before runtime autonomy expands.

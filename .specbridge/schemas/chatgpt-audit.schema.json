@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specbridge.local/schemas/chatgpt-audit.schema.json",
+  "title": "SpecBridge ChatGPT Audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "audit_id",
+    "auditor",
+    "audit_packet_path",
+    "execution_contract_path",
+    "final_report_path",
+    "checked_dimensions",
+    "findings",
+    "outcome",
+    "merge_allowed",
+    "unresolved_risks",
+    "source_files"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1"
+    },
+    "audit_id": {
+      "type": "string"
+    },
+    "auditor": {
+      "type": "string"
+    },
+    "audit_packet_path": {
+      "type": "string"
+    },
+    "execution_contract_path": {
+      "type": "string"
+    },
+    "final_report_path": {
+      "type": "string"
+    },
+    "checked_dimensions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "result",
+          "evidence",
+          "blocking"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "result": {
+            "type": "string",
+            "enum": [
+              "pass",
+              "fail",
+              "needs_human_decision",
+              "not_applicable"
+            ]
+          },
+          "evidence": {
+            "type": "string"
+          },
+          "blocking": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "severity",
+          "category",
+          "file",
+          "line",
+          "evidence",
+          "recommendation",
+          "blocking"
+        ],
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": [
+              "info",
+              "low",
+              "medium",
+              "high",
+              "critical"
+            ]
+          },
+          "category": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string"
+          },
+          "line": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1
+          },
+          "evidence": {
+            "type": "string"
+          },
+          "recommendation": {
+            "type": "string"
+          },
+          "blocking": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "approved",
+        "changes_requested",
+        "blocked",
+        "needs_human_decision"
+      ]
+    },
+    "merge_allowed": {
+      "type": "boolean"
+    },
+    "unresolved_risks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

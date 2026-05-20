@@ -191,6 +191,86 @@ function Write-AuditFixtureFiles {
   Set-Content -LiteralPath $ReportPath -Value ($report | ConvertTo-Json -Depth 6) -NoNewline
 }
 
+function Write-ChatGptAuditFixtureFiles {
+  param(
+    [string] $AuditPath = ".specbridge/audits/chatgpt-audit-fixture.chatgpt-audit.json",
+    [string] $Outcome = "approved",
+    [bool] $MergeAllowed = $true,
+    [string] $OmitDimension = "",
+    [bool] $BlockingFinding = $false
+  )
+
+  $auditPacketPath = ".specbridge/audit-packets/chatgpt-audit-fixture.audit-packet.json"
+  $contractPath = ".specbridge/contracts/chatgpt-audit-fixture.execution.md"
+  $reportPath = ".specbridge/reports/chatgpt-audit-fixture.final-report.json"
+
+  New-Item -ItemType Directory -Force -Path (Split-Path -Parent $AuditPath) | Out-Null
+  New-Item -ItemType Directory -Force -Path (Split-Path -Parent $auditPacketPath) | Out-Null
+  New-Item -ItemType Directory -Force -Path (Split-Path -Parent $contractPath) | Out-Null
+  New-Item -ItemType Directory -Force -Path (Split-Path -Parent $reportPath) | Out-Null
+
+  Set-Content -LiteralPath $auditPacketPath -Value "{}" -NoNewline
+  Set-Content -LiteralPath $contractPath -Value "# ChatGPT Audit Fixture Contract" -NoNewline
+  Set-Content -LiteralPath $reportPath -Value "{}" -NoNewline
+
+  $dimensionNames = @(
+    "spec_compliance",
+    "acceptance_criteria",
+    "policy_boundaries",
+    "security_rules",
+    "changed_file_scope",
+    "test_evidence",
+    "ci_evidence",
+    "final_report_honesty"
+  )
+
+  $dimensions = @()
+
+  foreach ($dimensionName in $dimensionNames) {
+    if ($dimensionName -eq $OmitDimension) {
+      continue
+    }
+
+    $dimensions += [ordered]@{
+      name = $dimensionName
+      result = "pass"
+      evidence = "Fixture evidence for $dimensionName."
+      blocking = $false
+    }
+  }
+
+  $audit = [ordered]@{
+    schema_version = "1"
+    audit_id = "chatgpt-audit-fixture"
+    auditor = "SpecBridge Tests"
+    audit_packet_path = $auditPacketPath
+    execution_contract_path = $contractPath
+    final_report_path = $reportPath
+    checked_dimensions = $dimensions
+    findings = @(
+      [ordered]@{
+        severity = "info"
+        category = "governance"
+        file = $auditPacketPath
+        line = $null
+        evidence = "Fixture finding."
+        recommendation = "Keep audit artifacts machine-readable."
+        blocking = $BlockingFinding
+      }
+    )
+    outcome = $Outcome
+    merge_allowed = $MergeAllowed
+    unresolved_risks = @()
+    source_files = @(
+      $auditPacketPath,
+      $contractPath,
+      $reportPath
+    )
+  }
+
+  Set-Content -LiteralPath $AuditPath -Value ($audit | ConvertTo-Json -Depth 8) -NoNewline
+}
+
 try {
   New-Item -ItemType Directory -Force -Path $tempRoot | Out-Null
 
@@ -411,6 +491,41 @@ This contract intentionally omits the Goal section.
     } `
     -Command "./scripts/validate-audit-packets.ps1" `
     -ExpectedPattern "unexpected field.*raw_diff"
+
+  Invoke-ExpectedSuccess `
+    -Name "chatgpt-audit-valid-fixture" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/audits" -Recurse -Force -ErrorAction SilentlyContinue
+      Write-ChatGptAuditFixtureFiles
+    } `
+    -Command "./scripts/validate-chatgpt-audits.ps1"
+
+  Invoke-ExpectedFailure `
+    -Name "chatgpt-audit-missing-required-dimension" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/audits" -Recurse -Force -ErrorAction SilentlyContinue
+      Write-ChatGptAuditFixtureFiles -OmitDimension "security_rules"
+    } `
+    -Command "./scripts/validate-chatgpt-audits.ps1" `
+    -ExpectedPattern "missing required audit dimension.*security_rules"
+
+  Invoke-ExpectedFailure `
+    -Name "chatgpt-audit-approved-with-blocking-finding" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/audits" -Recurse -Force -ErrorAction SilentlyContinue
+      Write-ChatGptAuditFixtureFiles -BlockingFinding $true
+    } `
+    -Command "./scripts/validate-chatgpt-audits.ps1" `
+    -ExpectedPattern "blocking findings or dimensions must prevent merge"
+
+  Invoke-ExpectedFailure `
+    -Name "chatgpt-audit-non-approved-allows-merge" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/audits" -Recurse -Force -ErrorAction SilentlyContinue
+      Write-ChatGptAuditFixtureFiles -Outcome "changes_requested" -MergeAllowed $true
+    } `
+    -Command "./scripts/validate-chatgpt-audits.ps1" `
+    -ExpectedPattern "non-approved audit outcomes must set merge_allowed false"
 
   Invoke-ExpectedFailure `
     -Name "final-report-missing-property" `

@@ -1,0 +1,79 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-050-chatgpt-audit-standard",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-050-chatgpt-audit-standard.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-050-chatgpt-audit-standard.execution.md",
+  "final_report_path": ".specbridge/reports/issue-050-chatgpt-audit-standard.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "The schema and validator implement the backlog's required ChatGPT audit outcomes, checked dimensions, findings, and merge-blocking behavior.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "The execution contract defines acceptance criteria for schema, validator, outcomes, dimensions, findings, and validation fixtures.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The task is limited to governance schema, validation scripts, docs, audit artifact, audit packet artifact, context, contract, scope manifest, and final report artifacts.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The change does not add secrets, production configuration, authentication, authorization, billing, CI/CD security weakening, or deployment automation.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed files are listed in the final report and covered by the contract scope manifest.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "Local validation evidence is recorded in the final report and test results before PR submission.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "needs_human_decision",
+      "evidence": "GitHub CI evidence is pending until this branch is pushed and pull request checks complete.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records pending CI risk and avoids claiming deployment or production changes.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "ci_evidence",
+      "file": ".specbridge/audit-packets/issue-050-chatgpt-audit-standard.audit-packet.json",
+      "line": null,
+      "evidence": "CI status is represented as pending in the audit packet until GitHub checks run.",
+      "recommendation": "Allow the GitHub merge gate to provide final CI evidence before merge.",
+      "blocking": false
+    }
+  ],
+  "outcome": "needs_human_decision",
+  "merge_allowed": false,
+  "unresolved_risks": [
+    "CI evidence is pending until GitHub checks run."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-050-chatgpt-audit-standard.audit-packet.json",
+    ".specbridge/contracts/issue-050-chatgpt-audit-standard.execution.md",
+    ".specbridge/reports/issue-050-chatgpt-audit-standard.final-report.json"
+  ]
+}

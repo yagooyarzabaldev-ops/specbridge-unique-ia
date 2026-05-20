@@ -17,6 +17,7 @@ In scope:
 - execution contracts
 - contract scope manifests
 - audit packets
+- ChatGPT audit artifacts
 - schemas
 - final reports
 - PR review reports
@@ -46,11 +47,12 @@ Out of scope:
 | ST-P004 | Schemas | `./scripts/validate-schemas.ps1` | Required JSON schemas exist and are readable. |
 | ST-P005 | Final Reports | `./scripts/validate-final-reports.ps1` | Final reports are valid JSON and contain required fields. |
 | ST-P006 | Audit Packets | `./scripts/validate-audit-packets.ps1` | Audit packets contain required evidence fields, repository-relative paths, validation summaries, CI status, policy result, and no raw/sensitive content fields. |
-| ST-P007 | PR Review Reports | `./scripts/validate-pr-review-reports.ps1` | PR review report artifacts are valid. |
-| ST-P008 | Claude Review Workflow | `./scripts/validate-claude-review-workflow.ps1` | Claude review workflow guardrails are present. |
-| ST-P009 | Autonomous Protocol | `./scripts/validate-autonomous-execution-protocol.ps1` | Autonomous execution protocol guardrails are present. |
-| ST-P010 | Review Gate | `./scripts/validate-review-gate.ps1` | Current changed files do not touch blocked paths or blocked workflow permissions. |
-| ST-P011 | Smoke | `./scripts/specbridge-smoke.ps1` | The deterministic validation chain passes. |
+| ST-P007 | ChatGPT Audits | `./scripts/validate-chatgpt-audits.ps1` | ChatGPT audit artifacts contain required outcomes, checked dimensions, file-referenced findings, and merge-blocking semantics. |
+| ST-P008 | PR Review Reports | `./scripts/validate-pr-review-reports.ps1` | PR review report artifacts are valid. |
+| ST-P009 | Claude Review Workflow | `./scripts/validate-claude-review-workflow.ps1` | Claude review workflow guardrails are present. |
+| ST-P010 | Autonomous Protocol | `./scripts/validate-autonomous-execution-protocol.ps1` | Autonomous execution protocol guardrails are present. |
+| ST-P011 | Review Gate | `./scripts/validate-review-gate.ps1` | Current changed files do not touch blocked paths or blocked workflow permissions. |
+| ST-P012 | Smoke | `./scripts/specbridge-smoke.ps1` | The deterministic validation chain passes. |
 
 ## Negative Tests
 
@@ -64,8 +66,11 @@ Out of scope:
 | ST-N006 | Audit Packets | Generate an audit packet with a missing execution contract. | Audit packet generation fails with missing execution contract. |
 | ST-N007 | Audit Packets | Add an audit packet missing required fields in a temporary copy. | Audit packet validation fails with missing required field. |
 | ST-N008 | Audit Packets | Add an audit packet with a raw diff field in a temporary copy. | Audit packet validation fails with unexpected raw content field. |
-| ST-N009 | Final Reports | Add a final report missing required fields in a temporary copy. | Final report validation fails with missing required property. |
-| ST-N010 | Review Gate | Stage `src/blocked.txt` in a temporary Git repo. | Review gate fails with blocked path changed. |
+| ST-N009 | ChatGPT Audits | Add an audit missing a required checked dimension in a temporary copy. | ChatGPT audit validation fails with missing required dimension. |
+| ST-N010 | ChatGPT Audits | Add an approved audit with a blocking finding in a temporary copy. | ChatGPT audit validation fails because blocking findings prevent merge. |
+| ST-N011 | ChatGPT Audits | Add a non-approved audit with `merge_allowed: true` in a temporary copy. | ChatGPT audit validation fails because non-approved outcomes cannot allow merge. |
+| ST-N012 | Final Reports | Add a final report missing required fields in a temporary copy. | Final report validation fails with missing required property. |
+| ST-N013 | Review Gate | Stage `src/blocked.txt` in a temporary Git repo. | Review gate fails with blocked path changed. |
 
 ## Positive Fixtures
 
@@ -73,6 +78,7 @@ Out of scope:
 | --- | --- | --- | --- |
 | ST-F001 | Contract Scopes | Add two disjoint active scope manifests in a temporary copy. | Contract scope validation passes. |
 | ST-F002 | Audit Packets | Generate an audit packet from a fixture contract and final report, then validate it. | Audit packet validation passes. |
+| ST-F003 | ChatGPT Audits | Add a valid approved audit artifact with all required dimensions. | ChatGPT audit validation passes. |
 
 ## Required Command
 
