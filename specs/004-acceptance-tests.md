@@ -156,3 +156,9 @@ docs/specbridge-controlled-implementation-pilot.md exists; scripts/specbridge.ps
 Pass condition:
 
 docs/specbridge-multi-agent-pilot.md exists; issue 054 multi-agent decomposition exists; Agent A, Agent B, and Agent C each have their own execution contract, scope manifest, output artifact, and final report; scripts/test-specbridge-multi-agent-pilot.ps1 proves three disjoint slices and duplicate write-scope rejection; coordinator integration report, final report, audit packet, and ChatGPT audit artifacts validate; and scripts/specbridge-smoke.ps1 runs the multi-agent pilot validation.
+
+### AT-024 - Antigravity executor handoff exists
+
+Pass condition:
+
+docs/specbridge-live-antigravity-executor-handoff.md exists; scripts/specbridge.ps1 supports `prepare-executors`; `.specbridge/executor-packets/*.executor-packet.json` files exist for Agent A, Agent B, and Agent C; scripts/validate-executor-packets.ps1 validates required packet fields; scripts/test-specbridge-executor-handoff.ps1 proves successful packet generation and duplicate branch rejection; and scripts/specbridge-smoke.ps1 runs executor packet validation and handoff tests.

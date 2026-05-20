@@ -31,6 +31,7 @@ specbridge status
 | `audit-packet` | Wraps audit packet generation for a declared contract and final report. | Yes |
 | `detect-conflicts` | Runs contract scope conflict validation. | No |
 | `decompose-task` | Creates a file-backed multi-agent decomposition from a declared JSON input. | Yes |
+| `prepare-executors` | Creates Antigravity executor handoff packets from declared slice inputs. | Yes |
 | `review-gate` | Runs security gate validation and PR review gate validation. | No |
 
 ## Validation Profiles
@@ -39,7 +40,7 @@ specbridge status
 
 | Profile | Behavior |
 | --- | --- |
-| `standard` | Runs foundation, contract, scope, schema, final report, audit packet, ChatGPT audit, security, review report, Claude workflow, autonomous protocol, and review gate validation. |
+| `standard` | Runs foundation, contract, scope, schema, final report, audit packet, ChatGPT audit, executor packet, security, review report, Claude workflow, autonomous protocol, and review gate validation. |
 | `full` | Runs the standard profile plus negative validation fixtures. |
 | `smoke` | Runs `scripts/specbridge-smoke.ps1`. |
 
@@ -109,6 +110,32 @@ The output must be declared under `.specbridge/decompositions/` and end with `.d
 
 The CLI rejects duplicate `exclusive_write` paths inside the decomposition.
 
+## Executor Handoff Input
+
+`prepare-executors` expects a JSON file with:
+
+```json
+{
+  "task_id": "example-task",
+  "slices": [
+    {
+      "id": "agent-a",
+      "role": "implementation",
+      "goal": "Run one executor contract.",
+      "contract_path": ".specbridge/contracts/example.execution.md",
+      "final_report_path": ".specbridge/reports/example.final-report.json",
+      "exclusive_write": ["docs/agent-a.md"],
+      "read_only": ["README.md"],
+      "required_validations": ["powershell -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1"]
+    }
+  ]
+}
+```
+
+The command writes `.specbridge/executor-packets/*.executor-packet.json` files and rejects duplicate branch names.
+
+Generated packets use `manual_antigravity` launch mode. They prepare the handoff for a separate Antigravity Claude Code session but do not start any external process.
+
 ## Test Coverage
 
 `scripts/test-specbridge-cli.ps1` verifies:
@@ -120,6 +147,7 @@ The CLI rejects duplicate `exclusive_write` paths inside the decomposition.
 - `create-report`
 - `audit-packet`
 - `decompose-task`
+- `prepare-executors`
 - `detect-conflicts`
 - `review-gate`
 - deterministic failure when a required output path is missing

@@ -1,0 +1,39 @@
+{
+    "schema_version":  "1",
+    "packet_id":  "issue-058-live-antigravity-executor-handoff-agent-c-documentation",
+    "task_id":  "issue-058-live-antigravity-executor-handoff",
+    "slice_id":  "agent-c-documentation",
+    "agent_role":  "documentation",
+    "goal":  "Run the documentation executor contract in a dedicated Antigravity Claude Code session.",
+    "launch_mode":  "manual_antigravity",
+    "branch_name":  "claude/issue-058-live-antigravity-executor-handoff-agent-c-documentation",
+    "execution_contract_path":  ".specbridge/contracts/issue-056-agent-c-documentation-slice.execution.md",
+    "final_report_path":  ".specbridge/reports/issue-056-agent-c-documentation-slice.final-report.json",
+    "exclusive_write":  [
+                            "docs/specbridge-multi-agent-pilot.md"
+                        ],
+    "read_only":  [
+                      "README.md",
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      ".specbridge/policy.yaml",
+                      "docs/specbridge-multi-agent-antigravity-architecture.md"
+                  ],
+    "required_validations":  [
+                                 "powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                 "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1"
+                             ],
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "status":  "ready_for_handoff",
+    "source_files":  [
+                         ".specbridge/executor-handoffs/issue-058-live-antigravity-executor-handoff.input.json",
+                         ".specbridge/contracts/issue-056-agent-c-documentation-slice.execution.md"
+                     ],
+    "generated_by":  "specbridge-cli"
+}

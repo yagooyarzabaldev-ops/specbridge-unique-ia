@@ -363,3 +363,37 @@ The coordinator produces an integration report, final report, audit packet, and 
 ### AC-084
 
 The multi-agent pilot remains repository-first and does not launch live executor sessions, create product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, touch production, or access secrets.
+
+## Live Antigravity Executor Handoff Acceptance Criteria
+
+### AC-085
+
+docs/specbridge-live-antigravity-executor-handoff.md exists and records the file-backed handoff model for Antigravity Claude Code executor sessions.
+
+### AC-086
+
+scripts/specbridge.ps1 supports `prepare-executors`.
+
+### AC-087
+
+`prepare-executors` creates `.specbridge/executor-packets/*.executor-packet.json` files from declared slice inputs.
+
+### AC-088
+
+Executor packets include launch mode, branch name, execution contract path, final report path, exclusive write scope, read-only scope, required validations, stop conditions, status, and source files.
+
+### AC-089
+
+scripts/validate-executor-packets.ps1 validates executor packet structure, repository-relative paths, launch mode, status, branch uniqueness, packet uniqueness, contract references, final report path shape, validations, stop conditions, and source files.
+
+### AC-090
+
+scripts/test-specbridge-executor-handoff.ps1 verifies successful three-packet generation and deterministic duplicate branch rejection.
+
+### AC-091
+
+scripts/specbridge-smoke.ps1 runs executor packet validation and executor handoff tests.
+
+### AC-092
+
+The handoff task does not launch live sessions, create product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, touch production, or access secrets.

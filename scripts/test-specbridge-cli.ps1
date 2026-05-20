@@ -269,6 +269,50 @@ try {
       )) `
       -ExpectedPattern '"slices"\s*:\s*2'
 
+    $handoffInput = [ordered]@{
+      task_id = "cli-executor-handoff"
+      slices = @(
+        [ordered]@{
+          id = "agent-a-implementation"
+          role = "implementation"
+          goal = "Prepare an implementation executor handoff packet."
+          contract_path = ".specbridge/contracts/issue-054-agent-a-implementation-slice.execution.md"
+          final_report_path = ".specbridge/reports/issue-054-agent-a-implementation-slice.final-report.json"
+          exclusive_write = @(".specbridge/pilot/multi-agent/agent-a-implementation-output.md")
+          read_only = @("README.md")
+          required_validations = @("powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-multi-agent-pilot.ps1")
+        }
+      )
+    }
+
+    Set-Content `
+      -LiteralPath ".specbridge/decompositions/cli-handoff-input.json" `
+      -Value ($handoffInput | ConvertTo-Json -Depth 8) `
+      -NoNewline
+
+    Assert-Success `
+      -Name "prepare-executors" `
+      -Result (Invoke-Cli -Arguments @(
+        "prepare-executors",
+        "-InputPath",
+        ".specbridge/decompositions/cli-handoff-input.json",
+        "-OutputDirectory",
+        ".specbridge/executor-packets",
+        "-Force"
+      )) `
+      -ExpectedPattern '"packet_count"\s*:\s*1'
+
+    $executorPacketValidation = & powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-executor-packets.ps1 2>&1
+
+    if ($LASTEXITCODE -ne 0) {
+      Write-Output "FAIL CLI-created executor packet did not validate."
+      Write-Output ($executorPacketValidation | Out-String)
+      $failed = $true
+    }
+    else {
+      Write-Output "PASS CLI-created executor packet validates."
+    }
+
     Assert-Success `
       -Name "detect-conflicts" `
       -Result (Invoke-Cli -Arguments @("detect-conflicts")) `

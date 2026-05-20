@@ -1,0 +1,65 @@
+{
+  "task_id": "issue-058-live-antigravity-executor-handoff",
+  "slices": [
+    {
+      "id": "agent-a-implementation",
+      "role": "implementation",
+      "goal": "Run the implementation executor contract in a dedicated Antigravity Claude Code session.",
+      "contract_path": ".specbridge/contracts/issue-054-agent-a-implementation-slice.execution.md",
+      "final_report_path": ".specbridge/reports/issue-054-agent-a-implementation-slice.final-report.json",
+      "exclusive_write": [
+        ".specbridge/pilot/multi-agent/agent-a-implementation-output.md"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        ".specbridge/policy.yaml"
+      ],
+      "required_validations": [
+        "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-multi-agent-pilot.ps1"
+      ]
+    },
+    {
+      "id": "agent-b-tests",
+      "role": "tests",
+      "goal": "Run the test executor contract in a dedicated Antigravity Claude Code session.",
+      "contract_path": ".specbridge/contracts/issue-055-agent-b-test-slice.execution.md",
+      "final_report_path": ".specbridge/reports/issue-055-agent-b-test-slice.final-report.json",
+      "exclusive_write": [
+        "scripts/test-specbridge-multi-agent-pilot.ps1"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        ".specbridge/policy.yaml",
+        "scripts/specbridge.ps1"
+      ],
+      "required_validations": [
+        "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-multi-agent-pilot.ps1"
+      ]
+    },
+    {
+      "id": "agent-c-documentation",
+      "role": "documentation",
+      "goal": "Run the documentation executor contract in a dedicated Antigravity Claude Code session.",
+      "contract_path": ".specbridge/contracts/issue-056-agent-c-documentation-slice.execution.md",
+      "final_report_path": ".specbridge/reports/issue-056-agent-c-documentation-slice.final-report.json",
+      "exclusive_write": [
+        "docs/specbridge-multi-agent-pilot.md"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        ".specbridge/policy.yaml",
+        "docs/specbridge-multi-agent-antigravity-architecture.md"
+      ],
+      "required_validations": [
+        "powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+        "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1"
+      ]
+    }
+  ]
+}

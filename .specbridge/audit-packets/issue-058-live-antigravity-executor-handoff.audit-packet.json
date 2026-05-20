@@ -1,0 +1,255 @@
+﻿{
+    "schema_version":  "1",
+    "task_id":  "issue-058-live-antigravity-executor-handoff",
+    "generated_by":  "specbridge-audit-packet-generator",
+    "execution_contract_path":  ".specbridge/contracts/issue-058-live-antigravity-executor-handoff.execution.md",
+    "changed_files":  [
+                          ".specbridge/audit-packets/issue-058-live-antigravity-executor-handoff.audit-packet.json",
+                          ".specbridge/audits/issue-058-live-antigravity-executor-handoff.chatgpt-audit.json",
+                          ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                          ".specbridge/context/CURRENT_GOAL.md",
+                          ".specbridge/contracts/issue-058-live-antigravity-executor-handoff.execution.md",
+                          ".specbridge/executor-handoffs/issue-058-live-antigravity-executor-handoff.input.json",
+                          ".specbridge/executor-packets/issue-058-live-antigravity-executor-handoff-agent-a-implementation.executor-packet.json",
+                          ".specbridge/executor-packets/issue-058-live-antigravity-executor-handoff-agent-b-tests.executor-packet.json",
+                          ".specbridge/executor-packets/issue-058-live-antigravity-executor-handoff-agent-c-documentation.executor-packet.json",
+                          ".specbridge/reports/issue-058-live-antigravity-executor-handoff.final-report.json",
+                          ".specbridge/scopes/issue-058-live-antigravity-executor-handoff.scope.json",
+                          "docs/specbridge-autonomy-backlog.md",
+                          "docs/specbridge-live-antigravity-executor-handoff.md",
+                          "docs/specbridge-local-cli.md",
+                          "docs/specbridge-test-matrix.md",
+                          "docs/specbridge-test-results.md",
+                          "scripts/specbridge.ps1",
+                          "scripts/specbridge-smoke.ps1",
+                          "scripts/test-specbridge-cli.ps1",
+                          "scripts/test-specbridge-executor-handoff.ps1",
+                          "scripts/validate-executor-packets.ps1",
+                          "specs/004-acceptance-tests.md"
+                      ],
+    "diff_summary":  [
+                         {
+                             "file":  ".specbridge/audit-packets/issue-058-live-antigravity-executor-handoff.audit-packet.json",
+                             "added_lines":  255,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/audits/issue-058-live-antigravity-executor-handoff.chatgpt-audit.json",
+                             "added_lines":  80,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                             "added_lines":  34,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/CURRENT_GOAL.md",
+                             "added_lines":  1,
+                             "deleted_lines":  1
+                         },
+                         {
+                             "file":  ".specbridge/contracts/issue-058-live-antigravity-executor-handoff.execution.md",
+                             "added_lines":  170,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-handoffs/issue-058-live-antigravity-executor-handoff.input.json",
+                             "added_lines":  65,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-packets/issue-058-live-antigravity-executor-handoff-agent-a-implementation.executor-packet.json",
+                             "added_lines":  37,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-packets/issue-058-live-antigravity-executor-handoff-agent-b-tests.executor-packet.json",
+                             "added_lines":  38,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-packets/issue-058-live-antigravity-executor-handoff-agent-c-documentation.executor-packet.json",
+                             "added_lines":  39,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/reports/issue-058-live-antigravity-executor-handoff.final-report.json",
+                             "added_lines":  57,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/scopes/issue-058-live-antigravity-executor-handoff.scope.json",
+                             "added_lines":  44,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-autonomy-backlog.md",
+                             "added_lines":  40,
+                             "deleted_lines":  2
+                         },
+                         {
+                             "file":  "docs/specbridge-live-antigravity-executor-handoff.md",
+                             "added_lines":  92,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-local-cli.md",
+                             "added_lines":  29,
+                             "deleted_lines":  1
+                         },
+                         {
+                             "file":  "docs/specbridge-test-matrix.md",
+                             "added_lines":  14,
+                             "deleted_lines":  9
+                         },
+                         {
+                             "file":  "docs/specbridge-test-results.md",
+                             "added_lines":  9,
+                             "deleted_lines":  4
+                         },
+                         {
+                             "file":  "scripts/specbridge.ps1",
+                             "added_lines":  247,
+                             "deleted_lines":  1
+                         },
+                         {
+                             "file":  "scripts/specbridge-smoke.ps1",
+                             "added_lines":  2,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/test-specbridge-cli.ps1",
+                             "added_lines":  44,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/test-specbridge-executor-handoff.ps1",
+                             "added_lines":  246,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/validate-executor-packets.ps1",
+                             "added_lines":  220,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "specs/004-acceptance-tests.md",
+                             "added_lines":  6,
+                             "deleted_lines":  0
+                         }
+                     ],
+    "validation_commands":  [
+                                "git diff --check",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 prepare-executors -InputPath .specbridge/executor-handoffs/issue-058-live-antigravity-executor-handoff.input.json -OutputDirectory .specbridge/executor-packets -BranchPrefix claude -Force",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-executor-handoff.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-autonomous-execution-protocol.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-claude-review-workflow.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-executor-packets.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-pr-review-reports.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-schemas.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1"
+                            ],
+    "validation_results":  [
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 prepare-executors -InputPath .specbridge/executor-handoffs/issue-058-live-antigravity-executor-handoff.input.json -OutputDirectory .specbridge/executor-packets -BranchPrefix claude -Force",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-executor-packets.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-executor-handoff.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-schemas.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-pr-review-reports.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-claude-review-workflow.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-autonomous-execution-protocol.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "git diff --check",
+                                   "result":  "passed"
+                               }
+                           ],
+    "final_report_path":  ".specbridge/reports/issue-058-live-antigravity-executor-handoff.final-report.json",
+    "ci_status":  "pending",
+    "pr_review_report_path":  null,
+    "policy_result":  "Passed. Scope is limited to executor handoff packets, local CLI generation, deterministic validation, smoke coverage, documentation, context updates, contract, scope manifest, audit packet, audit artifact, and final report artifacts.",
+    "unresolved_risks":  [
+                             "CI evidence is pending until the branch is pushed and GitHub checks run.",
+                             "Executor packets prepare live Antigravity handoff but do not launch sessions or create executor branches."
+                         ],
+    "completion_status":  "complete_pending_ci",
+    "source_files":  [
+                         ".specbridge/contracts/issue-058-live-antigravity-executor-handoff.execution.md",
+                         ".specbridge/reports/issue-058-live-antigravity-executor-handoff.final-report.json"
+                     ],
+    "secret_omission":  "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

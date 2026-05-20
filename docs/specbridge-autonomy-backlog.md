@@ -257,8 +257,46 @@ Acceptance:
 
 ## Current Next Task
 
-After the Multi-Agent Pilot is merged, start live Antigravity executor orchestration.
+After the Live Antigravity Executor Handoff is merged, start Real Branch-Per-Executor Orchestration.
 
 Reason:
 
-The file-backed multi-agent pilot proves decomposition, scopes, per-agent reports, conflict detection, and coordinator evidence. The next product proof is running the same structure through separate Antigravity Claude Code sessions and branch-level PRs.
+The handoff packet layer prepares deterministic executor work packages. The next product proof is mapping those packets to separate executor branches and PRs while preserving coordinator evidence.
+
+## Next Runtime Expansion
+
+### 8. Live Antigravity Executor Handoff
+
+Goal:
+
+Prepare repository-backed handoff packets for separate Antigravity Claude Code executor sessions.
+
+Status:
+
+Implemented as `specbridge prepare-executors`, `scripts/validate-executor-packets.ps1`, `scripts/test-specbridge-executor-handoff.ps1`, and `.specbridge/executor-packets/*.executor-packet.json`.
+
+Acceptance:
+
+- each executor packet references one contract
+- each executor packet declares branch name, launch mode, write scope, read-only scope, validations, stop conditions, and final report path
+- duplicate branch names fail before handoff
+- packets validate locally and in smoke
+- live sessions are not launched until a later runtime contract authorizes that boundary
+
+### 9. Real Branch-Per-Executor Orchestration
+
+Goal:
+
+Run separate executor branches and PRs from the handoff packets.
+
+Status:
+
+Planned.
+
+Acceptance:
+
+- one branch per executor packet
+- one PR per independently mergeable executor branch
+- coordinator tracks PR URLs and CI status
+- integration waits for all child evidence
+- rollback notes are recorded per executor branch

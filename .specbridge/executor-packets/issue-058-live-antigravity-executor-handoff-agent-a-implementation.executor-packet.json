@@ -1,0 +1,37 @@
+{
+    "schema_version":  "1",
+    "packet_id":  "issue-058-live-antigravity-executor-handoff-agent-a-implementation",
+    "task_id":  "issue-058-live-antigravity-executor-handoff",
+    "slice_id":  "agent-a-implementation",
+    "agent_role":  "implementation",
+    "goal":  "Run the implementation executor contract in a dedicated Antigravity Claude Code session.",
+    "launch_mode":  "manual_antigravity",
+    "branch_name":  "claude/issue-058-live-antigravity-executor-handoff-agent-a-implementation",
+    "execution_contract_path":  ".specbridge/contracts/issue-054-agent-a-implementation-slice.execution.md",
+    "final_report_path":  ".specbridge/reports/issue-054-agent-a-implementation-slice.final-report.json",
+    "exclusive_write":  [
+                            ".specbridge/pilot/multi-agent/agent-a-implementation-output.md"
+                        ],
+    "read_only":  [
+                      "README.md",
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      ".specbridge/policy.yaml"
+                  ],
+    "required_validations":  [
+                                 "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-multi-agent-pilot.ps1"
+                             ],
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "status":  "ready_for_handoff",
+    "source_files":  [
+                         ".specbridge/executor-handoffs/issue-058-live-antigravity-executor-handoff.input.json",
+                         ".specbridge/contracts/issue-054-agent-a-implementation-slice.execution.md"
+                     ],
+    "generated_by":  "specbridge-cli"
+}

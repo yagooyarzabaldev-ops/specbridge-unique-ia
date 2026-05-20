@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -21,6 +21,7 @@ param(
   [string] $RiskResult = "",
   [string] $CompletionStatus = "draft",
   [string] $Profile = "standard",
+  [string] $BranchPrefix = "claude",
   [switch] $IncludeLatestArtifacts,
   [switch] $Force
 )
@@ -188,6 +189,7 @@ function Invoke-ValidationProfile {
     "./scripts/validate-final-reports.ps1",
     "./scripts/validate-audit-packets.ps1",
     "./scripts/validate-chatgpt-audits.ps1",
+    "./scripts/validate-executor-packets.ps1",
     "./scripts/validate-security-gates.ps1",
     "./scripts/validate-pr-review-reports.ps1",
     "./scripts/validate-claude-review-workflow.ps1",
@@ -673,6 +675,249 @@ function Invoke-DecomposeTaskCommand {
   exit 0
 }
 
+function Get-RequiredJsonString {
+  param(
+    [object] $Object,
+    [string] $FieldName,
+    [string] $Context
+  )
+
+  if (-not $Object.PSObject.Properties.Name.Contains($FieldName)) {
+    Fail "$Context must include $FieldName"
+  }
+
+  $value = $Object.$FieldName
+
+  if ($null -eq $value -or $value.GetType().Name -ne "String" -or [string]::IsNullOrWhiteSpace($value)) {
+    Fail "$Context.$FieldName must be a non-empty string"
+  }
+
+  return $value.Trim()
+}
+
+function Get-RequiredJsonStringArray {
+  param(
+    [object] $Object,
+    [string] $FieldName,
+    [string] $Context
+  )
+
+  if (-not $Object.PSObject.Properties.Name.Contains($FieldName)) {
+    Fail "$Context must include $FieldName"
+  }
+
+  $value = $Object.$FieldName
+
+  if ($null -eq $value -or -not ($value -is [System.Array]) -or @($value).Count -le 0) {
+    Fail "$Context.$FieldName must be a non-empty array"
+  }
+
+  $items = @()
+
+  foreach ($item in @($value)) {
+    if ($null -eq $item -or $item.GetType().Name -ne "String" -or [string]::IsNullOrWhiteSpace($item)) {
+      Fail "$Context.$FieldName must contain only non-empty strings"
+    }
+
+    $items += $item.Trim()
+  }
+
+  return @($items)
+}
+
+function Get-OptionalJsonStringArray {
+  param(
+    [object] $Object,
+    [string] $FieldName,
+    [string] $Context
+  )
+
+  if (-not $Object.PSObject.Properties.Name.Contains($FieldName)) {
+    return @()
+  }
+
+  $value = $Object.$FieldName
+
+  if ($null -eq $value) {
+    return @()
+  }
+
+  if (-not ($value -is [System.Array])) {
+    Fail "$Context.$FieldName must be an array when provided"
+  }
+
+  $items = @()
+
+  foreach ($item in @($value)) {
+    if ($null -eq $item -or $item.GetType().Name -ne "String" -or [string]::IsNullOrWhiteSpace($item)) {
+      Fail "$Context.$FieldName must contain only non-empty strings"
+    }
+
+    $items += $item.Trim()
+  }
+
+  return @($items)
+}
+
+function Convert-ToSafeName {
+  param(
+    [string] $Value,
+    [string] $FieldName
+  )
+
+  if ([string]::IsNullOrWhiteSpace($Value)) {
+    Fail "$FieldName is required"
+  }
+
+  $safe = $Value.Trim().ToLowerInvariant() -replace "[^a-z0-9._-]+", "-"
+  $safe = $safe.Trim("-")
+
+  if ([string]::IsNullOrWhiteSpace($safe)) {
+    Fail "$FieldName must contain at least one safe character"
+  }
+
+  return $safe
+}
+
+function Invoke-PrepareExecutorsCommand {
+  $input = Normalize-RepoPath -Path $InputPath -FieldName "InputPath"
+  $outputDir = ".specbridge/executor-packets"
+
+  if (-not [string]::IsNullOrWhiteSpace($OutputDirectory)) {
+    $outputDir = Normalize-RepoPath -Path $OutputDirectory -FieldName "OutputDirectory"
+  }
+
+  if ($outputDir -notmatch "^\.specbridge/executor-packets(/.*)?$") {
+    Fail "OutputDirectory must be under .specbridge/executor-packets: $outputDir"
+  }
+
+  if (-not (Test-Path -LiteralPath $input)) {
+    Fail "InputPath does not exist: $input"
+  }
+
+  try {
+    $source = Get-Content -LiteralPath $input -Raw | ConvertFrom-Json
+  }
+  catch {
+    Fail "InputPath must contain valid JSON: $input"
+  }
+
+  $taskId = Get-RequiredJsonString -Object $source -FieldName "task_id" -Context "InputPath JSON"
+
+  if (-not $source.PSObject.Properties.Name.Contains("slices") -or -not ($source.slices -is [System.Array]) -or @($source.slices).Count -le 0) {
+    Fail "InputPath JSON must include a non-empty slices array"
+  }
+
+  $safeTaskId = Convert-ToSafeName -Value $taskId -FieldName "task_id"
+  $safeBranchPrefix = Convert-ToSafeName -Value $BranchPrefix -FieldName "BranchPrefix"
+  $seenPacketPaths = @{}
+  $seenBranchNames = @{}
+  $packets = @()
+
+  foreach ($slice in @($source.slices)) {
+    $context = "slice"
+    $sliceId = Get-RequiredJsonString -Object $slice -FieldName "id" -Context $context
+    $goal = Get-RequiredJsonString -Object $slice -FieldName "goal" -Context $context
+    $role = Get-RequiredJsonString -Object $slice -FieldName "role" -Context $context
+    $contractPath = Normalize-RepoPath -Path (Get-RequiredJsonString -Object $slice -FieldName "contract_path" -Context $context) -FieldName "slice.contract_path"
+    $finalReportPath = Normalize-RepoPath -Path (Get-RequiredJsonString -Object $slice -FieldName "final_report_path" -Context $context) -FieldName "slice.final_report_path"
+    $exclusiveWrite = @(
+      Get-RequiredJsonStringArray -Object $slice -FieldName "exclusive_write" -Context $context |
+        ForEach-Object { Normalize-RepoPath -Path $_ -FieldName "slice.exclusive_write" }
+    )
+    $readOnly = @(
+      Get-OptionalJsonStringArray -Object $slice -FieldName "read_only" -Context $context |
+        ForEach-Object { Normalize-RepoPath -Path $_ -FieldName "slice.read_only" }
+    )
+    $validations = @(
+      Get-RequiredJsonStringArray -Object $slice -FieldName "required_validations" -Context $context
+    )
+
+    if ($contractPath -notmatch "^\.specbridge/contracts/.+\.execution\.md$") {
+      Fail "slice.contract_path must point to a SpecBridge execution contract: $contractPath"
+    }
+
+    if (-not (Test-Path -LiteralPath $contractPath)) {
+      Fail "slice.contract_path does not exist: $contractPath"
+    }
+
+    if ($finalReportPath -notmatch "^\.specbridge/reports/.+\.final-report\.json$") {
+      Fail "slice.final_report_path must point to a SpecBridge final report path: $finalReportPath"
+    }
+
+    $safeSliceId = Convert-ToSafeName -Value $sliceId -FieldName "slice.id"
+    $branchName = "$safeBranchPrefix/$safeTaskId-$safeSliceId"
+
+    if ($slice.PSObject.Properties.Name.Contains("branch_name") -and -not [string]::IsNullOrWhiteSpace($slice.branch_name)) {
+      $branchName = $slice.branch_name.Trim()
+    }
+
+    if ($branchName -notmatch "^[A-Za-z0-9._/-]+$" -or $branchName -match "(^|/)\.\.(/|$)") {
+      Fail "slice.branch_name contains unsupported characters: $branchName"
+    }
+
+    if ($seenBranchNames.ContainsKey($branchName)) {
+      Fail "Duplicate branch_name in executor handoff input: $branchName"
+    }
+
+    $seenBranchNames[$branchName] = $sliceId
+    $packetFileName = "$safeTaskId-$safeSliceId.executor-packet.json"
+    $packetPath = Normalize-RepoPath -Path (Join-Path $outputDir $packetFileName) -FieldName "executor_packet_path"
+
+    if ($seenPacketPaths.ContainsKey($packetPath)) {
+      Fail "Duplicate executor packet path: $packetPath"
+    }
+
+    if ((Test-Path -LiteralPath $packetPath) -and -not $Force) {
+      Fail "Executor packet already exists; use -Force to replace it: $packetPath"
+    }
+
+    $seenPacketPaths[$packetPath] = $sliceId
+
+    $packet = [ordered]@{
+      schema_version = "1"
+      packet_id = "$safeTaskId-$safeSliceId"
+      task_id = $taskId
+      slice_id = $sliceId
+      agent_role = $role
+      goal = $goal
+      launch_mode = "manual_antigravity"
+      branch_name = $branchName
+      execution_contract_path = $contractPath
+      final_report_path = $finalReportPath
+      exclusive_write = @($exclusiveWrite)
+      read_only = @($readOnly)
+      required_validations = @($validations)
+      stop_conditions = @(
+        "policy_conflict",
+        "scope_conflict",
+        "missing_required_context",
+        "impossible_acceptance_criteria",
+        "protected_resource_required"
+      )
+      status = "ready_for_handoff"
+      source_files = @(
+        $input,
+        $contractPath
+      )
+      generated_by = "specbridge-cli"
+    }
+
+    Write-Utf8JsonFile -Path $packetPath -Value $packet -Depth 8
+    $packets += $packetPath
+  }
+
+  Write-CliJson ([ordered]@{
+    command = "prepare-executors"
+    ok = $true
+    output_directory = $outputDir
+    packets = @($packets)
+    packet_count = @($packets).Count
+  })
+
+  exit 0
+}
+
 function Invoke-ReviewGateCommand {
   $security = Invoke-ScriptGate -ScriptPath "./scripts/validate-security-gates.ps1"
   $review = $null
@@ -709,6 +954,7 @@ switch ($Command) {
   "audit-packet" { Invoke-AuditPacketCommand }
   "detect-conflicts" { Invoke-DetectConflictsCommand }
   "decompose-task" { Invoke-DecomposeTaskCommand }
+  "prepare-executors" { Invoke-PrepareExecutorsCommand }
   "review-gate" { Invoke-ReviewGateCommand }
   default { Fail "Unsupported command: $Command" }
 }
