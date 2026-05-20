@@ -109,3 +109,17 @@ docs/specbridge-test-matrix.md exists and defines positive and negative SpecBrid
 ### AC-025
 
 docs/specbridge-test-results.md exists and records the local validation evidence for the current test phase.
+
+## Multi-Agent Architecture Acceptance Criteria
+
+### AC-026
+
+docs/specbridge-multi-agent-antigravity-architecture.md exists and defines multi-agent execution as a first-class product capability.
+
+### AC-027
+
+The architecture defines Governor, Coordinator, Executor, Reviewer, parallel execution rules, scope ownership, branch strategy, evidence aggregation, and merge behavior.
+
+### AC-028
+
+Product requirements and architecture specs mention multiple Claude Code executors working in parallel inside Antigravity.

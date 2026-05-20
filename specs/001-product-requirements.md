@@ -20,6 +20,10 @@ SpecBridge must be able to:
 
 - convert ChatGPT/Codex context into structured repository files
 - define execution contracts
+- decompose a product goal into multiple agent-specific execution contracts
+- coordinate multiple Claude Code executors working in parallel inside Antigravity
+- assign non-overlapping write scopes
+- aggregate evidence from parallel agent tasks
 - enforce autonomy profiles
 - classify task risk
 - trigger Claude Code execution
@@ -66,3 +70,9 @@ SpecBridge is not:
 ## MVP Requirement
 
 The MVP must prove the complete loop from structured context to autonomous Claude Code execution, validation, review, policy decision, and final report.
+
+## Multi-Agent Requirement
+
+SpecBridge must treat multi-agent orchestration as a first-class product capability.
+
+The product must support a future mode where multiple Claude Code executors work at the same time inside Antigravity, each with its own execution contract, write scope, validation commands, branch, final report, and escalation route.

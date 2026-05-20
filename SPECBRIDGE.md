@@ -45,6 +45,19 @@ GitHub + CI
 
 ```
 
+For parallel Antigravity execution, SpecBridge adds a coordination layer:
+
+```text
+SpecBridge Coordinator
+  decomposes goals into contracts, assigns non-overlapping scopes, tracks dependencies, and routes escalations
+
+Claude Code Executors
+  work concurrently inside Antigravity sessions, each bound to one execution contract
+
+Independent Reviewer
+  reviews output against specs, policies, contracts, and evidence
+```
+
 ## Default Mode: Vibe Autopilot
 
 The primary mode of SpecBridge is Vibe Autopilot.
@@ -277,6 +290,9 @@ Responsible for:
 
 - preparing execution contracts
 - enforcing policy
+- coordinating multiple executor contracts
+- assigning non-overlapping write scopes
+- tracking task dependencies
 - coordinating GitHub state
 - coordinating autonomous execution
 - reading CI and review results

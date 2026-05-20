@@ -40,15 +40,32 @@ Claude Code should not ask for ordinary implementation permissions.
 
 Claude Code must stop for policy boundaries.
 
-### 4. GitHub Orchestration
+### 4. Multi-Agent Coordinator
+
+Coordinates several Claude Code executors working in parallel inside Antigravity.
+
+The coordinator determines:
+
+- task decomposition
+- dependency order
+- exclusive write scopes
+- read-only shared context
+- branch strategy
+- escalation routing
+- final report aggregation
+- merge order
+
+No two executors should write the same file unless a coordinator-owned integration contract explicitly authorizes it.
+
+### 5. GitHub Orchestration
 
 Coordinates issues, branches, pull requests, CI, review, and audit trail.
 
-### 5. Codex Review
+### 6. Codex Review
 
 Reviews implementation against specs, acceptance criteria, policy, and risk.
 
-### 6. Final Reporter
+### 7. Final Reporter
 
 Produces concise final reports for the user.
 

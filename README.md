@@ -15,6 +15,8 @@ Report the final result to the user.
 
 SpecBridge allows a user to delegate software development work from ChatGPT/Codex to Claude Code without approving every individual step.
 
+SpecBridge also supports a multi-agent product direction: one governed goal may be decomposed into multiple execution contracts so several Claude Code executors can work in parallel inside Antigravity without losing scope control, validation, review, or auditability.
+
 The default workflow is Vibe Autopilot:
 
 1. The user defines the goal.
@@ -49,7 +51,7 @@ Responsible for intent, context, specs, acceptance criteria, and review.
 
 ### SpecBridge
 
-Responsible for execution contracts, policy enforcement, GitHub orchestration, and final reports.
+Responsible for execution contracts, policy enforcement, multi-agent coordination, GitHub orchestration, and final reports.
 
 ### Claude Code
 
@@ -97,3 +99,4 @@ See:
 - `docs/specbridge-mvp-operating-runbook.md`
 - `docs/specbridge-v3-essential-product-scope.md`
 - `docs/specbridge-v4-product-contract.md`
+- `docs/specbridge-multi-agent-antigravity-architecture.md`

@@ -19,6 +19,9 @@ The product should help an operator:
 - assemble an audit packet
 - prepare PR evidence
 - read completion status
+- coordinate multiple Claude Code executors inside Antigravity
+- detect write-scope conflicts before parallel work starts
+- aggregate evidence from parallel executor tasks
 - preserve policy and human merge control
 - allow automatic merge only after required policy, validation, review, and CI gates pass
 
@@ -43,6 +46,8 @@ Required commands:
 - `specbridge status`
 - `specbridge validate`
 - `specbridge create-contract`
+- `specbridge decompose-task`
+- `specbridge detect-conflicts`
 - `specbridge create-report`
 - `specbridge audit-packet`
 - `specbridge review-gate`
@@ -167,6 +172,9 @@ V4 is product-ready when:
 - read-only MCP resources are contract-backed
 - low-risk MCP tools are contract-backed and tested
 - PR evidence integration is deterministic
+- multi-agent task decomposition is contract-backed
+- write-scope conflict detection is tested
+- parallel executor evidence aggregation is tested
 - final reports remain schema-validated
 - no protected files are touched without explicit policy
 - autonomous merge is enabled only after required gates pass

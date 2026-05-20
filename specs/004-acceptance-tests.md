@@ -108,3 +108,9 @@ scripts/specbridge-smoke.ps1 runs scripts/test-specbridge-negative-validations.p
 Pass condition:
 
 docs/specbridge-test-matrix.md defines positive and negative test coverage, and docs/specbridge-test-results.md records current validation evidence.
+
+### AT-016 - Multi-agent Antigravity architecture exists
+
+Pass condition:
+
+docs/specbridge-multi-agent-antigravity-architecture.md exists and defines Governor, Coordinator, Executor, Reviewer, parallel execution rules, scope ownership, branching, evidence, merge model, and product requirements for multiple Claude Code executors working inside Antigravity.

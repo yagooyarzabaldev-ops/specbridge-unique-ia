@@ -31,6 +31,9 @@ V3 should add only the minimum runtime surface needed to make the MVP loop easie
 - local task status reader
 - audit packet assembler
 - PR evidence checklist generator
+- multi-agent contract decomposition
+- write-scope conflict detection
+- parallel task evidence aggregation
 - optional MCP facade after tool contracts stabilize
 
 ## Minimal Runtime Boundary
