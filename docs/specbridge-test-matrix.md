@@ -16,6 +16,7 @@ In scope:
 - foundation files
 - execution contracts
 - contract scope manifests
+- audit packets
 - schemas
 - final reports
 - PR review reports
@@ -44,11 +45,12 @@ Out of scope:
 | ST-P003 | Contract Scopes | `./scripts/validate-contract-scopes.ps1` | Scope manifests declare required ownership fields, active write paths do not overlap, dependencies are explicit, and final report paths are unique. |
 | ST-P004 | Schemas | `./scripts/validate-schemas.ps1` | Required JSON schemas exist and are readable. |
 | ST-P005 | Final Reports | `./scripts/validate-final-reports.ps1` | Final reports are valid JSON and contain required fields. |
-| ST-P006 | PR Review Reports | `./scripts/validate-pr-review-reports.ps1` | PR review report artifacts are valid. |
-| ST-P007 | Claude Review Workflow | `./scripts/validate-claude-review-workflow.ps1` | Claude review workflow guardrails are present. |
-| ST-P008 | Autonomous Protocol | `./scripts/validate-autonomous-execution-protocol.ps1` | Autonomous execution protocol guardrails are present. |
-| ST-P009 | Review Gate | `./scripts/validate-review-gate.ps1` | Current changed files do not touch blocked paths or blocked workflow permissions. |
-| ST-P010 | Smoke | `./scripts/specbridge-smoke.ps1` | The deterministic validation chain passes. |
+| ST-P006 | Audit Packets | `./scripts/validate-audit-packets.ps1` | Audit packets contain required evidence fields, repository-relative paths, validation summaries, CI status, policy result, and no raw/sensitive content fields. |
+| ST-P007 | PR Review Reports | `./scripts/validate-pr-review-reports.ps1` | PR review report artifacts are valid. |
+| ST-P008 | Claude Review Workflow | `./scripts/validate-claude-review-workflow.ps1` | Claude review workflow guardrails are present. |
+| ST-P009 | Autonomous Protocol | `./scripts/validate-autonomous-execution-protocol.ps1` | Autonomous execution protocol guardrails are present. |
+| ST-P010 | Review Gate | `./scripts/validate-review-gate.ps1` | Current changed files do not touch blocked paths or blocked workflow permissions. |
+| ST-P011 | Smoke | `./scripts/specbridge-smoke.ps1` | The deterministic validation chain passes. |
 
 ## Negative Tests
 
@@ -59,14 +61,18 @@ Out of scope:
 | ST-N003 | Contract Scopes | Add a scope manifest without `exclusive_write` in a temporary copy. | Contract scope validation fails with missing required property. |
 | ST-N004 | Contract Scopes | Add two active scope manifests with the same `exclusive_write` path in a temporary copy. | Contract scope validation fails with conflicting contract ids and path. |
 | ST-N005 | Contract Scopes | Add two scope manifests with the same final report path in a temporary copy. | Contract scope validation fails with duplicate final report path. |
-| ST-N006 | Final Reports | Add a final report missing required fields in a temporary copy. | Final report validation fails with missing required property. |
-| ST-N007 | Review Gate | Stage `src/blocked.txt` in a temporary Git repo. | Review gate fails with blocked path changed. |
+| ST-N006 | Audit Packets | Generate an audit packet with a missing execution contract. | Audit packet generation fails with missing execution contract. |
+| ST-N007 | Audit Packets | Add an audit packet missing required fields in a temporary copy. | Audit packet validation fails with missing required field. |
+| ST-N008 | Audit Packets | Add an audit packet with a raw diff field in a temporary copy. | Audit packet validation fails with unexpected raw content field. |
+| ST-N009 | Final Reports | Add a final report missing required fields in a temporary copy. | Final report validation fails with missing required property. |
+| ST-N010 | Review Gate | Stage `src/blocked.txt` in a temporary Git repo. | Review gate fails with blocked path changed. |
 
 ## Positive Fixtures
 
 | ID | Area | Fixture | Expected Result |
 | --- | --- | --- | --- |
 | ST-F001 | Contract Scopes | Add two disjoint active scope manifests in a temporary copy. | Contract scope validation passes. |
+| ST-F002 | Audit Packets | Generate an audit packet from a fixture contract and final report, then validate it. | Audit packet validation passes. |
 
 ## Required Command
 

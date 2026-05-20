@@ -167,3 +167,29 @@ Read/write relationships between active contracts require explicit dependencies.
 ### AC-038
 
 scripts/specbridge-smoke.ps1 runs the contract scope validator.
+
+## Audit Packet Generator Acceptance Criteria
+
+### AC-039
+
+scripts/generate-audit-packet.ps1 exists and creates deterministic `.specbridge/audit-packets/*.audit-packet.json` files.
+
+### AC-040
+
+scripts/validate-audit-packets.ps1 exists and validates required audit packet fields.
+
+### AC-041
+
+Audit packets include task id, execution contract path, changed files, diff summary, validation commands, validation results, final report path, CI status, PR review report path, policy result, unresolved risks, completion status, and source file references.
+
+### AC-042
+
+Audit packets reference source files by repository-relative path and do not embed raw diffs, file contents, secrets, tokens, private keys, or credential values.
+
+### AC-043
+
+Positive fixture generation passes and invalid audit packets fail for expected reasons.
+
+### AC-044
+
+scripts/specbridge-smoke.ps1 runs audit packet validation.

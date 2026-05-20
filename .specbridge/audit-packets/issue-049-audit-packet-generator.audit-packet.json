@@ -1,0 +1,205 @@
+﻿{
+    "schema_version":  "1",
+    "task_id":  "issue-049-audit-packet-generator",
+    "generated_by":  "specbridge-audit-packet-generator",
+    "execution_contract_path":  ".specbridge/contracts/issue-049-audit-packet-generator.execution.md",
+    "changed_files":  [
+                          ".specbridge/audit-packets/issue-049-audit-packet-generator.audit-packet.json",
+                          ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                          ".specbridge/context/audit-packet-standard.md",
+                          ".specbridge/context/CURRENT_GOAL.md",
+                          ".specbridge/contracts/issue-049-audit-packet-generator.execution.md",
+                          ".specbridge/reports/issue-049-audit-packet-generator.final-report.json",
+                          ".specbridge/schemas/audit-packet.schema.json",
+                          ".specbridge/scopes/issue-049-audit-packet-generator.scope.json",
+                          "docs/specbridge-audit-packet-generator.md",
+                          "docs/specbridge-autonomy-backlog.md",
+                          "docs/specbridge-test-matrix.md",
+                          "docs/specbridge-test-results.md",
+                          "scripts/generate-audit-packet.ps1",
+                          "scripts/specbridge-smoke.ps1",
+                          "scripts/test-specbridge-negative-validations.ps1",
+                          "scripts/validate-audit-packets.ps1",
+                          "scripts/validate-schemas.ps1",
+                          "specs/004-acceptance-tests.md"
+                      ],
+    "diff_summary":  [
+                         {
+                             "file":  ".specbridge/audit-packets/issue-049-audit-packet-generator.audit-packet.json",
+                             "added_lines":  205,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                             "added_lines":  26,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/audit-packet-standard.md",
+                             "added_lines":  25,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/CURRENT_GOAL.md",
+                             "added_lines":  1,
+                             "deleted_lines":  1
+                         },
+                         {
+                             "file":  ".specbridge/contracts/issue-049-audit-packet-generator.execution.md",
+                             "added_lines":  157,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/reports/issue-049-audit-packet-generator.final-report.json",
+                             "added_lines":  47,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/schemas/audit-packet.schema.json",
+                             "added_lines":  132,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/scopes/issue-049-audit-packet-generator.scope.json",
+                             "added_lines":  35,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-audit-packet-generator.md",
+                             "added_lines":  88,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-autonomy-backlog.md",
+                             "added_lines":  6,
+                             "deleted_lines":  2
+                         },
+                         {
+                             "file":  "docs/specbridge-test-matrix.md",
+                             "added_lines":  13,
+                             "deleted_lines":  7
+                         },
+                         {
+                             "file":  "docs/specbridge-test-results.md",
+                             "added_lines":  8,
+                             "deleted_lines":  3
+                         },
+                         {
+                             "file":  "scripts/generate-audit-packet.ps1",
+                             "added_lines":  328,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/specbridge-smoke.ps1",
+                             "added_lines":  1,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/test-specbridge-negative-validations.ps1",
+                             "added_lines":  113,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/validate-audit-packets.ps1",
+                             "added_lines":  254,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/validate-schemas.ps1",
+                             "added_lines":  1,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "specs/004-acceptance-tests.md",
+                             "added_lines":  6,
+                             "deleted_lines":  0
+                         }
+                     ],
+    "validation_commands":  [
+                                "git diff --check",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/generate-audit-packet.ps1 -TaskId issue-049-audit-packet-generator -ExecutionContractPath .specbridge/contracts/issue-049-audit-packet-generator.execution.md -FinalReportPath .specbridge/reports/issue-049-audit-packet-generator.final-report.json -CiStatus pending",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-autonomous-execution-protocol.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-claude-review-workflow.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-pr-review-reports.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-schemas.ps1"
+                            ],
+    "validation_results":  [
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/generate-audit-packet.ps1 -TaskId issue-049-audit-packet-generator -ExecutionContractPath .specbridge/contracts/issue-049-audit-packet-generator.execution.md -FinalReportPath .specbridge/reports/issue-049-audit-packet-generator.final-report.json -CiStatus pending",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-schemas.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-pr-review-reports.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-claude-review-workflow.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-autonomous-execution-protocol.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "git diff --check",
+                                   "result":  "passed"
+                               }
+                           ],
+    "final_report_path":  ".specbridge/reports/issue-049-audit-packet-generator.final-report.json",
+    "ci_status":  "pending",
+    "pr_review_report_path":  null,
+    "policy_result":  "Passed. Scope is limited to governance scripts, tests, documentation, schema, audit packet artifact, context, contract, scope manifest, and final report artifacts.",
+    "unresolved_risks":  [
+                             "CI evidence is pending until the branch is pushed and GitHub checks run."
+                         ],
+    "completion_status":  "complete_pending_ci",
+    "source_files":  [
+                         ".specbridge/contracts/issue-049-audit-packet-generator.execution.md",
+                         ".specbridge/reports/issue-049-audit-packet-generator.final-report.json"
+                     ],
+    "secret_omission":  "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

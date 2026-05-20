@@ -159,6 +159,38 @@ function Write-ScopeManifest {
   Set-Content -LiteralPath $Path -Value ($manifest | ConvertTo-Json -Depth 4) -NoNewline
 }
 
+function Write-AuditFixtureFiles {
+  param(
+    [string] $ContractPath = ".specbridge/contracts/audit-fixture.execution.md",
+    [string] $ReportPath = ".specbridge/reports/audit-fixture.final-report.json"
+  )
+
+  New-Item -ItemType Directory -Force -Path (Split-Path -Parent $ContractPath) | Out-Null
+  New-Item -ItemType Directory -Force -Path (Split-Path -Parent $ReportPath) | Out-Null
+
+  Set-Content -LiteralPath $ContractPath -Value "# Audit Fixture Contract" -NoNewline
+
+  $report = [ordered]@{
+    summary = "Audit fixture final report"
+    changed_files = @(
+      "docs/audit-fixture.md",
+      ".specbridge/reports/audit-fixture.final-report.json"
+    )
+    validations = @(
+      "powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1: passed",
+      "git diff --check: passed"
+    )
+    policy_result = "Passed in audit packet fixture."
+    risk_result = "Low risk fixture."
+    unresolved_risks = @()
+    merge_status = "Not applicable."
+    deployment_status = "Not applicable."
+    completion_status = "complete"
+  }
+
+  Set-Content -LiteralPath $ReportPath -Value ($report | ConvertTo-Json -Depth 6) -NoNewline
+}
+
 try {
   New-Item -ItemType Directory -Force -Path $tempRoot | Out-Null
 
@@ -298,6 +330,87 @@ This contract intentionally omits the Goal section.
     } `
     -Command "./scripts/validate-contract-scopes.ps1" `
     -ExpectedPattern "duplicate final_report path=.specbridge/reports/shared\.final-report\.json contracts=report-a, report-b"
+
+  Invoke-ExpectedSuccess `
+    -Name "audit-packet-generator-valid-fixture" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/audit-packets" -Recurse -Force -ErrorAction SilentlyContinue
+      Write-AuditFixtureFiles
+
+      powershell -ExecutionPolicy Bypass -File ./scripts/generate-audit-packet.ps1 `
+        -TaskId "audit-fixture" `
+        -ExecutionContractPath ".specbridge/contracts/audit-fixture.execution.md" `
+        -FinalReportPath ".specbridge/reports/audit-fixture.final-report.json" `
+        -CiStatus "not_collected" | Out-Null
+    } `
+    -Command "./scripts/validate-audit-packets.ps1"
+
+  Invoke-ExpectedFailure `
+    -Name "audit-packet-generator-missing-contract" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/audit-packets" -Recurse -Force -ErrorAction SilentlyContinue
+      Write-AuditFixtureFiles
+    } `
+    -Command "./scripts/generate-audit-packet.ps1 -TaskId audit-fixture -ExecutionContractPath .specbridge/contracts/missing.execution.md -FinalReportPath .specbridge/reports/audit-fixture.final-report.json" `
+    -ExpectedPattern "missing execution contract"
+
+  Invoke-ExpectedFailure `
+    -Name "audit-packet-missing-required-field" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/audit-packets" -Recurse -Force -ErrorAction SilentlyContinue
+      New-Item -ItemType Directory -Force -Path ".specbridge/audit-packets" | Out-Null
+
+      $packet = [ordered]@{
+        schema_version = "1"
+        task_id = "missing-required-field"
+      }
+
+      Set-Content -LiteralPath ".specbridge/audit-packets/missing-required-field.audit-packet.json" -Value ($packet | ConvertTo-Json -Depth 4) -NoNewline
+    } `
+    -Command "./scripts/validate-audit-packets.ps1" `
+    -ExpectedPattern "missing required field.*execution_contract_path"
+
+  Invoke-ExpectedFailure `
+    -Name "audit-packet-raw-diff-field" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/audit-packets" -Recurse -Force -ErrorAction SilentlyContinue
+      New-Item -ItemType Directory -Force -Path ".specbridge/audit-packets" | Out-Null
+
+      $packet = [ordered]@{
+        schema_version = "1"
+        task_id = "raw-diff-field"
+        generated_by = "specbridge-tests"
+        execution_contract_path = ".specbridge/contracts/audit-fixture.execution.md"
+        changed_files = @("docs/audit-fixture.md")
+        diff_summary = @(
+          [ordered]@{
+            file = "docs/audit-fixture.md"
+            added_lines = 1
+            deleted_lines = 0
+          }
+        )
+        validation_commands = @("git diff --check")
+        validation_results = @(
+          [ordered]@{
+            command = "git diff --check"
+            result = "passed"
+          }
+        )
+        final_report_path = ".specbridge/reports/audit-fixture.final-report.json"
+        ci_status = "not_collected"
+        pr_review_report_path = $null
+        policy_result = "Passed."
+        unresolved_risks = @()
+        completion_status = "complete"
+        source_files = @(".specbridge/contracts/audit-fixture.execution.md", ".specbridge/reports/audit-fixture.final-report.json")
+        secret_omission = "No raw content."
+        raw_diff = "diff --git a/docs/audit-fixture.md b/docs/audit-fixture.md"
+      }
+
+      Set-Content -LiteralPath ".specbridge/audit-packets/raw-diff-field.audit-packet.json" -Value ($packet | ConvertTo-Json -Depth 8) -NoNewline
+    } `
+    -Command "./scripts/validate-audit-packets.ps1" `
+    -ExpectedPattern "unexpected field.*raw_diff"
 
   Invoke-ExpectedFailure `
     -Name "final-report-missing-property" `

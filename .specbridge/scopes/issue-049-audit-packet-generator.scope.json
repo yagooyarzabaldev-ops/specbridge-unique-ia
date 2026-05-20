@@ -1,0 +1,35 @@
+{
+  "contract_id": "issue-049-audit-packet-generator",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/audit-packets/issue-049-audit-packet-generator.audit-packet.json",
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/context/audit-packet-standard.md",
+    ".specbridge/contracts/issue-049-audit-packet-generator.execution.md",
+    ".specbridge/reports/issue-049-audit-packet-generator.final-report.json",
+    ".specbridge/schemas/audit-packet.schema.json",
+    ".specbridge/scopes/issue-049-audit-packet-generator.scope.json",
+    "docs/specbridge-audit-packet-generator.md",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-test-matrix.md",
+    "docs/specbridge-test-results.md",
+    "scripts/generate-audit-packet.ps1",
+    "scripts/specbridge-smoke.ps1",
+    "scripts/test-specbridge-negative-validations.ps1",
+    "scripts/validate-audit-packets.ps1",
+    "scripts/validate-schemas.ps1",
+    "specs/004-acceptance-tests.md"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    ".specbridge/policy.yaml",
+    "docs/specbridge-contract-scope-validator.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-048-contract-scope-validator"
+  ],
+  "final_report": ".specbridge/reports/issue-049-audit-packet-generator.final-report.json"
+}

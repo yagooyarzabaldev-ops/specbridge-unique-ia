@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specbridge.local/schemas/audit-packet.schema.json",
+  "title": "SpecBridge Audit Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "generated_by",
+    "execution_contract_path",
+    "changed_files",
+    "diff_summary",
+    "validation_commands",
+    "validation_results",
+    "final_report_path",
+    "ci_status",
+    "pr_review_report_path",
+    "policy_result",
+    "unresolved_risks",
+    "completion_status",
+    "source_files",
+    "secret_omission"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "generated_by": {
+      "type": "string"
+    },
+    "execution_contract_path": {
+      "type": "string"
+    },
+    "changed_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "diff_summary": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "file",
+          "added_lines",
+          "deleted_lines"
+        ],
+        "properties": {
+          "file": {
+            "type": "string"
+          },
+          "added_lines": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "deleted_lines": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "validation_commands": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "validation_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "command",
+          "result"
+        ],
+        "properties": {
+          "command": {
+            "type": "string"
+          },
+          "result": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "final_report_path": {
+      "type": "string"
+    },
+    "ci_status": {
+      "type": "string"
+    },
+    "pr_review_report_path": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "policy_result": {
+      "type": "string"
+    },
+    "unresolved_risks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "completion_status": {
+      "type": "string"
+    },
+    "source_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "secret_omission": {
+      "type": "string"
+    }
+  }
+}

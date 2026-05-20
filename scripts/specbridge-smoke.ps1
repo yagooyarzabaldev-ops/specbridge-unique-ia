@@ -11,6 +11,7 @@ $validationScripts = @(
   "./scripts/validate-contract-scopes.ps1",
   "./scripts/validate-schemas.ps1",
   "./scripts/validate-final-reports.ps1",
+  "./scripts/validate-audit-packets.ps1",
   "./scripts/validate-pr-review-reports.ps1",
   "./scripts/validate-claude-review-workflow.ps1",
   "./scripts/validate-autonomous-execution-protocol.ps1",

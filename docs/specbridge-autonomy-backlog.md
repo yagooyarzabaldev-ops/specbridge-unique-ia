@@ -100,6 +100,10 @@ Goal:
 
 Create the evidence bundle ChatGPT/Codex uses to audit Claude Code output.
 
+Status:
+
+Implemented as `scripts/generate-audit-packet.ps1` and `scripts/validate-audit-packets.ps1`, with committed packet evidence under `.specbridge/audit-packets/`.
+
 Required packet fields:
 
 - issue or task id
@@ -231,8 +235,8 @@ Acceptance:
 
 ## Current Next Task
 
-After the Contract Scope Validator is merged, start with the Audit Packet Generator.
+After the Audit Packet Generator is merged, start with the ChatGPT Audit Standard.
 
 Reason:
 
-Contract scope validation gives SpecBridge the ownership evidence required before generating the audit bundle used by ChatGPT/Codex review.
+Audit packets provide the evidence bundle that the ChatGPT Audit Standard must consume and judge.

@@ -120,3 +120,9 @@ docs/specbridge-multi-agent-antigravity-architecture.md exists and defines Gover
 Pass condition:
 
 scripts/validate-contract-scopes.ps1 exists, validates `.specbridge/scopes/*.scope.json`, rejects overlapping active `exclusive_write` paths, rejects duplicate final report paths, requires explicit dependencies for active read/write relationships, and is included in scripts/specbridge-smoke.ps1.
+
+### AT-018 - Audit packet generation exists
+
+Pass condition:
+
+scripts/generate-audit-packet.ps1 creates deterministic `.specbridge/audit-packets/*.audit-packet.json` files, scripts/validate-audit-packets.ps1 validates the required packet fields, packets reference files by path without embedding raw diffs or file contents, and scripts/specbridge-smoke.ps1 includes audit packet validation.

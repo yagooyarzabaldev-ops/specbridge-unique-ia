@@ -5,6 +5,7 @@ Write-Output "SpecBridge schema validation started."
 $failed = $false
 
 $requiredSchemas = @(
+  ".specbridge/schemas/audit-packet.schema.json",
   ".specbridge/schemas/claude-review-output.schema.json",
   ".specbridge/schemas/codex-review-output.schema.json",
   ".specbridge/schemas/final-report.schema.json"
