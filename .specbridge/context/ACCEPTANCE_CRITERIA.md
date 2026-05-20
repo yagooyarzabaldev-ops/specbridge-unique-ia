@@ -227,3 +227,29 @@ Positive audit fixtures pass and invalid audit fixtures fail for expected reason
 ### AC-052
 
 scripts/specbridge-smoke.ps1 runs ChatGPT audit validation.
+
+## Security Review Gate Expansion Acceptance Criteria
+
+### AC-053
+
+scripts/validate-security-gates.ps1 exists and validates changed files for deterministic security categories.
+
+### AC-054
+
+scripts/specbridge-smoke.ps1 runs security gate validation.
+
+### AC-055
+
+The security gate detects secret-like content, auth-sensitive paths, authorization-sensitive paths, CI/CD permission escalation, dependency manifest or lockfile changes, unsafe shell commands, protected path changes, and production configuration paths.
+
+### AC-056
+
+The negative validation suite includes a safe fixture that passes security gate validation.
+
+### AC-057
+
+The negative validation suite includes unsafe fixtures that fail for the expected security categories.
+
+### AC-058
+
+Security gate failures name the category in machine-readable output.

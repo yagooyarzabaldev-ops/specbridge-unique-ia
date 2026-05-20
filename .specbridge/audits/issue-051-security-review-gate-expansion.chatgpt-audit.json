@@ -1,0 +1,79 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-051-security-review-gate-expansion",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-051-security-review-gate-expansion.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-051-security-review-gate-expansion.execution.md",
+  "final_report_path": ".specbridge/reports/issue-051-security-review-gate-expansion.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "The security gate implements the backlog's required categories for secret-like content, auth-sensitive files, authorization-sensitive files, CI/CD permission escalation, dependency additions, unsafe shell commands, protected paths, and production configuration.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "The execution contract defines acceptance criteria for the validator, smoke coverage, safe fixture, unsafe fixtures, category output, and local validations.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The task is limited to validation scripts, tests, documentation, context updates, contract, scope manifest, report, audit packet, and audit artifact.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The change strengthens security validation and does not add secrets, production configuration, authentication implementation, authorization implementation, billing, dependency installation, CI/CD permission escalation, CI/CD security weakening, or deployment automation.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed files are listed in the final report and covered by the contract scope manifest.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "Local validation evidence is recorded in the final report and test results, including safe and unsafe security gate fixtures.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "needs_human_decision",
+      "evidence": "GitHub CI evidence is pending until this branch is pushed and pull request checks complete.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records pending CI risk and does not claim deployment or production changes.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "ci_evidence",
+      "file": ".specbridge/audit-packets/issue-051-security-review-gate-expansion.audit-packet.json",
+      "line": null,
+      "evidence": "CI status is represented as pending in the audit packet until GitHub checks run.",
+      "recommendation": "Allow the GitHub merge gate to provide final CI evidence before merge.",
+      "blocking": false
+    }
+  ],
+  "outcome": "needs_human_decision",
+  "merge_allowed": false,
+  "unresolved_risks": [
+    "CI evidence is pending until GitHub checks run."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-051-security-review-gate-expansion.audit-packet.json",
+    ".specbridge/contracts/issue-051-security-review-gate-expansion.execution.md",
+    ".specbridge/reports/issue-051-security-review-gate-expansion.final-report.json"
+  ]
+}

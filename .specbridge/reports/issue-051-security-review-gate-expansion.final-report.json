@@ -1,0 +1,45 @@
+{
+  "summary": "Added deterministic security gate validation with explicit categories, smoke coverage, and positive and negative fixture coverage.",
+  "changed_files": [
+    "scripts/validate-security-gates.ps1",
+    "scripts/test-specbridge-negative-validations.ps1",
+    "scripts/specbridge-smoke.ps1",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    ".specbridge/scopes/issue-051-security-review-gate-expansion.scope.json",
+    ".specbridge/contracts/issue-051-security-review-gate-expansion.execution.md",
+    ".specbridge/reports/issue-051-security-review-gate-expansion.final-report.json",
+    ".specbridge/audit-packets/issue-051-security-review-gate-expansion.audit-packet.json",
+    ".specbridge/audits/issue-051-security-review-gate-expansion.chatgpt-audit.json",
+    "docs/specbridge-security-review-gate-expansion.md",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-test-matrix.md",
+    "docs/specbridge-test-results.md",
+    "specs/004-acceptance-tests.md"
+  ],
+  "validations": [
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-schemas.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-pr-review-reports.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-claude-review-workflow.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-autonomous-execution-protocol.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "git diff --check: passed"
+  ],
+  "policy_result": "Passed. Scope is limited to governance validation, security gate fixtures, documentation, context updates, contract, scope manifest, audit packet, audit artifact, and final report artifacts.",
+  "risk_result": "Medium risk because security validation behavior changed. No runtime product code, secrets, production configuration, billing, authentication implementation, authorization implementation, dependency installation, CI/CD permission escalation, CI/CD security weakening, branch protection weakening, raw secret capture, raw file content capture, or deployment automation.",
+  "unresolved_risks": [
+    "CI evidence is pending until the branch is pushed and GitHub checks run."
+  ],
+  "merge_status": "Pending pull request and required gates.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_ci"
+}

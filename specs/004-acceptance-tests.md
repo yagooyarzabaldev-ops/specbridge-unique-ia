@@ -132,3 +132,9 @@ scripts/generate-audit-packet.ps1 creates deterministic `.specbridge/audit-packe
 Pass condition:
 
 .specbridge/schemas/chatgpt-audit.schema.json exists, scripts/validate-chatgpt-audits.ps1 validates `.specbridge/audits/*.chatgpt-audit.json`, allowed outcomes are limited to `approved`, `changes_requested`, `blocked`, and `needs_human_decision`, every audit checks the required dimensions, blocking findings prevent merge, and scripts/specbridge-smoke.ps1 includes ChatGPT audit validation.
+
+### AT-020 - Security review gate expansion exists
+
+Pass condition:
+
+scripts/validate-security-gates.ps1 exists, scripts/specbridge-smoke.ps1 includes security gate validation, the gate checks changed files for secret-like content, auth-sensitive paths, authorization-sensitive paths, CI/CD permission escalation, dependency manifest or lockfile changes, unsafe shell commands, protected path changes, and production configuration paths, and the negative validation suite proves safe and unsafe fixtures with expected security categories.

@@ -41,6 +41,7 @@ Already complete:
 - final report artifacts
 - PR review report artifacts
 - GitHub CI validation
+- security review gate expansion
 
 ## Remaining Work
 
@@ -210,6 +211,10 @@ Goal:
 
 Strengthen deterministic security checks before runtime autonomy expands.
 
+Status:
+
+Implemented as `scripts/validate-security-gates.ps1` with smoke validation coverage and positive/negative fixture coverage in `scripts/test-specbridge-negative-validations.ps1`.
+
 Add checks for:
 
 - secret-like content
@@ -239,8 +244,8 @@ Acceptance:
 
 ## Current Next Task
 
-After the ChatGPT Audit Standard is merged, start with Security Review Gate Expansion.
+After the Security Review Gate Expansion is merged, start with the Local SpecBridge CLI.
 
 Reason:
 
-Security gates should now consume contract scope, audit packet, and audit result evidence before runtime autonomy expands.
+The security gate now guards protected categories before runtime autonomy expands. The next product step is a file-backed CLI wrapper that can expose the existing validators, contract/report creation, audit packet generation, conflict detection, and review gate commands through deterministic local commands.

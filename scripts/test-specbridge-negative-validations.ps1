@@ -94,11 +94,26 @@ function Invoke-ExpectedSuccess {
   param(
     [string] $Name,
     [scriptblock] $Arrange,
-    [string] $Command
+    [string] $Command,
+    [bool] $RequiresGit = $false
   )
 
   $caseDir = Join-Path $tempRoot $Name
   Copy-RepoFixture -Destination $caseDir
+
+  if ($RequiresGit) {
+    Push-Location $caseDir
+    try {
+      git init | Out-Null
+      git config user.email "specbridge-tests@example.invalid"
+      git config user.name "SpecBridge Tests"
+      git config core.autocrlf false
+      git commit --allow-empty -m "baseline" | Out-Null
+    }
+    finally {
+      Pop-Location
+    }
+  }
 
   Push-Location $caseDir
   try {
@@ -526,6 +541,123 @@ This contract intentionally omits the Goal section.
     } `
     -Command "./scripts/validate-chatgpt-audits.ps1" `
     -ExpectedPattern "non-approved audit outcomes must set merge_allowed false"
+
+  Invoke-ExpectedSuccess `
+    -Name "security-gate-safe-fixture" `
+    -RequiresGit $true `
+    -Arrange {
+      New-Item -ItemType Directory -Force -Path "docs" | Out-Null
+      Set-Content -LiteralPath "docs/security-safe-fixture.md" -Value "Safe documentation fixture." -NoNewline
+      git add docs/security-safe-fixture.md 2>$null
+    } `
+    -Command "./scripts/validate-security-gates.ps1"
+
+  Invoke-ExpectedFailure `
+    -Name "security-gate-secret-like-content" `
+    -RequiresGit $true `
+    -Arrange {
+      New-Item -ItemType Directory -Force -Path "docs" | Out-Null
+      $secretLikeValue = "AKIA" + "1234567890ABCDEF"
+      Set-Content -LiteralPath "docs/security-secret-fixture.txt" -Value "fixture = $secretLikeValue" -NoNewline
+      git add docs/security-secret-fixture.txt 2>$null
+    } `
+    -Command "./scripts/validate-security-gates.ps1" `
+    -ExpectedPattern "category=secret_like_content"
+
+  Invoke-ExpectedFailure `
+    -Name "security-gate-auth-sensitive-file" `
+    -RequiresGit $true `
+    -Arrange {
+      New-Item -ItemType Directory -Force -Path "auth" | Out-Null
+      Set-Content -LiteralPath "auth/login-policy.md" -Value "Authentication fixture." -NoNewline
+      git add auth/login-policy.md 2>$null
+    } `
+    -Command "./scripts/validate-security-gates.ps1" `
+    -ExpectedPattern "category=auth_sensitive_file"
+
+  Invoke-ExpectedFailure `
+    -Name "security-gate-authorization-sensitive-file" `
+    -RequiresGit $true `
+    -Arrange {
+      New-Item -ItemType Directory -Force -Path "rbac" | Out-Null
+      Set-Content -LiteralPath "rbac/policy.md" -Value "Authorization fixture." -NoNewline
+      git add rbac/policy.md 2>$null
+    } `
+    -Command "./scripts/validate-security-gates.ps1" `
+    -ExpectedPattern "category=authorization_sensitive_file"
+
+  Invoke-ExpectedFailure `
+    -Name "security-gate-ci-permission-escalation" `
+    -RequiresGit $true `
+    -Arrange {
+      New-Item -ItemType Directory -Force -Path ".github/workflows" | Out-Null
+      $workflow = @(
+        "name: Security Fixture",
+        "",
+        "on:",
+        "  pull_request:",
+        "",
+        "permissions:",
+        "  contents: write",
+        "",
+        "jobs:",
+        "  fixture:",
+        "    runs-on: windows-latest",
+        "    steps:",
+        "      - run: echo fixture"
+      ) -join "`n"
+
+      $workflowPath = Join-Path (Join-Path ".github" "workflows") "security-fixture.yml"
+      $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+      [System.IO.File]::WriteAllText((Join-Path (Get-Location).Path $workflowPath), $workflow, $utf8NoBom)
+      git add .github/workflows/security-fixture.yml 2>$null
+    } `
+    -Command "./scripts/validate-security-gates.ps1" `
+    -ExpectedPattern "category=ci_cd_permission_escalation"
+
+  Invoke-ExpectedFailure `
+    -Name "security-gate-dependency-addition" `
+    -RequiresGit $true `
+    -Arrange {
+      Set-Content -LiteralPath "package.json" -Value "{}" -NoNewline
+      git add package.json 2>$null
+    } `
+    -Command "./scripts/validate-security-gates.ps1" `
+    -ExpectedPattern "category=dependency_addition"
+
+  Invoke-ExpectedFailure `
+    -Name "security-gate-unsafe-shell-command" `
+    -RequiresGit $true `
+    -Arrange {
+      New-Item -ItemType Directory -Force -Path "docs" | Out-Null
+      $dangerousCommand = "rm -r" + "f /"
+      Set-Content -LiteralPath "docs/security-command-fixture.md" -Value "Do not run: $dangerousCommand" -NoNewline
+      git add docs/security-command-fixture.md 2>$null
+    } `
+    -Command "./scripts/validate-security-gates.ps1" `
+    -ExpectedPattern "category=unsafe_shell_command"
+
+  Invoke-ExpectedFailure `
+    -Name "security-gate-protected-path" `
+    -RequiresGit $true `
+    -Arrange {
+      New-Item -ItemType Directory -Force -Path "secrets" | Out-Null
+      Set-Content -LiteralPath "secrets/example.txt" -Value "protected path fixture" -NoNewline
+      git add secrets/example.txt 2>$null
+    } `
+    -Command "./scripts/validate-security-gates.ps1" `
+    -ExpectedPattern "category=protected_path_change"
+
+  Invoke-ExpectedFailure `
+    -Name "security-gate-production-config" `
+    -RequiresGit $true `
+    -Arrange {
+      New-Item -ItemType Directory -Force -Path "infra/prod" | Out-Null
+      Set-Content -LiteralPath "infra/prod/config.yaml" -Value "name: fixture" -NoNewline
+      git add infra/prod/config.yaml 2>$null
+    } `
+    -Command "./scripts/validate-security-gates.ps1" `
+    -ExpectedPattern "category=production_configuration"
 
   Invoke-ExpectedFailure `
     -Name "final-report-missing-property" `

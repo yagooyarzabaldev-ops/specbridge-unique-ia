@@ -1,0 +1,192 @@
+﻿{
+    "schema_version":  "1",
+    "task_id":  "issue-051-security-review-gate-expansion",
+    "generated_by":  "specbridge-audit-packet-generator",
+    "execution_contract_path":  ".specbridge/contracts/issue-051-security-review-gate-expansion.execution.md",
+    "changed_files":  [
+                          ".specbridge/audit-packets/issue-051-security-review-gate-expansion.audit-packet.json",
+                          ".specbridge/audits/issue-051-security-review-gate-expansion.chatgpt-audit.json",
+                          ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                          ".specbridge/context/CURRENT_GOAL.md",
+                          ".specbridge/contracts/issue-051-security-review-gate-expansion.execution.md",
+                          ".specbridge/reports/issue-051-security-review-gate-expansion.final-report.json",
+                          ".specbridge/scopes/issue-051-security-review-gate-expansion.scope.json",
+                          "docs/specbridge-autonomy-backlog.md",
+                          "docs/specbridge-security-review-gate-expansion.md",
+                          "docs/specbridge-test-matrix.md",
+                          "docs/specbridge-test-results.md",
+                          "scripts/specbridge-smoke.ps1",
+                          "scripts/test-specbridge-negative-validations.ps1",
+                          "scripts/validate-security-gates.ps1",
+                          "specs/004-acceptance-tests.md"
+                      ],
+    "diff_summary":  [
+                         {
+                             "file":  ".specbridge/audit-packets/issue-051-security-review-gate-expansion.audit-packet.json",
+                             "added_lines":  192,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/audits/issue-051-security-review-gate-expansion.chatgpt-audit.json",
+                             "added_lines":  79,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                             "added_lines":  255,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/CURRENT_GOAL.md",
+                             "added_lines":  19,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/contracts/issue-051-security-review-gate-expansion.execution.md",
+                             "added_lines":  160,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/reports/issue-051-security-review-gate-expansion.final-report.json",
+                             "added_lines":  45,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/scopes/issue-051-security-review-gate-expansion.scope.json",
+                             "added_lines":  33,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-autonomy-backlog.md",
+                             "added_lines":  251,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-security-review-gate-expansion.md",
+                             "added_lines":  58,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-test-matrix.md",
+                             "added_lines":  114,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-test-results.md",
+                             "added_lines":  73,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/specbridge-smoke.ps1",
+                             "added_lines":  39,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/test-specbridge-negative-validations.ps1",
+                             "added_lines":  19,
+                             "deleted_lines":  17
+                         },
+                         {
+                             "file":  "scripts/validate-security-gates.ps1",
+                             "added_lines":  337,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "specs/004-acceptance-tests.md",
+                             "added_lines":  140,
+                             "deleted_lines":  0
+                         }
+                     ],
+    "validation_commands":  [
+                                "git diff --check",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-autonomous-execution-protocol.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-claude-review-workflow.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-pr-review-reports.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-schemas.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1"
+                            ],
+    "validation_results":  [
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-schemas.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-pr-review-reports.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-claude-review-workflow.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-autonomous-execution-protocol.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "git diff --check",
+                                   "result":  "passed"
+                               }
+                           ],
+    "final_report_path":  ".specbridge/reports/issue-051-security-review-gate-expansion.final-report.json",
+    "ci_status":  "pending",
+    "pr_review_report_path":  null,
+    "policy_result":  "Passed. Scope is limited to governance validation, security gate fixtures, documentation, context updates, contract, scope manifest, audit packet, audit artifact, and final report artifacts.",
+    "unresolved_risks":  [
+                             "CI evidence is pending until the branch is pushed and GitHub checks run."
+                         ],
+    "completion_status":  "complete_pending_ci",
+    "source_files":  [
+                         ".specbridge/contracts/issue-051-security-review-gate-expansion.execution.md",
+                         ".specbridge/reports/issue-051-security-review-gate-expansion.final-report.json"
+                     ],
+    "secret_omission":  "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

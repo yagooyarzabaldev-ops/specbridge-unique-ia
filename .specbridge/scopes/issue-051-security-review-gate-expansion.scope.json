@@ -1,0 +1,33 @@
+{
+  "contract_id": "issue-051-security-review-gate-expansion",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/audit-packets/issue-051-security-review-gate-expansion.audit-packet.json",
+    ".specbridge/audits/issue-051-security-review-gate-expansion.chatgpt-audit.json",
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-051-security-review-gate-expansion.execution.md",
+    ".specbridge/reports/issue-051-security-review-gate-expansion.final-report.json",
+    ".specbridge/scopes/issue-051-security-review-gate-expansion.scope.json",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-security-review-gate-expansion.md",
+    "docs/specbridge-test-matrix.md",
+    "docs/specbridge-test-results.md",
+    "scripts/specbridge-smoke.ps1",
+    "scripts/test-specbridge-negative-validations.ps1",
+    "scripts/validate-security-gates.ps1",
+    "specs/004-acceptance-tests.md"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    "docs/specbridge-chatgpt-audit-standard.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-050-chatgpt-audit-standard"
+  ],
+  "final_report": ".specbridge/reports/issue-051-security-review-gate-expansion.final-report.json"
+}
