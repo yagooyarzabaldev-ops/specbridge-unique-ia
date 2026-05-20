@@ -19,6 +19,7 @@ In scope:
 - audit packets
 - ChatGPT audit artifacts
 - security review gates
+- local CLI commands
 - schemas
 - final reports
 - PR review reports
@@ -50,11 +51,12 @@ Out of scope:
 | ST-P006 | Audit Packets | `./scripts/validate-audit-packets.ps1` | Audit packets contain required evidence fields, repository-relative paths, validation summaries, CI status, policy result, and no raw/sensitive content fields. |
 | ST-P007 | ChatGPT Audits | `./scripts/validate-chatgpt-audits.ps1` | ChatGPT audit artifacts contain required outcomes, checked dimensions, file-referenced findings, and merge-blocking semantics. |
 | ST-P008 | Security Gate | `./scripts/validate-security-gates.ps1` | Current changed files do not cross protected security categories. |
-| ST-P009 | PR Review Reports | `./scripts/validate-pr-review-reports.ps1` | PR review report artifacts are valid. |
-| ST-P010 | Claude Review Workflow | `./scripts/validate-claude-review-workflow.ps1` | Claude review workflow guardrails are present. |
-| ST-P011 | Autonomous Protocol | `./scripts/validate-autonomous-execution-protocol.ps1` | Autonomous execution protocol guardrails are present. |
-| ST-P012 | Review Gate | `./scripts/validate-review-gate.ps1` | Current changed files do not touch blocked paths or blocked workflow permissions. |
-| ST-P013 | Smoke | `./scripts/specbridge-smoke.ps1` | The deterministic validation chain passes. |
+| ST-P009 | Local CLI | `./scripts/test-specbridge-cli.ps1` | The local CLI supports every required command and deterministic failure behavior. |
+| ST-P010 | PR Review Reports | `./scripts/validate-pr-review-reports.ps1` | PR review report artifacts are valid. |
+| ST-P011 | Claude Review Workflow | `./scripts/validate-claude-review-workflow.ps1` | Claude review workflow guardrails are present. |
+| ST-P012 | Autonomous Protocol | `./scripts/validate-autonomous-execution-protocol.ps1` | Autonomous execution protocol guardrails are present. |
+| ST-P013 | Review Gate | `./scripts/validate-review-gate.ps1` | Current changed files do not touch blocked paths or blocked workflow permissions. |
+| ST-P014 | Smoke | `./scripts/specbridge-smoke.ps1` | The deterministic validation chain passes. |
 
 ## Negative Tests
 
@@ -90,6 +92,7 @@ Out of scope:
 | ST-F002 | Audit Packets | Generate an audit packet from a fixture contract and final report, then validate it. | Audit packet validation passes. |
 | ST-F003 | ChatGPT Audits | Add a valid approved audit artifact with all required dimensions. | ChatGPT audit validation passes. |
 | ST-F004 | Security Gate | Add safe documentation in a temporary Git repo. | Security gate validation passes. |
+| ST-F005 | Local CLI | Run `status`, `validate`, `create-contract`, `create-report`, `audit-packet`, `decompose-task`, `detect-conflicts`, and `review-gate` in a temporary copy. | CLI validation passes and generated artifacts validate. |
 
 ## Required Command
 
@@ -101,7 +104,7 @@ powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-vali
 
 The negative runner creates temporary repository copies, mutates only those copies, verifies expected failures, and removes the temporary files.
 
-It also runs positive fixtures proving that disjoint active manifests, valid audit packet generation, valid ChatGPT audits, and safe security gate changes pass.
+It also runs positive fixtures proving that disjoint active manifests, valid audit packet generation, valid ChatGPT audits, safe security gate changes, and local CLI commands pass.
 
 ## Completion Rule
 

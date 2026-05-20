@@ -42,6 +42,7 @@ Already complete:
 - PR review report artifacts
 - GitHub CI validation
 - security review gate expansion
+- local SpecBridge CLI
 
 ## Remaining Work
 
@@ -50,6 +51,10 @@ Already complete:
 Goal:
 
 Implement the first file-backed runtime surface.
+
+Status:
+
+Implemented as `scripts/specbridge.ps1` with command coverage in `scripts/test-specbridge-cli.ps1` and smoke validation coverage.
 
 Required commands:
 
@@ -244,8 +249,8 @@ Acceptance:
 
 ## Current Next Task
 
-After the Security Review Gate Expansion is merged, start with the Local SpecBridge CLI.
+After the Local SpecBridge CLI is merged, start with the Controlled Implementation Pilot.
 
 Reason:
 
-The security gate now guards protected categories before runtime autonomy expands. The next product step is a file-backed CLI wrapper that can expose the existing validators, contract/report creation, audit packet generation, conflict detection, and review gate commands through deterministic local commands.
+The CLI now exposes the repository-first governance loop through deterministic local commands. The next product proof is a small controlled implementation pilot that runs through ChatGPT/Codex intent, SpecBridge contract and gates, Claude Code implementation, CI, ChatGPT audit, final report, and automatic merge.

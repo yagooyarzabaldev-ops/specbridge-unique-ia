@@ -12,7 +12,7 @@ Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test
 
 Execute the autonomy backlog in `docs/specbridge-autonomy-backlog.md`.
 
-The Security Review Gate Expansion is now the active completion target. After it is merged, the next recommended task is the Local SpecBridge CLI.
+The Local SpecBridge CLI is now the active completion target. After it is merged, the next recommended task is the Controlled Implementation Pilot.
 
 ## Completion Condition
 

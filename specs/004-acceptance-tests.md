@@ -138,3 +138,9 @@ Pass condition:
 Pass condition:
 
 scripts/validate-security-gates.ps1 exists, scripts/specbridge-smoke.ps1 includes security gate validation, the gate checks changed files for secret-like content, auth-sensitive paths, authorization-sensitive paths, CI/CD permission escalation, dependency manifest or lockfile changes, unsafe shell commands, protected path changes, and production configuration paths, and the negative validation suite proves safe and unsafe fixtures with expected security categories.
+
+### AT-021 - Local SpecBridge CLI exists
+
+Pass condition:
+
+scripts/specbridge.ps1 exists and supports `status`, `validate`, `create-contract`, `create-report`, `audit-packet`, `detect-conflicts`, `decompose-task`, and `review-gate`; commands have deterministic exit codes; artifact commands use declared repository-relative output paths; commands do not require secrets; scripts/test-specbridge-cli.ps1 covers every command; and scripts/specbridge-smoke.ps1 runs the CLI validation suite.

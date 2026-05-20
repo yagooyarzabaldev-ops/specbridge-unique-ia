@@ -253,3 +253,33 @@ The negative validation suite includes unsafe fixtures that fail for the expecte
 ### AC-058
 
 Security gate failures name the category in machine-readable output.
+
+## Local SpecBridge CLI Acceptance Criteria
+
+### AC-059
+
+scripts/specbridge.ps1 exists and exposes the local file-backed CLI.
+
+### AC-060
+
+The CLI supports `status`, `validate`, `create-contract`, `create-report`, `audit-packet`, `detect-conflicts`, `decompose-task`, and `review-gate`.
+
+### AC-061
+
+CLI commands have deterministic exit codes and fail when required declared inputs or output paths are missing.
+
+### AC-062
+
+CLI artifact commands write only declared repository-relative output paths.
+
+### AC-063
+
+CLI commands do not require secrets and avoid network calls by default.
+
+### AC-064
+
+scripts/test-specbridge-cli.ps1 covers every CLI command.
+
+### AC-065
+
+scripts/specbridge-smoke.ps1 runs the CLI validation suite.

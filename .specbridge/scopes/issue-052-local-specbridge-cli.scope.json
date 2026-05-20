@@ -1,0 +1,34 @@
+{
+  "contract_id": "issue-052-local-specbridge-cli",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/audit-packets/issue-052-local-specbridge-cli.audit-packet.json",
+    ".specbridge/audits/issue-052-local-specbridge-cli.chatgpt-audit.json",
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-052-local-specbridge-cli.execution.md",
+    ".specbridge/reports/issue-052-local-specbridge-cli.final-report.json",
+    ".specbridge/scopes/issue-052-local-specbridge-cli.scope.json",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-local-cli.md",
+    "docs/specbridge-test-matrix.md",
+    "docs/specbridge-test-results.md",
+    "scripts/specbridge-smoke.ps1",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "specs/004-acceptance-tests.md"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    "docs/specbridge-v4-product-contract.md",
+    "docs/specbridge-security-review-gate-expansion.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-051-security-review-gate-expansion"
+  ],
+  "final_report": ".specbridge/reports/issue-052-local-specbridge-cli.final-report.json"
+}
