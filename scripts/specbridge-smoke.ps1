@@ -12,7 +12,8 @@ $validationScripts = @(
   "./scripts/validate-final-reports.ps1",
   "./scripts/validate-pr-review-reports.ps1",
   "./scripts/validate-claude-review-workflow.ps1",
-  "./scripts/validate-autonomous-execution-protocol.ps1"
+  "./scripts/validate-autonomous-execution-protocol.ps1",
+  "./scripts/test-specbridge-negative-validations.ps1"
 )
 
 foreach ($script in $validationScripts) {

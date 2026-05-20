@@ -90,3 +90,21 @@ docs/specbridge-v4-product-contract.md exists and defines product goal, required
 Pass condition:
 
 .specbridge/policy.yaml enables autonomous merge, .specbridge/autonomy.yaml selects `full_autopilot` as the default profile, and documentation states that automatic merge requires all configured gates to pass.
+
+### AT-013 - Negative validation suite exists
+
+Pass condition:
+
+scripts/test-specbridge-negative-validations.ps1 exists and verifies that foundation validation, contract validation, final report validation, and PR review gate validation fail for expected invalid fixtures.
+
+### AT-014 - Smoke validation includes negative tests
+
+Pass condition:
+
+scripts/specbridge-smoke.ps1 runs scripts/test-specbridge-negative-validations.ps1 as part of the deterministic smoke chain.
+
+### AT-015 - Test evidence is documented
+
+Pass condition:
+
+docs/specbridge-test-matrix.md defines positive and negative test coverage, and docs/specbridge-test-results.md records current validation evidence.

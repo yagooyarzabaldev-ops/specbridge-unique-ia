@@ -1,0 +1,78 @@
+# SpecBridge Test Matrix
+
+## Purpose
+
+This matrix defines the required test coverage for SpecBridge's repository-first governance loop.
+
+The test suite must prove both:
+
+- valid SpecBridge artifacts pass
+- invalid or unsafe SpecBridge artifacts fail deterministically
+
+## Test Scope
+
+In scope:
+
+- foundation files
+- execution contracts
+- schemas
+- final reports
+- PR review reports
+- Claude review workflow guardrails
+- autonomous execution protocol
+- PR review gate
+- smoke validation
+- negative validation cases
+
+Out of scope:
+
+- production deployment
+- billing
+- secrets
+- live Claude execution
+- live MCP servers
+- hosted dashboard runtime
+- destructive infrastructure operations
+
+## Positive Tests
+
+| ID | Area | Command | Expected Result |
+| --- | --- | --- | --- |
+| ST-P001 | Foundation | `./scripts/validate-foundation.ps1` | Required files exist, Markdown fences are balanced, no blocked implementation paths exist. |
+| ST-P002 | Contracts | `./scripts/validate-contracts.ps1` | Every execution contract has required sections, metadata, allowed autonomy profile, allowed risk level, allowed status, and GitHub issue URL. |
+| ST-P003 | Schemas | `./scripts/validate-schemas.ps1` | Required JSON schemas exist and are readable. |
+| ST-P004 | Final Reports | `./scripts/validate-final-reports.ps1` | Final reports are valid JSON and contain required fields. |
+| ST-P005 | PR Review Reports | `./scripts/validate-pr-review-reports.ps1` | PR review report artifacts are valid. |
+| ST-P006 | Claude Review Workflow | `./scripts/validate-claude-review-workflow.ps1` | Claude review workflow guardrails are present. |
+| ST-P007 | Autonomous Protocol | `./scripts/validate-autonomous-execution-protocol.ps1` | Autonomous execution protocol guardrails are present. |
+| ST-P008 | Review Gate | `./scripts/validate-review-gate.ps1` | Current changed files do not touch blocked paths or blocked workflow permissions. |
+| ST-P009 | Smoke | `./scripts/specbridge-smoke.ps1` | The deterministic validation chain passes. |
+
+## Negative Tests
+
+| ID | Area | Fixture | Expected Failure |
+| --- | --- | --- | --- |
+| ST-N001 | Foundation | Remove `README.md` in a temporary copy. | Foundation validation fails with missing required file. |
+| ST-N002 | Contracts | Add an execution contract without `## Goal` in a temporary copy. | Contract validation fails with missing required section. |
+| ST-N003 | Final Reports | Add a final report missing required fields in a temporary copy. | Final report validation fails with missing required property. |
+| ST-N004 | Review Gate | Stage `src/blocked.txt` in a temporary Git repo. | Review gate fails with blocked path changed. |
+
+## Required Command
+
+Run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1
+```
+
+The negative runner creates temporary repository copies, mutates only those copies, verifies expected failures, and removes the temporary files.
+
+## Completion Rule
+
+The SpecBridge test phase is complete when:
+
+- all positive validations pass
+- all negative tests fail for the expected reason
+- `specbridge-smoke` includes the negative test runner
+- final report evidence records the validation result
+

@@ -91,3 +91,21 @@ Documentation states that automatic merge is allowed only after required validat
 ### AC-021
 
 Production deployment remains disabled.
+
+## Test Suite Acceptance Criteria
+
+### AC-022
+
+scripts/test-specbridge-negative-validations.ps1 exists and verifies expected failure behavior for missing foundation files, incomplete execution contracts, incomplete final reports, and blocked PR paths.
+
+### AC-023
+
+scripts/specbridge-smoke.ps1 runs the negative validation suite.
+
+### AC-024
+
+docs/specbridge-test-matrix.md exists and defines positive and negative SpecBridge test coverage.
+
+### AC-025
+
+docs/specbridge-test-results.md exists and records the local validation evidence for the current test phase.
