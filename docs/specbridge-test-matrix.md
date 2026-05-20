@@ -15,6 +15,7 @@ In scope:
 
 - foundation files
 - execution contracts
+- contract scope manifests
 - schemas
 - final reports
 - PR review reports
@@ -40,13 +41,14 @@ Out of scope:
 | --- | --- | --- | --- |
 | ST-P001 | Foundation | `./scripts/validate-foundation.ps1` | Required files exist, Markdown fences are balanced, no blocked implementation paths exist. |
 | ST-P002 | Contracts | `./scripts/validate-contracts.ps1` | Every execution contract has required sections, metadata, allowed autonomy profile, allowed risk level, allowed status, and GitHub issue URL. |
-| ST-P003 | Schemas | `./scripts/validate-schemas.ps1` | Required JSON schemas exist and are readable. |
-| ST-P004 | Final Reports | `./scripts/validate-final-reports.ps1` | Final reports are valid JSON and contain required fields. |
-| ST-P005 | PR Review Reports | `./scripts/validate-pr-review-reports.ps1` | PR review report artifacts are valid. |
-| ST-P006 | Claude Review Workflow | `./scripts/validate-claude-review-workflow.ps1` | Claude review workflow guardrails are present. |
-| ST-P007 | Autonomous Protocol | `./scripts/validate-autonomous-execution-protocol.ps1` | Autonomous execution protocol guardrails are present. |
-| ST-P008 | Review Gate | `./scripts/validate-review-gate.ps1` | Current changed files do not touch blocked paths or blocked workflow permissions. |
-| ST-P009 | Smoke | `./scripts/specbridge-smoke.ps1` | The deterministic validation chain passes. |
+| ST-P003 | Contract Scopes | `./scripts/validate-contract-scopes.ps1` | Scope manifests declare required ownership fields, active write paths do not overlap, dependencies are explicit, and final report paths are unique. |
+| ST-P004 | Schemas | `./scripts/validate-schemas.ps1` | Required JSON schemas exist and are readable. |
+| ST-P005 | Final Reports | `./scripts/validate-final-reports.ps1` | Final reports are valid JSON and contain required fields. |
+| ST-P006 | PR Review Reports | `./scripts/validate-pr-review-reports.ps1` | PR review report artifacts are valid. |
+| ST-P007 | Claude Review Workflow | `./scripts/validate-claude-review-workflow.ps1` | Claude review workflow guardrails are present. |
+| ST-P008 | Autonomous Protocol | `./scripts/validate-autonomous-execution-protocol.ps1` | Autonomous execution protocol guardrails are present. |
+| ST-P009 | Review Gate | `./scripts/validate-review-gate.ps1` | Current changed files do not touch blocked paths or blocked workflow permissions. |
+| ST-P010 | Smoke | `./scripts/specbridge-smoke.ps1` | The deterministic validation chain passes. |
 
 ## Negative Tests
 
@@ -54,8 +56,17 @@ Out of scope:
 | --- | --- | --- | --- |
 | ST-N001 | Foundation | Remove `README.md` in a temporary copy. | Foundation validation fails with missing required file. |
 | ST-N002 | Contracts | Add an execution contract without `## Goal` in a temporary copy. | Contract validation fails with missing required section. |
-| ST-N003 | Final Reports | Add a final report missing required fields in a temporary copy. | Final report validation fails with missing required property. |
-| ST-N004 | Review Gate | Stage `src/blocked.txt` in a temporary Git repo. | Review gate fails with blocked path changed. |
+| ST-N003 | Contract Scopes | Add a scope manifest without `exclusive_write` in a temporary copy. | Contract scope validation fails with missing required property. |
+| ST-N004 | Contract Scopes | Add two active scope manifests with the same `exclusive_write` path in a temporary copy. | Contract scope validation fails with conflicting contract ids and path. |
+| ST-N005 | Contract Scopes | Add two scope manifests with the same final report path in a temporary copy. | Contract scope validation fails with duplicate final report path. |
+| ST-N006 | Final Reports | Add a final report missing required fields in a temporary copy. | Final report validation fails with missing required property. |
+| ST-N007 | Review Gate | Stage `src/blocked.txt` in a temporary Git repo. | Review gate fails with blocked path changed. |
+
+## Positive Fixtures
+
+| ID | Area | Fixture | Expected Result |
+| --- | --- | --- | --- |
+| ST-F001 | Contract Scopes | Add two disjoint active scope manifests in a temporary copy. | Contract scope validation passes. |
 
 ## Required Command
 
@@ -67,12 +78,14 @@ powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-vali
 
 The negative runner creates temporary repository copies, mutates only those copies, verifies expected failures, and removes the temporary files.
 
+It also runs a positive contract-scope fixture proving that disjoint active manifests pass.
+
 ## Completion Rule
 
 The SpecBridge test phase is complete when:
 
 - all positive validations pass
+- all positive fixtures pass
 - all negative tests fail for the expected reason
 - `specbridge-smoke` includes the negative test runner
 - final report evidence records the validation result
-

@@ -1,0 +1,30 @@
+{
+  "contract_id": "issue-048-contract-scope-validator",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-048-contract-scope-validator.execution.md",
+    ".specbridge/reports/issue-048-contract-scope-validator.final-report.json",
+    ".specbridge/scopes/issue-048-contract-scope-validator.scope.json",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-contract-scope-validator.md",
+    "docs/specbridge-test-matrix.md",
+    "docs/specbridge-test-results.md",
+    "scripts/specbridge-smoke.ps1",
+    "scripts/test-specbridge-negative-validations.ps1",
+    "scripts/validate-contract-scopes.ps1",
+    "specs/004-acceptance-tests.md"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    ".specbridge/policy.yaml",
+    "docs/specbridge-multi-agent-antigravity-architecture.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-047-autonomy-backlog-memory"
+  ],
+  "final_report": ".specbridge/reports/issue-048-contract-scope-validator.final-report.json"
+}

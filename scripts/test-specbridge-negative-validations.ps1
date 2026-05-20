@@ -90,6 +90,75 @@ function Invoke-ExpectedFailure {
   }
 }
 
+function Invoke-ExpectedSuccess {
+  param(
+    [string] $Name,
+    [scriptblock] $Arrange,
+    [string] $Command
+  )
+
+  $caseDir = Join-Path $tempRoot $Name
+  Copy-RepoFixture -Destination $caseDir
+
+  Push-Location $caseDir
+  try {
+    & $Arrange
+
+    $previousBaseRef = $env:GITHUB_BASE_REF
+    $previousHeadRef = $env:GITHUB_HEAD_REF
+    $env:GITHUB_BASE_REF = $null
+    $env:GITHUB_HEAD_REF = $null
+
+    try {
+      $output = & powershell -ExecutionPolicy Bypass -Command $Command 2>&1
+      $exitCode = $LASTEXITCODE
+      $outputText = ($output | Out-String)
+    }
+    finally {
+      $env:GITHUB_BASE_REF = $previousBaseRef
+      $env:GITHUB_HEAD_REF = $previousHeadRef
+    }
+
+    if ($exitCode -ne 0) {
+      Write-Output "FAIL positive fixture failed unexpectedly: $Name"
+      Write-Output $outputText
+      $script:failed = $true
+      return
+    }
+
+    Write-Output "PASS positive fixture: $Name"
+  }
+  finally {
+    Pop-Location
+  }
+}
+
+function Write-ScopeManifest {
+  param(
+    [string] $Path,
+    [string] $ContractId,
+    [string] $Status,
+    [string[]] $ExclusiveWrite,
+    [string[]] $ReadOnly,
+    [string[]] $CoordinatorOwned,
+    [string[]] $Dependencies,
+    [string] $FinalReport
+  )
+
+  $manifest = [ordered]@{
+    contract_id = $ContractId
+    status = $Status
+    exclusive_write = @($ExclusiveWrite)
+    read_only = @($ReadOnly)
+    coordinator_owned = @($CoordinatorOwned)
+    dependencies = @($Dependencies)
+    final_report = $FinalReport
+  }
+
+  New-Item -ItemType Directory -Force -Path (Split-Path -Parent $Path) | Out-Null
+  Set-Content -LiteralPath $Path -Value ($manifest | ConvertTo-Json -Depth 4) -NoNewline
+}
+
 try {
   New-Item -ItemType Directory -Force -Path $tempRoot | Out-Null
 
@@ -126,6 +195,109 @@ This contract intentionally omits the Goal section.
     } `
     -Command "./scripts/validate-contracts.ps1" `
     -ExpectedPattern "missing required section.*Goal"
+
+  Invoke-ExpectedSuccess `
+    -Name "contract-scope-disjoint-manifests" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/scopes" -Recurse -Force -ErrorAction SilentlyContinue
+
+      Write-ScopeManifest `
+        -Path ".specbridge/scopes/disjoint-a.scope.json" `
+        -ContractId "disjoint-a" `
+        -Status "active" `
+        -ExclusiveWrite @("docs/disjoint-a.md") `
+        -ReadOnly @("README.md") `
+        -CoordinatorOwned @() `
+        -Dependencies @() `
+        -FinalReport ".specbridge/reports/disjoint-a.final-report.json"
+
+      Write-ScopeManifest `
+        -Path ".specbridge/scopes/disjoint-b.scope.json" `
+        -ContractId "disjoint-b" `
+        -Status "active" `
+        -ExclusiveWrite @("docs/disjoint-b.md") `
+        -ReadOnly @("README.md") `
+        -CoordinatorOwned @() `
+        -Dependencies @("disjoint-a") `
+        -FinalReport ".specbridge/reports/disjoint-b.final-report.json"
+    } `
+    -Command "./scripts/validate-contract-scopes.ps1"
+
+  Invoke-ExpectedFailure `
+    -Name "contract-scope-missing-exclusive-write" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/scopes" -Recurse -Force -ErrorAction SilentlyContinue
+
+      $manifest = [ordered]@{
+        contract_id = "missing-exclusive-write"
+        status = "active"
+        read_only = @("README.md")
+        coordinator_owned = @()
+        dependencies = @()
+        final_report = ".specbridge/reports/missing-exclusive-write.final-report.json"
+      }
+
+      New-Item -ItemType Directory -Force -Path ".specbridge/scopes" | Out-Null
+      Set-Content -LiteralPath ".specbridge/scopes/missing-exclusive-write.scope.json" -Value ($manifest | ConvertTo-Json -Depth 4) -NoNewline
+    } `
+    -Command "./scripts/validate-contract-scopes.ps1" `
+    -ExpectedPattern "missing required property.*exclusive_write"
+
+  Invoke-ExpectedFailure `
+    -Name "contract-scope-conflicting-write-path" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/scopes" -Recurse -Force -ErrorAction SilentlyContinue
+
+      Write-ScopeManifest `
+        -Path ".specbridge/scopes/conflict-a.scope.json" `
+        -ContractId "conflict-a" `
+        -Status "active" `
+        -ExclusiveWrite @("docs/shared.md") `
+        -ReadOnly @() `
+        -CoordinatorOwned @() `
+        -Dependencies @() `
+        -FinalReport ".specbridge/reports/conflict-a.final-report.json"
+
+      Write-ScopeManifest `
+        -Path ".specbridge/scopes/conflict-b.scope.json" `
+        -ContractId "conflict-b" `
+        -Status "active" `
+        -ExclusiveWrite @("docs/shared.md") `
+        -ReadOnly @() `
+        -CoordinatorOwned @() `
+        -Dependencies @() `
+        -FinalReport ".specbridge/reports/conflict-b.final-report.json"
+    } `
+    -Command "./scripts/validate-contract-scopes.ps1" `
+    -ExpectedPattern "exclusive_write conflict path=docs/shared\.md contracts=conflict-a, conflict-b"
+
+  Invoke-ExpectedFailure `
+    -Name "contract-scope-duplicate-final-report" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/scopes" -Recurse -Force -ErrorAction SilentlyContinue
+
+      Write-ScopeManifest `
+        -Path ".specbridge/scopes/report-a.scope.json" `
+        -ContractId "report-a" `
+        -Status "active" `
+        -ExclusiveWrite @("docs/report-a.md") `
+        -ReadOnly @() `
+        -CoordinatorOwned @() `
+        -Dependencies @() `
+        -FinalReport ".specbridge/reports/shared.final-report.json"
+
+      Write-ScopeManifest `
+        -Path ".specbridge/scopes/report-b.scope.json" `
+        -ContractId "report-b" `
+        -Status "active" `
+        -ExclusiveWrite @("docs/report-b.md") `
+        -ReadOnly @() `
+        -CoordinatorOwned @() `
+        -Dependencies @() `
+        -FinalReport ".specbridge/reports/shared.final-report.json"
+    } `
+    -Command "./scripts/validate-contract-scopes.ps1" `
+    -ExpectedPattern "duplicate final_report path=.specbridge/reports/shared\.final-report\.json contracts=report-a, report-b"
 
   Invoke-ExpectedFailure `
     -Name "final-report-missing-property" `

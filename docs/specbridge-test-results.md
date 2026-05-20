@@ -10,8 +10,8 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 
 - Date: 2026-05-20
 - Environment: local PowerShell workspace
-- Branch: `codex/specbridge-test-suite`
-- Scope: repository-first validation and negative validation suite
+- Branch: `codex/contract-scope-validator`
+- Scope: contract scope validation for multi-agent coordination
 
 ## Results
 
@@ -19,6 +19,7 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 | --- | --- |
 | Foundation validation | passed |
 | Contract validation | passed |
+| Contract scope validation | passed |
 | Schema validation | passed |
 | Final report validation | passed |
 | PR review report validation | passed |
@@ -35,12 +36,16 @@ The negative validation suite verifies:
 
 - missing required foundation file fails
 - incomplete execution contract fails
+- disjoint active contract scope manifests pass
+- missing contract scope `exclusive_write` fails
+- conflicting active contract write paths fail
+- duplicate contract scope final report paths fail
 - incomplete final report fails
 - blocked PR path fails
 
 ## Policy Result
 
-Passed. The change adds test documentation and a local negative validation runner only. It does not add runtime product code, secrets, production configuration, deployment automation, billing, hosted dashboard implementation, MCP server implementation, GitHub App implementation, branch protection weakening, or CI/CD security weakening.
+Passed. The change adds governance validation, scope manifest documentation, test fixtures, context updates, an execution contract, and a final report only. It does not add runtime product code, secrets, production configuration, deployment automation, billing, hosted dashboard implementation, MCP server implementation, GitHub App implementation, branch protection weakening, or CI/CD security weakening.
 
 ## Unresolved Risks
 

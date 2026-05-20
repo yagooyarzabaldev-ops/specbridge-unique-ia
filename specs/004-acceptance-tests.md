@@ -114,3 +114,9 @@ docs/specbridge-test-matrix.md defines positive and negative test coverage, and 
 Pass condition:
 
 docs/specbridge-multi-agent-antigravity-architecture.md exists and defines Governor, Coordinator, Executor, Reviewer, parallel execution rules, scope ownership, branching, evidence, merge model, and product requirements for multiple Claude Code executors working inside Antigravity.
+
+### AT-017 - Contract scope validation exists
+
+Pass condition:
+
+scripts/validate-contract-scopes.ps1 exists, validates `.specbridge/scopes/*.scope.json`, rejects overlapping active `exclusive_write` paths, rejects duplicate final report paths, requires explicit dependencies for active read/write relationships, and is included in scripts/specbridge-smoke.ps1.

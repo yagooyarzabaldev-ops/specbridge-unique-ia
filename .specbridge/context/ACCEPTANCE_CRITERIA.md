@@ -137,3 +137,33 @@ docs/specbridge-autonomy-backlog.md exists and records the remaining work for lo
 ### AC-031
 
 Future agents can determine the next execution order from repository files without relying on chat history.
+
+## Contract Scope Validator Acceptance Criteria
+
+### AC-032
+
+scripts/validate-contract-scopes.ps1 exists and validates `.specbridge/scopes/*.scope.json` manifests.
+
+### AC-033
+
+Each scope manifest declares `exclusive_write`, `read_only`, `coordinator_owned`, `dependencies`, and `final_report`.
+
+### AC-034
+
+Active conflicting write scopes fail validation with contract ids and paths in the failure output.
+
+### AC-035
+
+Disjoint active scope manifests pass validation.
+
+### AC-036
+
+Duplicate final report paths fail validation.
+
+### AC-037
+
+Read/write relationships between active contracts require explicit dependencies.
+
+### AC-038
+
+scripts/specbridge-smoke.ps1 runs the contract scope validator.

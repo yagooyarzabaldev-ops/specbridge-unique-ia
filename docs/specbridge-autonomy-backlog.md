@@ -75,6 +75,10 @@ Goal:
 
 Prevent unsafe or overlapping agent work before Claude Code starts.
 
+Status:
+
+Implemented as `scripts/validate-contract-scopes.ps1` with `.specbridge/scopes/*.scope.json` manifests, smoke validation coverage, and positive/negative fixture coverage.
+
 Required validation:
 
 - each contract declares `exclusive_write`
@@ -227,9 +231,8 @@ Acceptance:
 
 ## Current Next Task
 
-Start with the Contract Scope Validator.
+After the Contract Scope Validator is merged, start with the Audit Packet Generator.
 
 Reason:
 
-Multi-agent autonomy requires conflict detection before agents can safely work in parallel.
-
+Contract scope validation gives SpecBridge the ownership evidence required before generating the audit bundle used by ChatGPT/Codex review.

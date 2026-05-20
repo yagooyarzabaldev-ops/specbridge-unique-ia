@@ -10,7 +10,9 @@ Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test
 
 ## Active Work
 
-Execute the autonomy backlog in `docs/specbridge-autonomy-backlog.md`, starting with contract scope validation because safe multi-agent execution requires conflict detection before parallel Claude Code work begins.
+Execute the autonomy backlog in `docs/specbridge-autonomy-backlog.md`.
+
+The Contract Scope Validator is now the active completion target. After it is merged, the next recommended task is the Audit Packet Generator.
 
 ## Completion Condition
 
