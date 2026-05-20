@@ -33,8 +33,12 @@ SpecBridge must be able to:
 The product must support at least three autonomy profiles:
 
 1. assisted: human approval before implementation and merge.
-2. vibe_autopilot: autonomous ordinary implementation, no autonomous merge by default.
+2. vibe_autopilot: autonomous ordinary implementation, no autonomous merge unless selected by policy.
 3. full_autopilot: autonomous implementation and merge when all gates pass.
+
+Default profile:
+
+SpecBridge uses `full_autopilot` by default once the repository policy enables autonomous merge and required gates are configured.
 
 ## Safety Requirements
 

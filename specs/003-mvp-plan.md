@@ -56,3 +56,23 @@ It should not start as a SaaS product.
 ## MVP Success Criteria
 
 The MVP succeeds when a task can be defined as structured context, executed by Claude Code without step-by-step permission requests, validated, reviewed, and reported with evidence.
+
+## Current Completion Status
+
+The repository-first MVP is complete as a controlled governance loop.
+
+Completed evidence includes:
+
+- context package files under `.specbridge/context/`
+- execution contract templates and examples under `.specbridge/contracts/`
+- final report schema and examples under `.specbridge/reports/`
+- PR review report schema and example under `.specbridge/review-reports/`
+- deterministic validation scripts under `scripts/`
+- GitHub workflow definitions under `.github/workflows/`
+- Claude Code commands and rules under `.claude/`
+- controlled E2E pilot documentation
+- local autonomous execution protocol documentation
+
+The MVP does not activate hosted runtime code, real MCP servers, production deployment, secret handling, or billing.
+
+Autonomous merge is allowed only through the active policy and only after required gates pass.

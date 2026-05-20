@@ -26,4 +26,4 @@ profiles:
     autonomous_staging_deploy: true
     autonomous_production_deploy: false
 
-default_profile: vibe_autopilot
+default_profile: full_autopilot

@@ -25,6 +25,14 @@ The default workflow is Vibe Autopilot:
 6. Codex reviews the implementation.
 7. SpecBridge reports the final outcome.
 
+The default autonomy profile is now Full Autopilot:
+
+- ordinary implementation proceeds without step-by-step approval
+- validation failures are fixed automatically when inside scope
+- pull requests may be updated automatically
+- merge may happen automatically only when all required gates pass
+- production deployment remains manual unless a future policy explicitly enables it
+
 ## Core Principle
 
 SpecBridge does not remove control.
@@ -72,3 +80,20 @@ The first MVP must prove this flow:
 5. Let Codex review.
 6. Merge only if policy allows it.
 7. Produce a final report.
+
+## Current Status
+
+SpecBridge currently has three governed status layers:
+
+- V1 foundation: complete and validated locally.
+- Repository-first MVP: complete as a controlled loop using context files, execution contracts, validation scripts, PR gates, review artifacts, and final reports.
+- V3 essential product scope: defined for the next runtime phase, with implementation still blocked until a dedicated execution contract authorizes source paths, test strategy, lint, typecheck, and build gates.
+- V4 product contract: defined for local CLI, MCP, GitHub evidence integration, dashboard boundaries, data model boundaries, runtime gates, completion criteria, and Version 5 candidates.
+- Default automation: Full Autopilot is enabled for autonomous merge after required gates pass; production deployment remains disabled.
+
+See:
+
+- `docs/specbridge-phase-completion.md`
+- `docs/specbridge-mvp-operating-runbook.md`
+- `docs/specbridge-v3-essential-product-scope.md`
+- `docs/specbridge-v4-product-contract.md`

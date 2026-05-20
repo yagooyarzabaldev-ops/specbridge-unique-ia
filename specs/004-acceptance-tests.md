@@ -60,3 +60,33 @@ SPECBRIDGE.md, AGENTS.md, CLAUDE.md, and .specbridge/policy.yaml define stop con
 Pass condition:
 
 .specbridge/report-template.md exists and includes sections for summary, changed files, validations, policy result, risk result, merge status, deployment status, and rollback notes.
+
+### AT-008 - MVP operating runbook exists
+
+Pass condition:
+
+docs/specbridge-mvp-operating-runbook.md exists and defines required inputs, operating loop, local validations, CI gates, completion standard, failure handling, and MVP boundary.
+
+### AT-009 - Phase completion artifact exists
+
+Pass condition:
+
+docs/specbridge-phase-completion.md exists and records Phase 1, Phase 2, and Phase 3 status with explicit non-activation boundaries.
+
+### AT-010 - V3 essential scope exists
+
+Pass condition:
+
+docs/specbridge-v3-essential-product-scope.md exists and defines essential product capabilities, runtime boundary, non-essential scope, version 4 candidates, and the gate required before runtime work starts.
+
+### AT-011 - V4 product contract exists
+
+Pass condition:
+
+docs/specbridge-v4-product-contract.md exists and defines product goal, required product surfaces, local CLI scope, MCP scope, GitHub integration scope, hosted dashboard scope, data model boundary, runtime implementation gates, V4 completion criteria, and Version 5 candidates.
+
+### AT-012 - Automatic merge policy is explicit
+
+Pass condition:
+
+.specbridge/policy.yaml enables autonomous merge, .specbridge/autonomy.yaml selects `full_autopilot` as the default profile, and documentation states that automatic merge requires all configured gates to pass.

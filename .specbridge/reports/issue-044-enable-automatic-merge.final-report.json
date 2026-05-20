@@ -1,0 +1,40 @@
+{
+  "summary": "Enabled gate-controlled automatic merge by switching SpecBridge's default mode/profile to Full Autopilot and allowing autonomous merge only after required gates pass.",
+  "changed_files": [
+    ".specbridge/policy.yaml",
+    ".specbridge/autonomy.yaml",
+    "README.md",
+    "docs/specbridge-v4-product-contract.md",
+    "docs/specbridge-mvp-operating-runbook.md",
+    "docs/specbridge-phase-completion.md",
+    "docs/specbridge-v3-essential-product-scope.md",
+    "specs/001-product-requirements.md",
+    "specs/003-mvp-plan.md",
+    "specs/004-acceptance-tests.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    ".specbridge/contracts/issue-044-enable-automatic-merge.execution.md",
+    ".specbridge/reports/issue-044-enable-automatic-merge.final-report.json"
+  ],
+  "validations": [
+    "validate-foundation: PASSED",
+    "validate-contracts: PASSED",
+    "validate-schemas: PASSED",
+    "validate-final-reports: PASSED",
+    "validate-pr-review-reports: PASSED",
+    "validate-claude-review-workflow: PASSED",
+    "validate-autonomous-execution-protocol: PASSED",
+    "validate-review-gate: PASSED",
+    "specbridge-smoke: PASSED",
+    "git diff --check: PASSED"
+  ],
+  "policy_result": "Passed. Policy change enables automatic merge only after required gates pass. Production deployment remains disabled. No secrets, billing, production configuration, runtime product code, hosted dashboard implementation, MCP server implementation, GitHub App implementation, branch protection weakening, or CI/CD security weakening were included.",
+  "risk_result": "High risk governance change with gate-preserving scope. The change enables automatic merge but does not weaken validation, policy, review, or CI requirements.",
+  "unresolved_risks": [
+    "GitHub repository auto-merge support may need to be enabled in repository settings before PR auto-merge can be activated.",
+    "CI evidence is required before any automatic merge can occur."
+  ],
+  "merge_status": "automatic_after_gates",
+  "deployment_status": "not_applicable",
+  "completion_status": "complete_pending_pr"
+}

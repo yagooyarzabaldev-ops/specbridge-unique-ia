@@ -3,7 +3,7 @@ version: 1
 project:
   name: specbridge
   methodology: spec_driven_development
-  default_mode: vibe_autopilot
+  default_mode: full_autopilot
   default_branch: main
 
 execution:
@@ -48,7 +48,7 @@ quality_gates:
   require_codex_review: true
 
 merge:
-  autonomous_merge_enabled: false
+  autonomous_merge_enabled: true
   minimum_conditions:
     - ci_passed
     - tests_passed

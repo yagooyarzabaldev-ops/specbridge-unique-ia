@@ -2,16 +2,16 @@
 
 ## Goal
 
-Establish the foundation contract for SpecBridge before adding product implementation code.
+Close SpecBridge foundation status, complete the repository-first MVP operating loop, define the essential V3 product scope, finish the V4 product contract, and enable gate-controlled automatic merge before adding runtime product implementation code.
 
 ## Current Phase
 
-Foundation phase.
+Foundation complete. Repository-first MVP complete as a controlled governance loop. Essential V3 product scope defined. V4 product contract complete at governance level. Full Autopilot is the default policy for gate-controlled automatic merge.
 
 ## Active Work
 
-Define repository-level context files that allow ChatGPT/Codex to provide clean execution context to Claude Code.
+Maintain explicit context, execution contracts, validation gates, review artifacts, final reports, and phase boundaries so Claude Code can execute governed work without ad-hoc permission requests.
 
 ## Completion Condition
 
-The context package exists, is non-empty, and aligns with the product contract defined in README.md, SPECBRIDGE.md, AGENTS.md, and CLAUDE.md.
+The phase completion artifact, MVP operating runbook, V3 essential scope, V4 product contract, automatic merge policy contract, execution contracts, and final reports exist; all deterministic validations pass; runtime product implementation remains blocked until a dedicated execution contract authorizes it.
