@@ -49,6 +49,7 @@ Already complete:
 - operational autonomy issue closure and evidence-only child PR cleanup
 - controlled Antigravity/Claude Code runtime launch with one bounded non-interactive executor artifact
 - runtime launch plans generated from executor packets without executing Claude Code
+- runtime result records generated from launch plans and declared executor evidence without executing Claude Code
 
 ## Remaining Work
 
@@ -269,11 +270,11 @@ Acceptance:
 
 ## Current Next Task
 
-After Runtime Launch Plans are merged, start controlled runtime result recording.
+After Runtime Result Recording is merged, start a controlled source-backed runtime implementation slice.
 
 Reason:
 
-The repository will have a deterministic artifact that prepares Claude Code launch shape from an executor packet. The next product proof should capture the actual executor result into a structured runtime result artifact before broader runtime automation.
+The repository will have launch plans and runtime results as deterministic evidence layers. The next product proof should use those layers for one small source-backed implementation slice before broader runtime automation.
 
 ## Next Runtime Expansion
 
@@ -397,7 +398,7 @@ Record the result of a bounded Claude Code runtime execution from a declared lau
 
 Status:
 
-Planned.
+Implemented as `specbridge record-runtime-result`, `scripts/validate-runtime-results.ps1`, CLI test coverage, negative validation coverage, and `.specbridge/runtime-results/issue-065-record-runtime-results.runtime-result.json`.
 
 Acceptance:
 
@@ -407,3 +408,22 @@ Acceptance:
 - the result records exit code, files written, validations, policy result, stop conditions, and completion status
 - validation covers successful and invalid runtime result artifacts
 - no secrets, production configuration, billing, auth security, dependency installation, database changes, CI/CD weakening, live launch expansion, or deployment automation are involved
+
+### 15. Controlled Source-Backed Runtime Slice
+
+Goal:
+
+Use the launch plan and runtime result layers for one small source-backed implementation slice.
+
+Status:
+
+Planned.
+
+Acceptance:
+
+- one source-backed runtime task has a dedicated execution contract
+- source paths, tests, docs, final report, audit packet, and ChatGPT/Codex audit are declared up front
+- Claude Code executes only inside the assigned scope
+- SpecBridge records the runtime result from declared executor evidence
+- GitHub CI, security gate, review gate, runtime result validation, audit packet validation, and ChatGPT/Codex audit pass before merge
+- no secrets, production configuration, billing, auth security, dependency installation unless explicitly authorized, database changes, CI/CD weakening, or deployment automation are involved

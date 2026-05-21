@@ -15,6 +15,7 @@ $validationScripts = @(
   "./scripts/validate-chatgpt-audits.ps1",
   "./scripts/validate-executor-packets.ps1",
   "./scripts/validate-runtime-launches.ps1",
+  "./scripts/validate-runtime-results.ps1",
   "./scripts/validate-branch-orchestrations.ps1",
   "./scripts/validate-security-gates.ps1",
   "./scripts/validate-pr-review-reports.ps1",

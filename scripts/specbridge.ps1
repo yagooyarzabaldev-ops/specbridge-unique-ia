@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "record-runtime-result", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -27,6 +27,8 @@ param(
   [ValidateSet("acceptEdits", "auto", "default", "dontAsk", "plan")]
   [string] $PermissionMode = "acceptEdits",
   [string] $MaxBudgetUsd = "0.25",
+  [int] $RuntimeExitCode = 0,
+  [string[]] $WrittenFile = @(),
   [ValidateSet("simulation", "github")]
   [string] $EvidenceMode = "simulation",
   [string] $RepositoryUrl = "https://github.com/yagooyarzabaldev-ops/specbridge",
@@ -200,6 +202,7 @@ function Invoke-ValidationProfile {
     "./scripts/validate-chatgpt-audits.ps1",
     "./scripts/validate-executor-packets.ps1",
     "./scripts/validate-runtime-launches.ps1",
+    "./scripts/validate-runtime-results.ps1",
     "./scripts/validate-branch-orchestrations.ps1",
     "./scripts/validate-security-gates.ps1",
     "./scripts/validate-pr-review-reports.ps1",
@@ -319,6 +322,8 @@ function Invoke-StatusCommand {
       reports = Get-FileCount -Path ".specbridge/reports" -Filter "*.final-report.json"
       audit_packets = Get-FileCount -Path ".specbridge/audit-packets" -Filter "*.audit-packet.json"
       chatgpt_audits = Get-FileCount -Path ".specbridge/audits" -Filter "*.chatgpt-audit.json"
+      runtime_launches = Get-FileCount -Path ".specbridge/runtime-launches" -Filter "*.runtime-launch.json"
+      runtime_results = Get-FileCount -Path ".specbridge/runtime-results" -Filter "*.runtime-result.json"
     }
     current_goal_path = ".specbridge/context/CURRENT_GOAL.md"
   }
@@ -330,6 +335,8 @@ function Invoke-StatusCommand {
       final_report = Get-LatestArtifactPath -Path ".specbridge/reports" -Filter "*.final-report.json"
       audit_packet = Get-LatestArtifactPath -Path ".specbridge/audit-packets" -Filter "*.audit-packet.json"
       chatgpt_audit = Get-LatestArtifactPath -Path ".specbridge/audits" -Filter "*.chatgpt-audit.json"
+      runtime_launch = Get-LatestArtifactPath -Path ".specbridge/runtime-launches" -Filter "*.runtime-launch.json"
+      runtime_result = Get-LatestArtifactPath -Path ".specbridge/runtime-results" -Filter "*.runtime-result.json"
     }
   }
 
@@ -1106,6 +1113,194 @@ function Invoke-PrepareRuntimeLaunchCommand {
   exit 0
 }
 
+function Convert-ValidationRecords {
+  param(
+    [string[]] $Records
+  )
+
+  if ($Records.Count -le 0) {
+    Fail "Validation must include at least one runtime validation result"
+  }
+
+  $results = @()
+
+  foreach ($recordEntry in @($Records)) {
+    if ($null -eq $recordEntry -or $recordEntry.GetType().Name -ne "String" -or [string]::IsNullOrWhiteSpace($recordEntry)) {
+      Fail "Validation must contain only non-empty strings"
+    }
+
+    foreach ($record in @($recordEntry -split ",")) {
+      $trimmed = $record.Trim()
+
+      if ([string]::IsNullOrWhiteSpace($trimmed)) {
+        Fail "Validation must contain only non-empty strings"
+      }
+
+      $separatorIndex = $trimmed.LastIndexOf(": ")
+
+      if ($separatorIndex -gt 0) {
+        $commandText = $trimmed.Substring(0, $separatorIndex).Trim()
+        $resultText = $trimmed.Substring($separatorIndex + 2).Trim()
+      }
+      else {
+        $commandText = $trimmed
+        $resultText = "recorded"
+      }
+
+      if ([string]::IsNullOrWhiteSpace($commandText) -or [string]::IsNullOrWhiteSpace($resultText)) {
+        Fail "Validation records must contain non-empty command and result text"
+      }
+
+      $results += [ordered]@{
+        command = $commandText
+        result = $resultText
+      }
+    }
+  }
+
+  return @($results)
+}
+
+function Invoke-RecordRuntimeResultCommand {
+  $input = Normalize-RepoPath -Path $InputPath -FieldName "InputPath"
+  $evidence = Normalize-RepoPath -Path $EvidencePath -FieldName "EvidencePath"
+  $output = Assert-OutputPath `
+    -Path $OutputPath `
+    -Pattern "^\.specbridge/runtime-results/.+\.runtime-result\.json$" `
+    -Description "a .specbridge/runtime-results/*.runtime-result.json runtime result"
+
+  if ($input -notmatch "^\.specbridge/runtime-launches/.+\.runtime-launch\.json$") {
+    Fail "InputPath must be a .specbridge/runtime-launches/*.runtime-launch.json file: $input"
+  }
+
+  if (-not (Test-Path -LiteralPath $input)) {
+    Fail "InputPath does not exist: $input"
+  }
+
+  if (-not (Test-Path -LiteralPath $evidence -PathType Leaf)) {
+    Fail "EvidencePath must reference an existing executor evidence file: $evidence"
+  }
+
+  $launch = Get-JsonObjectFromFile -Path $input -Description "runtime launch plan"
+  $context = "runtime launch plan $input"
+
+  foreach ($field in @("launch_id", "task_id", "packet_id", "slice_id", "branch_name", "exclusive_write", "required_validations", "stop_conditions", "launch_status")) {
+    if (-not $launch.PSObject.Properties.Name.Contains($field)) {
+      Fail "$context must include $field"
+    }
+  }
+
+  if ($launch.launch_status -ne "ready_for_operator_launch") {
+    Fail "runtime launch plan status must be ready_for_operator_launch: $input"
+  }
+
+  $exclusiveWrite = @($launch.exclusive_write | ForEach-Object { Normalize-RepoPath -Path $_ -FieldName "exclusive_write" })
+
+  if ($exclusiveWrite.Count -le 0) {
+    Fail "runtime launch plan exclusive_write must not be empty"
+  }
+
+  if ($exclusiveWrite -notcontains $evidence) {
+    Fail "EvidencePath must be declared in runtime launch exclusive_write: $evidence"
+  }
+
+  if ($RuntimeExitCode -lt 0 -or $RuntimeExitCode -gt 255) {
+    Fail "RuntimeExitCode must be between 0 and 255"
+  }
+
+  $allowedCompletionStatuses = @("complete", "failed", "blocked", "partial", "needs_human_decision")
+
+  if ($allowedCompletionStatuses -notcontains $CompletionStatus) {
+    Fail "CompletionStatus must be one of: $($allowedCompletionStatuses -join ', ')"
+  }
+
+  if ([string]::IsNullOrWhiteSpace($PolicyResult)) {
+    Fail "PolicyResult is required"
+  }
+
+  $filesWritten = @()
+
+  if ($WrittenFile.Count -le 0) {
+    $filesWritten += $evidence
+  }
+  else {
+    foreach ($path in @($WrittenFile)) {
+      $filesWritten += Normalize-RepoPath -Path $path -FieldName "WrittenFile"
+    }
+  }
+
+  $filesWritten = @($filesWritten | Sort-Object -Unique)
+
+  foreach ($path in $filesWritten) {
+    if ($exclusiveWrite -notcontains $path) {
+      Fail "WrittenFile must be declared in runtime launch exclusive_write: $path"
+    }
+
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
+      Fail "WrittenFile must reference an existing file: $path"
+    }
+  }
+
+  if ($filesWritten -notcontains $evidence) {
+    Fail "WrittenFile must include EvidencePath: $evidence"
+  }
+
+  $validationResults = Convert-ValidationRecords -Records $Validation
+  $runtimeStatus = "succeeded"
+
+  if ($RuntimeExitCode -ne 0) {
+    $runtimeStatus = "failed"
+  }
+
+  $safeResultId = Convert-ToSafeName -Value ($launch.launch_id + "-runtime-result") -FieldName "result_id"
+
+  $result = [ordered]@{
+    schema_version = "1"
+    result_id = $safeResultId
+    generated_by = "specbridge-cli"
+    source_runtime_launch_path = $input
+    launch_id = $launch.launch_id
+    task_id = $launch.task_id
+    packet_id = $launch.packet_id
+    slice_id = $launch.slice_id
+    branch_name = $launch.branch_name
+    executor_evidence_path = $evidence
+    exit_code = $RuntimeExitCode
+    files_written = @($filesWritten)
+    validation_results = @($validationResults)
+    policy_result = $PolicyResult.Trim()
+    stop_conditions = @($launch.stop_conditions)
+    completion_status = $CompletionStatus
+    runtime_status = $runtimeStatus
+    result_status = "recorded"
+    execution_policy = [ordered]@{
+      launches_claude = $false
+      launches_antigravity = $false
+      executes_shell = $false
+      requires_network = $false
+      touches_secrets = $false
+      touches_production = $false
+      installs_dependencies = $false
+      deploys = $false
+    }
+    source_files = @($input, $evidence)
+  }
+
+  Write-Utf8JsonFile -Path $output -Value $result -Depth 10
+
+  Write-CliJson ([ordered]@{
+    command = "record-runtime-result"
+    ok = $true
+    output_path = $output
+    source_runtime_launch_path = $input
+    executor_evidence_path = $evidence
+    runtime_status = $runtimeStatus
+    result_status = "recorded"
+  })
+
+  exit 0
+}
+
 function Get-JsonObjectFromFile {
   param(
     [string] $Path,
@@ -1589,6 +1784,7 @@ switch ($Command) {
   "decompose-task" { Invoke-DecomposeTaskCommand }
   "prepare-executors" { Invoke-PrepareExecutorsCommand }
   "prepare-runtime-launch" { Invoke-PrepareRuntimeLaunchCommand }
+  "record-runtime-result" { Invoke-RecordRuntimeResultCommand }
   "plan-executor-branches" { Invoke-PlanExecutorBranchesCommand }
   "record-github-evidence" { Invoke-RecordGithubEvidenceCommand }
   "coordinate-executors" { Invoke-CoordinateExecutorsCommand }

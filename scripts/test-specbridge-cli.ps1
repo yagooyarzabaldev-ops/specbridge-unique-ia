@@ -343,6 +343,41 @@ try {
     }
 
     Assert-Success `
+      -Name "record-runtime-result" `
+      -Result (Invoke-Cli -Arguments @(
+        "record-runtime-result",
+        "-InputPath",
+        ".specbridge/runtime-launches/cli-fixture.runtime-launch.json",
+        "-EvidencePath",
+        ".specbridge/pilot/multi-agent/agent-a-implementation-output.md",
+        "-OutputPath",
+        ".specbridge/runtime-results/cli-fixture.runtime-result.json",
+        "-RuntimeExitCode",
+        "0",
+        "-WrittenFile",
+        ".specbridge/pilot/multi-agent/agent-a-implementation-output.md",
+        "-Validation",
+        "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-multi-agent-pilot.ps1: passed",
+        "-PolicyResult",
+        "Passed in CLI runtime result fixture.",
+        "-CompletionStatus",
+        "complete",
+        "-Force"
+      )) `
+      -ExpectedPattern '"result_status"\s*:\s*"recorded"'
+
+    $runtimeResultValidation = & powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-results.ps1 2>&1
+
+    if ($LASTEXITCODE -ne 0) {
+      Write-Output "FAIL CLI-created runtime result did not validate."
+      Write-Output ($runtimeResultValidation | Out-String)
+      $failed = $true
+    }
+    else {
+      Write-Output "PASS CLI-created runtime result validates."
+    }
+
+    Assert-Success `
       -Name "plan-executor-branches" `
       -Result (Invoke-Cli -Arguments @(
         "plan-executor-branches",
@@ -466,6 +501,26 @@ try {
         "-Force"
       )) `
       -ExpectedPattern "AllowedTool must include Write"
+
+    Assert-Failure `
+      -Name "record-runtime-result-out-of-scope-evidence" `
+      -Result (Invoke-Cli -Arguments @(
+        "record-runtime-result",
+        "-InputPath",
+        ".specbridge/runtime-launches/cli-fixture.runtime-launch.json",
+        "-EvidencePath",
+        "README.md",
+        "-OutputPath",
+        ".specbridge/runtime-results/out-of-scope.runtime-result.json",
+        "-Validation",
+        "fixture validation: passed",
+        "-PolicyResult",
+        "Passed in CLI fixture.",
+        "-CompletionStatus",
+        "complete",
+        "-Force"
+      )) `
+      -ExpectedPattern "EvidencePath must be declared"
   }
   finally {
     Pop-Location

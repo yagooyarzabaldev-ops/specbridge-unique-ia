@@ -10,8 +10,8 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 
 - Date: 2026-05-21
 - Environment: local PowerShell workspace
-- Branch: `codex/prepare-runtime-launch-plans`
-- Scope: Runtime launch plan preparation for issue 063 with CLI command, runtime launch validator, runtime launch artifact, final report, audit packet, and ChatGPT/Codex audit
+- Branch: `codex/record-runtime-results`
+- Scope: Runtime result recording for issue 065 with CLI command, runtime result validator, runtime result artifact, final report, audit packet, and ChatGPT/Codex audit
 
 ## Results
 
@@ -40,6 +40,8 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 | Claude bounded executor invocation | passed |
 | Runtime launch plan validation | passed |
 | Runtime launch plan CLI generation | passed |
+| Runtime result validation | passed |
+| Runtime result CLI recording | passed |
 | PR review report validation | passed |
 | Claude review workflow validation | passed |
 | Autonomous execution protocol validation | passed |
@@ -106,14 +108,18 @@ The negative validation suite verifies:
 - runtime launch plan CLI generation passes
 - runtime launch plan unapproved tool failure is rejected deterministically
 - invalid runtime launch artifact fails validation
+- runtime result validation passes
+- runtime result CLI recording passes
+- runtime result out-of-scope evidence failure is rejected deterministically
+- invalid runtime result artifact fails validation
 - incomplete final report fails
 - blocked PR path fails
 
 ## Policy Result
 
-Passed. The change adds runtime launch plan preparation from executor packets, records launch-plan evidence, updates repository memory, and adds contract, scope, final report, audit evidence, audit packet evidence, validation, tests, and documentation. It does not launch Claude Code, launch Antigravity, run shell commands from the new command, access protected credentials, touch production, install dependencies, modify auth or billing surfaces, weaken CI/CD security, change database schema, or deploy.
+Passed. The change adds runtime result recording from launch plans and declared executor evidence, records runtime-result evidence, updates repository memory, and adds contract, scope, final report, audit evidence, audit packet evidence, validation, tests, and documentation. It does not launch Claude Code, launch Antigravity, run shell commands from the new command, access protected credentials, touch production, install dependencies, modify auth or billing surfaces, weaken CI/CD security, change database schema, or deploy.
 
 ## Unresolved Risks
 
-- Runtime launch plan PR CI evidence is pending until the branch is pushed and GitHub runs checks.
-- Runtime launch plans prepare execution but do not record actual executor exit status; result recording remains a future contract.
+- Runtime result recording PR CI evidence is pending until the branch is pushed and GitHub runs checks.
+- Runtime results record evidence from an existing bounded run; a future source-backed implementation slice is still required to prove the next end-to-end product loop.

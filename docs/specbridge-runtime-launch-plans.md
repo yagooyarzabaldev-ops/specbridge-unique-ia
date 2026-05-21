@@ -77,7 +77,7 @@ The validator requires:
 
 Runtime launch plans are preparation artifacts only.
 
-They do not certify that the executor ran, that tests passed, or that merge is allowed. A later runtime result recorder must capture actual executor exit code, written files, validation results, CI evidence, and ChatGPT/Codex audit status.
+They do not certify that the executor ran, that tests passed, or that merge is allowed. Runtime result artifacts capture executor exit code, written files, validation results, policy result, and completion status after a bounded run.
 
 ## Current Evidence
 
@@ -95,4 +95,4 @@ It was generated from:
 
 ## Next Step
 
-The next runtime task should add a controlled result recorder that reads a runtime launch plan and declared executor output evidence, then writes a structured runtime result artifact.
+The next runtime task should use launch plans and runtime results for a small source-backed implementation slice.

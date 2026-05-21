@@ -192,3 +192,9 @@ docs/specbridge-controlled-antigravity-runtime-launch.md exists; issue 061 has a
 Pass condition:
 
 docs/specbridge-runtime-launch-plans.md exists; scripts/specbridge.ps1 supports `prepare-runtime-launch`; the command reads one executor packet and writes one declared `.specbridge/runtime-launches/*.runtime-launch.json` artifact; `.specbridge/runtime-launches/issue-063-prepare-runtime-launch-plans.runtime-launch.json` validates; scripts/validate-runtime-launches.ps1 validates runtime launch plan structure and safety boundaries; standard validation and smoke validation include runtime launch validation; CLI tests cover success and unapproved tool failure; negative validation tests cover invalid runtime launch artifacts; and the command does not launch Claude Code, launch Antigravity, run shell commands, call GitHub, install dependencies, touch secrets, or deploy.
+
+### AT-030 - Runtime result recording exists
+
+Pass condition:
+
+docs/specbridge-runtime-results.md exists; scripts/specbridge.ps1 supports `record-runtime-result`; the command reads one runtime launch plan and one declared executor evidence file, then writes one declared `.specbridge/runtime-results/*.runtime-result.json` artifact; `.specbridge/runtime-results/issue-065-record-runtime-results.runtime-result.json` validates; scripts/validate-runtime-results.ps1 validates runtime result structure and safety boundaries; standard validation and smoke validation include runtime result validation; CLI tests cover success and out-of-scope evidence failure; negative validation tests cover invalid runtime result artifacts; and the command does not launch Claude Code, launch Antigravity, run shell commands, call GitHub, install dependencies, touch secrets, or deploy.

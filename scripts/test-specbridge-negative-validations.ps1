@@ -642,6 +642,57 @@ This contract intentionally omits the Goal section.
     -Command "./scripts/validate-runtime-launches.ps1" `
     -ExpectedPattern "max_budget_usd must be greater than 0 and no more than 10"
 
+  Invoke-ExpectedFailure `
+    -Name "runtime-result-evidence-outside-launch-scope" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/runtime-results" -Recurse -Force -ErrorAction SilentlyContinue
+      New-Item -ItemType Directory -Force -Path ".specbridge/runtime-results" | Out-Null
+
+      $result = [ordered]@{
+        schema_version = "1"
+        result_id = "runtime-result-evidence-outside-launch-scope"
+        generated_by = "specbridge-tests"
+        source_runtime_launch_path = ".specbridge/runtime-launches/issue-063-prepare-runtime-launch-plans.runtime-launch.json"
+        launch_id = "issue-061-controlled-antigravity-runtime-launch-claude-runtime-runtime-launch"
+        task_id = "issue-061-controlled-antigravity-runtime-launch"
+        packet_id = "issue-061-controlled-antigravity-runtime-launch-claude-runtime"
+        slice_id = "claude-runtime"
+        branch_name = "claude/issue-061-controlled-antigravity-runtime-launch-claude-runtime"
+        executor_evidence_path = "README.md"
+        exit_code = 0
+        files_written = @("README.md")
+        validation_results = @(
+          [ordered]@{
+            command = "fixture validation"
+            result = "passed"
+          }
+        )
+        policy_result = "Passed in invalid fixture."
+        stop_conditions = @("policy_conflict")
+        completion_status = "complete"
+        runtime_status = "succeeded"
+        result_status = "recorded"
+        execution_policy = [ordered]@{
+          launches_claude = $false
+          launches_antigravity = $false
+          executes_shell = $false
+          requires_network = $false
+          touches_secrets = $false
+          touches_production = $false
+          installs_dependencies = $false
+          deploys = $false
+        }
+        source_files = @(
+          ".specbridge/runtime-launches/issue-063-prepare-runtime-launch-plans.runtime-launch.json",
+          "README.md"
+        )
+      }
+
+      Set-Content -LiteralPath ".specbridge/runtime-results/runtime-result-evidence-outside-launch-scope.runtime-result.json" -Value ($result | ConvertTo-Json -Depth 8) -NoNewline
+    } `
+    -Command "./scripts/validate-runtime-results.ps1" `
+    -ExpectedPattern "executor_evidence_path must be declared"
+
   Invoke-ExpectedSuccess `
     -Name "security-gate-safe-fixture" `
     -RequiresGit $true `

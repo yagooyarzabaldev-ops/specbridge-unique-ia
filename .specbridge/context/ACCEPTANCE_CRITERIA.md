@@ -611,3 +611,53 @@ scripts/test-specbridge-negative-validations.ps1 covers invalid runtime launch a
 ### AC-143
 
 The runtime launch plan task does not add product runtime execution, dependency installation, MCP server implementation, GitHub App implementation, hosted dashboard implementation, database changes, production configuration, protected credential access, auth or billing changes, CI/CD weakening, or deployment automation.
+
+## Runtime Result Recording Acceptance Criteria
+
+### AC-144
+
+scripts/specbridge.ps1 supports `record-runtime-result`.
+
+### AC-145
+
+`record-runtime-result` reads one `.specbridge/runtime-launches/*.runtime-launch.json` file, reads one declared executor evidence file, and writes one declared `.specbridge/runtime-results/*.runtime-result.json` file.
+
+### AC-146
+
+The executor evidence path must be declared in the source runtime launch plan `exclusive_write` set.
+
+### AC-147
+
+Runtime result artifacts record schema version, result id, source runtime launch path, launch id, task id, packet id, slice id, branch name, executor evidence path, exit code, files written, validation results, policy result, stop conditions, completion status, runtime status, result status, execution policy, and source files.
+
+### AC-148
+
+Runtime result recording is evidence capture only and does not launch Claude Code, launch Antigravity, run shell commands, call GitHub, install dependencies, touch secrets, or deploy.
+
+### AC-149
+
+scripts/validate-runtime-results.ps1 exists and validates `.specbridge/runtime-results/*.runtime-result.json` artifacts.
+
+### AC-150
+
+scripts/specbridge.ps1 `validate -Profile standard` includes runtime result validation.
+
+### AC-151
+
+scripts/specbridge-smoke.ps1 includes runtime result validation.
+
+### AC-152
+
+scripts/test-specbridge-cli.ps1 covers successful `record-runtime-result` generation and deterministic out-of-scope evidence failure.
+
+### AC-153
+
+scripts/test-specbridge-negative-validations.ps1 covers invalid runtime result artifacts.
+
+### AC-154
+
+.specbridge/runtime-results/issue-065-record-runtime-results.runtime-result.json exists and validates.
+
+### AC-155
+
+The runtime result recording task does not add live launch expansion, dependency installation, MCP server implementation, GitHub App implementation, hosted dashboard implementation, database changes, production configuration, protected credential access, auth or billing changes, CI/CD weakening, or deployment automation.

@@ -1,0 +1,45 @@
+{
+  "summary": "Added deterministic runtime result recording for bounded Claude Code execution evidence. The CLI now records one source runtime launch plan plus one declared executor evidence file into a validated .specbridge/runtime-results/*.runtime-result.json artifact without launching Claude Code, Antigravity, shell commands, network calls, dependency installation, GitHub operations, or deployment.",
+  "changed_files": [
+    ".specbridge/audit-packets/issue-065-record-runtime-results.audit-packet.json",
+    ".specbridge/audits/issue-065-record-runtime-results.chatgpt-audit.json",
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-065-record-runtime-results.execution.md",
+    ".specbridge/reports/issue-065-record-runtime-results.final-report.json",
+    ".specbridge/runtime-results/issue-065-record-runtime-results.runtime-result.json",
+    ".specbridge/scopes/issue-065-record-runtime-results.scope.json",
+    "README.md",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-runtime-launch-plans.md",
+    "docs/specbridge-runtime-results.md",
+    "docs/specbridge-test-results.md",
+    "scripts/specbridge-smoke.ps1",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "scripts/test-specbridge-negative-validations.ps1",
+    "scripts/validate-runtime-results.ps1",
+    "specs/004-acceptance-tests.md"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-results.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "git diff --check: passed"
+  ],
+  "policy_result": "Passed. The task stayed inside the issue 065 contract and scope manifest. The new command reads only a declared runtime launch plan and declared executor evidence file, verifies that the evidence and written files are inside the launch plan exclusive_write set, writes one declared runtime result artifact, and records recording-only execution policy booleans.",
+  "risk_result": "Medium risk because runtime result artifacts may be used by later audit and merge gates. Risk is controlled by file-only evidence recording, no live executor launch, no shell execution by the command, no dependency installation, no secrets, no production configuration, no authentication or authorization changes, no billing changes, no CI/CD weakening, and no deployment.",
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending until the branch is pushed and checks run.",
+    "Runtime result recording uses an existing bounded runtime evidence artifact; a future contract is still required for the first source-backed implementation slice that executes and records a new real change."
+  ],
+  "merge_status": "Pending pull request, GitHub CI, and required merge gates.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_pr_ci"
+}
