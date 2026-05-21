@@ -12,7 +12,7 @@ Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test
 
 Execute the autonomy backlog in `docs/specbridge-autonomy-backlog.md`.
 
-Controlled GitHub evidence is now the active completion target. After it is merged, the next recommended task is executor PR integration or cleanup for the open child executor PR evidence records.
+Operational autonomy cleanup is now the active completion target. After it is merged, the next recommended task is a controlled Antigravity/Claude Code runtime launch under a dedicated execution contract.
 
 ## Completion Condition
 

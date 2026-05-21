@@ -46,6 +46,7 @@ Already complete:
 - live Antigravity executor handoff packets
 - branch-per-executor planning and coordinator simulation evidence
 - controlled GitHub evidence run with real child executor PRs and passed child CI
+- operational autonomy issue closure and evidence-only child PR cleanup
 
 ## Remaining Work
 
@@ -262,14 +263,15 @@ Acceptance:
 6. Controlled implementation pilot
 7. Multi-agent pilot
 8. Controlled GitHub evidence run
+9. Operational autonomy cleanup
 
 ## Current Next Task
 
-After Controlled GitHub Evidence Run is merged, start executor PR integration or cleanup.
+After Operational Autonomy Cleanup is merged, start a controlled Antigravity/Claude Code runtime launch.
 
 Reason:
 
-The coordinator can now mark GitHub evidence ready from child PRs, but child PRs remain open evidence records. The next product proof should decide whether SpecBridge merges, closes, supersedes, or archives child executor PRs after parent coordination lands.
+The repository now has clean GitHub evidence, no stale open evidence PRs, and no broad stale autonomy issue. The next product proof should run one bounded Claude Code executor task inside Antigravity under a dedicated contract, then send the result through GitHub CI and ChatGPT/Codex audit.
 
 ## Next Runtime Expansion
 
@@ -328,3 +330,40 @@ Acceptance:
 - each child PR records ChatGPT/Codex audit status
 - the coordinator marks integration ready only when every child PR has passed CI and approved audit evidence
 - simulation URLs are not accepted in GitHub evidence mode
+
+### 11. Operational Autonomy Cleanup
+
+Goal:
+
+Close stale autonomy bookkeeping after the controlled GitHub evidence run.
+
+Status:
+
+Implemented by closing issue 42 as completed, closing child evidence PRs #56, #57, and #58 without merge, and recording the cleanup decision in repository evidence.
+
+Acceptance:
+
+- child evidence PRs are closed without merge
+- issue 42 is closed as completed
+- cleanup decision is recorded in `.specbridge/github-evidence/`
+- repository memory points to the next controlled runtime launch
+
+### 12. Controlled Antigravity Runtime Launch
+
+Goal:
+
+Run one bounded Claude Code executor task inside Antigravity using a SpecBridge contract, then validate and audit the resulting PR through GitHub.
+
+Status:
+
+Planned.
+
+Acceptance:
+
+- one low-risk runtime task has a dedicated execution contract
+- SpecBridge prepares the executor packet
+- Antigravity/Claude Code runs against only the assigned contract
+- the executor PR is created and validated by CI
+- ChatGPT/Codex audits the result against spec, policy, security, and evidence
+- merge happens only after required gates pass
+- no secrets, production configuration, billing, auth security, dependency installation, or deployment automation are involved

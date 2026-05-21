@@ -1,0 +1,65 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-042-operational-autonomy-policy-closure",
+  "generated_by": "ChatGPT/Codex",
+  "cleanup_date": "2026-05-21",
+  "source_evidence": [
+    ".specbridge/github-evidence/issue-060-controlled-github-evidence-run.input.json",
+    ".specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json",
+    ".specbridge/orchestrations/issue-060-controlled-github-evidence-run.executor-orchestration.json",
+    "docs/specbridge-controlled-github-evidence-run.md"
+  ],
+  "parent_pr": {
+    "pr_number": 59,
+    "pr_url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/59",
+    "status": "merged",
+    "merge_commit_sha": "ef97705baf14e49cd1e0a6a25345de1dd2dc1de3",
+    "decision": "authoritative_coordinator_record"
+  },
+  "child_prs": [
+    {
+      "pr_number": 56,
+      "pr_url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/56",
+      "executor": "agent-a-implementation",
+      "status_before_cleanup": "open",
+      "status_after_cleanup": "closed",
+      "merged": false,
+      "cleanup_comment_id": 4510609035,
+      "decision": "closed_without_merge",
+      "reason": "Superseded by merged coordinator PR 59 and committed issue 060 evidence artifacts."
+    },
+    {
+      "pr_number": 57,
+      "pr_url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/57",
+      "executor": "agent-b-tests",
+      "status_before_cleanup": "open",
+      "status_after_cleanup": "closed",
+      "merged": false,
+      "cleanup_comment_id": 4510609567,
+      "decision": "closed_without_merge",
+      "reason": "Superseded by merged coordinator PR 59 and committed issue 060 evidence artifacts."
+    },
+    {
+      "pr_number": 58,
+      "pr_url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/58",
+      "executor": "agent-c-documentation",
+      "status_before_cleanup": "open",
+      "status_after_cleanup": "closed",
+      "merged": false,
+      "cleanup_comment_id": 4510609407,
+      "decision": "closed_without_merge",
+      "reason": "Superseded by merged coordinator PR 59 and committed issue 060 evidence artifacts."
+    }
+  ],
+  "issue_closure": {
+    "issue_number": 42,
+    "issue_url": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/42",
+    "status_before_cleanup": "open",
+    "status_after_cleanup": "closed",
+    "state_reason": "completed",
+    "cleanup_comment_id": 4510612493,
+    "decision": "closed_completed",
+    "reason": "Operational autonomy policy bundle completed or superseded by merged PRs 47 through 59."
+  },
+  "next_recommended_task": "controlled-antigravity-claude-code-runtime-launch"
+}

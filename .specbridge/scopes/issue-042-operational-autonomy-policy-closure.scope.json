@@ -1,0 +1,33 @@
+{
+  "contract_id": "issue-042-operational-autonomy-policy-closure",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/audit-packets/issue-042-operational-autonomy-policy-closure.audit-packet.json",
+    ".specbridge/audits/issue-042-operational-autonomy-policy-closure.chatgpt-audit.json",
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-042-operational-autonomy-policy-closure.execution.md",
+    ".specbridge/github-evidence/issue-042-operational-autonomy-policy-closure.cleanup.json",
+    ".specbridge/reports/issue-042-operational-autonomy-policy-closure.final-report.json",
+    ".specbridge/scopes/issue-042-operational-autonomy-policy-closure.scope.json",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-operational-autonomy-policy-closure.md",
+    "docs/specbridge-test-results.md",
+    "README.md",
+    "specs/004-acceptance-tests.md"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/github-evidence/issue-060-controlled-github-evidence-run.input.json",
+    ".specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json",
+    ".specbridge/orchestrations/issue-060-controlled-github-evidence-run.executor-orchestration.json",
+    "docs/specbridge-controlled-github-evidence-run.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-060-controlled-github-evidence-run"
+  ],
+  "final_report": ".specbridge/reports/issue-042-operational-autonomy-policy-closure.final-report.json"
+}

@@ -489,3 +489,29 @@ scripts/test-specbridge-branch-orchestration.ps1 verifies GitHub evidence record
 ### AC-114
 
 The controlled GitHub evidence run does not launch Antigravity sessions, start Claude Code, merge child executor PRs, create product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, touch production, or access protected credentials.
+
+## Operational Autonomy Cleanup Acceptance Criteria
+
+### AC-115
+
+docs/specbridge-operational-autonomy-policy-closure.md exists and records the cleanup decision.
+
+### AC-116
+
+GitHub child evidence PRs 56, 57, and 58 are closed without merge.
+
+### AC-117
+
+GitHub issue 42 is closed as completed after a comment links the merged evidence chain.
+
+### AC-118
+
+.specbridge/github-evidence/issue-042-operational-autonomy-policy-closure.cleanup.json records the child PR and issue cleanup decisions.
+
+### AC-119
+
+The cleanup task does not merge child PRs, delete remote branches, launch Antigravity sessions, start Claude Code, create product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, touch production, or access protected credentials.
+
+### AC-120
+
+Repository memory identifies controlled Antigravity/Claude Code runtime launch as the next recommended task.

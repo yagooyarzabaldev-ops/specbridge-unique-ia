@@ -174,3 +174,9 @@ docs/specbridge-branch-per-executor-orchestration.md exists; scripts/specbridge.
 Pass condition:
 
 docs/specbridge-controlled-github-evidence-run.md exists; `.specbridge/github-evidence/issue-060-controlled-github-evidence-run.input.json` records child PR evidence for PRs 56, 57, and 58; scripts/specbridge.ps1 supports `record-github-evidence`; `.specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json` records real child PR URLs, passed CI status, and approved ChatGPT/Codex audit status; `.specbridge/orchestrations/issue-060-controlled-github-evidence-run.executor-orchestration.json` records GitHub evidence mode and `ready_for_integration`; scripts/validate-branch-orchestrations.ps1 validates the GitHub evidence records; scripts/test-specbridge-branch-orchestration.ps1 proves GitHub evidence recording and simulation URL rejection; and child executor PRs remain unmerged evidence records unless a later contract authorizes integration.
+
+### AT-027 - Operational autonomy cleanup exists
+
+Pass condition:
+
+docs/specbridge-operational-autonomy-policy-closure.md exists; `.specbridge/github-evidence/issue-042-operational-autonomy-policy-closure.cleanup.json` records PRs 56, 57, and 58 closed without merge; issue 42 is closed as completed; repository memory points to controlled Antigravity/Claude Code runtime launch as the next recommended task; and the cleanup does not merge child PRs, delete remote branches, launch Antigravity sessions, start Claude Code, or touch protected credentials.
