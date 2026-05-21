@@ -91,7 +91,7 @@ SpecBridge currently has three governed status layers:
 - Repository-first MVP: complete as a controlled loop using context files, execution contracts, validation scripts, PR gates, review artifacts, and final reports.
 - V3 essential product scope: defined for the next runtime phase, with implementation still blocked until a dedicated execution contract authorizes source paths, test strategy, lint, typecheck, and build gates.
 - V4 product contract: defined for local CLI, MCP, GitHub evidence integration, dashboard boundaries, data model boundaries, runtime gates, completion criteria, and Version 5 candidates.
-- Branch-per-executor orchestration: implemented as deterministic branch plans and coordinator simulation evidence. Real executor branches and child PRs remain the next dedicated runtime task.
+- Branch-per-executor orchestration: implemented as deterministic branch plans, coordinator simulation evidence, and a controlled GitHub evidence run with real child PR URLs, passed child CI, and ChatGPT/Codex audit status.
 - Default automation: Full Autopilot is enabled for autonomous merge after required gates pass; production deployment remains disabled.
 
 See:
@@ -102,4 +102,5 @@ See:
 - `docs/specbridge-v4-product-contract.md`
 - `docs/specbridge-multi-agent-antigravity-architecture.md`
 - `docs/specbridge-branch-per-executor-orchestration.md`
+- `docs/specbridge-controlled-github-evidence-run.md`
 - `docs/specbridge-autonomy-backlog.md`

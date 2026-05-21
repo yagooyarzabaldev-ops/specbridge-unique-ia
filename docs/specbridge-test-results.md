@@ -8,10 +8,10 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 
 ## Test Run
 
-- Date: 2026-05-20
+- Date: 2026-05-21
 - Environment: local PowerShell workspace
-- Branch: `codex/branch-executor-orchestration`
-- Scope: Branch-per-executor orchestration with branch plans, coordinator simulation evidence, and merge-blocked simulated evidence
+- Branch: `codex/controlled-github-evidence-run`
+- Scope: Controlled GitHub evidence run with real child executor PRs, passed child CI, ChatGPT/Codex audit status, and GitHub-mode coordinator evidence
 
 ## Results
 
@@ -32,6 +32,7 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 | Multi-agent pilot validation | passed |
 | Executor handoff validation | passed |
 | Branch orchestration validation suite | passed |
+| Controlled GitHub evidence recording | passed |
 | PR review report validation | passed |
 | Claude review workflow validation | passed |
 | Autonomous execution protocol validation | passed |
@@ -76,6 +77,7 @@ The negative validation suite verifies:
 - local CLI task decomposition passes
 - local CLI executor handoff packet generation passes and validates
 - local CLI branch planning passes and validates
+- local CLI GitHub evidence recording passes and rejects simulation URLs
 - local CLI simulated executor coordination passes and validates
 - local CLI conflict detection passes
 - local CLI review gate passes
@@ -88,15 +90,18 @@ The negative validation suite verifies:
 - branch orchestration simulated coordination passes
 - branch orchestration duplicate branch fails deterministically
 - branch orchestration simulation evidence cannot authorize merge
+- branch orchestration GitHub evidence recording passes with real-shaped PR URLs
+- branch orchestration GitHub evidence mode marks integration ready with passed CI and approved audit
+- branch orchestration GitHub evidence recording rejects simulation URLs
 - incomplete final report fails
 - blocked PR path fails
 
 ## Policy Result
 
-Passed. The change adds file-backed branch-per-executor planning, coordinator simulation evidence, deterministic branch orchestration validation, CLI branch orchestration commands, smoke coverage, documentation, context updates, an execution contract, a scope manifest, audit evidence, audit packet evidence, and a final report only. It does not add protected credentials, production configuration, deployment automation, billing, hosted dashboard implementation, MCP server implementation, GitHub App implementation, database schema implementation, authentication implementation, authorization implementation, branch protection weakening, dependency installation, live executor branch creation, live child PR creation, or CI/CD security weakening.
+Passed. The change adds controlled GitHub child branch and child PR evidence, file-backed GitHub evidence recording, GitHub-mode coordinator evidence, deterministic branch orchestration validation, CLI command coverage, documentation, context updates, an execution contract, a scope manifest, audit evidence, audit packet evidence, and a final report. It does not add protected credentials, production configuration, deployment automation, billing, hosted dashboard implementation, MCP server implementation, GitHub App implementation, database schema implementation, authentication implementation, authorization implementation, branch protection weakening, dependency installation, live Antigravity session launch, live Claude Code process launch, child PR merge, or CI/CD security weakening.
 
 ## Unresolved Risks
 
-- CI evidence is pending until the branch is pushed and GitHub runs checks.
-- Auto-merge behavior should be verified on this pull request after checks pass.
-- Branch orchestration currently records simulation evidence and planned branch/PR records; real executor branches and child PRs remain the next dedicated runtime task.
+- Parent PR CI evidence is pending until the branch is pushed and GitHub runs checks.
+- Auto-merge behavior should be verified on the parent pull request after checks pass.
+- Child executor PRs #56, #57, and #58 remain open evidence records and are not merged by this contract.

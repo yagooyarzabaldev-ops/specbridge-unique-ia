@@ -1,0 +1,50 @@
+{
+  "summary": "Added controlled GitHub evidence recording for branch-per-executor orchestration, created three real executor branches and child PRs, captured child CI and ChatGPT/Codex audit evidence, and coordinated the run in GitHub evidence mode.",
+  "changed_files": [
+    "scripts/specbridge.ps1",
+    "scripts/validate-branch-orchestrations.ps1",
+    "scripts/test-specbridge-branch-orchestration.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/github-evidence/issue-060-controlled-github-evidence-run.input.json",
+    ".specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json",
+    ".specbridge/orchestrations/issue-060-controlled-github-evidence-run.executor-orchestration.json",
+    ".specbridge/contracts/issue-060-controlled-github-evidence-run.execution.md",
+    ".specbridge/scopes/issue-060-controlled-github-evidence-run.scope.json",
+    ".specbridge/reports/issue-060-controlled-github-evidence-run.final-report.json",
+    ".specbridge/audit-packets/issue-060-controlled-github-evidence-run.audit-packet.json",
+    ".specbridge/audits/issue-060-controlled-github-evidence-run.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    "docs/specbridge-controlled-github-evidence-run.md",
+    "docs/specbridge-local-cli.md",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-test-matrix.md",
+    "docs/specbridge-test-results.md",
+    "README.md",
+    "specs/004-acceptance-tests.md"
+  ],
+  "validations": [
+    "GitHub child PR #56 checks: passed",
+    "GitHub child PR #57 checks: passed",
+    "GitHub child PR #58 checks: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 record-github-evidence -InputPath .specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json -EvidencePath .specbridge/github-evidence/issue-060-controlled-github-evidence-run.input.json -OutputPath .specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json -Force: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 coordinate-executors -InputPath .specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json -OutputPath .specbridge/orchestrations/issue-060-controlled-github-evidence-run.executor-orchestration.json -EvidenceMode github -Force: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/validate-branch-orchestrations.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-branch-orchestration.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1: passed",
+    "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "git diff --check: passed"
+  ],
+  "policy_result": "Passed. Scope is limited to controlled GitHub child branch and child PR evidence for existing executor packets, local evidence recording, deterministic branch orchestration validation, tests, documentation, context updates, contract, scope manifest, audit packet, audit artifact, and final report artifacts.",
+  "risk_result": "Medium risk because the task creates controlled GitHub child branches and PR evidence and extends the local orchestration surface. No live Antigravity session launch, live Claude Code process launch, child PR merge, protected credential access, production configuration, billing, authentication implementation, authorization implementation, dependency installation, CI/CD permission escalation, CI/CD security weakening, hosted dashboard implementation, MCP server implementation, GitHub App implementation, database schema implementation, or deployment automation.",
+  "unresolved_risks": [
+    "Parent PR CI evidence is pending until this branch is pushed and GitHub checks run.",
+    "Child PRs remain open evidence records and are not merged by this contract.",
+    "Live Antigravity session launch and Claude Code executor process launch remain future runtime work."
+  ],
+  "merge_status": "Pending parent pull request and required gates.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_parent_ci"
+}

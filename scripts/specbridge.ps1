@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "plan-executor-branches", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -13,6 +13,7 @@ param(
   [string] $ReportPath = "",
   [string] $OutputDirectory = "",
   [string] $OutputFileName = "",
+  [string] $EvidencePath = "",
   [string] $CiStatus = "not_collected",
   [string] $Summary = "",
   [string[]] $ChangedFile = @(),
@@ -1093,6 +1094,149 @@ function Invoke-PlanExecutorBranchesCommand {
   exit 0
 }
 
+function Invoke-RecordGithubEvidenceCommand {
+  $branchPlanPath = Normalize-RepoPath -Path $InputPath -FieldName "InputPath"
+  $evidencePath = Normalize-RepoPath -Path $EvidencePath -FieldName "EvidencePath"
+  $output = Assert-OutputPath `
+    -Path $OutputPath `
+    -Pattern "^\.specbridge/branch-plans/.+\.branch-plan\.json$" `
+    -Description "a .specbridge/branch-plans/*.branch-plan.json branch plan"
+
+  if ($branchPlanPath -notmatch "^\.specbridge/branch-plans/.+\.branch-plan\.json$") {
+    Fail "InputPath must be a .specbridge/branch-plans/*.branch-plan.json file: $branchPlanPath"
+  }
+
+  if ($evidencePath -notmatch "^\.specbridge/github-evidence/.+\.json$") {
+    Fail "EvidencePath must be under .specbridge/github-evidence and end with .json: $evidencePath"
+  }
+
+  if (-not (Test-Path -LiteralPath $branchPlanPath)) {
+    Fail "InputPath does not exist: $branchPlanPath"
+  }
+
+  if (-not (Test-Path -LiteralPath $evidencePath)) {
+    Fail "EvidencePath does not exist: $evidencePath"
+  }
+
+  $branchPlan = Get-JsonObjectFromFile -Path $branchPlanPath -Description "branch plan"
+  $evidence = Get-JsonObjectFromFile -Path $evidencePath -Description "GitHub evidence"
+
+  foreach ($field in @("task_id", "executor_branches", "source_files")) {
+    if (-not $branchPlan.PSObject.Properties.Name.Contains($field)) {
+      Fail "branch plan must include $field"
+    }
+  }
+
+  foreach ($field in @("task_id", "child_prs")) {
+    if (-not $evidence.PSObject.Properties.Name.Contains($field)) {
+      Fail "GitHub evidence must include $field"
+    }
+  }
+
+  if (-not ($evidence.child_prs -is [System.Array]) -or @($evidence.child_prs).Count -le 0) {
+    Fail "GitHub evidence child_prs must be a non-empty array"
+  }
+
+  $evidenceByPacketId = @{}
+
+  foreach ($child in @($evidence.child_prs)) {
+    foreach ($field in @("packet_id", "branch_name", "pr_url", "pr_status", "ci_status", "chatgpt_audit_status")) {
+      if (-not $child.PSObject.Properties.Name.Contains($field)) {
+        Fail "GitHub evidence child_prs entries must include $field"
+      }
+
+      $value = $child.$field
+
+      if ($null -eq $value -or $value.GetType().Name -ne "String" -or [string]::IsNullOrWhiteSpace($value)) {
+        Fail "GitHub evidence child_prs.$field must be a non-empty string"
+      }
+    }
+
+    if ($child.pr_url -notmatch "^https://github\.com/.+/.+/pull/[0-9]+$") {
+      Fail "GitHub evidence pr_url must use a GitHub pull request URL: $($child.pr_url)"
+    }
+
+    if ($evidenceByPacketId.ContainsKey($child.packet_id)) {
+      Fail "Duplicate packet_id in GitHub evidence: $($child.packet_id)"
+    }
+
+    $evidenceByPacketId[$child.packet_id] = $child
+  }
+
+  $updatedBranches = @()
+
+  foreach ($executor in @($branchPlan.executor_branches | Sort-Object packet_id)) {
+    if (-not $evidenceByPacketId.ContainsKey($executor.packet_id)) {
+      Fail "Missing GitHub evidence for packet_id: $($executor.packet_id)"
+    }
+
+    $child = $evidenceByPacketId[$executor.packet_id]
+
+    if ($child.branch_name -ne $executor.branch_name) {
+      Fail "GitHub evidence branch_name mismatch for packet_id $($executor.packet_id): expected=$($executor.branch_name) actual=$($child.branch_name)"
+    }
+
+    $mergeStatus = "not_ready"
+
+    if ($child.ci_status -eq "passed" -and $child.chatgpt_audit_status -eq "approved") {
+      $mergeStatus = "ready_for_integration"
+    }
+    elseif ($child.ci_status -eq "failed" -or $child.chatgpt_audit_status -in @("changes_requested", "blocked")) {
+      $mergeStatus = "blocked"
+    }
+
+    $updatedBranches += [ordered]@{
+      packet_id = $executor.packet_id
+      slice_id = $executor.slice_id
+      agent_role = $executor.agent_role
+      branch_name = $executor.branch_name
+      base_branch = $executor.base_branch
+      execution_contract_path = $executor.execution_contract_path
+      final_report_path = $executor.final_report_path
+      exclusive_write = @($executor.exclusive_write)
+      required_validations = @($executor.required_validations)
+      pr_title = $executor.pr_title
+      pr_url = $child.pr_url
+      pr_status = $child.pr_status
+      ci_status = $child.ci_status
+      chatgpt_audit_status = $child.chatgpt_audit_status
+      merge_status = $mergeStatus
+      rollback_notes = @($executor.rollback_notes)
+    }
+  }
+
+  $sourceFiles = @($branchPlan.source_files)
+  $sourceFiles += $branchPlanPath
+  $sourceFiles += $evidencePath
+
+  $updatedPlan = [ordered]@{
+    schema_version = $branchPlan.schema_version
+    plan_id = $evidence.task_id
+    task_id = $evidence.task_id
+    source_task_id = $branchPlan.source_task_id
+    generated_by = "specbridge-cli"
+    repository_url = $branchPlan.repository_url
+    base_branch = $branchPlan.base_branch
+    source_packet_count = @($updatedBranches).Count
+    executor_branches = @($updatedBranches)
+    coordinator_gates = $branchPlan.coordinator_gates
+    status = "evidence_recorded"
+    source_files = @($sourceFiles | Sort-Object -Unique)
+  }
+
+  Write-Utf8JsonFile -Path $output -Value $updatedPlan -Depth 10
+
+  Write-CliJson ([ordered]@{
+    command = "record-github-evidence"
+    ok = $true
+    output_path = $output
+    evidence_path = $evidencePath
+    child_count = @($updatedBranches).Count
+  })
+
+  exit 0
+}
+
 function Invoke-CoordinateExecutorsCommand {
   $branchPlanPath = Normalize-RepoPath -Path $InputPath -FieldName "InputPath"
 
@@ -1263,6 +1407,7 @@ switch ($Command) {
   "decompose-task" { Invoke-DecomposeTaskCommand }
   "prepare-executors" { Invoke-PrepareExecutorsCommand }
   "plan-executor-branches" { Invoke-PlanExecutorBranchesCommand }
+  "record-github-evidence" { Invoke-RecordGithubEvidenceCommand }
   "coordinate-executors" { Invoke-CoordinateExecutorsCommand }
   "review-gate" { Invoke-ReviewGateCommand }
   default { Fail "Unsupported command: $Command" }

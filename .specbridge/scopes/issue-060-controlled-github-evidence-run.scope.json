@@ -1,0 +1,44 @@
+{
+  "contract_id": "issue-060-controlled-github-evidence-run",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/audit-packets/issue-060-controlled-github-evidence-run.audit-packet.json",
+    ".specbridge/audits/issue-060-controlled-github-evidence-run.chatgpt-audit.json",
+    ".specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json",
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-060-controlled-github-evidence-run.execution.md",
+    ".specbridge/github-evidence/issue-060-controlled-github-evidence-run.input.json",
+    ".specbridge/orchestrations/issue-060-controlled-github-evidence-run.executor-orchestration.json",
+    ".specbridge/reports/issue-060-controlled-github-evidence-run.final-report.json",
+    ".specbridge/scopes/issue-060-controlled-github-evidence-run.scope.json",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-controlled-github-evidence-run.md",
+    "docs/specbridge-local-cli.md",
+    "docs/specbridge-test-matrix.md",
+    "docs/specbridge-test-results.md",
+    "README.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-branch-orchestration.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "scripts/validate-branch-orchestrations.ps1",
+    "specs/004-acceptance-tests.md"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json",
+    ".specbridge/executor-packets/issue-058-live-antigravity-executor-handoff-agent-a-implementation.executor-packet.json",
+    ".specbridge/executor-packets/issue-058-live-antigravity-executor-handoff-agent-b-tests.executor-packet.json",
+    ".specbridge/executor-packets/issue-058-live-antigravity-executor-handoff-agent-c-documentation.executor-packet.json",
+    "docs/specbridge-branch-per-executor-orchestration.md",
+    "docs/specbridge-multi-agent-antigravity-architecture.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-058-live-antigravity-executor-handoff",
+    "issue-059-branch-per-executor-orchestration"
+  ],
+  "final_report": ".specbridge/reports/issue-060-controlled-github-evidence-run.final-report.json"
+}

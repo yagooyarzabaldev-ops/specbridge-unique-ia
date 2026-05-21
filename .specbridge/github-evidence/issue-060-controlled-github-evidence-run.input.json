@@ -1,0 +1,56 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-060-controlled-github-evidence-run",
+  "generated_by": "ChatGPT/Codex",
+  "source_branch_plan_path": ".specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json",
+  "child_prs": [
+    {
+      "packet_id": "issue-058-live-antigravity-executor-handoff-agent-a-implementation",
+      "branch_name": "claude/issue-058-live-antigravity-executor-handoff-agent-a-implementation",
+      "pr_url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/56",
+      "pr_number": 56,
+      "pr_status": "open",
+      "head_sha": "3912979e1f22342ea311bed40baffabcbdfe5e5d",
+      "ci_status": "passed",
+      "ci_run_ids": [
+        26238919858,
+        26238919519,
+        26238919518,
+        26238919514
+      ],
+      "chatgpt_audit_status": "approved"
+    },
+    {
+      "packet_id": "issue-058-live-antigravity-executor-handoff-agent-b-tests",
+      "branch_name": "claude/issue-058-live-antigravity-executor-handoff-agent-b-tests",
+      "pr_url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/57",
+      "pr_number": 57,
+      "pr_status": "open",
+      "head_sha": "aeb08b41fe56ab5df013e4d02a9a359b0ff26a34",
+      "ci_status": "passed",
+      "ci_run_ids": [
+        26238918716,
+        26238918855,
+        26238918538,
+        26238918540
+      ],
+      "chatgpt_audit_status": "approved"
+    },
+    {
+      "packet_id": "issue-058-live-antigravity-executor-handoff-agent-c-documentation",
+      "branch_name": "claude/issue-058-live-antigravity-executor-handoff-agent-c-documentation",
+      "pr_url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/58",
+      "pr_number": 58,
+      "pr_status": "open",
+      "head_sha": "262f36c89af3ecf7177a65d09e40f08a94147c46",
+      "ci_status": "passed",
+      "ci_run_ids": [
+        26238920059,
+        26238920008,
+        26238920010,
+        26238920146
+      ],
+      "chatgpt_audit_status": "approved"
+    }
+  ]
+}

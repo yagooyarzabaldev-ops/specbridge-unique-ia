@@ -168,3 +168,9 @@ docs/specbridge-live-antigravity-executor-handoff.md exists; scripts/specbridge.
 Pass condition:
 
 docs/specbridge-branch-per-executor-orchestration.md exists; scripts/specbridge.ps1 supports `plan-executor-branches` and `coordinate-executors`; `.specbridge/branch-plans/*.branch-plan.json` records one branch per executor packet; `.specbridge/orchestrations/*.executor-orchestration.json` records child PR, CI, ChatGPT audit, merge, and rollback evidence; scripts/validate-branch-orchestrations.ps1 validates branch plan and orchestration artifacts; scripts/test-specbridge-branch-orchestration.ps1 proves successful planning, simulated coordination, duplicate branch rejection, and simulation merge blocking; and scripts/specbridge-smoke.ps1 runs branch orchestration validation and tests.
+
+### AT-026 - Controlled GitHub evidence exists
+
+Pass condition:
+
+docs/specbridge-controlled-github-evidence-run.md exists; `.specbridge/github-evidence/issue-060-controlled-github-evidence-run.input.json` records child PR evidence for PRs 56, 57, and 58; scripts/specbridge.ps1 supports `record-github-evidence`; `.specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json` records real child PR URLs, passed CI status, and approved ChatGPT/Codex audit status; `.specbridge/orchestrations/issue-060-controlled-github-evidence-run.executor-orchestration.json` records GitHub evidence mode and `ready_for_integration`; scripts/validate-branch-orchestrations.ps1 validates the GitHub evidence records; scripts/test-specbridge-branch-orchestration.ps1 proves GitHub evidence recording and simulation URL rejection; and child executor PRs remain unmerged evidence records unless a later contract authorizes integration.

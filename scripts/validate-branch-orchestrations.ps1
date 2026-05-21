@@ -75,7 +75,7 @@ $childResultRequiredFields = @(
   "rollback_notes"
 )
 
-$allowedPlanStatuses = @("planned", "active", "completed", "blocked", "cancelled")
+$allowedPlanStatuses = @("planned", "evidence_recorded", "active", "completed", "blocked", "cancelled")
 $allowedEvidenceModes = @("simulation", "github")
 $allowedIntegrationDecisions = @("simulation_only_no_merge", "ready_for_integration", "blocked")
 $allowedCoordinatorStatuses = @("simulated", "ready_for_integration", "blocked")
@@ -274,8 +274,10 @@ foreach ($file in $branchPlanFiles) {
   foreach ($path in (Test-StringArray -Value $plan.source_files -FieldName "source_files" -FileName $file.FullName)) {
     Test-RepoPath -Path $path -FieldName "source_files" -FileName $file.FullName -MustExist $true
 
-    if ($path -notmatch "^\.specbridge/executor-packets/.+\.executor-packet\.json$") {
-      Write-Failure "source_files must reference executor packets in $($file.FullName): $path"
+    if ($path -notmatch "^\.specbridge/executor-packets/.+\.executor-packet\.json$" -and
+        $path -notmatch "^\.specbridge/branch-plans/.+\.branch-plan\.json$" -and
+        $path -notmatch "^\.specbridge/github-evidence/.+\.json$") {
+      Write-Failure "source_files must reference executor packets, branch plans, or GitHub evidence in $($file.FullName): $path"
     }
   }
 
@@ -295,6 +297,16 @@ foreach ($file in $branchPlanFiles) {
 
     if ($null -ne $executor.pr_url -and $executor.pr_url -notmatch "^(https://github\.com/.+/.+/pull/[0-9]+|simulation://pull-requests/.+)$") {
       Write-Failure "pr_url must be null, a GitHub PR URL, or a simulation URL in $($file.FullName): $($executor.pr_url)"
+    }
+
+    if ($plan.status -eq "evidence_recorded") {
+      if ($null -eq $executor.pr_url -or $executor.pr_url -notmatch "^https://github\.com/.+/.+/pull/[0-9]+$") {
+        Write-Failure "evidence_recorded branch plan requires a GitHub PR URL in $($file.FullName): packet=$($executor.packet_id)"
+      }
+
+      if ($executor.ci_status -eq "not_collected" -or $executor.chatgpt_audit_status -eq "not_collected") {
+        Write-Failure "evidence_recorded branch plan requires collected CI and audit status in $($file.FullName): packet=$($executor.packet_id)"
+      }
     }
 
     Test-BranchName -BranchName $executor.branch_name -FileName $file.FullName
@@ -389,10 +401,14 @@ foreach ($file in $orchestrationFiles) {
   foreach ($child in @($orchestration.child_results)) {
     Test-RequiredFields -Object $child -RequiredFields $childResultRequiredFields -AllowedFields $childResultRequiredFields -FileName $file.FullName
 
-    foreach ($stringField in @("packet_id", "slice_id", "agent_role", "branch_name", "pr_url", "pr_status", "ci_status", "chatgpt_audit_status", "merge_blocker")) {
+    foreach ($stringField in @("packet_id", "slice_id", "agent_role", "branch_name", "pr_url", "pr_status", "ci_status", "chatgpt_audit_status")) {
       if ($child.PSObject.Properties.Name.Contains($stringField)) {
         Test-String -Value $child.$stringField -FieldName $stringField -FileName $file.FullName
       }
+    }
+
+    if ($child.merge_allowed -eq $false) {
+      Test-String -Value $child.merge_blocker -FieldName "merge_blocker" -FileName $file.FullName
     }
 
     Test-BranchName -BranchName $child.branch_name -FileName $file.FullName
@@ -420,10 +436,31 @@ foreach ($file in $orchestrationFiles) {
     if ($orchestration.evidence_mode -eq "github" -and $child.pr_url -notmatch "^https://github\.com/.+/.+/pull/[0-9]+$") {
       Write-Failure "github child result must use a GitHub PR URL in $($file.FullName): packet=$($child.packet_id)"
     }
+
+    if ($orchestration.evidence_mode -eq "github" -and $child.merge_allowed -eq $true) {
+      if ($child.ci_status -ne "passed" -or $child.chatgpt_audit_status -ne "approved") {
+        Write-Failure "github child result can allow merge only with passed CI and approved audit in $($file.FullName): packet=$($child.packet_id)"
+      }
+    }
   }
 
   if ($orchestration.evidence_mode -eq "simulation" -and $orchestration.integration_decision -ne "simulation_only_no_merge") {
     Write-Failure "simulation orchestration must use integration_decision simulation_only_no_merge in $($file.FullName)"
+  }
+
+  if ($orchestration.evidence_mode -eq "github" -and $orchestration.integration_decision -eq "ready_for_integration") {
+    $notReadyChildren = @(
+      $orchestration.child_results |
+        Where-Object {
+          $_.merge_allowed -ne $true -or
+          $_.ci_status -ne "passed" -or
+          $_.chatgpt_audit_status -ne "approved"
+        }
+    )
+
+    if ($notReadyChildren.Count -gt 0) {
+      Write-Failure "ready_for_integration requires every github child result to be merge_allowed with passed CI and approved audit in $($file.FullName)"
+    }
   }
 }
 

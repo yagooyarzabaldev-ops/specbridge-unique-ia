@@ -339,6 +339,41 @@ try {
       )) `
       -ExpectedPattern '"integration_decision"\s*:\s*"simulation_only_no_merge"'
 
+    New-Item -ItemType Directory -Force -Path ".specbridge/github-evidence" | Out-Null
+
+    $cliGithubEvidence = [ordered]@{
+      task_id = "cli-github-evidence"
+      child_prs = @(
+        [ordered]@{
+          packet_id = "cli-executor-handoff-agent-a-implementation"
+          branch_name = "claude/cli-executor-handoff-agent-a-implementation"
+          pr_url = "https://github.com/yagooyarzabaldev-ops/specbridge/pull/1004"
+          pr_status = "open"
+          ci_status = "passed"
+          chatgpt_audit_status = "approved"
+        }
+      )
+    }
+
+    Set-Content `
+      -LiteralPath ".specbridge/github-evidence/cli-github-evidence.input.json" `
+      -Value ($cliGithubEvidence | ConvertTo-Json -Depth 8) `
+      -NoNewline
+
+    Assert-Success `
+      -Name "record-github-evidence" `
+      -Result (Invoke-Cli -Arguments @(
+        "record-github-evidence",
+        "-InputPath",
+        ".specbridge/branch-plans/cli-fixture.branch-plan.json",
+        "-EvidencePath",
+        ".specbridge/github-evidence/cli-github-evidence.input.json",
+        "-OutputPath",
+        ".specbridge/branch-plans/cli-github-evidence.branch-plan.json",
+        "-Force"
+      )) `
+      -ExpectedPattern '"child_count"\s*:\s*1'
+
     $branchOrchestrationValidation = & powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-branch-orchestrations.ps1 2>&1
 
     if ($LASTEXITCODE -ne 0) {

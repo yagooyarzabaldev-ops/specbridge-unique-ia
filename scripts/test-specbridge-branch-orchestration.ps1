@@ -154,6 +154,118 @@ try {
       Write-Output "PASS simulation evidence blocks merge authorization."
     }
 
+    New-Item -ItemType Directory -Force -Path ".specbridge/github-evidence" | Out-Null
+
+    $githubEvidence = [ordered]@{
+      schema_version = "1"
+      task_id = "issue-060-controlled-github-evidence-run"
+      generated_by = "specbridge-test"
+      source_branch_plan_path = ".specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json"
+      child_prs = @(
+        [ordered]@{
+          packet_id = "issue-058-live-antigravity-executor-handoff-agent-a-implementation"
+          branch_name = "claude/issue-058-live-antigravity-executor-handoff-agent-a-implementation"
+          pr_url = "https://github.com/yagooyarzabaldev-ops/specbridge/pull/1001"
+          pr_status = "open"
+          ci_status = "passed"
+          chatgpt_audit_status = "approved"
+        },
+        [ordered]@{
+          packet_id = "issue-058-live-antigravity-executor-handoff-agent-b-tests"
+          branch_name = "claude/issue-058-live-antigravity-executor-handoff-agent-b-tests"
+          pr_url = "https://github.com/yagooyarzabaldev-ops/specbridge/pull/1002"
+          pr_status = "open"
+          ci_status = "passed"
+          chatgpt_audit_status = "approved"
+        },
+        [ordered]@{
+          packet_id = "issue-058-live-antigravity-executor-handoff-agent-c-documentation"
+          branch_name = "claude/issue-058-live-antigravity-executor-handoff-agent-c-documentation"
+          pr_url = "https://github.com/yagooyarzabaldev-ops/specbridge/pull/1003"
+          pr_status = "open"
+          ci_status = "passed"
+          chatgpt_audit_status = "approved"
+        }
+      )
+    }
+
+    Set-Content `
+      -LiteralPath ".specbridge/github-evidence/issue-060-fixture.input.json" `
+      -Value ($githubEvidence | ConvertTo-Json -Depth 8) `
+      -NoNewline
+
+    Assert-Success `
+      -Name "record-github-evidence" `
+      -Result (Invoke-Cli -Arguments @(
+        "record-github-evidence",
+        "-InputPath",
+        ".specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json",
+        "-EvidencePath",
+        ".specbridge/github-evidence/issue-060-fixture.input.json",
+        "-OutputPath",
+        ".specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json",
+        "-Force"
+      )) `
+      -ExpectedPattern '"child_count"\s*:\s*3'
+
+    Assert-Success `
+      -Name "coordinate-executors-github" `
+      -Result (Invoke-Cli -Arguments @(
+        "coordinate-executors",
+        "-InputPath",
+        ".specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json",
+        "-OutputPath",
+        ".specbridge/orchestrations/issue-060-controlled-github-evidence-run.executor-orchestration.json",
+        "-EvidenceMode",
+        "github",
+        "-Force"
+      )) `
+      -ExpectedPattern '"integration_decision"\s*:\s*"ready_for_integration"'
+
+    $githubValidation = & powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-branch-orchestrations.ps1 2>&1
+
+    if ($LASTEXITCODE -ne 0) {
+      Write-Output "FAIL github evidence branch orchestration artifacts did not validate."
+      Write-Output ($githubValidation | Out-String)
+      $failed = $true
+    }
+    else {
+      Write-Output "PASS github evidence branch orchestration artifacts validate."
+    }
+
+    $invalidEvidence = [ordered]@{
+      task_id = "issue-060-invalid-github-evidence"
+      child_prs = @(
+        [ordered]@{
+          packet_id = "issue-058-live-antigravity-executor-handoff-agent-a-implementation"
+          branch_name = "claude/issue-058-live-antigravity-executor-handoff-agent-a-implementation"
+          pr_url = "simulation://pull-requests/agent-a"
+          pr_status = "open"
+          ci_status = "passed"
+          chatgpt_audit_status = "approved"
+        }
+      )
+    }
+
+    Set-Content `
+      -LiteralPath ".specbridge/github-evidence/issue-060-invalid-input.json" `
+      -Value ($invalidEvidence | ConvertTo-Json -Depth 8) `
+      -NoNewline
+
+    Assert-Failure `
+      -Name "record-github-evidence-rejects-simulation-url" `
+      -Result (Invoke-Cli -Arguments @(
+        "record-github-evidence",
+        "-InputPath",
+        ".specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json",
+        "-EvidencePath",
+        ".specbridge/github-evidence/issue-060-invalid-input.json",
+        "-OutputPath",
+        ".specbridge/branch-plans/invalid.branch-plan.json",
+        "-Force"
+      )) `
+      -ExpectedPattern "GitHub evidence pr_url must use a GitHub pull request URL"
+
     $conflictDir = ".specbridge/executor-packets/branch-conflict-fixture"
     New-Item -ItemType Directory -Force -Path $conflictDir | Out-Null
     $sourcePackets = @(Get-ChildItem -LiteralPath ".specbridge/executor-packets" -Filter "issue-058-live-antigravity-executor-handoff-*.executor-packet.json" -File | Sort-Object Name | Select-Object -First 2)

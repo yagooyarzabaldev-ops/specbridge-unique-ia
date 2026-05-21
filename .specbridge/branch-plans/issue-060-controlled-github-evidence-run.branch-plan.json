@@ -1,0 +1,107 @@
+{
+    "schema_version":  "1",
+    "plan_id":  "issue-060-controlled-github-evidence-run",
+    "task_id":  "issue-060-controlled-github-evidence-run",
+    "source_task_id":  "issue-058-live-antigravity-executor-handoff",
+    "generated_by":  "specbridge-cli",
+    "repository_url":  "https://github.com/yagooyarzabaldev-ops/specbridge",
+    "base_branch":  "main",
+    "source_packet_count":  3,
+    "executor_branches":  [
+                              {
+                                  "packet_id":  "issue-058-live-antigravity-executor-handoff-agent-a-implementation",
+                                  "slice_id":  "agent-a-implementation",
+                                  "agent_role":  "implementation",
+                                  "branch_name":  "claude/issue-058-live-antigravity-executor-handoff-agent-a-implementation",
+                                  "base_branch":  "main",
+                                  "execution_contract_path":  ".specbridge/contracts/issue-054-agent-a-implementation-slice.execution.md",
+                                  "final_report_path":  ".specbridge/reports/issue-054-agent-a-implementation-slice.final-report.json",
+                                  "exclusive_write":  [
+                                                          ".specbridge/pilot/multi-agent/agent-a-implementation-output.md"
+                                                      ],
+                                  "required_validations":  [
+                                                               "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-multi-agent-pilot.ps1"
+                                                           ],
+                                  "pr_title":  "Executor agent-a-implementation: Run the implementation executor contract in a dedicated Antigravity Claude Code session.",
+                                  "pr_url":  "https://github.com/yagooyarzabaldev-ops/specbridge/pull/56",
+                                  "pr_status":  "open",
+                                  "ci_status":  "passed",
+                                  "chatgpt_audit_status":  "approved",
+                                  "merge_status":  "ready_for_integration",
+                                  "rollback_notes":  [
+                                                         "Close the executor PR if it exists.",
+                                                         "Delete or abandon branch claude/issue-058-live-antigravity-executor-handoff-agent-a-implementation after coordinator review.",
+                                                         "Re-run the coordinator plan before retrying this packet."
+                                                     ]
+                              },
+                              {
+                                  "packet_id":  "issue-058-live-antigravity-executor-handoff-agent-b-tests",
+                                  "slice_id":  "agent-b-tests",
+                                  "agent_role":  "tests",
+                                  "branch_name":  "claude/issue-058-live-antigravity-executor-handoff-agent-b-tests",
+                                  "base_branch":  "main",
+                                  "execution_contract_path":  ".specbridge/contracts/issue-055-agent-b-test-slice.execution.md",
+                                  "final_report_path":  ".specbridge/reports/issue-055-agent-b-test-slice.final-report.json",
+                                  "exclusive_write":  [
+                                                          "scripts/test-specbridge-multi-agent-pilot.ps1"
+                                                      ],
+                                  "required_validations":  [
+                                                               "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-multi-agent-pilot.ps1"
+                                                           ],
+                                  "pr_title":  "Executor agent-b-tests: Run the test executor contract in a dedicated Antigravity Claude Code session.",
+                                  "pr_url":  "https://github.com/yagooyarzabaldev-ops/specbridge/pull/57",
+                                  "pr_status":  "open",
+                                  "ci_status":  "passed",
+                                  "chatgpt_audit_status":  "approved",
+                                  "merge_status":  "ready_for_integration",
+                                  "rollback_notes":  [
+                                                         "Close the executor PR if it exists.",
+                                                         "Delete or abandon branch claude/issue-058-live-antigravity-executor-handoff-agent-b-tests after coordinator review.",
+                                                         "Re-run the coordinator plan before retrying this packet."
+                                                     ]
+                              },
+                              {
+                                  "packet_id":  "issue-058-live-antigravity-executor-handoff-agent-c-documentation",
+                                  "slice_id":  "agent-c-documentation",
+                                  "agent_role":  "documentation",
+                                  "branch_name":  "claude/issue-058-live-antigravity-executor-handoff-agent-c-documentation",
+                                  "base_branch":  "main",
+                                  "execution_contract_path":  ".specbridge/contracts/issue-056-agent-c-documentation-slice.execution.md",
+                                  "final_report_path":  ".specbridge/reports/issue-056-agent-c-documentation-slice.final-report.json",
+                                  "exclusive_write":  [
+                                                          "docs/specbridge-multi-agent-pilot.md"
+                                                      ],
+                                  "required_validations":  [
+                                                               "powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                                               "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1"
+                                                           ],
+                                  "pr_title":  "Executor agent-c-documentation: Run the documentation executor contract in a dedicated Antigravity Claude Code session.",
+                                  "pr_url":  "https://github.com/yagooyarzabaldev-ops/specbridge/pull/58",
+                                  "pr_status":  "open",
+                                  "ci_status":  "passed",
+                                  "chatgpt_audit_status":  "approved",
+                                  "merge_status":  "ready_for_integration",
+                                  "rollback_notes":  [
+                                                         "Close the executor PR if it exists.",
+                                                         "Delete or abandon branch claude/issue-058-live-antigravity-executor-handoff-agent-c-documentation after coordinator review.",
+                                                         "Re-run the coordinator plan before retrying this packet."
+                                                     ]
+                              }
+                          ],
+    "coordinator_gates":  {
+                              "one_branch_per_packet":  true,
+                              "one_pr_per_branch_required":  true,
+                              "ci_status_required":  "passed",
+                              "chatgpt_audit_required":  "approved",
+                              "integration_waits_for_all_children":  true,
+                              "simulation_cannot_authorize_merge":  true
+                          },
+    "status":  "evidence_recorded",
+    "source_files":  [
+                         ".specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json",
+                         ".specbridge/executor-packets/issue-058-live-antigravity-executor-handoff-agent-a-implementation.executor-packet.json",
+                         ".specbridge/executor-packets/issue-058-live-antigravity-executor-handoff-agent-b-tests.executor-packet.json",
+                         ".specbridge/executor-packets/issue-058-live-antigravity-executor-handoff-agent-c-documentation.executor-packet.json",
+                         ".specbridge/github-evidence/issue-060-controlled-github-evidence-run.input.json"
+                     ]
+}

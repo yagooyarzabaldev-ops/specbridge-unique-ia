@@ -1,0 +1,80 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-060-controlled-github-evidence-run",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-060-controlled-github-evidence-run.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-060-controlled-github-evidence-run.execution.md",
+  "final_report_path": ".specbridge/reports/issue-060-controlled-github-evidence-run.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "The implementation adds GitHub evidence recording, real child PR evidence input, evidence-recorded branch plan output, GitHub-mode coordinator output, validation updates, tests, docs, and audit artifacts for issue 060.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "AC-105 through AC-114 are represented by child PR records, the record-github-evidence CLI command, GitHub evidence mode coordination, validation, test coverage, documentation, and audit artifacts.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The task is limited to controlled child branch and child PR evidence plus local scripts, deterministic repository artifacts, documentation, context, contract, scope, report, audit packet, and audit artifact.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The change does not add protected credentials, production configuration, billing, authentication implementation, authorization implementation, dependency installation, CI/CD security weakening, deployment automation, live Antigravity launch, live Claude Code launch, or child PR merge.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed files are listed in the final report and covered by the issue 060 scope manifest.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "Branch orchestration validation, branch orchestration tests, CLI tests, standard validation, negative validation, smoke validation, and git diff check passed locally.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "needs_human_decision",
+      "evidence": "Child PR CI passed for PRs 56, 57, and 58. Parent PR CI evidence is pending until this branch is pushed and checks complete.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records child PR CI evidence, pending parent CI, open child PR status, and the fact that child PRs are not merged by this contract.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "runtime_boundary",
+      "file": ".specbridge/orchestrations/issue-060-controlled-github-evidence-run.executor-orchestration.json",
+      "line": null,
+      "evidence": "The coordinator artifact uses GitHub evidence mode and marks integration ready from real child PR evidence, while child PRs remain open.",
+      "recommendation": "Use a later dedicated contract for child PR integration or cleanup after parent evidence lands.",
+      "blocking": false
+    }
+  ],
+  "outcome": "needs_human_decision",
+  "merge_allowed": false,
+  "unresolved_risks": [
+    "Parent PR CI evidence is pending until GitHub checks run.",
+    "Child PRs remain open evidence records and are not merged by this contract."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-060-controlled-github-evidence-run.audit-packet.json",
+    ".specbridge/contracts/issue-060-controlled-github-evidence-run.execution.md",
+    ".specbridge/reports/issue-060-controlled-github-evidence-run.final-report.json"
+  ]
+}

@@ -23,6 +23,7 @@ In scope:
 - multi-agent decomposition pilot
 - Antigravity executor handoff packets
 - branch-per-executor orchestration artifacts
+- controlled GitHub evidence artifacts
 - schemas
 - final reports
 - PR review reports
@@ -40,8 +41,8 @@ Out of scope:
 - live Claude execution
 - live MCP servers
 - live Antigravity session launch
-- live executor branch creation
-- live child PR creation
+- uncontrolled live executor branch creation
+- uncontrolled live child PR creation
 - hosted dashboard runtime
 - destructive infrastructure operations
 
@@ -67,6 +68,7 @@ Out of scope:
 | ST-P016 | Review Gate | `./scripts/validate-review-gate.ps1` | Current changed files do not touch blocked paths or blocked workflow permissions. |
 | ST-P017 | Smoke | `./scripts/specbridge-smoke.ps1` | The deterministic validation chain passes. |
 | ST-P018 | Branch Orchestration | `./scripts/validate-branch-orchestrations.ps1` | Branch plan and coordinator orchestration artifacts are valid, simulation evidence is explicit, and simulated evidence cannot authorize merge. |
+| ST-P019 | Controlled GitHub Evidence | `./scripts/test-specbridge-branch-orchestration.ps1` | GitHub evidence recording accepts real PR URLs, rejects simulation URLs, and marks integration ready only when child CI passed and ChatGPT audit is approved. |
 
 ## Negative Tests
 
@@ -107,6 +109,7 @@ Out of scope:
 | ST-F006 | Multi-Agent Pilot | Generate a three-agent decomposition in a temporary copy. | Decomposition succeeds with three disjoint write scopes and a duplicate write-scope fixture fails. |
 | ST-F007 | Executor Handoff | Generate three executor packets in a temporary copy. | Executor packet validation passes and a duplicate branch fixture fails. |
 | ST-F008 | Branch Orchestration | Generate a branch plan and simulation orchestration in a temporary copy. | Branch orchestration validation passes and simulated evidence remains non-mergeable. |
+| ST-F009 | Controlled GitHub Evidence | Record GitHub evidence from a branch plan in a temporary copy. | Evidence recording passes with real-shaped PR URLs and rejects simulation URLs. |
 
 ## Required Command
 
@@ -118,7 +121,7 @@ powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-vali
 
 The negative runner creates temporary repository copies, mutates only those copies, verifies expected failures, and removes the temporary files.
 
-It also runs positive fixtures proving that disjoint active manifests, valid audit packet generation, valid ChatGPT audits, safe security gate changes, and local CLI commands pass.
+It also runs positive fixtures proving that disjoint active manifests, valid audit packet generation, valid ChatGPT audits, safe security gate changes, local CLI commands, branch orchestration, and controlled GitHub evidence recording pass.
 
 ## Completion Rule
 

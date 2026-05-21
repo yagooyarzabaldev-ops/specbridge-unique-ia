@@ -33,6 +33,7 @@ specbridge status
 | `decompose-task` | Creates a file-backed multi-agent decomposition from a declared JSON input. | Yes |
 | `prepare-executors` | Creates Antigravity executor handoff packets from declared slice inputs. | Yes |
 | `plan-executor-branches` | Creates one planned executor branch record per executor packet. | Yes |
+| `record-github-evidence` | Hydrates a branch plan with declared real GitHub child PR, CI, and ChatGPT/Codex audit evidence. | Yes |
 | `coordinate-executors` | Aggregates executor branch evidence into a coordinator orchestration artifact. | Yes |
 | `review-gate` | Runs security gate validation and PR review gate validation. | No |
 
@@ -150,6 +151,16 @@ The output must be declared under `.specbridge/branch-plans/` and end with `.bra
 
 The command rejects duplicate branch names and records PR, CI, ChatGPT audit, merge, and rollback placeholders for every executor branch.
 
+`record-github-evidence` expects a source branch plan and a declared GitHub evidence input file:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 record-github-evidence -InputPath .specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json -EvidencePath .specbridge/github-evidence/issue-060-controlled-github-evidence-run.input.json -OutputPath .specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json
+```
+
+The output must be declared under `.specbridge/branch-plans/` and end with `.branch-plan.json`.
+
+The command requires packet ids and branch names to match the source plan, rejects `simulation://` URLs, and records PR URL, PR status, CI status, ChatGPT/Codex audit status, and integration readiness for each executor branch.
+
 `coordinate-executors` expects a branch plan file:
 
 ```powershell
@@ -173,6 +184,7 @@ Simulation mode writes explicit simulated PR, CI, and audit evidence and cannot 
 - `decompose-task`
 - `prepare-executors`
 - `plan-executor-branches`
+- `record-github-evidence`
 - `coordinate-executors`
 - `detect-conflicts`
 - `review-gate`

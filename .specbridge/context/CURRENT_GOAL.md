@@ -2,7 +2,7 @@
 
 ## Goal
 
-Build the next autonomy layer for SpecBridge: local CLI, contract scope validation, audit packet generation, ChatGPT audit standard, controlled implementation pilot, multi-agent pilot, and stronger security gates.
+Build the next autonomy layer for SpecBridge: local CLI, contract scope validation, audit packet generation, ChatGPT audit standard, controlled implementation pilot, multi-agent pilot, branch-per-executor orchestration, controlled GitHub evidence, and stronger security gates.
 
 ## Current Phase
 
@@ -12,7 +12,7 @@ Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test
 
 Execute the autonomy backlog in `docs/specbridge-autonomy-backlog.md`.
 
-Branch-per-executor orchestration is now the active completion target. After it is merged, the next recommended task is a controlled GitHub evidence run with real executor branches, child pull requests, CI evidence, and ChatGPT/Codex audit evidence.
+Controlled GitHub evidence is now the active completion target. After it is merged, the next recommended task is executor PR integration or cleanup for the open child executor PR evidence records.
 
 ## Completion Condition
 

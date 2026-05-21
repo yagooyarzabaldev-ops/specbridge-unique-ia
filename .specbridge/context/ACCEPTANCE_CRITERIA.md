@@ -447,3 +447,45 @@ scripts/specbridge-smoke.ps1 runs branch orchestration validation and branch orc
 ### AC-104
 
 The branch orchestration task does not launch live sessions, create live executor branches, open child PRs, create product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, touch production, or access protected credentials.
+
+## Controlled GitHub Evidence Acceptance Criteria
+
+### AC-105
+
+docs/specbridge-controlled-github-evidence-run.md exists and records the controlled GitHub evidence model.
+
+### AC-106
+
+One real GitHub branch exists for each issue 058 executor packet.
+
+### AC-107
+
+One real GitHub child PR exists for each executor branch.
+
+### AC-108
+
+.specbridge/github-evidence/issue-060-controlled-github-evidence-run.input.json records child PR URL, PR number, PR status, head SHA, CI status, CI run ids, and ChatGPT/Codex audit status for every executor branch.
+
+### AC-109
+
+scripts/specbridge.ps1 supports `record-github-evidence`.
+
+### AC-110
+
+`record-github-evidence` reads a source branch plan and declared GitHub evidence input, rejects simulation URLs, and writes an evidence-recorded branch plan.
+
+### AC-111
+
+`coordinate-executors -EvidenceMode github` marks integration ready only when every child result has a real GitHub PR URL, passed CI, and approved ChatGPT/Codex audit status.
+
+### AC-112
+
+scripts/validate-branch-orchestrations.ps1 validates GitHub evidence mode records and rejects incomplete real evidence.
+
+### AC-113
+
+scripts/test-specbridge-branch-orchestration.ps1 verifies GitHub evidence recording, ready integration, and simulation URL rejection.
+
+### AC-114
+
+The controlled GitHub evidence run does not launch Antigravity sessions, start Claude Code, merge child executor PRs, create product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, touch production, or access protected credentials.

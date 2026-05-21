@@ -1,0 +1,215 @@
+﻿{
+    "schema_version":  "1",
+    "task_id":  "issue-060-controlled-github-evidence-run",
+    "generated_by":  "specbridge-audit-packet-generator",
+    "execution_contract_path":  ".specbridge/contracts/issue-060-controlled-github-evidence-run.execution.md",
+    "changed_files":  [
+                          ".specbridge/audit-packets/issue-060-controlled-github-evidence-run.audit-packet.json",
+                          ".specbridge/audits/issue-060-controlled-github-evidence-run.chatgpt-audit.json",
+                          ".specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json",
+                          ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                          ".specbridge/context/CURRENT_GOAL.md",
+                          ".specbridge/contracts/issue-060-controlled-github-evidence-run.execution.md",
+                          ".specbridge/github-evidence/issue-060-controlled-github-evidence-run.input.json",
+                          ".specbridge/orchestrations/issue-060-controlled-github-evidence-run.executor-orchestration.json",
+                          ".specbridge/reports/issue-060-controlled-github-evidence-run.final-report.json",
+                          ".specbridge/scopes/issue-060-controlled-github-evidence-run.scope.json",
+                          "docs/specbridge-autonomy-backlog.md",
+                          "docs/specbridge-controlled-github-evidence-run.md",
+                          "docs/specbridge-local-cli.md",
+                          "docs/specbridge-test-matrix.md",
+                          "docs/specbridge-test-results.md",
+                          "README.md",
+                          "scripts/specbridge.ps1",
+                          "scripts/test-specbridge-branch-orchestration.ps1",
+                          "scripts/test-specbridge-cli.ps1",
+                          "scripts/validate-branch-orchestrations.ps1",
+                          "specs/004-acceptance-tests.md"
+                      ],
+    "diff_summary":  [
+                         {
+                             "file":  ".specbridge/audit-packets/issue-060-controlled-github-evidence-run.audit-packet.json",
+                             "added_lines":  215,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/audits/issue-060-controlled-github-evidence-run.chatgpt-audit.json",
+                             "added_lines":  80,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json",
+                             "added_lines":  107,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                             "added_lines":  42,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/CURRENT_GOAL.md",
+                             "added_lines":  2,
+                             "deleted_lines":  2
+                         },
+                         {
+                             "file":  ".specbridge/contracts/issue-060-controlled-github-evidence-run.execution.md",
+                             "added_lines":  167,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/github-evidence/issue-060-controlled-github-evidence-run.input.json",
+                             "added_lines":  56,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/orchestrations/issue-060-controlled-github-evidence-run.executor-orchestration.json",
+                             "added_lines":  71,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/reports/issue-060-controlled-github-evidence-run.final-report.json",
+                             "added_lines":  50,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/scopes/issue-060-controlled-github-evidence-run.scope.json",
+                             "added_lines":  44,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-autonomy-backlog.md",
+                             "added_lines":  10,
+                             "deleted_lines":  4
+                         },
+                         {
+                             "file":  "docs/specbridge-controlled-github-evidence-run.md",
+                             "added_lines":  88,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-local-cli.md",
+                             "added_lines":  12,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-test-matrix.md",
+                             "added_lines":  6,
+                             "deleted_lines":  3
+                         },
+                         {
+                             "file":  "docs/specbridge-test-results.md",
+                             "added_lines":  12,
+                             "deleted_lines":  7
+                         },
+                         {
+                             "file":  "README.md",
+                             "added_lines":  2,
+                             "deleted_lines":  1
+                         },
+                         {
+                             "file":  "scripts/specbridge.ps1",
+                             "added_lines":  146,
+                             "deleted_lines":  1
+                         },
+                         {
+                             "file":  "scripts/test-specbridge-branch-orchestration.ps1",
+                             "added_lines":  112,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/test-specbridge-cli.ps1",
+                             "added_lines":  35,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/validate-branch-orchestrations.ps1",
+                             "added_lines":  41,
+                             "deleted_lines":  4
+                         },
+                         {
+                             "file":  "specs/004-acceptance-tests.md",
+                             "added_lines":  6,
+                             "deleted_lines":  0
+                         }
+                     ],
+    "validation_commands":  [
+                                "git diff --check",
+                                "GitHub child PR #56 checks",
+                                "GitHub child PR #57 checks",
+                                "GitHub child PR #58 checks",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 coordinate-executors -InputPath .specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json -OutputPath .specbridge/orchestrations/issue-060-controlled-github-evidence-run.executor-orchestration.json -EvidenceMode github -Force",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 record-github-evidence -InputPath .specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json -EvidencePath .specbridge/github-evidence/issue-060-controlled-github-evidence-run.input.json -OutputPath .specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json -Force",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-branch-orchestration.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1",
+                                "powershell -ExecutionPolicy Bypass -File ./scripts/validate-branch-orchestrations.ps1"
+                            ],
+    "validation_results":  [
+                               {
+                                   "command":  "GitHub child PR #56 checks",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "GitHub child PR #57 checks",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "GitHub child PR #58 checks",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 record-github-evidence -InputPath .specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json -EvidencePath .specbridge/github-evidence/issue-060-controlled-github-evidence-run.input.json -OutputPath .specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json -Force",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 coordinate-executors -InputPath .specbridge/branch-plans/issue-060-controlled-github-evidence-run.branch-plan.json -OutputPath .specbridge/orchestrations/issue-060-controlled-github-evidence-run.executor-orchestration.json -EvidenceMode github -Force",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/validate-branch-orchestrations.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-branch-orchestration.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "git diff --check",
+                                   "result":  "passed"
+                               }
+                           ],
+    "final_report_path":  ".specbridge/reports/issue-060-controlled-github-evidence-run.final-report.json",
+    "ci_status":  "not_collected",
+    "pr_review_report_path":  null,
+    "policy_result":  "Passed. Scope is limited to controlled GitHub child branch and child PR evidence for existing executor packets, local evidence recording, deterministic branch orchestration validation, tests, documentation, context updates, contract, scope manifest, audit packet, audit artifact, and final report artifacts.",
+    "unresolved_risks":  [
+                             "Parent PR CI evidence is pending until this branch is pushed and GitHub checks run.",
+                             "Child PRs remain open evidence records and are not merged by this contract.",
+                             "Live Antigravity session launch and Claude Code executor process launch remain future runtime work."
+                         ],
+    "completion_status":  "complete_pending_parent_ci",
+    "source_files":  [
+                         ".specbridge/contracts/issue-060-controlled-github-evidence-run.execution.md",
+                         ".specbridge/reports/issue-060-controlled-github-evidence-run.final-report.json"
+                     ],
+    "secret_omission":  "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

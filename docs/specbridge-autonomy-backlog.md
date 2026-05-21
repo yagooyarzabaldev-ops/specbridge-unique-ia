@@ -45,6 +45,7 @@ Already complete:
 - local SpecBridge CLI
 - live Antigravity executor handoff packets
 - branch-per-executor planning and coordinator simulation evidence
+- controlled GitHub evidence run with real child executor PRs and passed child CI
 
 ## Remaining Work
 
@@ -67,6 +68,10 @@ Required commands:
 - `specbridge audit-packet`
 - `specbridge detect-conflicts`
 - `specbridge decompose-task`
+- `specbridge prepare-executors`
+- `specbridge plan-executor-branches`
+- `specbridge record-github-evidence`
+- `specbridge coordinate-executors`
 - `specbridge review-gate`
 
 Acceptance:
@@ -256,14 +261,15 @@ Acceptance:
 5. Local CLI wrapper
 6. Controlled implementation pilot
 7. Multi-agent pilot
+8. Controlled GitHub evidence run
 
 ## Current Next Task
 
-After Branch-Per-Executor Orchestration is merged, start a controlled GitHub evidence run.
+After Controlled GitHub Evidence Run is merged, start executor PR integration or cleanup.
 
 Reason:
 
-The branch plan layer maps executor packets to planned branches and coordinator evidence. The next product proof is replacing simulation evidence with real child PR URLs, real CI status, and real ChatGPT/Codex audit status.
+The coordinator can now mark GitHub evidence ready from child PRs, but child PRs remain open evidence records. The next product proof should decide whether SpecBridge merges, closes, supersedes, or archives child executor PRs after parent coordination lands.
 
 ## Next Runtime Expansion
 
@@ -293,7 +299,7 @@ Run separate executor branches and PRs from the handoff packets.
 
 Status:
 
-Implemented as deterministic branch plans and coordinator orchestration artifacts. Real child branch and PR creation remains blocked until a dedicated runtime contract authorizes that boundary.
+Implemented as deterministic branch plans and coordinator orchestration artifacts. Real child branch and PR creation is now covered by the controlled GitHub evidence run.
 
 Acceptance:
 
@@ -312,7 +318,7 @@ Create real executor branches and child PRs from a branch plan, then coordinate 
 
 Status:
 
-Planned.
+Implemented as `specbridge record-github-evidence`, real child executor branches, child PRs #56, #57, and #58, committed GitHub evidence input, an evidence-recorded branch plan, and GitHub-mode coordinator orchestration.
 
 Acceptance:
 
