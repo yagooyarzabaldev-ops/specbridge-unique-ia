@@ -2,19 +2,19 @@
 
 ## Goal
 
-Build the next autonomy layer for SpecBridge: local CLI, contract scope validation, audit packet generation, ChatGPT audit standard, controlled implementation pilot, multi-agent pilot, branch-per-executor orchestration, controlled GitHub evidence, operational cleanup, and controlled Antigravity/Claude Code runtime launch.
+Build the next autonomy layer for SpecBridge: local CLI, contract scope validation, audit packet generation, ChatGPT audit standard, controlled implementation pilot, multi-agent pilot, branch-per-executor orchestration, controlled GitHub evidence, operational cleanup, controlled Antigravity/Claude Code runtime launch, and runtime launch planning.
 
 ## Current Phase
 
-Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test suite active. Multi-agent Antigravity architecture defined. Current phase is controlled runtime launch and audit.
+Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test suite active. Multi-agent Antigravity architecture defined. Current phase is controlled runtime implementation.
 
 ## Active Work
 
-Execute issue 061: controlled Antigravity/Claude Code runtime launch under `.specbridge/contracts/issue-061-controlled-antigravity-runtime-launch.execution.md`.
+Execute issue 063: prepare Claude runtime launch plans under `.specbridge/contracts/issue-063-prepare-runtime-launch-plans.execution.md`.
 
-This task proves that SpecBridge can prepare a bounded executor packet, launch Claude Code non-interactively from the Antigravity workspace, constrain the executor to a single evidence artifact, validate locally, audit through ChatGPT/Codex, and preserve the result through GitHub.
+This task adds the first source-backed runtime slice after the live launch proof: a deterministic CLI command that turns one executor packet into a bounded launch plan without executing Claude Code.
 
-After issue 061 is merged, the next recommended task is a controlled runtime implementation slice under a new dedicated contract that authorizes exact source paths and validation gates.
+After issue 063 is merged, the next recommended task is a controlled runtime result recorder that captures executor exit status, output artifacts, validation evidence, and policy status from a declared launch plan.
 
 ## Completion Condition
 

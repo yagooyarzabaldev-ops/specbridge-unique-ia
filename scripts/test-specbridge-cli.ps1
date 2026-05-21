@@ -314,6 +314,35 @@ try {
     }
 
     Assert-Success `
+      -Name "prepare-runtime-launch" `
+      -Result (Invoke-Cli -Arguments @(
+        "prepare-runtime-launch",
+        "-InputPath",
+        ".specbridge/executor-packets/cli-executor-handoff-agent-a-implementation.executor-packet.json",
+        "-OutputPath",
+        ".specbridge/runtime-launches/cli-fixture.runtime-launch.json",
+        "-AllowedTool",
+        "Read,Write",
+        "-PermissionMode",
+        "acceptEdits",
+        "-MaxBudgetUsd",
+        "0.25",
+        "-Force"
+      )) `
+      -ExpectedPattern '"launch_status"\s*:\s*"ready_for_operator_launch"'
+
+    $runtimeLaunchValidation = & powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-launches.ps1 2>&1
+
+    if ($LASTEXITCODE -ne 0) {
+      Write-Output "FAIL CLI-created runtime launch did not validate."
+      Write-Output ($runtimeLaunchValidation | Out-String)
+      $failed = $true
+    }
+    else {
+      Write-Output "PASS CLI-created runtime launch validates."
+    }
+
+    Assert-Success `
       -Name "plan-executor-branches" `
       -Result (Invoke-Cli -Arguments @(
         "plan-executor-branches",
@@ -409,6 +438,34 @@ try {
         "https://github.com/yagooyarzabaldev-ops/specbridge/issues/998"
       )) `
       -ExpectedPattern "OutputPath is required"
+
+    Assert-Failure `
+      -Name "prepare-runtime-launch-invalid-tool" `
+      -Result (Invoke-Cli -Arguments @(
+        "prepare-runtime-launch",
+        "-InputPath",
+        ".specbridge/executor-packets/cli-executor-handoff-agent-a-implementation.executor-packet.json",
+        "-OutputPath",
+        ".specbridge/runtime-launches/invalid-tool.runtime-launch.json",
+        "-AllowedTool",
+        "Bash",
+        "-Force"
+      )) `
+      -ExpectedPattern "AllowedTool is not approved"
+
+    Assert-Failure `
+      -Name "prepare-runtime-launch-missing-write-tool" `
+      -Result (Invoke-Cli -Arguments @(
+        "prepare-runtime-launch",
+        "-InputPath",
+        ".specbridge/executor-packets/cli-executor-handoff-agent-a-implementation.executor-packet.json",
+        "-OutputPath",
+        ".specbridge/runtime-launches/missing-write.runtime-launch.json",
+        "-AllowedTool",
+        "Read",
+        "-Force"
+      )) `
+      -ExpectedPattern "AllowedTool must include Write"
   }
   finally {
     Pop-Location

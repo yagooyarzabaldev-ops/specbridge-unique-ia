@@ -565,3 +565,49 @@ The runtime evidence records the Claude invocation mode, tool restriction, execu
 ### AC-132
 
 The controlled runtime launch does not add product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, change database schema, touch production, access protected credentials, modify auth or billing surfaces, weaken CI/CD security, or deploy anything.
+
+## Runtime Launch Plan Acceptance Criteria
+
+### AC-133
+
+scripts/specbridge.ps1 supports `prepare-runtime-launch`.
+
+### AC-134
+
+`prepare-runtime-launch` reads one `.specbridge/executor-packets/*.executor-packet.json` file and writes one declared `.specbridge/runtime-launches/*.runtime-launch.json` file.
+
+### AC-135
+
+Runtime launch plans record schema version, launch id, source executor packet path, task id, packet id, slice id, branch name, execution contract path, final report path, exclusive write paths, read-only context, required validations, allowed tools, permission mode, max budget, command summary, prompt sections, stop conditions, execution policy, launch status, and source files.
+
+### AC-136
+
+Runtime launch plans are preparation artifacts only and do not launch Claude Code, launch Antigravity, run shell commands, call GitHub, install dependencies, touch secrets, or deploy.
+
+### AC-137
+
+scripts/validate-runtime-launches.ps1 exists and validates `.specbridge/runtime-launches/*.runtime-launch.json` artifacts.
+
+### AC-138
+
+scripts/specbridge.ps1 `validate -Profile standard` includes runtime launch validation.
+
+### AC-139
+
+scripts/specbridge-smoke.ps1 includes runtime launch validation.
+
+### AC-140
+
+scripts/test-specbridge-cli.ps1 covers successful `prepare-runtime-launch` generation and deterministic unapproved tool failure.
+
+### AC-141
+
+scripts/test-specbridge-negative-validations.ps1 covers invalid runtime launch artifacts.
+
+### AC-142
+
+.specbridge/runtime-launches/issue-063-prepare-runtime-launch-plans.runtime-launch.json exists and validates.
+
+### AC-143
+
+The runtime launch plan task does not add product runtime execution, dependency installation, MCP server implementation, GitHub App implementation, hosted dashboard implementation, database changes, production configuration, protected credential access, auth or billing changes, CI/CD weakening, or deployment automation.

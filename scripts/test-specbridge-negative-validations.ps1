@@ -542,6 +542,106 @@ This contract intentionally omits the Goal section.
     -Command "./scripts/validate-chatgpt-audits.ps1" `
     -ExpectedPattern "non-approved audit outcomes must set merge_allowed false"
 
+  Invoke-ExpectedFailure `
+    -Name "runtime-launch-unapproved-tool" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/runtime-launches" -Recurse -Force -ErrorAction SilentlyContinue
+      New-Item -ItemType Directory -Force -Path ".specbridge/runtime-launches" | Out-Null
+
+      $launch = [ordered]@{
+        schema_version = "1"
+        launch_id = "runtime-launch-unapproved-tool"
+        generated_by = "specbridge-tests"
+        source_executor_packet_path = ".specbridge/executor-packets/issue-061-controlled-antigravity-runtime-launch-claude-runtime.executor-packet.json"
+        task_id = "issue-061-controlled-antigravity-runtime-launch"
+        packet_id = "issue-061-controlled-antigravity-runtime-launch-claude-runtime"
+        slice_id = "claude-runtime"
+        agent_role = "runtime_executor"
+        goal = "Fixture runtime launch."
+        branch_name = "claude/fixture"
+        execution_contract_path = ".specbridge/contracts/issue-061-controlled-antigravity-runtime-launch.execution.md"
+        final_report_path = ".specbridge/reports/issue-061-controlled-antigravity-runtime-launch.final-report.json"
+        exclusive_write = @(".specbridge/runtime-evidence/issue-061-claude-runtime-executor-output.md")
+        read_only = @("README.md")
+        required_validations = @("powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1")
+        allowed_tools = @("Read", "Bash")
+        permission_mode = "acceptEdits"
+        max_budget_usd = "0.25"
+        command_summary = "claude -p --no-session-persistence --max-budget-usd 0.25 --permission-mode acceptEdits --tools `"Read,Bash`" --allowedTools `"Read,Bash`" <bounded prompt>"
+        prompt_sections = @("Fixture prompt section.")
+        stop_conditions = @("policy_conflict")
+        launch_status = "ready_for_operator_launch"
+        execution_policy = [ordered]@{
+          launches_claude = $false
+          launches_antigravity = $false
+          executes_shell = $false
+          requires_network = $false
+          touches_secrets = $false
+          touches_production = $false
+          installs_dependencies = $false
+          deploys = $false
+        }
+        source_files = @(
+          ".specbridge/executor-packets/issue-061-controlled-antigravity-runtime-launch-claude-runtime.executor-packet.json",
+          ".specbridge/contracts/issue-061-controlled-antigravity-runtime-launch.execution.md"
+        )
+      }
+
+      Set-Content -LiteralPath ".specbridge/runtime-launches/runtime-launch-unapproved-tool.runtime-launch.json" -Value ($launch | ConvertTo-Json -Depth 8) -NoNewline
+    } `
+    -Command "./scripts/validate-runtime-launches.ps1" `
+    -ExpectedPattern "allowed_tools contains an unapproved tool"
+
+  Invoke-ExpectedFailure `
+    -Name "runtime-launch-budget-above-limit" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/runtime-launches" -Recurse -Force -ErrorAction SilentlyContinue
+      New-Item -ItemType Directory -Force -Path ".specbridge/runtime-launches" | Out-Null
+
+      $launch = [ordered]@{
+        schema_version = "1"
+        launch_id = "runtime-launch-budget-above-limit"
+        generated_by = "specbridge-tests"
+        source_executor_packet_path = ".specbridge/executor-packets/issue-061-controlled-antigravity-runtime-launch-claude-runtime.executor-packet.json"
+        task_id = "issue-061-controlled-antigravity-runtime-launch"
+        packet_id = "issue-061-controlled-antigravity-runtime-launch-claude-runtime"
+        slice_id = "claude-runtime"
+        agent_role = "runtime_executor"
+        goal = "Fixture runtime launch."
+        branch_name = "claude/fixture"
+        execution_contract_path = ".specbridge/contracts/issue-061-controlled-antigravity-runtime-launch.execution.md"
+        final_report_path = ".specbridge/reports/issue-061-controlled-antigravity-runtime-launch.final-report.json"
+        exclusive_write = @(".specbridge/runtime-evidence/issue-061-claude-runtime-executor-output.md")
+        read_only = @("README.md")
+        required_validations = @("powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1")
+        allowed_tools = @("Read", "Write")
+        permission_mode = "acceptEdits"
+        max_budget_usd = "10.01"
+        command_summary = "claude -p --no-session-persistence --max-budget-usd 10.01 --permission-mode acceptEdits --tools `"Read,Write`" --allowedTools `"Read,Write`" <bounded prompt>"
+        prompt_sections = @("Fixture prompt section.")
+        stop_conditions = @("policy_conflict")
+        launch_status = "ready_for_operator_launch"
+        execution_policy = [ordered]@{
+          launches_claude = $false
+          launches_antigravity = $false
+          executes_shell = $false
+          requires_network = $false
+          touches_secrets = $false
+          touches_production = $false
+          installs_dependencies = $false
+          deploys = $false
+        }
+        source_files = @(
+          ".specbridge/executor-packets/issue-061-controlled-antigravity-runtime-launch-claude-runtime.executor-packet.json",
+          ".specbridge/contracts/issue-061-controlled-antigravity-runtime-launch.execution.md"
+        )
+      }
+
+      Set-Content -LiteralPath ".specbridge/runtime-launches/runtime-launch-budget-above-limit.runtime-launch.json" -Value ($launch | ConvertTo-Json -Depth 8) -NoNewline
+    } `
+    -Command "./scripts/validate-runtime-launches.ps1" `
+    -ExpectedPattern "max_budget_usd must be greater than 0 and no more than 10"
+
   Invoke-ExpectedSuccess `
     -Name "security-gate-safe-fixture" `
     -RequiresGit $true `

@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -23,6 +23,10 @@ param(
   [string] $CompletionStatus = "draft",
   [string] $Profile = "standard",
   [string] $BranchPrefix = "claude",
+  [string[]] $AllowedTool = @("Read", "Write"),
+  [ValidateSet("acceptEdits", "auto", "default", "dontAsk", "plan")]
+  [string] $PermissionMode = "acceptEdits",
+  [string] $MaxBudgetUsd = "0.25",
   [ValidateSet("simulation", "github")]
   [string] $EvidenceMode = "simulation",
   [string] $RepositoryUrl = "https://github.com/yagooyarzabaldev-ops/specbridge",
@@ -195,6 +199,7 @@ function Invoke-ValidationProfile {
     "./scripts/validate-audit-packets.ps1",
     "./scripts/validate-chatgpt-audits.ps1",
     "./scripts/validate-executor-packets.ps1",
+    "./scripts/validate-runtime-launches.ps1",
     "./scripts/validate-branch-orchestrations.ps1",
     "./scripts/validate-security-gates.ps1",
     "./scripts/validate-pr-review-reports.ps1",
@@ -924,6 +929,183 @@ function Invoke-PrepareExecutorsCommand {
   exit 0
 }
 
+function Invoke-PrepareRuntimeLaunchCommand {
+  $input = Normalize-RepoPath -Path $InputPath -FieldName "InputPath"
+  $output = Assert-OutputPath `
+    -Path $OutputPath `
+    -Pattern "^\.specbridge/runtime-launches/.+\.runtime-launch\.json$" `
+    -Description "a .specbridge/runtime-launches/*.runtime-launch.json runtime launch plan"
+
+  if ($input -notmatch "^\.specbridge/executor-packets/.+\.executor-packet\.json$") {
+    Fail "InputPath must be a .specbridge/executor-packets/*.executor-packet.json file: $input"
+  }
+
+  if (-not (Test-Path -LiteralPath $input)) {
+    Fail "InputPath does not exist: $input"
+  }
+
+  $packet = Get-JsonObjectFromFile -Path $input -Description "executor packet"
+  $context = "executor packet $input"
+
+  foreach ($field in @("packet_id", "task_id", "slice_id", "agent_role", "goal", "branch_name", "execution_contract_path", "final_report_path", "exclusive_write", "read_only", "required_validations", "stop_conditions", "status")) {
+    if (-not $packet.PSObject.Properties.Name.Contains($field)) {
+      Fail "$context must include $field"
+    }
+  }
+
+  if ($packet.status -ne "ready_for_handoff") {
+    Fail "executor packet status must be ready_for_handoff: $input"
+  }
+
+  $contractPath = Normalize-RepoPath -Path $packet.execution_contract_path -FieldName "execution_contract_path"
+  $finalReportPath = Normalize-RepoPath -Path $packet.final_report_path -FieldName "final_report_path"
+  $exclusiveWrite = @($packet.exclusive_write | ForEach-Object { Normalize-RepoPath -Path $_ -FieldName "exclusive_write" })
+  $readOnly = @($packet.read_only | ForEach-Object { Normalize-RepoPath -Path $_ -FieldName "read_only" })
+  $validations = @($packet.required_validations | ForEach-Object {
+    if ($null -eq $_ -or $_.GetType().Name -ne "String" -or [string]::IsNullOrWhiteSpace($_)) {
+      Fail "required_validations must contain only non-empty strings"
+    }
+
+    $_.Trim()
+  })
+  $stopConditions = @($packet.stop_conditions | ForEach-Object {
+    if ($null -eq $_ -or $_.GetType().Name -ne "String" -or [string]::IsNullOrWhiteSpace($_)) {
+      Fail "stop_conditions must contain only non-empty strings"
+    }
+
+    $_.Trim()
+  })
+
+  if ($contractPath -notmatch "^\.specbridge/contracts/.+\.execution\.md$") {
+    Fail "execution_contract_path must point to a SpecBridge execution contract: $contractPath"
+  }
+
+  if (-not (Test-Path -LiteralPath $contractPath)) {
+    Fail "execution_contract_path does not exist: $contractPath"
+  }
+
+  if ($finalReportPath -notmatch "^\.specbridge/reports/.+\.final-report\.json$") {
+    Fail "final_report_path must point to a SpecBridge final report path: $finalReportPath"
+  }
+
+  if ($exclusiveWrite.Count -le 0) {
+    Fail "executor packet exclusive_write must not be empty"
+  }
+
+  if ($readOnly.Count -le 0) {
+    Fail "executor packet read_only must not be empty"
+  }
+
+  if ($validations.Count -le 0) {
+    Fail "executor packet required_validations must not be empty"
+  }
+
+  $approvedTools = @("Read", "Write", "Edit")
+  $normalizedAllowedTools = @()
+
+  foreach ($toolEntry in @($AllowedTool)) {
+    if ($null -eq $toolEntry -or $toolEntry.GetType().Name -ne "String" -or [string]::IsNullOrWhiteSpace($toolEntry)) {
+      Fail "AllowedTool must contain only non-empty strings"
+    }
+
+    foreach ($tool in @($toolEntry -split ",")) {
+      $trimmedTool = $tool.Trim()
+
+      if ([string]::IsNullOrWhiteSpace($trimmedTool)) {
+        Fail "AllowedTool must contain only non-empty strings"
+      }
+
+      if ($approvedTools -notcontains $trimmedTool) {
+        Fail "AllowedTool is not approved for runtime launch planning: $trimmedTool"
+      }
+
+      $normalizedAllowedTools += $trimmedTool
+    }
+  }
+
+  $normalizedAllowedTools = @($normalizedAllowedTools | Sort-Object -Unique)
+
+  if ($normalizedAllowedTools.Count -le 0) {
+    Fail "AllowedTool must include at least one approved tool"
+  }
+
+  foreach ($requiredTool in @("Read", "Write")) {
+    if ($normalizedAllowedTools -notcontains $requiredTool) {
+      Fail "AllowedTool must include $requiredTool for runtime launch planning"
+    }
+  }
+
+  if ($MaxBudgetUsd -notmatch "^[0-9]+(\.[0-9]{1,2})?$") {
+    Fail "MaxBudgetUsd must be a positive decimal string with up to two fractional digits"
+  }
+
+  $budget = [decimal]::Parse($MaxBudgetUsd, [System.Globalization.CultureInfo]::InvariantCulture)
+
+  if ($budget -le 0 -or $budget -gt 10) {
+    Fail "MaxBudgetUsd must be greater than 0 and no more than 10"
+  }
+
+  $safeLaunchId = Convert-ToSafeName -Value ($packet.packet_id + "-runtime-launch") -FieldName "launch_id"
+  $allowedToolsText = ($normalizedAllowedTools -join ",")
+
+  $promptSections = @(
+    "Read README.md, SPECBRIDGE.md, AGENTS.md, CLAUDE.md, .specbridge/policy.yaml, the execution contract, and the executor packet before writing.",
+    "Modify only paths declared in exclusive_write.",
+    "Treat read_only paths as context only.",
+    "Run only required validations that are explicitly allowed by the runtime operator.",
+    "Stop on policy conflict, scope conflict, missing required context, impossible acceptance criteria, protected resource requirement, secrets, production configuration, billing, authentication security, authorization security, dependency installation, database change, CI/CD security change, or deployment automation.",
+    "Report changed files, validation evidence, policy result, unresolved risks, and completion status."
+  )
+
+  $launch = [ordered]@{
+    schema_version = "1"
+    launch_id = $safeLaunchId
+    generated_by = "specbridge-cli"
+    source_executor_packet_path = $input
+    task_id = $packet.task_id
+    packet_id = $packet.packet_id
+    slice_id = $packet.slice_id
+    agent_role = $packet.agent_role
+    goal = $packet.goal
+    branch_name = $packet.branch_name
+    execution_contract_path = $contractPath
+    final_report_path = $finalReportPath
+    exclusive_write = @($exclusiveWrite)
+    read_only = @($readOnly)
+    required_validations = @($validations)
+    allowed_tools = @($normalizedAllowedTools)
+    permission_mode = $PermissionMode
+    max_budget_usd = $MaxBudgetUsd
+    command_summary = "claude -p --no-session-persistence --max-budget-usd $MaxBudgetUsd --permission-mode $PermissionMode --tools `"$allowedToolsText`" --allowedTools `"$allowedToolsText`" <bounded prompt>"
+    prompt_sections = @($promptSections)
+    stop_conditions = @($stopConditions)
+    launch_status = "ready_for_operator_launch"
+    execution_policy = [ordered]@{
+      launches_claude = $false
+      launches_antigravity = $false
+      executes_shell = $false
+      requires_network = $false
+      touches_secrets = $false
+      touches_production = $false
+      installs_dependencies = $false
+      deploys = $false
+    }
+    source_files = @($input, $contractPath)
+  }
+
+  Write-Utf8JsonFile -Path $output -Value $launch -Depth 10
+
+  Write-CliJson ([ordered]@{
+    command = "prepare-runtime-launch"
+    ok = $true
+    output_path = $output
+    source_executor_packet_path = $input
+    launch_status = "ready_for_operator_launch"
+  })
+
+  exit 0
+}
+
 function Get-JsonObjectFromFile {
   param(
     [string] $Path,
@@ -1406,6 +1588,7 @@ switch ($Command) {
   "detect-conflicts" { Invoke-DetectConflictsCommand }
   "decompose-task" { Invoke-DecomposeTaskCommand }
   "prepare-executors" { Invoke-PrepareExecutorsCommand }
+  "prepare-runtime-launch" { Invoke-PrepareRuntimeLaunchCommand }
   "plan-executor-branches" { Invoke-PlanExecutorBranchesCommand }
   "record-github-evidence" { Invoke-RecordGithubEvidenceCommand }
   "coordinate-executors" { Invoke-CoordinateExecutorsCommand }

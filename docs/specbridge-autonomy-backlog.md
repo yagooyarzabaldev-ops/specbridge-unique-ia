@@ -48,6 +48,7 @@ Already complete:
 - controlled GitHub evidence run with real child executor PRs and passed child CI
 - operational autonomy issue closure and evidence-only child PR cleanup
 - controlled Antigravity/Claude Code runtime launch with one bounded non-interactive executor artifact
+- runtime launch plans generated from executor packets without executing Claude Code
 
 ## Remaining Work
 
@@ -268,11 +269,11 @@ Acceptance:
 
 ## Current Next Task
 
-After Controlled Antigravity Runtime Launch is merged, start a controlled runtime implementation slice.
+After Runtime Launch Plans are merged, start controlled runtime result recording.
 
 Reason:
 
-The repository will have proved the live ChatGPT/Codex -> SpecBridge -> Claude Code -> SpecBridge audit loop at evidence-only scope. The next product proof should authorize one small source-backed task with exact source paths, tests, lint, typecheck, build gates, security review, CI evidence, and ChatGPT/Codex audit.
+The repository will have a deterministic artifact that prepares Claude Code launch shape from an executor packet. The next product proof should capture the actual executor result into a structured runtime result artifact before broader runtime automation.
 
 ## Next Runtime Expansion
 
@@ -377,7 +378,7 @@ Authorize the first source-backed SpecBridge runtime implementation slice after 
 
 Status:
 
-Planned.
+Implemented as runtime launch plan preparation. `specbridge prepare-runtime-launch` converts one executor packet into a bounded `.specbridge/runtime-launches/*.runtime-launch.json` artifact without launching Claude Code, Antigravity, shell commands, GitHub operations, dependency installation, or deployment.
 
 Acceptance:
 
@@ -387,3 +388,22 @@ Acceptance:
 - lint, typecheck, tests, build, security gate, review gate, audit packet validation, and ChatGPT/Codex audit are required
 - GitHub CI passes before merge
 - the slice avoids secrets, production configuration, billing, auth security, dependency installation unless explicitly authorized, database changes, CI/CD weakening, and deployment automation
+
+### 14. Controlled Runtime Result Recording
+
+Goal:
+
+Record the result of a bounded Claude Code runtime execution from a declared launch plan.
+
+Status:
+
+Planned.
+
+Acceptance:
+
+- one runtime result recorder has a dedicated execution contract
+- the recorder reads one runtime launch plan and declared executor output evidence
+- the recorder writes one `.specbridge/runtime-results/*.runtime-result.json` artifact
+- the result records exit code, files written, validations, policy result, stop conditions, and completion status
+- validation covers successful and invalid runtime result artifacts
+- no secrets, production configuration, billing, auth security, dependency installation, database changes, CI/CD weakening, live launch expansion, or deployment automation are involved

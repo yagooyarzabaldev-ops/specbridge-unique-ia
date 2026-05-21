@@ -94,6 +94,7 @@ SpecBridge currently has three governed status layers:
 - Branch-per-executor orchestration: implemented as deterministic branch plans, coordinator simulation evidence, and a controlled GitHub evidence run with real child PR URLs, passed child CI, and ChatGPT/Codex audit status.
 - Operational autonomy cleanup: evidence-only child PRs are closed without merge, issue 42 is closed as completed, and stale GitHub evidence is resolved.
 - Controlled Antigravity/Claude Code runtime launch: implemented as a bounded non-interactive Claude Code run from the Antigravity workspace, with SpecBridge executor packet evidence, one executor-written runtime artifact, validation evidence, and ChatGPT/Codex audit.
+- Runtime launch plans: implemented as a deterministic CLI command that turns one executor packet into a bounded Claude Code launch plan artifact without executing Claude Code, Antigravity, shell commands, network calls, dependency installation, or deployment.
 - Default automation: Full Autopilot is enabled for autonomous merge after required gates pass; production deployment remains disabled.
 
 See:
@@ -107,4 +108,5 @@ See:
 - `docs/specbridge-controlled-github-evidence-run.md`
 - `docs/specbridge-operational-autonomy-policy-closure.md`
 - `docs/specbridge-controlled-antigravity-runtime-launch.md`
+- `docs/specbridge-runtime-launch-plans.md`
 - `docs/specbridge-autonomy-backlog.md`

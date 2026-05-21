@@ -186,3 +186,9 @@ docs/specbridge-operational-autonomy-policy-closure.md exists; `.specbridge/gith
 Pass condition:
 
 docs/specbridge-controlled-antigravity-runtime-launch.md exists; issue 061 has a dedicated execution contract, scope manifest, executor handoff input, generated executor packet, Claude runtime evidence JSON, Claude executor output artifact, final report, audit packet, and ChatGPT/Codex audit; Claude Code and Antigravity availability are recorded; Claude Code is invoked non-interactively with bounded Read/Write tools only; the executor writes only `.specbridge/runtime-evidence/issue-061-claude-runtime-executor-output.md`; local validations pass; GitHub CI passes before merge; and the launch does not add product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, touch production, access protected credentials, weaken CI/CD security, or deploy anything.
+
+### AT-029 - Runtime launch plans exist
+
+Pass condition:
+
+docs/specbridge-runtime-launch-plans.md exists; scripts/specbridge.ps1 supports `prepare-runtime-launch`; the command reads one executor packet and writes one declared `.specbridge/runtime-launches/*.runtime-launch.json` artifact; `.specbridge/runtime-launches/issue-063-prepare-runtime-launch-plans.runtime-launch.json` validates; scripts/validate-runtime-launches.ps1 validates runtime launch plan structure and safety boundaries; standard validation and smoke validation include runtime launch validation; CLI tests cover success and unapproved tool failure; negative validation tests cover invalid runtime launch artifacts; and the command does not launch Claude Code, launch Antigravity, run shell commands, call GitHub, install dependencies, touch secrets, or deploy.

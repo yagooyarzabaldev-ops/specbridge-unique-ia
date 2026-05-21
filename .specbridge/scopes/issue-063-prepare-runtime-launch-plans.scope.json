@@ -1,0 +1,39 @@
+{
+  "contract_id": "issue-063-prepare-runtime-launch-plans",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/audit-packets/issue-063-prepare-runtime-launch-plans.audit-packet.json",
+    ".specbridge/audits/issue-063-prepare-runtime-launch-plans.chatgpt-audit.json",
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-063-prepare-runtime-launch-plans.execution.md",
+    ".specbridge/reports/issue-063-prepare-runtime-launch-plans.final-report.json",
+    ".specbridge/runtime-launches/issue-063-prepare-runtime-launch-plans.runtime-launch.json",
+    ".specbridge/scopes/issue-063-prepare-runtime-launch-plans.scope.json",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-runtime-launch-plans.md",
+    "docs/specbridge-test-results.md",
+    "README.md",
+    "scripts/specbridge.ps1",
+    "scripts/specbridge-smoke.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "scripts/test-specbridge-negative-validations.ps1",
+    "scripts/validate-runtime-launches.ps1",
+    "specs/004-acceptance-tests.md"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/executor-packets/issue-061-controlled-antigravity-runtime-launch-claude-runtime.executor-packet.json",
+    "docs/specbridge-controlled-antigravity-runtime-launch.md",
+    "docs/specbridge-v3-essential-product-scope.md",
+    "docs/specbridge-v4-product-contract.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-061-controlled-antigravity-runtime-launch"
+  ],
+  "final_report": ".specbridge/reports/issue-063-prepare-runtime-launch-plans.final-report.json"
+}
