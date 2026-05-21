@@ -1,0 +1,80 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-061-controlled-antigravity-runtime-launch",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-061-controlled-antigravity-runtime-launch.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-061-controlled-antigravity-runtime-launch.execution.md",
+  "final_report_path": ".specbridge/reports/issue-061-controlled-antigravity-runtime-launch.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue 061 implements the requested controlled runtime launch by preparing a SpecBridge executor packet, invoking Claude Code non-interactively from the Antigravity workspace, recording runtime evidence, and preserving the result through report and audit artifacts.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "AC-121 through AC-132 are represented by the controlled runtime document, contract, scope manifest, handoff input, generated executor packet, Claude runtime evidence JSON, Claude executor output, final report, audit packet, and ChatGPT audit.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The executor was constrained to Read/Write tools only and wrote only the declared runtime evidence artifact; Codex changes are inside the issue 061 allowed scope, including the minimal branch orchestration smoke test maintenance needed after adding a new executor packet task.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The task does not add product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, change database schema, access protected credentials, touch production, modify auth or billing surfaces, weaken CI/CD security, or deploy anything.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed files are declared in the final report and covered by the issue 061 scope manifest, including scripts/test-specbridge-branch-orchestration.ps1 for deterministic smoke coverage with mixed executor packet task ids. The untracked local .agents and .claude/settings.local.json paths remain outside the staged task scope.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "Claude availability, Antigravity availability, readiness probe, executor packet generation, bounded Claude invocation, foundation validation, contract validation, scope validation, executor packet validation, standard validation, negative validation, branch orchestration validation, smoke validation, security gate, review gate, and git diff check passed locally.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "Local CI-equivalent SpecBridge validation passed. GitHub PR CI remains a required external merge gate and must pass before automatic merge.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records the evidence-only runtime scope, the single Claude-written file, local validation results, pending GitHub PR CI, no deployment, and the remaining need for a future source-backed runtime implementation contract.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "runtime_boundary",
+      "file": ".specbridge/runtime-evidence/issue-061-controlled-antigravity-runtime-launch.claude-run.json",
+      "line": null,
+      "evidence": "Claude Code was launched with Read/Write tools only and shell validation was delegated to SpecBridge/Codex after the executor artifact was written.",
+      "recommendation": "Use a later dedicated contract for the first source-backed runtime implementation slice.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending until the branch is pushed and checks run.",
+    "The runtime launch proves an evidence-only executor loop; source-backed implementation remains gated by a future contract."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-061-controlled-antigravity-runtime-launch.audit-packet.json",
+    ".specbridge/contracts/issue-061-controlled-antigravity-runtime-launch.execution.md",
+    ".specbridge/reports/issue-061-controlled-antigravity-runtime-launch.final-report.json"
+  ]
+}

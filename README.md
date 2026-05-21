@@ -92,7 +92,8 @@ SpecBridge currently has three governed status layers:
 - V3 essential product scope: defined for the next runtime phase, with implementation still blocked until a dedicated execution contract authorizes source paths, test strategy, lint, typecheck, and build gates.
 - V4 product contract: defined for local CLI, MCP, GitHub evidence integration, dashboard boundaries, data model boundaries, runtime gates, completion criteria, and Version 5 candidates.
 - Branch-per-executor orchestration: implemented as deterministic branch plans, coordinator simulation evidence, and a controlled GitHub evidence run with real child PR URLs, passed child CI, and ChatGPT/Codex audit status.
-- Operational autonomy cleanup: evidence-only child PRs are closed without merge, issue 42 is closed as completed, and the next runtime target is controlled Antigravity/Claude Code execution launch.
+- Operational autonomy cleanup: evidence-only child PRs are closed without merge, issue 42 is closed as completed, and stale GitHub evidence is resolved.
+- Controlled Antigravity/Claude Code runtime launch: implemented as a bounded non-interactive Claude Code run from the Antigravity workspace, with SpecBridge executor packet evidence, one executor-written runtime artifact, validation evidence, and ChatGPT/Codex audit.
 - Default automation: Full Autopilot is enabled for autonomous merge after required gates pass; production deployment remains disabled.
 
 See:
@@ -105,4 +106,5 @@ See:
 - `docs/specbridge-branch-per-executor-orchestration.md`
 - `docs/specbridge-controlled-github-evidence-run.md`
 - `docs/specbridge-operational-autonomy-policy-closure.md`
+- `docs/specbridge-controlled-antigravity-runtime-launch.md`
 - `docs/specbridge-autonomy-backlog.md`

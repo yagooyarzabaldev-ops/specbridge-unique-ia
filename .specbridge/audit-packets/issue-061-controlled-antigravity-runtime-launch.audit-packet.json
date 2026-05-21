@@ -1,0 +1,210 @@
+﻿{
+    "schema_version":  "1",
+    "task_id":  "issue-061-controlled-antigravity-runtime-launch",
+    "generated_by":  "specbridge-audit-packet-generator",
+    "execution_contract_path":  ".specbridge/contracts/issue-061-controlled-antigravity-runtime-launch.execution.md",
+    "changed_files":  [
+                          ".specbridge/audit-packets/issue-061-controlled-antigravity-runtime-launch.audit-packet.json",
+                          ".specbridge/audits/issue-061-controlled-antigravity-runtime-launch.chatgpt-audit.json",
+                          ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                          ".specbridge/context/CURRENT_GOAL.md",
+                          ".specbridge/contracts/issue-061-controlled-antigravity-runtime-launch.execution.md",
+                          ".specbridge/executor-handoffs/issue-061-controlled-antigravity-runtime-launch.input.json",
+                          ".specbridge/executor-packets/issue-061-controlled-antigravity-runtime-launch-claude-runtime.executor-packet.json",
+                          ".specbridge/reports/issue-061-controlled-antigravity-runtime-launch.final-report.json",
+                          ".specbridge/runtime-evidence/issue-061-claude-runtime-executor-output.md",
+                          ".specbridge/runtime-evidence/issue-061-controlled-antigravity-runtime-launch.claude-run.json",
+                          ".specbridge/scopes/issue-061-controlled-antigravity-runtime-launch.scope.json",
+                          "docs/specbridge-autonomy-backlog.md",
+                          "docs/specbridge-controlled-antigravity-runtime-launch.md",
+                          "docs/specbridge-test-results.md",
+                          "README.md",
+                          "scripts/test-specbridge-branch-orchestration.ps1",
+                          "specs/004-acceptance-tests.md"
+                      ],
+    "diff_summary":  [
+                         {
+                             "file":  ".specbridge/audit-packets/issue-061-controlled-antigravity-runtime-launch.audit-packet.json",
+                             "added_lines":  205,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/audits/issue-061-controlled-antigravity-runtime-launch.chatgpt-audit.json",
+                             "added_lines":  80,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                             "added_lines":  50,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/CURRENT_GOAL.md",
+                             "added_lines":  6,
+                             "deleted_lines":  4
+                         },
+                         {
+                             "file":  ".specbridge/contracts/issue-061-controlled-antigravity-runtime-launch.execution.md",
+                             "added_lines":  174,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-handoffs/issue-061-controlled-antigravity-runtime-launch.input.json",
+                             "added_lines":  27,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-packets/issue-061-controlled-antigravity-runtime-launch-claude-runtime.executor-packet.json",
+                             "added_lines":  40,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/reports/issue-061-controlled-antigravity-runtime-launch.final-report.json",
+                             "added_lines":  49,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-evidence/issue-061-claude-runtime-executor-output.md",
+                             "added_lines":  89,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-evidence/issue-061-controlled-antigravity-runtime-launch.claude-run.json",
+                             "added_lines":  113,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/scopes/issue-061-controlled-antigravity-runtime-launch.scope.json",
+                             "added_lines":  36,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-autonomy-backlog.md",
+                             "added_lines":  23,
+                             "deleted_lines":  3
+                         },
+                         {
+                             "file":  "docs/specbridge-controlled-antigravity-runtime-launch.md",
+                             "added_lines":  96,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-test-results.md",
+                             "added_lines":  11,
+                             "deleted_lines":  6
+                         },
+                         {
+                             "file":  "README.md",
+                             "added_lines":  3,
+                             "deleted_lines":  1
+                         },
+                         {
+                             "file":  "scripts/test-specbridge-branch-orchestration.ps1",
+                             "added_lines":  6,
+                             "deleted_lines":  1
+                         },
+                         {
+                             "file":  "specs/004-acceptance-tests.md",
+                             "added_lines":  6,
+                             "deleted_lines":  0
+                         }
+                     ],
+    "validation_commands":  [
+                                "antigravity --help",
+                                "Claude Code bounded executor invocation",
+                                "Claude readiness probe",
+                                "claude --version",
+                                "git diff --check",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 prepare-executors -InputPath .specbridge/executor-handoffs/issue-061-controlled-antigravity-runtime-launch.input.json -OutputDirectory .specbridge/executor-packets -BranchPrefix claude -Force",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-branch-orchestration.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-executor-packets.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1"
+                            ],
+    "validation_results":  [
+                               {
+                                   "command":  "claude --version",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "antigravity --help",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "Claude readiness probe",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 prepare-executors -InputPath .specbridge/executor-handoffs/issue-061-controlled-antigravity-runtime-launch.input.json -OutputDirectory .specbridge/executor-packets -BranchPrefix claude -Force",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "Claude Code bounded executor invocation",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-executor-packets.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-branch-orchestration.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "git diff --check",
+                                   "result":  "passed"
+                               }
+                           ],
+    "final_report_path":  ".specbridge/reports/issue-061-controlled-antigravity-runtime-launch.final-report.json",
+    "ci_status":  "pending",
+    "pr_review_report_path":  null,
+    "policy_result":  "Passed. The task stayed inside the issue 061 contract scope. Claude Code wrote only .specbridge/runtime-evidence/issue-061-claude-runtime-executor-output.md, and Codex updates were limited to declared contract, scope, handoff, executor packet, runtime evidence, report, audit, documentation, context, README, acceptance test memory, and the branch orchestration smoke test maintenance needed for mixed executor packet sets.",
+    "unresolved_risks":  [
+                             "GitHub PR CI evidence is pending until the branch is pushed and checks run.",
+                             "The runtime launch proves the executor loop at evidence-only scope; a future contract is still required before any source-backed runtime implementation slice."
+                         ],
+    "completion_status":  "complete_pending_pr_ci",
+    "source_files":  [
+                         ".specbridge/contracts/issue-061-controlled-antigravity-runtime-launch.execution.md",
+                         ".specbridge/reports/issue-061-controlled-antigravity-runtime-launch.final-report.json"
+                     ],
+    "secret_omission":  "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

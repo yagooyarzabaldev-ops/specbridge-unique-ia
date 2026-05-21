@@ -180,3 +180,9 @@ docs/specbridge-controlled-github-evidence-run.md exists; `.specbridge/github-ev
 Pass condition:
 
 docs/specbridge-operational-autonomy-policy-closure.md exists; `.specbridge/github-evidence/issue-042-operational-autonomy-policy-closure.cleanup.json` records PRs 56, 57, and 58 closed without merge; issue 42 is closed as completed; repository memory points to controlled Antigravity/Claude Code runtime launch as the next recommended task; and the cleanup does not merge child PRs, delete remote branches, launch Antigravity sessions, start Claude Code, or touch protected credentials.
+
+### AT-028 - Controlled Antigravity runtime launch exists
+
+Pass condition:
+
+docs/specbridge-controlled-antigravity-runtime-launch.md exists; issue 061 has a dedicated execution contract, scope manifest, executor handoff input, generated executor packet, Claude runtime evidence JSON, Claude executor output artifact, final report, audit packet, and ChatGPT/Codex audit; Claude Code and Antigravity availability are recorded; Claude Code is invoked non-interactively with bounded Read/Write tools only; the executor writes only `.specbridge/runtime-evidence/issue-061-claude-runtime-executor-output.md`; local validations pass; GitHub CI passes before merge; and the launch does not add product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, touch production, access protected credentials, weaken CI/CD security, or deploy anything.

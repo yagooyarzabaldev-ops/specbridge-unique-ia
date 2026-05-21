@@ -106,12 +106,17 @@ try {
 
   Push-Location $caseDir
   try {
+    $planInputDir = ".specbridge/executor-packets/branch-plan-fixture"
+    New-Item -ItemType Directory -Force -Path $planInputDir | Out-Null
+    Get-ChildItem -LiteralPath ".specbridge/executor-packets" -Filter "issue-058-live-antigravity-executor-handoff-*.executor-packet.json" -File |
+      Copy-Item -Destination $planInputDir -Force
+
     Assert-Success `
       -Name "plan-executor-branches" `
       -Result (Invoke-Cli -Arguments @(
         "plan-executor-branches",
         "-InputPath",
-        ".specbridge/executor-packets",
+        $planInputDir,
         "-OutputPath",
         ".specbridge/branch-plans/issue-059-branch-per-executor-orchestration.branch-plan.json",
         "-Force"

@@ -10,8 +10,8 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 
 - Date: 2026-05-21
 - Environment: local PowerShell workspace
-- Branch: `codex/executor-pr-evidence-cleanup`
-- Scope: Operational autonomy cleanup with issue 42 closure, child evidence PR closure, cleanup evidence, and repository memory updates
+- Branch: `codex/controlled-antigravity-runtime-launch`
+- Scope: Controlled Antigravity/Claude Code runtime launch for issue 061 with one bounded non-interactive executor artifact, runtime evidence, final report, audit packet, and ChatGPT/Codex audit
 
 ## Results
 
@@ -34,6 +34,10 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 | Branch orchestration validation suite | passed |
 | Controlled GitHub evidence recording | passed |
 | Operational autonomy cleanup evidence | passed |
+| Controlled Antigravity runtime launch | passed |
+| Claude Code availability | passed |
+| Antigravity CLI availability | passed |
+| Claude bounded executor invocation | passed |
 | PR review report validation | passed |
 | Claude review workflow validation | passed |
 | Autonomous execution protocol validation | passed |
@@ -94,15 +98,16 @@ The negative validation suite verifies:
 - branch orchestration GitHub evidence recording passes with real-shaped PR URLs
 - branch orchestration GitHub evidence mode marks integration ready with passed CI and approved audit
 - branch orchestration GitHub evidence recording rejects simulation URLs
+- controlled Antigravity runtime launch executor packet validates
+- controlled Antigravity runtime launch records Claude Code availability, Antigravity availability, readiness probe, executor invocation, and single-file executor output evidence
 - incomplete final report fails
 - blocked PR path fails
 
 ## Policy Result
 
-Passed. The change closes stale GitHub evidence work, records cleanup evidence, updates repository memory, and adds contract, scope, final report, audit evidence, audit packet evidence, and documentation. It does not add protected credentials, production configuration, deployment automation, billing, hosted dashboard implementation, MCP server implementation, GitHub App implementation, database schema implementation, authentication implementation, authorization implementation, branch protection weakening, dependency installation, live Antigravity session launch, live Claude Code process launch, child PR merge, branch deletion, or CI/CD security weakening.
+Passed. The change runs a controlled evidence-only Claude Code runtime launch from the Antigravity workspace, records runtime evidence, updates repository memory, and adds contract, scope, handoff, executor packet, final report, audit evidence, audit packet evidence, and documentation. It does not add product runtime code, protected credentials, production configuration, deployment automation, billing, hosted dashboard implementation, MCP server implementation, GitHub App implementation, database schema implementation, authentication implementation, authorization implementation, branch protection weakening, dependency installation, CI/CD security weakening, or deployment automation.
 
 ## Unresolved Risks
 
-- Cleanup PR CI evidence is pending until the branch is pushed and GitHub runs checks.
-- Remote evidence branches remain available but abandoned; this cleanup does not delete branches.
-- The next runtime launch remains blocked until a dedicated contract authorizes it.
+- Runtime launch PR CI evidence is pending until the branch is pushed and GitHub runs checks.
+- The runtime launch proves an evidence-only executor loop; source-backed implementation remains blocked until a future contract authorizes exact paths and validation gates.

@@ -1,0 +1,40 @@
+{
+    "schema_version":  "1",
+    "packet_id":  "issue-061-controlled-antigravity-runtime-launch-claude-runtime",
+    "task_id":  "issue-061-controlled-antigravity-runtime-launch",
+    "slice_id":  "claude-runtime",
+    "agent_role":  "runtime_executor",
+    "goal":  "Run one bounded Claude Code executor task and write only the allowed runtime evidence artifact.",
+    "launch_mode":  "manual_antigravity",
+    "branch_name":  "claude/issue-061-controlled-antigravity-runtime-launch-claude-runtime",
+    "execution_contract_path":  ".specbridge/contracts/issue-061-controlled-antigravity-runtime-launch.execution.md",
+    "final_report_path":  ".specbridge/reports/issue-061-controlled-antigravity-runtime-launch.final-report.json",
+    "exclusive_write":  [
+                            ".specbridge/runtime-evidence/issue-061-claude-runtime-executor-output.md"
+                        ],
+    "read_only":  [
+                      "README.md",
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      "CLAUDE.md",
+                      ".specbridge/policy.yaml",
+                      ".specbridge/contracts/issue-061-controlled-antigravity-runtime-launch.execution.md"
+                  ],
+    "required_validations":  [
+                                 "powershell -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                 "powershell -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1"
+                             ],
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "status":  "ready_for_handoff",
+    "source_files":  [
+                         ".specbridge/executor-handoffs/issue-061-controlled-antigravity-runtime-launch.input.json",
+                         ".specbridge/contracts/issue-061-controlled-antigravity-runtime-launch.execution.md"
+                     ],
+    "generated_by":  "specbridge-cli"
+}

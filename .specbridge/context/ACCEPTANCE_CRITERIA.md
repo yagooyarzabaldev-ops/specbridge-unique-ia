@@ -515,3 +515,53 @@ The cleanup task does not merge child PRs, delete remote branches, launch Antigr
 ### AC-120
 
 Repository memory identifies controlled Antigravity/Claude Code runtime launch as the next recommended task.
+
+## Controlled Antigravity Runtime Launch Acceptance Criteria
+
+### AC-121
+
+docs/specbridge-controlled-antigravity-runtime-launch.md exists and records the first bounded Claude Code runtime launch from the Antigravity workspace.
+
+### AC-122
+
+.specbridge/contracts/issue-061-controlled-antigravity-runtime-launch.execution.md exists and defines goal, context, allowed scope, blocked scope, acceptance criteria, validations, stop conditions, merge policy, deployment policy, final report requirements, and completion rule.
+
+### AC-123
+
+.specbridge/scopes/issue-061-controlled-antigravity-runtime-launch.scope.json exists and declares the issue 061 exclusive write paths, read-only paths, dependencies, and final report path.
+
+### AC-124
+
+.specbridge/executor-handoffs/issue-061-controlled-antigravity-runtime-launch.input.json exists and defines one bounded Claude runtime executor slice.
+
+### AC-125
+
+specbridge prepare-executors creates .specbridge/executor-packets/issue-061-controlled-antigravity-runtime-launch-claude-runtime.executor-packet.json.
+
+### AC-126
+
+Claude Code CLI availability, Antigravity CLI availability, and a Claude readiness probe are recorded in .specbridge/runtime-evidence/issue-061-controlled-antigravity-runtime-launch.claude-run.json.
+
+### AC-127
+
+Claude Code is invoked non-interactively with a bounded prompt and writes only .specbridge/runtime-evidence/issue-061-claude-runtime-executor-output.md.
+
+### AC-128
+
+The runtime evidence records the Claude invocation mode, tool restriction, executor packet path, exclusive write path, exit code, output artifact, and delegated validation responsibility.
+
+### AC-129
+
+.specbridge/reports/issue-061-controlled-antigravity-runtime-launch.final-report.json exists and validates against the final report validator.
+
+### AC-130
+
+.specbridge/audit-packets/issue-061-controlled-antigravity-runtime-launch.audit-packet.json exists and validates against the audit packet validator.
+
+### AC-131
+
+.specbridge/audits/issue-061-controlled-antigravity-runtime-launch.chatgpt-audit.json exists and validates against the ChatGPT audit validator.
+
+### AC-132
+
+The controlled runtime launch does not add product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, change database schema, touch production, access protected credentials, modify auth or billing surfaces, weaken CI/CD security, or deploy anything.

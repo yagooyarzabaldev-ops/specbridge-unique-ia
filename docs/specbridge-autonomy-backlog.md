@@ -47,6 +47,7 @@ Already complete:
 - branch-per-executor planning and coordinator simulation evidence
 - controlled GitHub evidence run with real child executor PRs and passed child CI
 - operational autonomy issue closure and evidence-only child PR cleanup
+- controlled Antigravity/Claude Code runtime launch with one bounded non-interactive executor artifact
 
 ## Remaining Work
 
@@ -267,11 +268,11 @@ Acceptance:
 
 ## Current Next Task
 
-After Operational Autonomy Cleanup is merged, start a controlled Antigravity/Claude Code runtime launch.
+After Controlled Antigravity Runtime Launch is merged, start a controlled runtime implementation slice.
 
 Reason:
 
-The repository now has clean GitHub evidence, no stale open evidence PRs, and no broad stale autonomy issue. The next product proof should run one bounded Claude Code executor task inside Antigravity under a dedicated contract, then send the result through GitHub CI and ChatGPT/Codex audit.
+The repository will have proved the live ChatGPT/Codex -> SpecBridge -> Claude Code -> SpecBridge audit loop at evidence-only scope. The next product proof should authorize one small source-backed task with exact source paths, tests, lint, typecheck, build gates, security review, CI evidence, and ChatGPT/Codex audit.
 
 ## Next Runtime Expansion
 
@@ -356,7 +357,7 @@ Run one bounded Claude Code executor task inside Antigravity using a SpecBridge 
 
 Status:
 
-Planned.
+Implemented as issue 061 with a bounded non-interactive Claude Code executor run. Claude Code wrote only `.specbridge/runtime-evidence/issue-061-claude-runtime-executor-output.md`; SpecBridge records CLI availability, executor packet evidence, runtime launch evidence, validation evidence, final report, audit packet, and ChatGPT/Codex audit evidence.
 
 Acceptance:
 
@@ -367,3 +368,22 @@ Acceptance:
 - ChatGPT/Codex audits the result against spec, policy, security, and evidence
 - merge happens only after required gates pass
 - no secrets, production configuration, billing, auth security, dependency installation, or deployment automation are involved
+
+### 13. Controlled Runtime Implementation Slice
+
+Goal:
+
+Authorize the first source-backed SpecBridge runtime implementation slice after the controlled runtime launch.
+
+Status:
+
+Planned.
+
+Acceptance:
+
+- one small feature has a dedicated execution contract
+- exact source, test, and documentation paths are declared
+- Claude Code executes in a bounded branch or executor session
+- lint, typecheck, tests, build, security gate, review gate, audit packet validation, and ChatGPT/Codex audit are required
+- GitHub CI passes before merge
+- the slice avoids secrets, production configuration, billing, auth security, dependency installation unless explicitly authorized, database changes, CI/CD weakening, and deployment automation
