@@ -32,6 +32,9 @@ specbridge status
 | `detect-conflicts` | Runs contract scope conflict validation. | No |
 | `decompose-task` | Creates a file-backed multi-agent decomposition from a declared JSON input. | Yes |
 | `prepare-executors` | Creates Antigravity executor handoff packets from declared slice inputs. | Yes |
+| `prepare-runtime-launch` | Creates a bounded runtime launch plan from one executor packet. | Yes |
+| `record-runtime-result` | Records bounded runtime execution evidence from a launch plan and executor output. | Yes |
+| `summarize-runtime` | Links one runtime launch plan and one runtime result into a validated runtime summary. | Yes |
 | `plan-executor-branches` | Creates one planned executor branch record per executor packet. | Yes |
 | `record-github-evidence` | Hydrates a branch plan with declared real GitHub child PR, CI, and ChatGPT/Codex audit evidence. | Yes |
 | `coordinate-executors` | Aggregates executor branch evidence into a coordinator orchestration artifact. | Yes |
@@ -43,7 +46,7 @@ specbridge status
 
 | Profile | Behavior |
 | --- | --- |
-| `standard` | Runs foundation, contract, scope, schema, final report, audit packet, ChatGPT audit, executor packet, branch orchestration, security, review report, Claude workflow, autonomous protocol, and review gate validation. |
+| `standard` | Runs foundation, contract, scope, schema, final report, audit packet, ChatGPT audit, executor packet, runtime launch, runtime result, runtime summary, branch orchestration, security, review report, Claude workflow, autonomous protocol, and review gate validation. |
 | `full` | Runs the standard profile plus negative validation fixtures. |
 | `smoke` | Runs `scripts/specbridge-smoke.ps1`. |
 
@@ -57,7 +60,7 @@ The default profile is `standard`.
 powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 status -IncludeLatestArtifacts
 ```
 
-When enabled, the JSON output includes `latest_artifacts` with the newest known contract, scope, final report, audit packet, and ChatGPT audit paths.
+When enabled, the JSON output includes `latest_artifacts` with the newest known contract, scope, final report, audit packet, ChatGPT audit, runtime launch, runtime result, and runtime summary paths.
 
 The selection is deterministic: artifact names that begin with `issue-<number>` are ordered by issue number first, then by file name.
 
@@ -139,6 +142,34 @@ The command writes `.specbridge/executor-packets/*.executor-packet.json` files a
 
 Generated packets use `manual_antigravity` launch mode. They prepare the handoff for a separate Antigravity Claude Code session but do not start any external process.
 
+## Runtime Evidence
+
+`prepare-runtime-launch` expects one executor packet:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 prepare-runtime-launch -InputPath .specbridge/executor-packets/example.executor-packet.json -OutputPath .specbridge/runtime-launches/example.runtime-launch.json
+```
+
+The output must be declared under `.specbridge/runtime-launches/` and end with `.runtime-launch.json`.
+
+`record-runtime-result` expects one runtime launch plan and one declared executor evidence file:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 record-runtime-result -InputPath .specbridge/runtime-launches/example.runtime-launch.json -EvidencePath .specbridge/runtime-evidence/example.md -OutputPath .specbridge/runtime-results/example.runtime-result.json -Validation "example validation: passed" -PolicyResult "Passed." -CompletionStatus complete
+```
+
+The output must be declared under `.specbridge/runtime-results/` and end with `.runtime-result.json`.
+
+`summarize-runtime` expects one runtime launch plan and one runtime result:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 summarize-runtime -InputPath .specbridge/runtime-launches/example.runtime-launch.json -EvidencePath .specbridge/runtime-results/example.runtime-result.json -OutputPath .specbridge/runtime-summaries/example.runtime-summary.json
+```
+
+The output must be declared under `.specbridge/runtime-summaries/` and end with `.runtime-summary.json`.
+
+Runtime evidence commands are file-backed evidence operations. They do not launch Claude Code, launch Antigravity, run shell commands, call GitHub, install dependencies, touch secrets, or deploy anything.
+
 ## Branch Orchestration
 
 `plan-executor-branches` expects either one executor packet file or a directory under `.specbridge/executor-packets`.
@@ -183,11 +214,15 @@ Simulation mode writes explicit simulated PR, CI, and audit evidence and cannot 
 - `audit-packet`
 - `decompose-task`
 - `prepare-executors`
+- `prepare-runtime-launch`
+- `record-runtime-result`
+- `summarize-runtime`
 - `plan-executor-branches`
 - `record-github-evidence`
 - `coordinate-executors`
 - `detect-conflicts`
 - `review-gate`
 - deterministic failure when a required output path is missing
+- deterministic failure when runtime launch and runtime result artifacts do not match
 
 `scripts/specbridge-smoke.ps1` runs the CLI suite in CI.

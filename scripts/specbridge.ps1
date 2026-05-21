@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "record-runtime-result", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "record-runtime-result", "summarize-runtime", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -203,6 +203,7 @@ function Invoke-ValidationProfile {
     "./scripts/validate-executor-packets.ps1",
     "./scripts/validate-runtime-launches.ps1",
     "./scripts/validate-runtime-results.ps1",
+    "./scripts/validate-runtime-summaries.ps1",
     "./scripts/validate-branch-orchestrations.ps1",
     "./scripts/validate-security-gates.ps1",
     "./scripts/validate-pr-review-reports.ps1",
@@ -324,6 +325,7 @@ function Invoke-StatusCommand {
       chatgpt_audits = Get-FileCount -Path ".specbridge/audits" -Filter "*.chatgpt-audit.json"
       runtime_launches = Get-FileCount -Path ".specbridge/runtime-launches" -Filter "*.runtime-launch.json"
       runtime_results = Get-FileCount -Path ".specbridge/runtime-results" -Filter "*.runtime-result.json"
+      runtime_summaries = Get-FileCount -Path ".specbridge/runtime-summaries" -Filter "*.runtime-summary.json"
     }
     current_goal_path = ".specbridge/context/CURRENT_GOAL.md"
   }
@@ -337,6 +339,7 @@ function Invoke-StatusCommand {
       chatgpt_audit = Get-LatestArtifactPath -Path ".specbridge/audits" -Filter "*.chatgpt-audit.json"
       runtime_launch = Get-LatestArtifactPath -Path ".specbridge/runtime-launches" -Filter "*.runtime-launch.json"
       runtime_result = Get-LatestArtifactPath -Path ".specbridge/runtime-results" -Filter "*.runtime-result.json"
+      runtime_summary = Get-LatestArtifactPath -Path ".specbridge/runtime-summaries" -Filter "*.runtime-summary.json"
     }
   }
 
@@ -1315,6 +1318,150 @@ function Get-JsonObjectFromFile {
   }
 }
 
+function Invoke-SummarizeRuntimeCommand {
+  $launchPath = Normalize-RepoPath -Path $InputPath -FieldName "InputPath"
+  $resultPath = Normalize-RepoPath -Path $EvidencePath -FieldName "EvidencePath"
+  $output = Assert-OutputPath `
+    -Path $OutputPath `
+    -Pattern "^\.specbridge/runtime-summaries/.+\.runtime-summary\.json$" `
+    -Description "a .specbridge/runtime-summaries/*.runtime-summary.json runtime summary"
+
+  if ($launchPath -notmatch "^\.specbridge/runtime-launches/.+\.runtime-launch\.json$") {
+    Fail "InputPath must be a .specbridge/runtime-launches/*.runtime-launch.json file: $launchPath"
+  }
+
+  if ($resultPath -notmatch "^\.specbridge/runtime-results/.+\.runtime-result\.json$") {
+    Fail "EvidencePath must be a .specbridge/runtime-results/*.runtime-result.json file: $resultPath"
+  }
+
+  if (-not (Test-Path -LiteralPath $launchPath -PathType Leaf)) {
+    Fail "InputPath does not exist: $launchPath"
+  }
+
+  if (-not (Test-Path -LiteralPath $resultPath -PathType Leaf)) {
+    Fail "EvidencePath does not exist: $resultPath"
+  }
+
+  $launch = Get-JsonObjectFromFile -Path $launchPath -Description "runtime launch"
+  $result = Get-JsonObjectFromFile -Path $resultPath -Description "runtime result"
+
+  foreach ($field in @("launch_id", "task_id", "packet_id", "slice_id", "branch_name", "execution_policy", "source_files")) {
+    if (-not $launch.PSObject.Properties.Name.Contains($field)) {
+      Fail "runtime launch must include $field"
+    }
+  }
+
+  foreach ($field in @("source_runtime_launch_path", "launch_id", "task_id", "packet_id", "slice_id", "branch_name", "validation_results", "policy_result", "completion_status", "runtime_status", "result_status", "execution_policy", "source_files")) {
+    if (-not $result.PSObject.Properties.Name.Contains($field)) {
+      Fail "runtime result must include $field"
+    }
+  }
+
+  if ((Normalize-RepoPath -Path $result.source_runtime_launch_path -FieldName "source_runtime_launch_path") -ne $launchPath) {
+    Fail "Runtime result source_runtime_launch_path must match InputPath"
+  }
+
+  foreach ($matchingField in @("launch_id", "task_id", "packet_id", "slice_id", "branch_name")) {
+    if ($launch.$matchingField -ne $result.$matchingField) {
+      Fail "$matchingField must match between runtime launch and runtime result"
+    }
+  }
+
+  if ($result.validation_results -isnot [System.Array] -or @($result.validation_results).Count -le 0) {
+    Fail "runtime result validation_results must be a non-empty array"
+  }
+
+  $validationTotal = @($result.validation_results).Count
+  $validationPassed = @($result.validation_results | Where-Object { $_.result -eq "passed" }).Count
+  $validationFailed = @($result.validation_results | Where-Object { $_.result -eq "failed" }).Count
+  $validationOther = $validationTotal - $validationPassed - $validationFailed
+  $blockers = @()
+
+  if ($result.runtime_status -ne "succeeded") {
+    $blockers += "runtime_status is not succeeded"
+  }
+
+  if ($result.result_status -ne "recorded") {
+    $blockers += "result_status is not recorded"
+  }
+
+  if ($result.completion_status -ne "complete") {
+    $blockers += "completion_status is not complete"
+  }
+
+  if ($validationFailed -gt 0 -or $validationOther -gt 0) {
+    $blockers += "validation_results are not all passed"
+  }
+
+  if ([string]::IsNullOrWhiteSpace($result.policy_result)) {
+    $blockers += "policy_result is empty"
+  }
+
+  $mergeReadiness = "ready_for_policy_gates"
+
+  if ($blockers.Count -gt 0) {
+    $mergeReadiness = "blocked"
+  }
+
+  $sourceFiles = @()
+  $sourceFiles += $launchPath
+  $sourceFiles += $resultPath
+  $sourceFiles += @($launch.source_files)
+  $sourceFiles += @($result.source_files)
+  $sourceFiles = @($sourceFiles | ForEach-Object { Normalize-RepoPath -Path $_ -FieldName "source_files" } | Sort-Object -Unique)
+  $summaryId = Convert-ToSafeName -Value ($result.task_id + "-runtime-summary") -FieldName "summary_id"
+
+  $summary = [ordered]@{
+    schema_version = "1"
+    summary_id = $summaryId
+    generated_by = "specbridge-cli"
+    runtime_launch_path = $launchPath
+    runtime_result_path = $resultPath
+    launch_id = $result.launch_id
+    task_id = $result.task_id
+    packet_id = $result.packet_id
+    slice_id = $result.slice_id
+    branch_name = $result.branch_name
+    completion_status = $result.completion_status
+    runtime_status = $result.runtime_status
+    result_status = $result.result_status
+    validation_totals = [ordered]@{
+      total = $validationTotal
+      passed = $validationPassed
+      failed = $validationFailed
+      other = $validationOther
+    }
+    policy_result = $result.policy_result
+    merge_readiness = $mergeReadiness
+    blockers = @($blockers)
+    execution_policy = [ordered]@{
+      launches_claude = $false
+      launches_antigravity = $false
+      executes_shell = $false
+      requires_network = $false
+      touches_secrets = $false
+      touches_production = $false
+      installs_dependencies = $false
+      deploys = $false
+    }
+    source_files = @($sourceFiles)
+  }
+
+  Write-Utf8JsonFile -Path $output -Value $summary -Depth 10
+
+  Write-CliJson ([ordered]@{
+    command = "summarize-runtime"
+    ok = $true
+    output_path = $output
+    runtime_launch_path = $launchPath
+    runtime_result_path = $resultPath
+    merge_readiness = $mergeReadiness
+    blocker_count = @($blockers).Count
+  })
+
+  exit 0
+}
+
 function Get-ExecutorPacketFiles {
   param(
     [string] $Path
@@ -1785,6 +1932,7 @@ switch ($Command) {
   "prepare-executors" { Invoke-PrepareExecutorsCommand }
   "prepare-runtime-launch" { Invoke-PrepareRuntimeLaunchCommand }
   "record-runtime-result" { Invoke-RecordRuntimeResultCommand }
+  "summarize-runtime" { Invoke-SummarizeRuntimeCommand }
   "plan-executor-branches" { Invoke-PlanExecutorBranchesCommand }
   "record-github-evidence" { Invoke-RecordGithubEvidenceCommand }
   "coordinate-executors" { Invoke-CoordinateExecutorsCommand }

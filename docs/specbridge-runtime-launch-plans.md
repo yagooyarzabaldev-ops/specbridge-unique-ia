@@ -95,4 +95,6 @@ It was generated from:
 
 ## Next Step
 
-The next runtime task should use launch plans and runtime results for a small source-backed implementation slice.
+Runtime result recording and runtime summaries now use launch plans as evidence inputs.
+
+The next runtime task should create fresh executor output from a bounded source implementation task, then record and summarize that result through the same launch, result, audit, CI, and merge gates.

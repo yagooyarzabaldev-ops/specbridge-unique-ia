@@ -1,0 +1,80 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-067-source-backed-runtime-slice",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-067-source-backed-runtime-slice.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-067-source-backed-runtime-slice.execution.md",
+  "final_report_path": ".specbridge/reports/issue-067-source-backed-runtime-slice.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue 067 adds the specified source-backed runtime summary surface: summarize-runtime CLI command, runtime summary artifact, validator, tests, docs, final report, and audit evidence.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "AC-156 through AC-168 are represented by the command, artifact structure, launch/result mismatch checks, validator, standard validation profile, smoke script, CLI positive and failure tests, negative validation fixture, documentation, and repository memory.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The implementation stays inside the issue 067 scope manifest and does not launch Claude Code, launch Antigravity, execute generated commands, call GitHub from the new command, install dependencies, touch secrets, change production configuration, or deploy.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The command reads only declared repository-relative runtime launch and runtime result inputs, rejects mismatched evidence chains, and records false execution policy booleans for launch, shell, network, secrets, production, dependency installation, and deployment.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed files are declared in the final report and covered by the issue 067 scope manifest. The untracked local .agents and .claude/settings.local.json paths remain outside the staged task scope.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "Runtime summary validation, runtime result validation, CLI tests, negative validation tests, contract validation, scope validation, standard validation, smoke validation, final report validation, audit packet validation, and ChatGPT audit validation passed locally.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "Local CI-equivalent targeted validation passed. GitHub PR CI remains a required external merge gate and must pass before automatic merge.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records the evidence-only summarization boundary, changed files, local validation results, pending PR CI, no deployment, and the remaining need for a future fresh executor source run.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "runtime_boundary",
+      "file": ".specbridge/runtime-summaries/issue-067-source-backed-runtime-slice.runtime-summary.json",
+      "line": null,
+      "evidence": "The runtime summary links an existing launch plan and runtime result, marks merge readiness as ready_for_policy_gates, and records no blockers.",
+      "recommendation": "Use a later dedicated contract for a fresh executor source run that creates new bounded executor output and then records and summarizes that result.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending until the branch is pushed and checks run.",
+    "Runtime summaries link existing launch and result evidence; a future fresh executor source run is still required to create new bounded executor output from a source implementation task."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-067-source-backed-runtime-slice.audit-packet.json",
+    ".specbridge/contracts/issue-067-source-backed-runtime-slice.execution.md",
+    ".specbridge/reports/issue-067-source-backed-runtime-slice.final-report.json"
+  ]
+}

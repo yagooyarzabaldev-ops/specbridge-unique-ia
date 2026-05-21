@@ -693,6 +693,56 @@ This contract intentionally omits the Goal section.
     -Command "./scripts/validate-runtime-results.ps1" `
     -ExpectedPattern "executor_evidence_path must be declared"
 
+  Invoke-ExpectedFailure `
+    -Name "runtime-summary-branch-mismatch" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/runtime-summaries" -Recurse -Force -ErrorAction SilentlyContinue
+      New-Item -ItemType Directory -Force -Path ".specbridge/runtime-summaries" | Out-Null
+
+      $summary = [ordered]@{
+        schema_version = "1"
+        summary_id = "runtime-summary-branch-mismatch"
+        generated_by = "specbridge-tests"
+        runtime_launch_path = ".specbridge/runtime-launches/issue-063-prepare-runtime-launch-plans.runtime-launch.json"
+        runtime_result_path = ".specbridge/runtime-results/issue-065-record-runtime-results.runtime-result.json"
+        launch_id = "issue-061-controlled-antigravity-runtime-launch-claude-runtime-runtime-launch"
+        task_id = "issue-061-controlled-antigravity-runtime-launch"
+        packet_id = "issue-061-controlled-antigravity-runtime-launch-claude-runtime"
+        slice_id = "claude-runtime"
+        branch_name = "claude/wrong-branch"
+        completion_status = "complete"
+        runtime_status = "succeeded"
+        result_status = "recorded"
+        validation_totals = [ordered]@{
+          total = 2
+          passed = 2
+          failed = 0
+          other = 0
+        }
+        policy_result = "Passed in invalid fixture."
+        merge_readiness = "ready_for_policy_gates"
+        blockers = @()
+        execution_policy = [ordered]@{
+          launches_claude = $false
+          launches_antigravity = $false
+          executes_shell = $false
+          requires_network = $false
+          touches_secrets = $false
+          touches_production = $false
+          installs_dependencies = $false
+          deploys = $false
+        }
+        source_files = @(
+          ".specbridge/runtime-launches/issue-063-prepare-runtime-launch-plans.runtime-launch.json",
+          ".specbridge/runtime-results/issue-065-record-runtime-results.runtime-result.json"
+        )
+      }
+
+      Set-Content -LiteralPath ".specbridge/runtime-summaries/runtime-summary-branch-mismatch.runtime-summary.json" -Value ($summary | ConvertTo-Json -Depth 8) -NoNewline
+    } `
+    -Command "./scripts/validate-runtime-summaries.ps1" `
+    -ExpectedPattern "branch_name must match runtime launch"
+
   Invoke-ExpectedSuccess `
     -Name "security-gate-safe-fixture" `
     -RequiresGit $true `

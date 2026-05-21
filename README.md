@@ -89,13 +89,14 @@ SpecBridge currently has three governed status layers:
 
 - V1 foundation: complete and validated locally.
 - Repository-first MVP: complete as a controlled loop using context files, execution contracts, validation scripts, PR gates, review artifacts, and final reports.
-- V3 essential product scope: defined for the next runtime phase, with implementation still blocked until a dedicated execution contract authorizes source paths, test strategy, lint, typecheck, and build gates.
+- V3 essential product scope: defined for the runtime phase, with source-backed runtime expansion allowed only through dedicated execution contracts that declare source paths, tests, docs, lint, typecheck, build, and review gates.
 - V4 product contract: defined for local CLI, MCP, GitHub evidence integration, dashboard boundaries, data model boundaries, runtime gates, completion criteria, and Version 5 candidates.
 - Branch-per-executor orchestration: implemented as deterministic branch plans, coordinator simulation evidence, and a controlled GitHub evidence run with real child PR URLs, passed child CI, and ChatGPT/Codex audit status.
 - Operational autonomy cleanup: evidence-only child PRs are closed without merge, issue 42 is closed as completed, and stale GitHub evidence is resolved.
 - Controlled Antigravity/Claude Code runtime launch: implemented as a bounded non-interactive Claude Code run from the Antigravity workspace, with SpecBridge executor packet evidence, one executor-written runtime artifact, validation evidence, and ChatGPT/Codex audit.
 - Runtime launch plans: implemented as a deterministic CLI command that turns one executor packet into a bounded Claude Code launch plan artifact without executing Claude Code, Antigravity, shell commands, network calls, dependency installation, or deployment.
 - Runtime result recording: implemented as a deterministic CLI command that records bounded executor evidence, exit code, written files, validation results, policy result, stop conditions, and completion status from a declared runtime launch plan.
+- Runtime summaries: implemented as the first source-backed runtime CLI slice that links a runtime launch plan and runtime result into a validated summary with merge readiness and blockers.
 - Default automation: Full Autopilot is enabled for autonomous merge after required gates pass; production deployment remains disabled.
 
 See:
@@ -111,4 +112,5 @@ See:
 - `docs/specbridge-controlled-antigravity-runtime-launch.md`
 - `docs/specbridge-runtime-launch-plans.md`
 - `docs/specbridge-runtime-results.md`
+- `docs/specbridge-runtime-summaries.md`
 - `docs/specbridge-autonomy-backlog.md`

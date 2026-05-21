@@ -661,3 +661,57 @@ scripts/test-specbridge-negative-validations.ps1 covers invalid runtime result a
 ### AC-155
 
 The runtime result recording task does not add live launch expansion, dependency installation, MCP server implementation, GitHub App implementation, hosted dashboard implementation, database changes, production configuration, protected credential access, auth or billing changes, CI/CD weakening, or deployment automation.
+
+## Runtime Summary Acceptance Criteria
+
+### AC-156
+
+scripts/specbridge.ps1 supports `summarize-runtime`.
+
+### AC-157
+
+`summarize-runtime` reads one `.specbridge/runtime-launches/*.runtime-launch.json` input file and one `.specbridge/runtime-results/*.runtime-result.json` evidence file.
+
+### AC-158
+
+`summarize-runtime` writes one declared `.specbridge/runtime-summaries/*.runtime-summary.json` output file.
+
+### AC-159
+
+Runtime summary artifacts record schema version, summary id, launch path, result path, launch id, task id, packet id, slice id, branch name, completion status, runtime status, result status, validation totals, policy result, merge readiness, blockers, execution policy, and source files.
+
+### AC-160
+
+Runtime summary generation rejects mismatched launch and result artifacts for source runtime launch path, launch id, task id, packet id, slice id, or branch name.
+
+### AC-161
+
+Runtime summary generation is evidence capture only and does not launch Claude Code, launch Antigravity, run shell commands, call GitHub, install dependencies, touch secrets, or deploy.
+
+### AC-162
+
+scripts/validate-runtime-summaries.ps1 exists and validates `.specbridge/runtime-summaries/*.runtime-summary.json` artifacts.
+
+### AC-163
+
+scripts/specbridge.ps1 `validate -Profile standard` includes runtime summary validation.
+
+### AC-164
+
+scripts/specbridge-smoke.ps1 includes runtime summary validation.
+
+### AC-165
+
+scripts/test-specbridge-cli.ps1 covers successful `summarize-runtime` generation and deterministic launch/result mismatch failure.
+
+### AC-166
+
+scripts/test-specbridge-negative-validations.ps1 covers invalid runtime summary artifacts.
+
+### AC-167
+
+.specbridge/runtime-summaries/issue-067-source-backed-runtime-slice.runtime-summary.json exists and validates.
+
+### AC-168
+
+The source-backed runtime summary task does not add live launch expansion, dependency installation, MCP server implementation, GitHub App implementation, hosted dashboard implementation, database changes, production configuration, protected credential access, auth or billing changes, CI/CD weakening, or deployment automation.

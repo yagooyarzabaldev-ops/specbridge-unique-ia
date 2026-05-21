@@ -50,6 +50,7 @@ Already complete:
 - controlled Antigravity/Claude Code runtime launch with one bounded non-interactive executor artifact
 - runtime launch plans generated from executor packets without executing Claude Code
 - runtime result records generated from launch plans and declared executor evidence without executing Claude Code
+- runtime summaries generated from launch plans and runtime results as the first source-backed runtime CLI slice
 
 ## Remaining Work
 
@@ -270,11 +271,11 @@ Acceptance:
 
 ## Current Next Task
 
-After Runtime Result Recording is merged, start a controlled source-backed runtime implementation slice.
+After Runtime Summary is merged, start a controlled fresh executor source run.
 
 Reason:
 
-The repository will have launch plans and runtime results as deterministic evidence layers. The next product proof should use those layers for one small source-backed implementation slice before broader runtime automation.
+The repository will have launch plans, runtime results, and runtime summaries as deterministic evidence layers. The next product proof should create fresh executor output from a bounded source implementation task, then record and summarize that result before broader runtime automation.
 
 ## Next Runtime Expansion
 
@@ -417,13 +418,33 @@ Use the launch plan and runtime result layers for one small source-backed implem
 
 Status:
 
-Planned.
+Implemented as `specbridge summarize-runtime`, `scripts/validate-runtime-summaries.ps1`, CLI test coverage, negative validation coverage, and `.specbridge/runtime-summaries/issue-067-source-backed-runtime-slice.runtime-summary.json`.
 
 Acceptance:
 
 - one source-backed runtime task has a dedicated execution contract
 - source paths, tests, docs, final report, audit packet, and ChatGPT/Codex audit are declared up front
-- Claude Code executes only inside the assigned scope
-- SpecBridge records the runtime result from declared executor evidence
-- GitHub CI, security gate, review gate, runtime result validation, audit packet validation, and ChatGPT/Codex audit pass before merge
+- SpecBridge links one declared runtime launch plan and one declared runtime result artifact
+- SpecBridge writes one validated runtime summary artifact
+- GitHub CI, security gate, review gate, runtime result validation, runtime summary validation, audit packet validation, and ChatGPT/Codex audit pass before merge
+- no secrets, production configuration, billing, auth security, dependency installation unless explicitly authorized, database changes, CI/CD weakening, or deployment automation are involved
+
+### 16. Controlled Fresh Executor Source Run
+
+Goal:
+
+Create fresh executor output from a bounded source implementation task, then record and summarize that result through the launch, result, audit, CI, and merge gates.
+
+Status:
+
+Planned.
+
+Acceptance:
+
+- one fresh source implementation task has a dedicated execution contract
+- exact source, test, docs, final report, audit packet, and ChatGPT/Codex audit paths are declared before execution
+- the executor writes only inside the assigned scope
+- SpecBridge records the runtime result from fresh declared executor evidence
+- SpecBridge writes a runtime summary for the fresh result
+- GitHub CI, security gate, review gate, runtime result validation, runtime summary validation, audit packet validation, and ChatGPT/Codex audit pass before merge
 - no secrets, production configuration, billing, auth security, dependency installation unless explicitly authorized, database changes, CI/CD weakening, or deployment automation are involved

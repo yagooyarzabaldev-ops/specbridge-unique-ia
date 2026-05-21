@@ -101,4 +101,6 @@ and:
 
 ## Next Step
 
-The next runtime task should use launch plans and runtime results for a small source-backed implementation slice, then let ChatGPT/Codex audit the output against the spec, policy, tests, and runtime evidence.
+Runtime summaries now use launch plans and runtime results as a source-backed CLI slice.
+
+The next runtime task should create fresh executor output from a bounded source implementation task, then record and summarize that result through the same launch, result, audit, CI, and merge gates.

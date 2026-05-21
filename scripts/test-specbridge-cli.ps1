@@ -378,6 +378,31 @@ try {
     }
 
     Assert-Success `
+      -Name "summarize-runtime" `
+      -Result (Invoke-Cli -Arguments @(
+        "summarize-runtime",
+        "-InputPath",
+        ".specbridge/runtime-launches/cli-fixture.runtime-launch.json",
+        "-EvidencePath",
+        ".specbridge/runtime-results/cli-fixture.runtime-result.json",
+        "-OutputPath",
+        ".specbridge/runtime-summaries/cli-fixture.runtime-summary.json",
+        "-Force"
+      )) `
+      -ExpectedPattern '"merge_readiness"\s*:\s*"ready_for_policy_gates"'
+
+    $runtimeSummaryValidation = & powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-summaries.ps1 2>&1
+
+    if ($LASTEXITCODE -ne 0) {
+      Write-Output "FAIL CLI-created runtime summary did not validate."
+      Write-Output ($runtimeSummaryValidation | Out-String)
+      $failed = $true
+    }
+    else {
+      Write-Output "PASS CLI-created runtime summary validates."
+    }
+
+    Assert-Success `
       -Name "plan-executor-branches" `
       -Result (Invoke-Cli -Arguments @(
         "plan-executor-branches",
@@ -521,6 +546,20 @@ try {
         "-Force"
       )) `
       -ExpectedPattern "EvidencePath must be declared"
+
+    Assert-Failure `
+      -Name "summarize-runtime-mismatched-result" `
+      -Result (Invoke-Cli -Arguments @(
+        "summarize-runtime",
+        "-InputPath",
+        ".specbridge/runtime-launches/cli-fixture.runtime-launch.json",
+        "-EvidencePath",
+        ".specbridge/runtime-results/issue-065-record-runtime-results.runtime-result.json",
+        "-OutputPath",
+        ".specbridge/runtime-summaries/mismatched.runtime-summary.json",
+        "-Force"
+      )) `
+      -ExpectedPattern "source_runtime_launch_path must match InputPath"
   }
   finally {
     Pop-Location
