@@ -8,10 +8,10 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 
 ## Test Run
 
-- Date: 2026-05-21
+- Date: 2026-05-22
 - Environment: local PowerShell workspace
-- Branch: `codex/source-backed-runtime-slice`
-- Scope: Source-backed runtime summary slice for issue 067 with CLI command, runtime summary validator, runtime summary artifact, final report, audit packet, and ChatGPT/Codex audit
+- Branch: `codex/fresh-executor-source-run`
+- Scope: Controlled fresh executor source run for issue 069 with Claude Code bounded output, runtime launch plan, runtime result, runtime summary, final report, audit packet, and ChatGPT/Codex audit
 
 ## Results
 
@@ -44,6 +44,9 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 | Runtime result CLI recording | passed |
 | Runtime summary validation | passed |
 | Runtime summary CLI generation | passed |
+| Fresh Claude executor source run | passed |
+| Fresh runtime result recording | passed |
+| Fresh runtime summary generation | passed |
 | PR review report validation | passed |
 | Claude review workflow validation | passed |
 | Autonomous execution protocol validation | passed |
@@ -118,14 +121,18 @@ The negative validation suite verifies:
 - runtime summary CLI generation passes
 - runtime summary launch/result mismatch failure is rejected deterministically
 - invalid runtime summary artifact fails validation
+- controlled fresh executor source run writes only declared exclusive scope paths
+- controlled fresh executor source run records Claude Code invocation evidence
+- fresh runtime result records executor evidence and written files from the issue 069 launch plan
+- fresh runtime summary reaches `ready_for_policy_gates` with no blockers
 - incomplete final report fails
 - blocked PR path fails
 
 ## Policy Result
 
-Passed. The change adds runtime summary generation from launch plans and runtime results, records runtime-summary evidence, updates repository memory, and adds contract, scope, final report, audit evidence, audit packet evidence, validation, tests, and documentation. It does not launch Claude Code, launch Antigravity, run shell commands from the new command, access protected credentials, touch production, install dependencies, modify auth or billing surfaces, weaken CI/CD security, change database schema, or deploy.
+Passed. The change adds a bounded fresh Claude Code executor source run, records runtime-result and runtime-summary evidence, updates repository memory, and adds contract, scope, final report, audit evidence, audit packet evidence, validation, and documentation. Claude Code wrote only declared executor paths and the coordinator-owned commands did not access protected credentials, touch production, install dependencies, modify auth or billing surfaces, weaken CI/CD security, change database schema, or deploy.
 
 ## Unresolved Risks
 
-- Runtime summary PR CI evidence is pending until the branch is pushed and GitHub runs checks.
-- Runtime summaries link existing launch and result evidence; a future fresh executor source run is still required to create new bounded executor output from a source implementation task.
+- Fresh executor source run PR CI evidence is pending until the branch is pushed and GitHub runs checks.
+- Multi-executor fresh runtime evidence remains future work.

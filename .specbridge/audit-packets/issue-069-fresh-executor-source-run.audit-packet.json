@@ -1,0 +1,241 @@
+﻿{
+    "schema_version":  "1",
+    "task_id":  "issue-069-fresh-executor-source-run",
+    "generated_by":  "specbridge-audit-packet-generator",
+    "execution_contract_path":  ".specbridge/contracts/issue-069-fresh-executor-source-run.execution.md",
+    "changed_files":  [
+                          ".specbridge/audit-packets/issue-069-fresh-executor-source-run.audit-packet.json",
+                          ".specbridge/audits/issue-069-fresh-executor-source-run.chatgpt-audit.json",
+                          ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                          ".specbridge/context/CURRENT_GOAL.md",
+                          ".specbridge/contracts/issue-069-fresh-executor-source-run.execution.md",
+                          ".specbridge/executor-handoffs/issue-069-fresh-executor-source-run.input.json",
+                          ".specbridge/executor-packets/issue-069-fresh-executor-source-run-claude-source.executor-packet.json",
+                          ".specbridge/reports/issue-069-fresh-executor-source-run.final-report.json",
+                          ".specbridge/runtime-evidence/issue-069-fresh-executor-source-run.claude-run.json",
+                          ".specbridge/runtime-evidence/issue-069-fresh-executor-source-run.executor-output.md",
+                          ".specbridge/runtime-launches/issue-069-fresh-executor-source-run.runtime-launch.json",
+                          ".specbridge/runtime-results/issue-069-fresh-executor-source-run.runtime-result.json",
+                          ".specbridge/runtime-summaries/issue-069-fresh-executor-source-run.runtime-summary.json",
+                          ".specbridge/scopes/issue-067-source-backed-runtime-slice.scope.json",
+                          ".specbridge/scopes/issue-069-fresh-executor-source-run.scope.json",
+                          "docs/specbridge-autonomy-backlog.md",
+                          "docs/specbridge-fresh-executor-source-run.md",
+                          "docs/specbridge-runtime-launch-plans.md",
+                          "docs/specbridge-runtime-results.md",
+                          "docs/specbridge-runtime-summaries.md",
+                          "docs/specbridge-test-results.md",
+                          "README.md",
+                          "specs/004-acceptance-tests.md"
+                      ],
+    "diff_summary":  [
+                         {
+                             "file":  ".specbridge/audit-packets/issue-069-fresh-executor-source-run.audit-packet.json",
+                             "added_lines":  null,
+                             "deleted_lines":  null
+                         },
+                         {
+                             "file":  ".specbridge/audits/issue-069-fresh-executor-source-run.chatgpt-audit.json",
+                             "added_lines":  null,
+                             "deleted_lines":  null
+                         },
+                         {
+                             "file":  ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                             "added_lines":  54,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/CURRENT_GOAL.md",
+                             "added_lines":  5,
+                             "deleted_lines":  5
+                         },
+                         {
+                             "file":  ".specbridge/contracts/issue-069-fresh-executor-source-run.execution.md",
+                             "added_lines":  178,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-handoffs/issue-069-fresh-executor-source-run.input.json",
+                             "added_lines":  31,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-packets/issue-069-fresh-executor-source-run-claude-source.executor-packet.json",
+                             "added_lines":  44,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/reports/issue-069-fresh-executor-source-run.final-report.json",
+                             "added_lines":  54,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-evidence/issue-069-fresh-executor-source-run.claude-run.json",
+                             "added_lines":  98,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-evidence/issue-069-fresh-executor-source-run.executor-output.md",
+                             "added_lines":  82,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-launches/issue-069-fresh-executor-source-run.runtime-launch.json",
+                             "added_lines":  70,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-results/issue-069-fresh-executor-source-run.runtime-result.json",
+                             "added_lines":  60,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-summaries/issue-069-fresh-executor-source-run.runtime-summary.json",
+                             "added_lines":  43,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/scopes/issue-067-source-backed-runtime-slice.scope.json",
+                             "added_lines":  1,
+                             "deleted_lines":  1
+                         },
+                         {
+                             "file":  ".specbridge/scopes/issue-069-fresh-executor-source-run.scope.json",
+                             "added_lines":  47,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-autonomy-backlog.md",
+                             "added_lines":  24,
+                             "deleted_lines":  3
+                         },
+                         {
+                             "file":  "docs/specbridge-fresh-executor-source-run.md",
+                             "added_lines":  149,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-runtime-launch-plans.md",
+                             "added_lines":  5,
+                             "deleted_lines":  6
+                         },
+                         {
+                             "file":  "docs/specbridge-runtime-results.md",
+                             "added_lines":  6,
+                             "deleted_lines":  7
+                         },
+                         {
+                             "file":  "docs/specbridge-runtime-summaries.md",
+                             "added_lines":  6,
+                             "deleted_lines":  5
+                         },
+                         {
+                             "file":  "docs/specbridge-test-results.md",
+                             "added_lines":  13,
+                             "deleted_lines":  6
+                         },
+                         {
+                             "file":  "README.md",
+                             "added_lines":  2,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "specs/004-acceptance-tests.md",
+                             "added_lines":  6,
+                             "deleted_lines":  0
+                         }
+                     ],
+    "validation_commands":  [
+                                "Claude Code bounded fresh executor invocation",
+                                "git diff --check",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-executor-packets.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-launches.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-results.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-summaries.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1"
+                            ],
+    "validation_results":  [
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-executor-packets.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-launches.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "Claude Code bounded fresh executor invocation",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-results.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-summaries.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "git diff --check",
+                                   "result":  "passed"
+                               }
+                           ],
+    "final_report_path":  ".specbridge/reports/issue-069-fresh-executor-source-run.final-report.json",
+    "ci_status":  "not_collected",
+    "pr_review_report_path":  null,
+    "policy_result":  "Passed. The task stayed inside the issue 069 contract and scope manifest. Claude Code wrote only the declared executor exclusive write paths. The coordinator-owned evidence commands recorded runtime launch, result, and summary artifacts without secrets, production changes, dependency installation, database changes, auth or billing changes, CI/CD weakening, or deployment.",
+    "unresolved_risks":  [
+                             "GitHub PR CI evidence is pending until the branch is pushed and checks run.",
+                             "Multi-executor fresh runtime evidence remains future work."
+                         ],
+    "completion_status":  "complete_pending_pr_ci",
+    "source_files":  [
+                         ".specbridge/contracts/issue-069-fresh-executor-source-run.execution.md",
+                         ".specbridge/reports/issue-069-fresh-executor-source-run.final-report.json"
+                     ],
+    "secret_omission":  "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

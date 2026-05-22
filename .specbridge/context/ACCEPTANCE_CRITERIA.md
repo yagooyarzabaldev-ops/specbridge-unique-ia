@@ -715,3 +715,57 @@ scripts/test-specbridge-negative-validations.ps1 covers invalid runtime summary 
 ### AC-168
 
 The source-backed runtime summary task does not add live launch expansion, dependency installation, MCP server implementation, GitHub App implementation, hosted dashboard implementation, database changes, production configuration, protected credential access, auth or billing changes, CI/CD weakening, or deployment automation.
+
+## Fresh Executor Source Run Acceptance Criteria
+
+### AC-169
+
+docs/specbridge-fresh-executor-source-run.md exists and records the governed fresh executor source run model.
+
+### AC-170
+
+.specbridge/contracts/issue-069-fresh-executor-source-run.execution.md exists and defines goal, context, source references, allowed scope, executor exclusive write scope, blocked scope, acceptance criteria, validations, stop conditions, merge policy, deployment policy, and completion rule.
+
+### AC-171
+
+.specbridge/scopes/issue-069-fresh-executor-source-run.scope.json exists and declares non-overlapping active write scope for issue 069.
+
+### AC-172
+
+.specbridge/executor-handoffs/issue-069-fresh-executor-source-run.input.json exists and defines one bounded runtime executor slice.
+
+### AC-173
+
+specbridge prepare-executors creates .specbridge/executor-packets/issue-069-fresh-executor-source-run-claude-source.executor-packet.json.
+
+### AC-174
+
+specbridge prepare-runtime-launch creates .specbridge/runtime-launches/issue-069-fresh-executor-source-run.runtime-launch.json from the issue 069 executor packet.
+
+### AC-175
+
+Claude Code is invoked non-interactively with bounded Read and Write tools and writes only docs/specbridge-fresh-executor-source-run.md and .specbridge/runtime-evidence/issue-069-fresh-executor-source-run.executor-output.md.
+
+### AC-176
+
+.specbridge/runtime-evidence/issue-069-fresh-executor-source-run.claude-run.json records Claude version, invocation mode, attempts, tool restriction, exit code, files written, policy result, and source files.
+
+### AC-177
+
+specbridge record-runtime-result creates .specbridge/runtime-results/issue-069-fresh-executor-source-run.runtime-result.json from the issue 069 runtime launch plan and executor output evidence.
+
+### AC-178
+
+specbridge summarize-runtime creates .specbridge/runtime-summaries/issue-069-fresh-executor-source-run.runtime-summary.json from the issue 069 launch and result artifacts.
+
+### AC-179
+
+.specbridge/reports/issue-069-fresh-executor-source-run.final-report.json, .specbridge/audit-packets/issue-069-fresh-executor-source-run.audit-packet.json, and .specbridge/audits/issue-069-fresh-executor-source-run.chatgpt-audit.json exist and validate.
+
+### AC-180
+
+Local validations pass for executor packets, runtime launches, runtime results, runtime summaries, final reports, audit packets, ChatGPT audits, contracts, scopes, standard validation, smoke validation, security gates, review gates, and git diff whitespace.
+
+### AC-181
+
+The fresh executor source run does not add product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, change database schema, touch production, access protected credentials, modify auth or billing surfaces, weaken CI/CD security, or deploy anything.

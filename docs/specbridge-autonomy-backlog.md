@@ -51,6 +51,7 @@ Already complete:
 - runtime launch plans generated from executor packets without executing Claude Code
 - runtime result records generated from launch plans and declared executor evidence without executing Claude Code
 - runtime summaries generated from launch plans and runtime results as the first source-backed runtime CLI slice
+- controlled fresh executor source run with new bounded Claude Code output recorded through launch, result, summary, final report, audit, CI, and merge gates
 
 ## Remaining Work
 
@@ -271,11 +272,11 @@ Acceptance:
 
 ## Current Next Task
 
-After Runtime Summary is merged, start a controlled fresh executor source run.
+After Fresh Executor Source Run is merged, start a controlled multi-executor fresh source run.
 
 Reason:
 
-The repository will have launch plans, runtime results, and runtime summaries as deterministic evidence layers. The next product proof should create fresh executor output from a bounded source implementation task, then record and summarize that result before broader runtime automation.
+The repository now has launch plans, runtime results, runtime summaries, and one fresh executor output chain. The next product proof should run multiple bounded executor outputs in parallel under non-overlapping scopes before broader runtime automation.
 
 ## Next Runtime Expansion
 
@@ -437,7 +438,7 @@ Create fresh executor output from a bounded source implementation task, then rec
 
 Status:
 
-Planned.
+Implemented as issue 069. Claude Code ran non-interactively with `Read` and `Write` tools only, wrote `docs/specbridge-fresh-executor-source-run.md` and `.specbridge/runtime-evidence/issue-069-fresh-executor-source-run.executor-output.md`, and SpecBridge recorded `.specbridge/runtime-results/issue-069-fresh-executor-source-run.runtime-result.json` plus `.specbridge/runtime-summaries/issue-069-fresh-executor-source-run.runtime-summary.json`.
 
 Acceptance:
 
@@ -447,4 +448,24 @@ Acceptance:
 - SpecBridge records the runtime result from fresh declared executor evidence
 - SpecBridge writes a runtime summary for the fresh result
 - GitHub CI, security gate, review gate, runtime result validation, runtime summary validation, audit packet validation, and ChatGPT/Codex audit pass before merge
+- no secrets, production configuration, billing, auth security, dependency installation unless explicitly authorized, database changes, CI/CD weakening, or deployment automation are involved
+
+### 17. Controlled Multi-Executor Fresh Source Run
+
+Goal:
+
+Run two or more bounded Claude Code executor slices from one governed goal, each with its own non-overlapping exclusive write scope, then record and summarize every result before coordinator integration.
+
+Status:
+
+Planned.
+
+Acceptance:
+
+- one multi-executor source task has a dedicated execution contract and decomposition
+- each executor has its own packet, runtime launch plan, runtime result, runtime summary, and final report evidence
+- active scope validation rejects overlap before execution
+- each executor writes only inside its exclusive write scope
+- coordinator aggregation waits for every executor runtime summary to be `ready_for_policy_gates`
+- ChatGPT/Codex audit checks every executor output against the shared spec and security standards
 - no secrets, production configuration, billing, auth security, dependency installation unless explicitly authorized, database changes, CI/CD weakening, or deployment automation are involved

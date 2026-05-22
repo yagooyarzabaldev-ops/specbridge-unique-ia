@@ -83,19 +83,20 @@ A later merge still requires CI, security gate, review gate, audit packet valida
 
 ## Current Evidence
 
-The first runtime summary is:
+Current runtime summary evidence includes:
 
 ```text
 .specbridge/runtime-summaries/issue-067-source-backed-runtime-slice.runtime-summary.json
+.specbridge/runtime-summaries/issue-069-fresh-executor-source-run.runtime-summary.json
 ```
 
-It links:
+The issue 069 summary links:
 
 ```text
-.specbridge/runtime-launches/issue-063-prepare-runtime-launch-plans.runtime-launch.json
-.specbridge/runtime-results/issue-065-record-runtime-results.runtime-result.json
+.specbridge/runtime-launches/issue-069-fresh-executor-source-run.runtime-launch.json
+.specbridge/runtime-results/issue-069-fresh-executor-source-run.runtime-result.json
 ```
 
 ## Next Step
 
-The next runtime expansion should create fresh executor output from a bounded source implementation task, then record and summarize that result through the same launch, result, audit, CI, and merge gates.
+The next runtime expansion should create multiple fresh executor outputs from one governed decomposition, then record and summarize every result before coordinator integration.

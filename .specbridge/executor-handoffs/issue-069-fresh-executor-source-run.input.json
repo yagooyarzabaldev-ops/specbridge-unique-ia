@@ -1,0 +1,31 @@
+{
+  "task_id": "issue-069-fresh-executor-source-run",
+  "slices": [
+    {
+      "id": "claude-source",
+      "role": "runtime_executor",
+      "goal": "Create the fresh executor source-run operating document and executor output evidence inside the assigned scope.",
+      "contract_path": ".specbridge/contracts/issue-069-fresh-executor-source-run.execution.md",
+      "final_report_path": ".specbridge/reports/issue-069-fresh-executor-source-run.final-report.json",
+      "exclusive_write": [
+        "docs/specbridge-fresh-executor-source-run.md",
+        ".specbridge/runtime-evidence/issue-069-fresh-executor-source-run.executor-output.md"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".specbridge/policy.yaml",
+        ".specbridge/contracts/issue-069-fresh-executor-source-run.execution.md",
+        "docs/specbridge-runtime-launch-plans.md",
+        "docs/specbridge-runtime-results.md",
+        "docs/specbridge-runtime-summaries.md"
+      ],
+      "required_validations": [
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1"
+      ]
+    }
+  ]
+}

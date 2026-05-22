@@ -81,20 +81,19 @@ They do not certify that the executor ran, that tests passed, or that merge is a
 
 ## Current Evidence
 
-The first launch plan is:
+Current launch plan evidence includes:
 
 ```text
 .specbridge/runtime-launches/issue-063-prepare-runtime-launch-plans.runtime-launch.json
+.specbridge/runtime-launches/issue-069-fresh-executor-source-run.runtime-launch.json
 ```
 
-It was generated from:
+The issue 069 launch plan was generated from:
 
 ```text
-.specbridge/executor-packets/issue-061-controlled-antigravity-runtime-launch-claude-runtime.executor-packet.json
+.specbridge/executor-packets/issue-069-fresh-executor-source-run-claude-source.executor-packet.json
 ```
 
 ## Next Step
 
-Runtime result recording and runtime summaries now use launch plans as evidence inputs.
-
-The next runtime task should create fresh executor output from a bounded source implementation task, then record and summarize that result through the same launch, result, audit, CI, and merge gates.
+Runtime result recording and runtime summaries now use launch plans as evidence inputs. The next runtime expansion should prepare multiple launch plans from one governed goal and keep each executor scope non-overlapping.

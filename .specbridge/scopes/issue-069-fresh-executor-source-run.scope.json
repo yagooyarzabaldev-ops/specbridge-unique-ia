@@ -1,0 +1,47 @@
+{
+  "contract_id": "issue-069-fresh-executor-source-run",
+  "status": "active",
+  "exclusive_write": [
+    ".specbridge/audit-packets/issue-069-fresh-executor-source-run.audit-packet.json",
+    ".specbridge/audits/issue-069-fresh-executor-source-run.chatgpt-audit.json",
+    ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-069-fresh-executor-source-run.execution.md",
+    ".specbridge/executor-handoffs/issue-069-fresh-executor-source-run.input.json",
+    ".specbridge/executor-packets/issue-069-fresh-executor-source-run-claude-source.executor-packet.json",
+    ".specbridge/reports/issue-069-fresh-executor-source-run.final-report.json",
+    ".specbridge/runtime-evidence/issue-069-fresh-executor-source-run.claude-run.json",
+    ".specbridge/runtime-evidence/issue-069-fresh-executor-source-run.executor-output.md",
+    ".specbridge/runtime-launches/issue-069-fresh-executor-source-run.runtime-launch.json",
+    ".specbridge/runtime-results/issue-069-fresh-executor-source-run.runtime-result.json",
+    ".specbridge/runtime-summaries/issue-069-fresh-executor-source-run.runtime-summary.json",
+    ".specbridge/scopes/issue-067-source-backed-runtime-slice.scope.json",
+    "README.md",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-fresh-executor-source-run.md",
+    "docs/specbridge-runtime-launch-plans.md",
+    "docs/specbridge-runtime-results.md",
+    "docs/specbridge-runtime-summaries.md",
+    "docs/specbridge-test-results.md",
+    "specs/004-acceptance-tests.md"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    "scripts/specbridge.ps1",
+    "scripts/validate-executor-packets.ps1",
+    "scripts/validate-runtime-launches.ps1",
+    "scripts/validate-runtime-results.ps1",
+    "scripts/validate-runtime-summaries.ps1",
+    "scripts/specbridge-smoke.ps1"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-063-prepare-runtime-launch-plans",
+    "issue-065-record-runtime-results",
+    "issue-067-source-backed-runtime-slice"
+  ],
+  "final_report": ".specbridge/reports/issue-069-fresh-executor-source-run.final-report.json"
+}

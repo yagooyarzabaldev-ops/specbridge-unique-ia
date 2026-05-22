@@ -204,3 +204,9 @@ docs/specbridge-runtime-results.md exists; scripts/specbridge.ps1 supports `reco
 Pass condition:
 
 docs/specbridge-runtime-summaries.md exists; scripts/specbridge.ps1 supports `summarize-runtime`; the command reads one runtime launch plan and one runtime result artifact, then writes one declared `.specbridge/runtime-summaries/*.runtime-summary.json` artifact; `.specbridge/runtime-summaries/issue-067-source-backed-runtime-slice.runtime-summary.json` validates; scripts/validate-runtime-summaries.ps1 validates runtime summary structure, launch/result consistency, validation totals, blockers, merge readiness, and safety boundaries; standard validation and smoke validation include runtime summary validation; CLI tests cover success and launch/result mismatch failure; negative validation tests cover invalid runtime summary artifacts; and the command does not launch Claude Code, launch Antigravity, run shell commands, call GitHub, install dependencies, touch secrets, or deploy.
+
+### AT-032 - Fresh executor source run exists
+
+Pass condition:
+
+docs/specbridge-fresh-executor-source-run.md exists; issue 069 has a dedicated execution contract, scope manifest, executor handoff input, generated executor packet, runtime launch plan, Claude run evidence, executor output evidence, runtime result, runtime summary, final report, audit packet, and ChatGPT/Codex audit; Claude Code is invoked non-interactively with bounded Read/Write tools only; the executor writes only docs/specbridge-fresh-executor-source-run.md and .specbridge/runtime-evidence/issue-069-fresh-executor-source-run.executor-output.md; local validations pass; GitHub CI passes before merge; and the task does not add product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, touch production, access protected credentials, weaken CI/CD security, or deploy anything.

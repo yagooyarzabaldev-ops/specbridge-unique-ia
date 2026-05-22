@@ -81,26 +81,25 @@ They do not certify merge readiness by themselves. A complete task still needs v
 
 ## Current Evidence
 
-The first runtime result is:
+Current runtime result evidence includes:
 
 ```text
 .specbridge/runtime-results/issue-065-record-runtime-results.runtime-result.json
+.specbridge/runtime-results/issue-069-fresh-executor-source-run.runtime-result.json
 ```
 
-It was recorded from:
+The issue 069 result was recorded from:
 
 ```text
-.specbridge/runtime-launches/issue-063-prepare-runtime-launch-plans.runtime-launch.json
+.specbridge/runtime-launches/issue-069-fresh-executor-source-run.runtime-launch.json
 ```
 
 and:
 
 ```text
-.specbridge/runtime-evidence/issue-061-claude-runtime-executor-output.md
+.specbridge/runtime-evidence/issue-069-fresh-executor-source-run.executor-output.md
 ```
 
 ## Next Step
 
-Runtime summaries now use launch plans and runtime results as a source-backed CLI slice.
-
-The next runtime task should create fresh executor output from a bounded source implementation task, then record and summarize that result through the same launch, result, audit, CI, and merge gates.
+Runtime summaries now use launch plans and runtime results as a source-backed CLI slice. The next runtime task should record multiple fresh executor results from one governed decomposition.

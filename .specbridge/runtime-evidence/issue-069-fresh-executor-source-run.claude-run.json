@@ -1,0 +1,98 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-069-fresh-executor-source-run",
+  "contract_id": "issue-069-fresh-executor-source-run",
+  "related_issue": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/69",
+  "workspace": "D:/Antigravity/Infinite Process/specbridge",
+  "runtime": {
+    "claude_version": "2.1.126 (Claude Code)",
+    "claude_command": "C:/Users/oyarz/.local/bin/claude.exe"
+  },
+  "executor_packet": {
+    "path": ".specbridge/executor-packets/issue-069-fresh-executor-source-run-claude-source.executor-packet.json",
+    "packet_id": "issue-069-fresh-executor-source-run-claude-source",
+    "slice_id": "claude-source",
+    "launch_mode": "manual_antigravity",
+    "exclusive_write": [
+      "docs/specbridge-fresh-executor-source-run.md",
+      ".specbridge/runtime-evidence/issue-069-fresh-executor-source-run.executor-output.md"
+    ]
+  },
+  "invocation": {
+    "mode": "non_interactive_print",
+    "command_summary": "claude -p --no-session-persistence --max-budget-usd 0.25 --permission-mode acceptEdits --tools Read,Write --allowedTools Read,Write --input-format text",
+    "tool_restriction": [
+      "Read",
+      "Write"
+    ],
+    "permission_mode": "acceptEdits",
+    "max_budget_usd": "0.25",
+    "shell_access_for_executor": false,
+    "raw_prompt_stored": false,
+    "raw_prompt_omission_reason": "The execution contract, executor packet, and runtime launch plan provide durable task context; the raw prompt is omitted to avoid storing transient conversation text."
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "input_mode": "prompt_argument",
+      "exit_code": 1,
+      "result": "failed_before_executor_work",
+      "reason": "Claude Code --print required stdin or a prompt argument; the long PowerShell argument was not accepted as the prompt."
+    },
+    {
+      "attempt": 2,
+      "input_mode": "stdin",
+      "exit_code": 0,
+      "result": "passed",
+      "reason": "Claude Code accepted the bounded prompt through stdin and wrote only the declared executor exclusive write paths."
+    }
+  ],
+  "result": {
+    "exit_code": 0,
+    "stdout_summary": "Claude Code reported both executor files written, no shell commands or external tools used by the executor, and coordinator-owned downstream validations remaining pending.",
+    "completion_status": "executor_scope_complete"
+  },
+  "files_written_by_claude": [
+    "docs/specbridge-fresh-executor-source-run.md",
+    ".specbridge/runtime-evidence/issue-069-fresh-executor-source-run.executor-output.md"
+  ],
+  "coordinator_validations": [
+    {
+      "command": "claude --version",
+      "result": "passed"
+    },
+    {
+      "command": "Get-Command claude",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 prepare-executors -InputPath .specbridge/executor-handoffs/issue-069-fresh-executor-source-run.input.json -OutputDirectory .specbridge/executor-packets -Force",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 prepare-runtime-launch -InputPath .specbridge/executor-packets/issue-069-fresh-executor-source-run-claude-source.executor-packet.json -OutputPath .specbridge/runtime-launches/issue-069-fresh-executor-source-run.runtime-launch.json -AllowedTool Read,Write -PermissionMode acceptEdits -MaxBudgetUsd 0.25 -Force",
+      "result": "passed"
+    },
+    {
+      "command": "Claude Code bounded fresh executor invocation",
+      "result": "passed"
+    }
+  ],
+  "policy_result": {
+    "executor_scope": "passed",
+    "protected_files_touched": false,
+    "product_runtime_code_added": false,
+    "dependency_installation": false,
+    "production_change": false,
+    "deployment_change": false,
+    "secrets_access": false
+  },
+  "source_files": [
+    ".specbridge/contracts/issue-069-fresh-executor-source-run.execution.md",
+    ".specbridge/executor-handoffs/issue-069-fresh-executor-source-run.input.json",
+    ".specbridge/executor-packets/issue-069-fresh-executor-source-run-claude-source.executor-packet.json",
+    ".specbridge/runtime-launches/issue-069-fresh-executor-source-run.runtime-launch.json",
+    "docs/specbridge-fresh-executor-source-run.md",
+    ".specbridge/runtime-evidence/issue-069-fresh-executor-source-run.executor-output.md"
+  ]
+}

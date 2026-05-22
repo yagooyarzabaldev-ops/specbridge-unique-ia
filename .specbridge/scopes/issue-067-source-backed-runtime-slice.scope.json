@@ -1,6 +1,6 @@
 {
   "contract_id": "issue-067-source-backed-runtime-slice",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/audit-packets/issue-067-source-backed-runtime-slice.audit-packet.json",
     ".specbridge/audits/issue-067-source-backed-runtime-slice.chatgpt-audit.json",
