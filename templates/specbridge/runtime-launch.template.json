@@ -1,0 +1,61 @@
+{
+  "schema_version": "1",
+  "launch_id": "{{TASK_ID}}-{{SLICE_ID}}-runtime-launch",
+  "generated_by": "specbridge-cli",
+  "source_executor_packet_path": ".specbridge/executor-packets/{{TASK_ID}}-{{SLICE_ID}}.executor-packet.json",
+  "task_id": "{{TASK_ID}}",
+  "packet_id": "{{TASK_ID}}-{{SLICE_ID}}",
+  "slice_id": "{{SLICE_ID}}",
+  "agent_role": "{{SLICE_ROLE}}",
+  "goal": "{{SLICE_GOAL}}",
+  "branch_name": "claude/{{TASK_ID}}-{{SLICE_ID}}",
+  "execution_contract_path": ".specbridge/contracts/{{TASK_ID}}.execution.md",
+  "final_report_path": ".specbridge/reports/{{TASK_ID}}.final-report.json",
+  "exclusive_write": [
+    "{{EXCLUSIVE_WRITE_PATH}}"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml"
+  ],
+  "required_validations": [
+    "{{REQUIRED_VALIDATION}}"
+  ],
+  "allowed_tools": [
+    "Read",
+    "Write"
+  ],
+  "permission_mode": "acceptEdits",
+  "max_budget_usd": "0.25",
+  "command_summary": "claude -p --no-session-persistence --max-budget-usd 0.25 --permission-mode acceptEdits --tools \"Read,Write\" --allowedTools \"Read,Write\" <bounded prompt>",
+  "prompt_sections": [
+    "Read required repository policy and contract files before writing.",
+    "Modify only paths declared in exclusive_write.",
+    "Report evidence, not confidence."
+  ],
+  "stop_conditions": [
+    "policy_conflict",
+    "scope_conflict",
+    "missing_required_context",
+    "impossible_acceptance_criteria",
+    "protected_resource_required"
+  ],
+  "launch_status": "ready_for_operator_launch",
+  "execution_policy": {
+    "launches_claude": false,
+    "launches_antigravity": false,
+    "executes_shell": false,
+    "requires_network": false,
+    "touches_secrets": false,
+    "touches_production": false,
+    "installs_dependencies": false,
+    "deploys": false
+  },
+  "source_files": [
+    ".specbridge/executor-packets/{{TASK_ID}}-{{SLICE_ID}}.executor-packet.json",
+    ".specbridge/contracts/{{TASK_ID}}.execution.md"
+  ]
+}

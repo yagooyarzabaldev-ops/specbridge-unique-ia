@@ -1,0 +1,19 @@
+{
+  "contract_id": "{{TASK_ID}}",
+  "status": "active",
+  "exclusive_write": [
+    "{{EXCLUSIVE_WRITE_PATH}}"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "{{DEPENDENCY_CONTRACT_ID}}"
+  ],
+  "final_report": ".specbridge/reports/{{TASK_ID}}.final-report.json"
+}

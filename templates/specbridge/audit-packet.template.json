@@ -1,0 +1,36 @@
+{
+  "schema_version": "1",
+  "task_id": "{{TASK_ID}}",
+  "generated_by": "specbridge-audit-packet-generator",
+  "execution_contract_path": ".specbridge/contracts/{{TASK_ID}}.execution.md",
+  "changed_files": [
+    "{{CHANGED_FILE}}"
+  ],
+  "diff_summary": [
+    {
+      "file": "{{CHANGED_FILE}}",
+      "added_lines": 1,
+      "deleted_lines": 0
+    }
+  ],
+  "validation_commands": [
+    "{{VALIDATION_COMMAND}}"
+  ],
+  "validation_results": [
+    {
+      "command": "{{VALIDATION_COMMAND}}",
+      "result": "passed"
+    }
+  ],
+  "final_report_path": ".specbridge/reports/{{TASK_ID}}.final-report.json",
+  "ci_status": "not_collected",
+  "pr_review_report_path": null,
+  "policy_result": "Passed.",
+  "unresolved_risks": [],
+  "completion_status": "complete_pending_pr_ci",
+  "source_files": [
+    ".specbridge/contracts/{{TASK_ID}}.execution.md",
+    ".specbridge/reports/{{TASK_ID}}.final-report.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths and validation summaries only."
+}

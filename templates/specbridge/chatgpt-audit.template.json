@@ -1,0 +1,25 @@
+{
+  "schema_version": "1",
+  "audit_id": "{{TASK_ID}}",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/{{TASK_ID}}.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/{{TASK_ID}}.execution.md",
+  "final_report_path": ".specbridge/reports/{{TASK_ID}}.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "{{TASK_ID}} evidence satisfies the active execution contract.",
+      "blocking": false
+    }
+  ],
+  "findings": [],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [],
+  "source_files": [
+    ".specbridge/audit-packets/{{TASK_ID}}.audit-packet.json",
+    ".specbridge/contracts/{{TASK_ID}}.execution.md",
+    ".specbridge/reports/{{TASK_ID}}.final-report.json"
+  ]
+}

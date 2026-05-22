@@ -145,6 +145,11 @@ try {
       -ExpectedPattern '"latest_artifacts"'
 
     Assert-Success `
+      -Name "standard-loop-status" `
+      -Result (Invoke-Cli -Arguments @("standard-loop-status")) `
+      -ExpectedPattern '"standard"\s*:\s*"SpecBridge Standard Loop v1"'
+
+    Assert-Success `
       -Name "validate-standard" `
       -Result (Invoke-Cli -Arguments @("validate", "-Profile", "standard")) `
       -ExpectedPattern '"ok"\s*:\s*true'
@@ -340,6 +345,32 @@ try {
     }
     else {
       Write-Output "PASS CLI-created runtime launch validates."
+    }
+
+    Assert-Success `
+      -Name "execute-runtime-launch-dry-run" `
+      -Result (Invoke-Cli -Arguments @(
+        "execute-runtime-launch",
+        "-InputPath",
+        ".specbridge/runtime-launches/cli-fixture.runtime-launch.json",
+        "-OutputPath",
+        ".specbridge/runtime-executions/cli-fixture.runtime-execution.json",
+        "-TimeoutSeconds",
+        "30",
+        "-DryRun",
+        "-Force"
+      )) `
+      -ExpectedPattern '"execution_status"\s*:\s*"dry_run"'
+
+    $runtimeExecutionValidation = & powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-executions.ps1 2>&1
+
+    if ($LASTEXITCODE -ne 0) {
+      Write-Output "FAIL CLI-created runtime execution did not validate."
+      Write-Output ($runtimeExecutionValidation | Out-String)
+      $failed = $true
+    }
+    else {
+      Write-Output "PASS CLI-created runtime execution validates."
     }
 
     Assert-Success `
@@ -626,6 +657,19 @@ try {
         "-Force"
       )) `
       -ExpectedPattern "EvidencePath must be declared"
+
+    Assert-Failure `
+      -Name "execute-runtime-launch-live-without-force" `
+      -Result (Invoke-Cli -Arguments @(
+        "execute-runtime-launch",
+        "-InputPath",
+        ".specbridge/runtime-launches/cli-fixture.runtime-launch.json",
+        "-OutputPath",
+        ".specbridge/runtime-executions/live-without-force.runtime-execution.json",
+        "-TimeoutSeconds",
+        "30"
+      )) `
+      -ExpectedPattern "requires -Force"
 
     Assert-Failure `
       -Name "summarize-runtime-mismatched-result" `

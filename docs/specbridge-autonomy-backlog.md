@@ -476,18 +476,38 @@ Acceptance:
 
 Goal:
 
-Use the serious loop for a small behavior change where one executor implements, one executor tests or audits, and ChatGPT/Codex reviews the result against explicit acceptance criteria.
+Use the serious loop for a small behavior change where SpecBridge implements a real standard feature, records runtime execution evidence, and ChatGPT/Codex reviews the result against explicit acceptance criteria.
 
 Status:
 
-Planned.
+Implemented as issue 073 Standard Loop v1. The pilot adds `standard-loop-status`, `execute-runtime-launch -DryRun`, runtime execution validation, standard templates, schema registration, CI authority documentation, and V5 live parallel pilot boundaries.
 
 Acceptance:
 
 - one small feature has a dedicated execution contract
-- multiple executor slices have non-overlapping write scopes
-- implementation, tests, and docs are assigned by scope before execution
-- runtime-run, runtime-result, runtime-summary, and autonomy metrics artifacts validate
+- executor slices have non-overlapping write scopes
+- implementation, tests, docs, templates, schemas, and evidence are assigned by scope before execution
+- runtime execution artifacts validate
 - ChatGPT/Codex audit verifies spec compliance and security standards
 - GitHub CI, security gate, review gate, audit packet validation, and ChatGPT/Codex audit pass before merge
 - no secrets, production configuration, billing, auth security, database changes, CI/CD weakening, or deployment automation are involved
+
+### 19. V5 Live Parallel Antigravity Pilot
+
+Goal:
+
+Run the first live parallel Antigravity pilot from Standard Loop v1 with one small product behavior change and multiple bounded Claude Code executor sessions.
+
+Status:
+
+Planned after Standard Loop v1 merges.
+
+Acceptance:
+
+- Standard Loop v1 is merged and `standard-loop-status` reports `ok: true`
+- the pilot has a dedicated execution contract and scope manifest
+- every live executor has a generated packet, runtime launch plan, runtime execution evidence, runtime result, and runtime summary
+- executor write scopes do not overlap
+- coordinator aggregation waits for every executor summary to be `ready_for_policy_gates`
+- GitHub CI, security gate, review gate, audit packet validation, and ChatGPT/Codex audit pass before integration
+- live execution remains blocked from secrets, production configuration, billing, auth security, database changes, dependency installation unless explicitly authorized, CI/CD weakening, and deployment automation

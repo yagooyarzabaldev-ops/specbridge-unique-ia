@@ -911,3 +911,77 @@ Local validations pass for executor packets, runtime launches, runtime runs, run
 ### AC-215
 
 The serious autonomous multi-executor test loop does not add product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, change database schema, touch production, access protected credentials, modify auth or billing surfaces, weaken CI/CD security, or deploy anything.
+
+## Standard Loop V1 Acceptance Criteria
+
+### AC-216
+
+docs/specbridge-standard-loop-v1.md exists and defines the canonical path from ChatGPT/Codex goal to contract, scope, executor packet, runtime launch, controlled execution, evidence, audit, GitHub CI, review gate, security gate, and merge.
+
+### AC-217
+
+docs/specbridge-standard-loop-feature-pilot.md exists and records `standard-loop-status` as the first real Standard Loop v1 feature pilot.
+
+### AC-218
+
+docs/specbridge-standard-templates.md exists and records the standard template set.
+
+### AC-219
+
+docs/specbridge-ci-authority-standard.md exists and defines GitHub CI, security gate, review gate, and CI authority without modifying `.github/workflows/**`.
+
+### AC-220
+
+docs/specbridge-v5-live-parallel-pilot-boundary.md exists and defines the next live parallel Antigravity pilot boundary.
+
+### AC-221
+
+templates/specbridge includes execution contract, scope manifest, executor handoff, runtime launch, final report, audit packet, and ChatGPT audit templates.
+
+### AC-222
+
+scripts/validate-standard-templates.ps1 exists and validates the standard template set.
+
+### AC-223
+
+scripts/validate-standard-ci-authority.ps1 exists and validates CI authority documentation and required existing workflow presence without authorizing workflow security control changes.
+
+### AC-224
+
+scripts/specbridge.ps1 supports `standard-loop-status`.
+
+### AC-225
+
+`standard-loop-status` reports template, schema, validator, existing CI workflow, latest artifact, missing path, and CI security boundary evidence.
+
+### AC-226
+
+scripts/specbridge.ps1 supports `execute-runtime-launch`.
+
+### AC-227
+
+`execute-runtime-launch -DryRun` writes one `.specbridge/runtime-executions/*.runtime-execution.json` artifact without launching Claude Code, requiring network, touching secrets, touching production, installing dependencies, or deploying.
+
+### AC-228
+
+scripts/validate-runtime-executions.ps1 exists and validates runtime execution artifacts, including launch references, tool restrictions, timeout bounds, stream evidence, execution policy, and launch field consistency.
+
+### AC-229
+
+.specbridge/executor-packets/issue-073-standard-loop-v1-standard-feature.executor-packet.json, .specbridge/runtime-launches/issue-073-standard-feature.runtime-launch.json, and .specbridge/runtime-executions/issue-073-standard-feature.runtime-execution.json exist and validate.
+
+### AC-230
+
+.specbridge/schemas includes schemas for executor packets, runtime launches, runtime runs, runtime results, runtime summaries, autonomy metrics, and runtime executions.
+
+### AC-231
+
+scripts/specbridge.ps1 `validate -Profile standard` and scripts/specbridge-smoke.ps1 include standard templates, CI authority, and runtime execution validation.
+
+### AC-232
+
+scripts/test-specbridge-cli.ps1 covers `standard-loop-status`, `execute-runtime-launch -DryRun`, and live execution rejection without `-Force`.
+
+### AC-233
+
+scripts/test-specbridge-negative-validations.ps1 covers invalid runtime execution artifacts, invalid standard templates, and missing CI authority workflow evidence.

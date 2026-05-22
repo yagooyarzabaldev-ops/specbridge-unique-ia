@@ -1,0 +1,28 @@
+{
+  "task_id": "issue-073-standard-loop-v1",
+  "slices": [
+    {
+      "id": "standard-feature",
+      "role": "runtime_executor",
+      "goal": "Use Standard Loop v1 evidence to validate the small standard-loop-status CLI feature and runner dry-run boundary.",
+      "contract_path": ".specbridge/contracts/issue-073-standard-loop-v1.execution.md",
+      "final_report_path": ".specbridge/reports/issue-073-standard-loop-v1.final-report.json",
+      "exclusive_write": [
+        ".specbridge/runtime-executions/issue-073-standard-feature.runtime-execution.json"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".specbridge/policy.yaml",
+        ".specbridge/contracts/issue-073-standard-loop-v1.execution.md",
+        "docs/specbridge-standard-loop-v1.md"
+      ],
+      "required_validations": [
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-executions.ps1",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1"
+      ]
+    }
+  ]
+}

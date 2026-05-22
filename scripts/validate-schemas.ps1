@@ -6,10 +6,17 @@ $failed = $false
 
 $requiredSchemas = @(
   ".specbridge/schemas/audit-packet.schema.json",
+  ".specbridge/schemas/autonomy-metrics.schema.json",
   ".specbridge/schemas/chatgpt-audit.schema.json",
   ".specbridge/schemas/claude-review-output.schema.json",
   ".specbridge/schemas/codex-review-output.schema.json",
-  ".specbridge/schemas/final-report.schema.json"
+  ".specbridge/schemas/executor-packet.schema.json",
+  ".specbridge/schemas/final-report.schema.json",
+  ".specbridge/schemas/runtime-execution.schema.json",
+  ".specbridge/schemas/runtime-launch.schema.json",
+  ".specbridge/schemas/runtime-result.schema.json",
+  ".specbridge/schemas/runtime-run.schema.json",
+  ".specbridge/schemas/runtime-summary.schema.json"
 )
 
 foreach ($schema in $requiredSchemas) {

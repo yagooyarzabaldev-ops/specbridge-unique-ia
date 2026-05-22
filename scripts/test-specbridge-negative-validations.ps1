@@ -694,6 +694,80 @@ This contract intentionally omits the Goal section.
     -ExpectedPattern "max_budget_usd must be greater than 0 and no more than 10"
 
   Invoke-ExpectedFailure `
+    -Name "runtime-execution-missing-write-tool" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/runtime-executions" -Recurse -Force -ErrorAction SilentlyContinue
+      New-Item -ItemType Directory -Force -Path ".specbridge/runtime-executions" | Out-Null
+
+      $execution = [ordered]@{
+        schema_version = "1"
+        execution_id = "runtime-execution-missing-write-tool"
+        generated_by = "specbridge-tests"
+        runtime_launch_path = ".specbridge/runtime-launches/issue-069-fresh-executor-source-run.runtime-launch.json"
+        launch_id = "issue-069-fresh-executor-source-run-claude-source-runtime-launch"
+        task_id = "issue-069-fresh-executor-source-run"
+        packet_id = "issue-069-fresh-executor-source-run-claude-source"
+        slice_id = "claude-source"
+        branch_name = "claude/issue-069-fresh-executor-source-run-claude-source"
+        dry_run = $true
+        timeout_seconds = 30
+        allowed_tools = @("Read")
+        permission_mode = "acceptEdits"
+        max_budget_usd = "0.25"
+        command_summary = "claude -p <bounded prompt>"
+        prompt_sections = @("Fixture prompt section.")
+        execution_status = "dry_run"
+        exit_code = $null
+        timed_out = $false
+        stdout = [ordered]@{
+          captured = $false
+          length = 0
+          line_count = 0
+          sha256 = $null
+        }
+        stderr = [ordered]@{
+          captured = $false
+          length = 0
+          line_count = 0
+          sha256 = $null
+        }
+        policy_result = "Dry run fixture."
+        execution_policy = [ordered]@{
+          launches_claude = $false
+          launches_antigravity = $false
+          executes_shell = $false
+          requires_network = $false
+          touches_secrets = $false
+          touches_production = $false
+          installs_dependencies = $false
+          deploys = $false
+        }
+        source_files = @(".specbridge/runtime-launches/issue-069-fresh-executor-source-run.runtime-launch.json")
+      }
+
+      Set-Content -LiteralPath ".specbridge/runtime-executions/runtime-execution-missing-write-tool.runtime-execution.json" -Value ($execution | ConvertTo-Json -Depth 8) -NoNewline
+    } `
+    -Command "./scripts/validate-runtime-executions.ps1" `
+    -ExpectedPattern "allowed_tools must include Read and Write"
+
+  Invoke-ExpectedFailure `
+    -Name "standard-template-missing-task-placeholder" `
+    -Arrange {
+      Set-Content -LiteralPath "templates/specbridge/final-report.template.json" -Value "{}" -NoNewline
+    } `
+    -Command "./scripts/validate-standard-templates.ps1" `
+    -ExpectedPattern "standard template must include \{\{TASK_ID\}\} placeholder"
+
+  Invoke-ExpectedFailure `
+    -Name "standard-ci-authority-missing-workflow" `
+    -RequiresGit $true `
+    -Arrange {
+      Remove-Item -LiteralPath ".github/workflows/specbridge-review-gate.yml" -Force
+    } `
+    -Command "./scripts/validate-standard-ci-authority.ps1" `
+    -ExpectedPattern "missing required existing workflow"
+
+  Invoke-ExpectedFailure `
     -Name "runtime-result-evidence-outside-launch-scope" `
     -Arrange {
       Remove-Item -LiteralPath ".specbridge/runtime-results" -Recurse -Force -ErrorAction SilentlyContinue

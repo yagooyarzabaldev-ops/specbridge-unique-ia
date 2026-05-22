@@ -1,0 +1,15 @@
+{
+  "summary": "{{TASK_ID}} completed with repository evidence.",
+  "changed_files": [
+    "{{CHANGED_FILE}}"
+  ],
+  "validations": [
+    "{{VALIDATION_COMMAND}}: passed"
+  ],
+  "policy_result": "Passed. The task stayed inside declared scope.",
+  "risk_result": "{{RISK_RESULT}}",
+  "unresolved_risks": [],
+  "merge_status": "Pending pull request and GitHub CI.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_pr_ci"
+}

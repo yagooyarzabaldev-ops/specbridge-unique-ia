@@ -1,0 +1,26 @@
+{
+  "task_id": "{{TASK_ID}}",
+  "slices": [
+    {
+      "id": "{{SLICE_ID}}",
+      "role": "{{SLICE_ROLE}}",
+      "goal": "{{SLICE_GOAL}}",
+      "contract_path": ".specbridge/contracts/{{TASK_ID}}.execution.md",
+      "final_report_path": ".specbridge/reports/{{TASK_ID}}.final-report.json",
+      "exclusive_write": [
+        "{{EXCLUSIVE_WRITE_PATH}}"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".specbridge/policy.yaml",
+        ".specbridge/contracts/{{TASK_ID}}.execution.md"
+      ],
+      "required_validations": [
+        "{{REQUIRED_VALIDATION}}"
+      ]
+    }
+  ]
+}

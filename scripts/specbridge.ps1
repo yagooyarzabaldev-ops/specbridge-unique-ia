@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -28,12 +28,14 @@ param(
   [string] $PermissionMode = "acceptEdits",
   [string] $MaxBudgetUsd = "0.25",
   [int] $RuntimeExitCode = 0,
+  [int] $TimeoutSeconds = 300,
   [string[]] $WrittenFile = @(),
   [ValidateSet("simulation", "github")]
   [string] $EvidenceMode = "simulation",
   [string] $RepositoryUrl = "https://github.com/yagooyarzabaldev-ops/specbridge",
   [string] $BaseBranch = "main",
   [switch] $IncludeLatestArtifacts,
+  [switch] $DryRun,
   [switch] $Force
 )
 
@@ -206,6 +208,9 @@ function Invoke-ValidationProfile {
     "./scripts/validate-runtime-results.ps1",
     "./scripts/validate-runtime-summaries.ps1",
     "./scripts/validate-autonomy-metrics.ps1",
+    "./scripts/validate-runtime-executions.ps1",
+    "./scripts/validate-standard-templates.ps1",
+    "./scripts/validate-standard-ci-authority.ps1",
     "./scripts/validate-branch-orchestrations.ps1",
     "./scripts/validate-security-gates.ps1",
     "./scripts/validate-pr-review-reports.ps1",
@@ -346,6 +351,107 @@ function Invoke-StatusCommand {
   }
 
   Write-CliJson $status
+  exit 0
+}
+
+function Get-StandardLoopPathStatus {
+  param(
+    [string[]] $Paths
+  )
+
+  $items = @()
+
+  foreach ($path in $Paths) {
+    $normalizedPath = Normalize-RepoPath -Path $path -FieldName "standard_loop_path"
+    $items += [ordered]@{
+      path = $normalizedPath
+      exists = (Test-Path -LiteralPath $normalizedPath)
+    }
+  }
+
+  return @($items)
+}
+
+function Invoke-StandardLoopStatusCommand {
+  $templatePaths = @(
+    "templates/specbridge/execution-contract.template.md",
+    "templates/specbridge/scope-manifest.template.json",
+    "templates/specbridge/executor-handoff.template.json",
+    "templates/specbridge/runtime-launch.template.json",
+    "templates/specbridge/final-report.template.json",
+    "templates/specbridge/audit-packet.template.json",
+    "templates/specbridge/chatgpt-audit.template.json"
+  )
+
+  $schemaPaths = @(
+    ".specbridge/schemas/executor-packet.schema.json",
+    ".specbridge/schemas/runtime-launch.schema.json",
+    ".specbridge/schemas/runtime-run.schema.json",
+    ".specbridge/schemas/runtime-result.schema.json",
+    ".specbridge/schemas/runtime-summary.schema.json",
+    ".specbridge/schemas/autonomy-metrics.schema.json",
+    ".specbridge/schemas/runtime-execution.schema.json"
+  )
+
+  $validatorPaths = @(
+    "scripts/validate-standard-templates.ps1",
+    "scripts/validate-standard-ci-authority.ps1",
+    "scripts/validate-runtime-executions.ps1"
+  )
+
+  $workflowPaths = @(
+    ".github/workflows/foundation-validation.yml",
+    ".github/workflows/specbridge-review-gate.yml",
+    ".github/workflows/specbridge-pr-review-report.yml",
+    ".github/workflows/claude-review-non-blocking.yml"
+  )
+
+  $templateStatus = Get-StandardLoopPathStatus -Paths $templatePaths
+  $schemaStatus = Get-StandardLoopPathStatus -Paths $schemaPaths
+  $validatorStatus = Get-StandardLoopPathStatus -Paths $validatorPaths
+  $workflowStatus = Get-StandardLoopPathStatus -Paths $workflowPaths
+
+  $allRequired = @($templateStatus + $schemaStatus + $validatorStatus + $workflowStatus)
+  $missing = @($allRequired | Where-Object { -not $_.exists } | ForEach-Object { $_.path })
+
+  $status = [ordered]@{
+    command = "standard-loop-status"
+    ok = ($missing.Count -eq 0)
+    standard = "SpecBridge Standard Loop v1"
+    branch = Get-GitValue -Arguments @("branch", "--show-current") -Fallback "unknown"
+    head = Get-GitValue -Arguments @("rev-parse", "--short", "HEAD") -Fallback "unknown"
+    template_count = @($templateStatus | Where-Object { $_.exists }).Count
+    schema_count = @($schemaStatus | Where-Object { $_.exists }).Count
+    validator_count = @($validatorStatus | Where-Object { $_.exists }).Count
+    ci_workflow_count = @($workflowStatus | Where-Object { $_.exists }).Count
+    latest_artifacts = [ordered]@{
+      contract = Get-LatestArtifactPath -Path ".specbridge/contracts" -Filter "*.execution.md"
+      scope = Get-LatestArtifactPath -Path ".specbridge/scopes" -Filter "*.scope.json"
+      runtime_launch = Get-LatestArtifactPath -Path ".specbridge/runtime-launches" -Filter "*.runtime-launch.json"
+      runtime_run = Get-LatestArtifactPath -Path ".specbridge/runtime-runs" -Filter "*.runtime-run.json"
+      runtime_result = Get-LatestArtifactPath -Path ".specbridge/runtime-results" -Filter "*.runtime-result.json"
+      runtime_summary = Get-LatestArtifactPath -Path ".specbridge/runtime-summaries" -Filter "*.runtime-summary.json"
+      runtime_execution = Get-LatestArtifactPath -Path ".specbridge/runtime-executions" -Filter "*.runtime-execution.json"
+      autonomy_metrics = Get-LatestArtifactPath -Path ".specbridge/metrics" -Filter "*.autonomy-metrics.json"
+      audit_packet = Get-LatestArtifactPath -Path ".specbridge/audit-packets" -Filter "*.audit-packet.json"
+      chatgpt_audit = Get-LatestArtifactPath -Path ".specbridge/audits" -Filter "*.chatgpt-audit.json"
+    }
+    required_paths = [ordered]@{
+      templates = @($templateStatus)
+      schemas = @($schemaStatus)
+      validators = @($validatorStatus)
+      ci_workflows = @($workflowStatus)
+    }
+    missing_required_paths = @($missing)
+    ci_security_boundary = "workflow files are read-only in this standardization package"
+  }
+
+  Write-CliJson $status -Depth 10
+
+  if ($missing.Count -gt 0) {
+    exit 1
+  }
+
   exit 0
 }
 
@@ -1802,6 +1908,287 @@ function Invoke-SummarizeAutonomyMetricsCommand {
   exit 0
 }
 
+function Get-TextSha256 {
+  param(
+    [AllowNull()]
+    [string] $Text
+  )
+
+  if ($null -eq $Text) {
+    return $null
+  }
+
+  $sha = [System.Security.Cryptography.SHA256]::Create()
+  $bytes = [System.Text.Encoding]::UTF8.GetBytes($Text)
+  $hashBytes = $sha.ComputeHash($bytes)
+  return ([System.BitConverter]::ToString($hashBytes)).Replace("-", "").ToLowerInvariant()
+}
+
+function Get-TextLineCount {
+  param(
+    [AllowNull()]
+    [string] $Text
+  )
+
+  if ([string]::IsNullOrEmpty($Text)) {
+    return 0
+  }
+
+  return @($Text -split "\r?\n").Count
+}
+
+function New-RuntimeExecutionPrompt {
+  param(
+    [object] $Launch
+  )
+
+  $lines = @()
+  $lines += "SpecBridge controlled runtime execution."
+  $lines += ""
+  $lines += "Task ID: $($Launch.task_id)"
+  $lines += "Packet ID: $($Launch.packet_id)"
+  $lines += "Slice ID: $($Launch.slice_id)"
+  $lines += "Goal: $($Launch.goal)"
+  $lines += ""
+  $lines += "Execution contract: $($Launch.execution_contract_path)"
+  $lines += "Final report path: $($Launch.final_report_path)"
+  $lines += ""
+  $lines += "Exclusive write paths:"
+  foreach ($path in @($Launch.exclusive_write)) {
+    $lines += "- $path"
+  }
+  $lines += ""
+  $lines += "Read-only context paths:"
+  foreach ($path in @($Launch.read_only)) {
+    $lines += "- $path"
+  }
+  $lines += ""
+  $lines += "Required prompt sections:"
+  foreach ($section in @($Launch.prompt_sections)) {
+    $lines += "- $section"
+  }
+  $lines += ""
+  $lines += "Stop conditions:"
+  foreach ($condition in @($Launch.stop_conditions)) {
+    $lines += "- $condition"
+  }
+  $lines += ""
+  $lines += "Report evidence, not confidence. Stop on any policy or scope conflict."
+
+  return ($lines -join "`n")
+}
+
+function Invoke-ExecuteRuntimeLaunchCommand {
+  $launchPath = Normalize-RepoPath -Path $InputPath -FieldName "InputPath"
+  $output = Assert-OutputPath `
+    -Path $OutputPath `
+    -Pattern "^\.specbridge/runtime-executions/.+\.runtime-execution\.json$" `
+    -Description "a .specbridge/runtime-executions/*.runtime-execution.json runtime execution artifact"
+
+  if ($launchPath -notmatch "^\.specbridge/runtime-launches/.+\.runtime-launch\.json$") {
+    Fail "InputPath must be a .specbridge/runtime-launches/*.runtime-launch.json file: $launchPath"
+  }
+
+  if (-not (Test-Path -LiteralPath $launchPath -PathType Leaf)) {
+    Fail "InputPath does not exist: $launchPath"
+  }
+
+  if ($TimeoutSeconds -lt 30 -or $TimeoutSeconds -gt 3600) {
+    Fail "TimeoutSeconds must be between 30 and 3600"
+  }
+
+  $launch = Get-JsonObjectFromFile -Path $launchPath -Description "runtime launch"
+  $context = "runtime launch $launchPath"
+
+  foreach ($field in @("launch_id", "task_id", "packet_id", "slice_id", "branch_name", "goal", "exclusive_write", "read_only", "allowed_tools", "permission_mode", "max_budget_usd", "prompt_sections", "stop_conditions", "launch_status")) {
+    if (-not $launch.PSObject.Properties.Name.Contains($field)) {
+      Fail "$context must include $field"
+    }
+  }
+
+  if ($launch.launch_status -ne "ready_for_operator_launch") {
+    Fail "runtime launch status must be ready_for_operator_launch: $launchPath"
+  }
+
+  $allowedTools = @($launch.allowed_tools | ForEach-Object { $_.ToString().Trim() } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+
+  foreach ($tool in $allowedTools) {
+    if (@("Read", "Write", "Edit") -notcontains $tool) {
+      Fail "runtime launch contains an unapproved tool for controlled execution: $tool"
+    }
+  }
+
+  if ($allowedTools -notcontains "Read" -or $allowedTools -notcontains "Write") {
+    Fail "runtime launch must include Read and Write tools for controlled execution"
+  }
+
+  if (-not $DryRun -and -not $Force) {
+    Fail "Live execute-runtime-launch requires -Force; use -DryRun for planning evidence"
+  }
+
+  $prompt = New-RuntimeExecutionPrompt -Launch $launch
+  $toolCsv = ($allowedTools -join ",")
+  $commandParts = @(
+    "claude",
+    "-p",
+    "--no-session-persistence",
+    "--max-budget-usd",
+    $launch.max_budget_usd,
+    "--permission-mode",
+    $launch.permission_mode,
+    "--tools",
+    $toolCsv,
+    "--allowedTools",
+    $toolCsv,
+    "--input-format",
+    "text"
+  )
+
+  $executionStatus = "dry_run"
+  $exitCode = $null
+  $timedOut = $false
+  $stdoutLength = 0
+  $stderrLength = 0
+  $stdoutLineCount = 0
+  $stderrLineCount = 0
+  $stdoutSha256 = $null
+  $stderrSha256 = $null
+
+  if (-not $DryRun) {
+    $claudeCommand = Get-Command claude -ErrorAction SilentlyContinue
+
+    if ($null -eq $claudeCommand) {
+      Fail "Claude Code CLI is not available on PATH"
+    }
+
+    $psi = New-Object System.Diagnostics.ProcessStartInfo
+    $psi.FileName = "claude"
+    $psi.UseShellExecute = $false
+    $psi.RedirectStandardInput = $true
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.CreateNoWindow = $true
+
+    $arguments = @(
+      "-p",
+      "--no-session-persistence",
+      "--max-budget-usd",
+      $launch.max_budget_usd,
+      "--permission-mode",
+      $launch.permission_mode,
+      "--tools",
+      $toolCsv,
+      "--allowedTools",
+      $toolCsv,
+      "--input-format",
+      "text"
+    )
+
+    $psi.Arguments = (($arguments | ForEach-Object { '"' + ($_.ToString().Replace('"', '\"')) + '"' }) -join " ")
+    $process = [System.Diagnostics.Process]::Start($psi)
+    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+    $stderrTask = $process.StandardError.ReadToEndAsync()
+    $process.StandardInput.Write($prompt)
+    $process.StandardInput.Close()
+
+    if (-not $process.WaitForExit($TimeoutSeconds * 1000)) {
+      $timedOut = $true
+      $executionStatus = "timed_out"
+      $process.Kill()
+      $process.WaitForExit()
+    }
+
+    $stdout = $stdoutTask.Result
+    $stderr = $stderrTask.Result
+    $exitCode = $process.ExitCode
+    $stdoutLength = $stdout.Length
+    $stderrLength = $stderr.Length
+    $stdoutLineCount = Get-TextLineCount -Text $stdout
+    $stderrLineCount = Get-TextLineCount -Text $stderr
+    $stdoutSha256 = Get-TextSha256 -Text $stdout
+    $stderrSha256 = Get-TextSha256 -Text $stderr
+
+    if (-not $timedOut) {
+      if ($exitCode -eq 0) {
+        $executionStatus = "succeeded"
+      }
+      else {
+        $executionStatus = "failed"
+      }
+    }
+  }
+
+  $safeExecutionId = Convert-ToSafeName -Value ($launch.launch_id + "-runtime-execution") -FieldName "execution_id"
+  $policyResult = "Dry run only. Claude Code was not launched."
+
+  if (-not $DryRun) {
+    $policyResult = "Controlled Claude Code launch executed with bounded tools, budget, timeout, and repository-scoped launch plan."
+  }
+
+  $execution = [ordered]@{
+    schema_version = "1"
+    execution_id = $safeExecutionId
+    generated_by = "specbridge-cli"
+    runtime_launch_path = $launchPath
+    launch_id = $launch.launch_id
+    task_id = $launch.task_id
+    packet_id = $launch.packet_id
+    slice_id = $launch.slice_id
+    branch_name = $launch.branch_name
+    dry_run = [bool] $DryRun
+    timeout_seconds = $TimeoutSeconds
+    allowed_tools = @($allowedTools)
+    permission_mode = $launch.permission_mode
+    max_budget_usd = $launch.max_budget_usd
+    command_summary = ($commandParts -join " ")
+    prompt_sections = @($launch.prompt_sections)
+    execution_status = $executionStatus
+    exit_code = $exitCode
+    timed_out = $timedOut
+    stdout = [ordered]@{
+      captured = (-not $DryRun)
+      length = $stdoutLength
+      line_count = $stdoutLineCount
+      sha256 = $stdoutSha256
+    }
+    stderr = [ordered]@{
+      captured = (-not $DryRun)
+      length = $stderrLength
+      line_count = $stderrLineCount
+      sha256 = $stderrSha256
+    }
+    policy_result = $policyResult
+    execution_policy = [ordered]@{
+      launches_claude = (-not [bool] $DryRun)
+      launches_antigravity = $false
+      executes_shell = $false
+      requires_network = (-not [bool] $DryRun)
+      touches_secrets = $false
+      touches_production = $false
+      installs_dependencies = $false
+      deploys = $false
+    }
+    source_files = @($launchPath)
+  }
+
+  Write-Utf8JsonFile -Path $output -Value $execution -Depth 10
+
+  Write-CliJson ([ordered]@{
+    command = "execute-runtime-launch"
+    ok = ($executionStatus -in @("dry_run", "succeeded"))
+    output_path = $output
+    runtime_launch_path = $launchPath
+    execution_status = $executionStatus
+    dry_run = [bool] $DryRun
+  })
+
+  if ($executionStatus -notin @("dry_run", "succeeded")) {
+    exit 1
+  }
+
+  exit 0
+}
+
 function Get-ExecutorPacketFiles {
   param(
     [string] $Path
@@ -2271,10 +2658,12 @@ switch ($Command) {
   "decompose-task" { Invoke-DecomposeTaskCommand }
   "prepare-executors" { Invoke-PrepareExecutorsCommand }
   "prepare-runtime-launch" { Invoke-PrepareRuntimeLaunchCommand }
+  "execute-runtime-launch" { Invoke-ExecuteRuntimeLaunchCommand }
   "run-runtime-launch" { Invoke-RunRuntimeLaunchCommand }
   "record-runtime-result" { Invoke-RecordRuntimeResultCommand }
   "summarize-runtime" { Invoke-SummarizeRuntimeCommand }
   "summarize-autonomy-metrics" { Invoke-SummarizeAutonomyMetricsCommand }
+  "standard-loop-status" { Invoke-StandardLoopStatusCommand }
   "plan-executor-branches" { Invoke-PlanExecutorBranchesCommand }
   "record-github-evidence" { Invoke-RecordGithubEvidenceCommand }
   "coordinate-executors" { Invoke-CoordinateExecutorsCommand }
