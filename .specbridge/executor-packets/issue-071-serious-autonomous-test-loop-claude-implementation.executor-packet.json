@@ -1,0 +1,43 @@
+{
+    "schema_version":  "1",
+    "packet_id":  "issue-071-serious-autonomous-test-loop-claude-implementation",
+    "task_id":  "issue-071-serious-autonomous-test-loop",
+    "slice_id":  "claude-implementation",
+    "agent_role":  "runtime_executor",
+    "goal":  "Create the serious autonomous test loop operating document and executor output evidence inside the assigned scope.",
+    "launch_mode":  "manual_antigravity",
+    "branch_name":  "claude/issue-071-serious-autonomous-test-loop-claude-implementation",
+    "execution_contract_path":  ".specbridge/contracts/issue-071-serious-autonomous-test-loop.execution.md",
+    "final_report_path":  ".specbridge/reports/issue-071-serious-autonomous-test-loop.final-report.json",
+    "exclusive_write":  [
+                            "docs/specbridge-serious-autonomous-test-loop.md",
+                            ".specbridge/runtime-evidence/issue-071-claude-implementation.executor-output.md"
+                        ],
+    "read_only":  [
+                      "README.md",
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      "CLAUDE.md",
+                      ".specbridge/policy.yaml",
+                      ".specbridge/contracts/issue-071-serious-autonomous-test-loop.execution.md",
+                      "docs/specbridge-autonomy-backlog.md",
+                      "docs/specbridge-fresh-executor-source-run.md"
+                  ],
+    "required_validations":  [
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1"
+                             ],
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "status":  "ready_for_handoff",
+    "source_files":  [
+                         ".specbridge/executor-handoffs/issue-071-serious-autonomous-test-loop.input.json",
+                         ".specbridge/contracts/issue-071-serious-autonomous-test-loop.execution.md"
+                     ],
+    "generated_by":  "specbridge-cli"
+}

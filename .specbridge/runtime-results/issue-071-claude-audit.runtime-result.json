@@ -1,0 +1,56 @@
+{
+    "schema_version":  "1",
+    "result_id":  "issue-071-serious-autonomous-test-loop-claude-audit-runtime-launch-runtime-result",
+    "generated_by":  "specbridge-cli",
+    "source_runtime_launch_path":  ".specbridge/runtime-launches/issue-071-claude-audit.runtime-launch.json",
+    "launch_id":  "issue-071-serious-autonomous-test-loop-claude-audit-runtime-launch",
+    "task_id":  "issue-071-serious-autonomous-test-loop",
+    "packet_id":  "issue-071-serious-autonomous-test-loop-claude-audit",
+    "slice_id":  "claude-audit",
+    "branch_name":  "claude/issue-071-serious-autonomous-test-loop-claude-audit",
+    "executor_evidence_path":  ".specbridge/runtime-evidence/issue-071-claude-audit.executor-output.md",
+    "exit_code":  0,
+    "files_written":  [
+                          ".specbridge/runtime-evidence/issue-071-claude-audit.executor-output.md",
+                          "docs/specbridge-autonomy-metrics.md"
+                      ],
+    "validation_results":  [
+                               {
+                                   "command":  "Claude Code bounded audit executor invocation",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "Executor wrote only declared exclusive_write files",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "Runtime run evidence captured",
+                                   "result":  "passed"
+                               }
+                           ],
+    "policy_result":  "Passed. Audit slice stayed inside declared scope; no protected resource, production, billing, auth, dependency, CI/CD security, database, or deployment boundary was touched.",
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "completion_status":  "complete",
+    "runtime_status":  "succeeded",
+    "result_status":  "recorded",
+    "execution_policy":  {
+                             "launches_claude":  false,
+                             "launches_antigravity":  false,
+                             "executes_shell":  false,
+                             "requires_network":  false,
+                             "touches_secrets":  false,
+                             "touches_production":  false,
+                             "installs_dependencies":  false,
+                             "deploys":  false
+                         },
+    "source_files":  [
+                         ".specbridge/runtime-launches/issue-071-claude-audit.runtime-launch.json",
+                         ".specbridge/runtime-evidence/issue-071-claude-audit.executor-output.md"
+                     ]
+}

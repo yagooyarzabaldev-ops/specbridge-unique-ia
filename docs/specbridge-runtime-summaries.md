@@ -88,6 +88,8 @@ Current runtime summary evidence includes:
 ```text
 .specbridge/runtime-summaries/issue-067-source-backed-runtime-slice.runtime-summary.json
 .specbridge/runtime-summaries/issue-069-fresh-executor-source-run.runtime-summary.json
+.specbridge/runtime-summaries/issue-071-claude-implementation.runtime-summary.json
+.specbridge/runtime-summaries/issue-071-claude-audit.runtime-summary.json
 ```
 
 The issue 069 summary links:
@@ -97,6 +99,8 @@ The issue 069 summary links:
 .specbridge/runtime-results/issue-069-fresh-executor-source-run.runtime-result.json
 ```
 
+The issue 071 summaries link both bounded executor slices to `ready_for_policy_gates` evidence before autonomy metrics and ChatGPT/Codex audit.
+
 ## Next Step
 
-The next runtime expansion should create multiple fresh executor outputs from one governed decomposition, then record and summarize every result before coordinator integration.
+The next runtime expansion should use the multi-executor chain for a small real feature implementation and keep coordinator integration blocked until every summary is ready for policy gates.

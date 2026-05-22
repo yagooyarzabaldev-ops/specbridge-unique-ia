@@ -98,6 +98,8 @@ SpecBridge currently has three governed status layers:
 - Runtime result recording: implemented as a deterministic CLI command that records bounded executor evidence, exit code, written files, validation results, policy result, stop conditions, and completion status from a declared runtime launch plan.
 - Runtime summaries: implemented as the first source-backed runtime CLI slice that links a runtime launch plan and runtime result into a validated summary with merge readiness and blockers.
 - Fresh executor source run: implemented as a bounded non-interactive Claude Code run that creates fresh executor output, records the runtime result, summarizes it, and preserves coordinator evidence for audit.
+- Runtime-run evidence capture: implemented as a deterministic CLI command that records bounded executor launch evidence, written files, tool restrictions, runtime status, and policy result before runtime results and summaries are produced.
+- Serious autonomous multi-executor test loop: implemented as a two-slice Claude Code runtime proof from one governed goal, with non-overlapping executor write scopes, runtime launch plans, runtime-run artifacts, runtime results, runtime summaries, autonomy metrics, hardened ChatGPT/Codex audit validation, and policy-gated completion evidence.
 - Default automation: Full Autopilot is enabled for autonomous merge after required gates pass; production deployment remains disabled.
 
 See:
@@ -114,5 +116,8 @@ See:
 - `docs/specbridge-runtime-launch-plans.md`
 - `docs/specbridge-runtime-results.md`
 - `docs/specbridge-runtime-summaries.md`
+- `docs/specbridge-runtime-runner.md`
 - `docs/specbridge-fresh-executor-source-run.md`
+- `docs/specbridge-serious-autonomous-test-loop.md`
+- `docs/specbridge-autonomy-metrics.md`
 - `docs/specbridge-autonomy-backlog.md`

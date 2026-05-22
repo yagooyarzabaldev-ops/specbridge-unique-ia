@@ -1,0 +1,43 @@
+{
+    "schema_version":  "1",
+    "metrics_id":  "issue-071-serious-autonomous-test-loop-autonomy-metrics",
+    "generated_by":  "specbridge-cli",
+    "task_filter":  "issue-071-serious-autonomous-test-loop",
+    "summary_count":  2,
+    "ready_count":  2,
+    "blocked_count":  0,
+    "executor_count":  2,
+    "validation_totals":  {
+                              "total":  6,
+                              "passed":  6,
+                              "failed":  0,
+                              "other":  0
+                          },
+    "runtime_status_counts":  {
+                                  "succeeded":  2
+                              },
+    "result_status_counts":  {
+                                 "recorded":  2
+                             },
+    "completion_status_counts":  {
+                                     "complete":  2
+                                 },
+    "merge_readiness_counts":  {
+                                   "ready_for_policy_gates":  2
+                               },
+    "policy_gate_ready_rate":  1,
+    "source_summaries":  [
+                             ".specbridge/runtime-summaries/issue-071-claude-audit.runtime-summary.json",
+                             ".specbridge/runtime-summaries/issue-071-claude-implementation.runtime-summary.json"
+                         ],
+    "source_results":  [
+                           ".specbridge/runtime-results/issue-071-claude-audit.runtime-result.json",
+                           ".specbridge/runtime-results/issue-071-claude-implementation.runtime-result.json"
+                       ],
+    "source_files":  [
+                         ".specbridge/runtime-results/issue-071-claude-audit.runtime-result.json",
+                         ".specbridge/runtime-results/issue-071-claude-implementation.runtime-result.json",
+                         ".specbridge/runtime-summaries/issue-071-claude-audit.runtime-summary.json",
+                         ".specbridge/runtime-summaries/issue-071-claude-implementation.runtime-summary.json"
+                     ]
+}

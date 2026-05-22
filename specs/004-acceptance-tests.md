@@ -210,3 +210,21 @@ docs/specbridge-runtime-summaries.md exists; scripts/specbridge.ps1 supports `su
 Pass condition:
 
 docs/specbridge-fresh-executor-source-run.md exists; issue 069 has a dedicated execution contract, scope manifest, executor handoff input, generated executor packet, runtime launch plan, Claude run evidence, executor output evidence, runtime result, runtime summary, final report, audit packet, and ChatGPT/Codex audit; Claude Code is invoked non-interactively with bounded Read/Write tools only; the executor writes only docs/specbridge-fresh-executor-source-run.md and .specbridge/runtime-evidence/issue-069-fresh-executor-source-run.executor-output.md; local validations pass; GitHub CI passes before merge; and the task does not add product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, touch production, access protected credentials, weaken CI/CD security, or deploy anything.
+
+### AT-033 - Runtime-run evidence exists
+
+Pass condition:
+
+docs/specbridge-runtime-runner.md exists; scripts/specbridge.ps1 supports `run-runtime-launch`; the command reads one runtime launch plan and one declared executor evidence file, then writes one declared `.specbridge/runtime-runs/*.runtime-run.json` artifact; scripts/validate-runtime-runs.ps1 validates runtime-run structure, written-file scope, tool restrictions, runner mode, and safety boundaries; standard validation and smoke validation include runtime-run validation; CLI tests cover success and out-of-scope evidence failure; negative validation tests cover invalid runtime-run artifacts; and the command does not launch Claude Code, launch Antigravity, call GitHub, install dependencies, touch secrets, touch production, or deploy.
+
+### AT-034 - Autonomy metrics exist
+
+Pass condition:
+
+docs/specbridge-autonomy-metrics.md exists; scripts/specbridge.ps1 supports `summarize-autonomy-metrics`; the command reads runtime summaries and runtime results, optionally filtered by task id, then writes one declared `.specbridge/metrics/*.autonomy-metrics.json` artifact; scripts/validate-autonomy-metrics.ps1 validates autonomy metrics counts, ready rate, validation totals, and source references; standard validation and smoke validation include autonomy metrics validation; CLI tests cover success and missing task failure; negative validation tests cover invalid autonomy metrics artifacts; and the command does not launch Claude Code, launch Antigravity, call GitHub, install dependencies, touch secrets, touch production, or deploy.
+
+### AT-035 - Serious autonomous multi-executor test loop exists
+
+Pass condition:
+
+docs/specbridge-serious-autonomous-test-loop.md exists; issue 071 has a dedicated execution contract, scope manifest, executor handoff input, two generated executor packets, two runtime launch plans, two Claude Code executor output evidence files, two runtime-run artifacts, two runtime-result artifacts, two runtime-summary artifacts, autonomy metrics, final report, audit packet, and ChatGPT/Codex audit; Claude Code is invoked non-interactively with bounded Read/Write tools for both slices; each executor writes only its declared exclusive scope; local validations pass; GitHub CI passes before merge; and the task does not add product runtime code, install dependencies, create an MCP server, create a GitHub App, add a hosted dashboard, touch production, access protected credentials, weaken CI/CD security, or deploy anything.

@@ -52,6 +52,8 @@ Already complete:
 - runtime result records generated from launch plans and declared executor evidence without executing Claude Code
 - runtime summaries generated from launch plans and runtime results as the first source-backed runtime CLI slice
 - controlled fresh executor source run with new bounded Claude Code output recorded through launch, result, summary, final report, audit, CI, and merge gates
+- runtime-run evidence capture generated from bounded executor launch plans and executor output evidence
+- serious autonomous multi-executor test loop with two Claude Code slices, non-overlapping scopes, runtime-run/result/summary evidence, autonomy metrics, hardened ChatGPT/Codex audit checks, final report, and merge gates
 
 ## Remaining Work
 
@@ -272,11 +274,11 @@ Acceptance:
 
 ## Current Next Task
 
-After Fresh Executor Source Run is merged, start a controlled multi-executor fresh source run.
+After the serious autonomous multi-executor test loop is merged, start a real feature pilot through the same loop.
 
 Reason:
 
-The repository now has launch plans, runtime results, runtime summaries, and one fresh executor output chain. The next product proof should run multiple bounded executor outputs in parallel under non-overlapping scopes before broader runtime automation.
+The repository now has launch plans, runtime-run evidence capture, runtime results, runtime summaries, autonomy metrics, and a two-slice Claude Code proof. The next product proof should use a small behavior change where ChatGPT/Codex defines the spec, Claude Code implements/tests/docs in bounded slices, and ChatGPT/Codex audits the result against the spec and security standards.
 
 ## Next Runtime Expansion
 
@@ -458,7 +460,7 @@ Run two or more bounded Claude Code executor slices from one governed goal, each
 
 Status:
 
-Planned.
+Implemented as issue 071. Two bounded Claude Code executor slices were launched from one governed goal with Read/Write-only tools, each wrote only its exclusive document and executor evidence files, and SpecBridge recorded runtime-run, runtime-result, runtime-summary, autonomy metrics, final report, audit packet, and ChatGPT/Codex audit evidence.
 
 Acceptance:
 
@@ -469,3 +471,23 @@ Acceptance:
 - coordinator aggregation waits for every executor runtime summary to be `ready_for_policy_gates`
 - ChatGPT/Codex audit checks every executor output against the shared spec and security standards
 - no secrets, production configuration, billing, auth security, dependency installation unless explicitly authorized, database changes, CI/CD weakening, or deployment automation are involved
+
+### 18. Real Feature Pilot Through Serious Loop
+
+Goal:
+
+Use the serious loop for a small behavior change where one executor implements, one executor tests or audits, and ChatGPT/Codex reviews the result against explicit acceptance criteria.
+
+Status:
+
+Planned.
+
+Acceptance:
+
+- one small feature has a dedicated execution contract
+- multiple executor slices have non-overlapping write scopes
+- implementation, tests, and docs are assigned by scope before execution
+- runtime-run, runtime-result, runtime-summary, and autonomy metrics artifacts validate
+- ChatGPT/Codex audit verifies spec compliance and security standards
+- GitHub CI, security gate, review gate, audit packet validation, and ChatGPT/Codex audit pass before merge
+- no secrets, production configuration, billing, auth security, database changes, CI/CD weakening, or deployment automation are involved

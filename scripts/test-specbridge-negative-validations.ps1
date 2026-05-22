@@ -224,9 +224,40 @@ function Write-ChatGptAuditFixtureFiles {
   New-Item -ItemType Directory -Force -Path (Split-Path -Parent $contractPath) | Out-Null
   New-Item -ItemType Directory -Force -Path (Split-Path -Parent $reportPath) | Out-Null
 
-  Set-Content -LiteralPath $auditPacketPath -Value "{}" -NoNewline
   Set-Content -LiteralPath $contractPath -Value "# ChatGPT Audit Fixture Contract" -NoNewline
   Set-Content -LiteralPath $reportPath -Value "{}" -NoNewline
+
+  $auditPacket = [ordered]@{
+    schema_version = "1"
+    task_id = "chatgpt-audit-fixture"
+    generated_by = "specbridge-tests"
+    execution_contract_path = $contractPath
+    changed_files = @("docs/chatgpt-audit-fixture.md")
+    diff_summary = @(
+      [ordered]@{
+        file = "docs/chatgpt-audit-fixture.md"
+        added_lines = 1
+        deleted_lines = 0
+      }
+    )
+    validation_commands = @("fixture validation")
+    validation_results = @(
+      [ordered]@{
+        command = "fixture validation"
+        result = "passed"
+      }
+    )
+    final_report_path = $reportPath
+    ci_status = "not_collected"
+    pr_review_report_path = $null
+    policy_result = "Passed in ChatGPT audit fixture."
+    unresolved_risks = @()
+    completion_status = "complete_pending_ci"
+    source_files = @($contractPath, $reportPath)
+    secret_omission = "Fixture omits raw content."
+  }
+
+  Set-Content -LiteralPath $auditPacketPath -Value ($auditPacket | ConvertTo-Json -Depth 8) -NoNewline
 
   $dimensionNames = @(
     "spec_compliance",
@@ -543,6 +574,26 @@ This contract intentionally omits the Goal section.
     -ExpectedPattern "non-approved audit outcomes must set merge_allowed false"
 
   Invoke-ExpectedFailure `
+    -Name "chatgpt-audit-mismatched-final-report" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/audits" -Recurse -Force -ErrorAction SilentlyContinue
+      Write-ChatGptAuditFixtureFiles
+      New-Item -ItemType Directory -Force -Path ".specbridge/reports" | Out-Null
+      Set-Content -LiteralPath ".specbridge/reports/other.final-report.json" -Value "{}" -NoNewline
+      $auditPath = ".specbridge/audits/chatgpt-audit-fixture.chatgpt-audit.json"
+      $audit = Get-Content -LiteralPath $auditPath -Raw | ConvertFrom-Json
+      $audit.final_report_path = ".specbridge/reports/other.final-report.json"
+      $audit.source_files = @(
+        $audit.audit_packet_path,
+        $audit.execution_contract_path,
+        $audit.final_report_path
+      )
+      Set-Content -LiteralPath $auditPath -Value ($audit | ConvertTo-Json -Depth 8) -NoNewline
+    } `
+    -Command "./scripts/validate-chatgpt-audits.ps1" `
+    -ExpectedPattern "audit final_report_path must match audit packet final_report_path"
+
+  Invoke-ExpectedFailure `
     -Name "runtime-launch-unapproved-tool" `
     -Arrange {
       Remove-Item -LiteralPath ".specbridge/runtime-launches" -Recurse -Force -ErrorAction SilentlyContinue
@@ -742,6 +793,108 @@ This contract intentionally omits the Goal section.
     } `
     -Command "./scripts/validate-runtime-summaries.ps1" `
     -ExpectedPattern "branch_name must match runtime launch"
+
+  Invoke-ExpectedFailure `
+    -Name "runtime-run-evidence-outside-launch-scope" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/runtime-runs" -Recurse -Force -ErrorAction SilentlyContinue
+      New-Item -ItemType Directory -Force -Path ".specbridge/runtime-runs" | Out-Null
+
+      $run = [ordered]@{
+        schema_version = "1"
+        run_id = "runtime-run-evidence-outside-launch-scope"
+        generated_by = "specbridge-tests"
+        runtime_launch_path = ".specbridge/runtime-launches/issue-069-fresh-executor-source-run.runtime-launch.json"
+        launch_id = "issue-069-fresh-executor-source-run-claude-source-runtime-launch"
+        task_id = "issue-069-fresh-executor-source-run"
+        packet_id = "issue-069-fresh-executor-source-run-claude-source"
+        slice_id = "claude-source"
+        branch_name = "claude/issue-069-fresh-executor-source-run-claude-source"
+        executor_evidence_path = "README.md"
+        exit_code = 0
+        files_written = @("README.md")
+        validation_results = @(
+          [ordered]@{
+            command = "fixture validation"
+            result = "passed"
+          }
+        )
+        tool_restriction = @("Read", "Write")
+        permission_mode = "acceptEdits"
+        max_budget_usd = "0.25"
+        policy_result = "Passed in invalid fixture."
+        stop_conditions = @("policy_conflict")
+        completion_status = "complete"
+        runtime_status = "succeeded"
+        run_status = "recorded"
+        runner_mode = "evidence_capture"
+        execution_policy = [ordered]@{
+          launches_claude = $false
+          launches_antigravity = $false
+          executes_shell = $false
+          requires_network = $false
+          touches_secrets = $false
+          touches_production = $false
+          installs_dependencies = $false
+          deploys = $false
+        }
+        source_files = @(
+          ".specbridge/runtime-launches/issue-069-fresh-executor-source-run.runtime-launch.json",
+          "README.md"
+        )
+      }
+
+      Set-Content -LiteralPath ".specbridge/runtime-runs/runtime-run-evidence-outside-launch-scope.runtime-run.json" -Value ($run | ConvertTo-Json -Depth 8) -NoNewline
+    } `
+    -Command "./scripts/validate-runtime-runs.ps1" `
+    -ExpectedPattern "executor_evidence_path must be declared"
+
+  Invoke-ExpectedFailure `
+    -Name "autonomy-metrics-invalid-ready-count" `
+    -Arrange {
+      Remove-Item -LiteralPath ".specbridge/metrics" -Recurse -Force -ErrorAction SilentlyContinue
+      New-Item -ItemType Directory -Force -Path ".specbridge/metrics" | Out-Null
+
+      $metrics = [ordered]@{
+        schema_version = "1"
+        metrics_id = "invalid-ready-count"
+        generated_by = "specbridge-tests"
+        task_filter = "fixture"
+        summary_count = 1
+        ready_count = 2
+        blocked_count = 0
+        executor_count = 1
+        validation_totals = [ordered]@{
+          total = 1
+          passed = 1
+          failed = 0
+          other = 0
+        }
+        runtime_status_counts = [ordered]@{
+          succeeded = 1
+        }
+        result_status_counts = [ordered]@{
+          recorded = 1
+        }
+        completion_status_counts = [ordered]@{
+          complete = 1
+        }
+        merge_readiness_counts = [ordered]@{
+          ready_for_policy_gates = 1
+        }
+        policy_gate_ready_rate = 1
+        source_summaries = @(".specbridge/runtime-summaries/issue-069-fresh-executor-source-run.runtime-summary.json")
+        source_results = @(".specbridge/runtime-results/issue-069-fresh-executor-source-run.runtime-result.json")
+        source_files = @(
+          ".specbridge/runtime-summaries/issue-069-fresh-executor-source-run.runtime-summary.json",
+          ".specbridge/runtime-results/issue-069-fresh-executor-source-run.runtime-result.json"
+        )
+      }
+
+      Set-Content -LiteralPath ".specbridge/metrics/invalid-ready-count.autonomy-metrics.json" -Value ($metrics | ConvertTo-Json -Depth 8) -NoNewline
+    } `
+    -Command "./scripts/validate-autonomy-metrics.ps1" `
+    -ExpectedPattern "ready_count plus blocked_count must not exceed summary_count"
 
   Invoke-ExpectedSuccess `
     -Name "security-gate-safe-fixture" `

@@ -403,6 +403,68 @@ try {
     }
 
     Assert-Success `
+      -Name "run-runtime-launch" `
+      -Result (Invoke-Cli -Arguments @(
+        "run-runtime-launch",
+        "-InputPath",
+        ".specbridge/runtime-launches/cli-fixture.runtime-launch.json",
+        "-EvidencePath",
+        ".specbridge/pilot/multi-agent/agent-a-implementation-output.md",
+        "-OutputPath",
+        ".specbridge/runtime-runs/cli-fixture.runtime-run.json",
+        "-RuntimeExitCode",
+        "0",
+        "-WrittenFile",
+        ".specbridge/pilot/multi-agent/agent-a-implementation-output.md",
+        "-Validation",
+        "CLI runtime run evidence capture: passed",
+        "-PolicyResult",
+        "Passed in CLI runtime run fixture.",
+        "-CompletionStatus",
+        "complete",
+        "-Force"
+      )) `
+      -ExpectedPattern '"run_status"\s*:\s*"recorded"'
+
+    $runtimeRunValidation = & powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-runs.ps1 2>&1
+
+    if ($LASTEXITCODE -ne 0) {
+      Write-Output "FAIL CLI-created runtime run did not validate."
+      Write-Output ($runtimeRunValidation | Out-String)
+      $failed = $true
+    }
+    else {
+      Write-Output "PASS CLI-created runtime run validates."
+    }
+
+    Assert-Success `
+      -Name "summarize-autonomy-metrics" `
+      -Result (Invoke-Cli -Arguments @(
+        "summarize-autonomy-metrics",
+        "-TaskId",
+        "cli-executor-handoff",
+        "-InputPath",
+        ".specbridge/runtime-summaries",
+        "-EvidencePath",
+        ".specbridge/runtime-results",
+        "-OutputPath",
+        ".specbridge/metrics/cli-fixture.autonomy-metrics.json",
+        "-Force"
+      )) `
+      -ExpectedPattern '"policy_gate_ready_rate"\s*:\s*1'
+
+    $autonomyMetricsValidation = & powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-autonomy-metrics.ps1 2>&1
+
+    if ($LASTEXITCODE -ne 0) {
+      Write-Output "FAIL CLI-created autonomy metrics did not validate."
+      Write-Output ($autonomyMetricsValidation | Out-String)
+      $failed = $true
+    }
+    else {
+      Write-Output "PASS CLI-created autonomy metrics validate."
+    }
+
+    Assert-Success `
       -Name "plan-executor-branches" `
       -Result (Invoke-Cli -Arguments @(
         "plan-executor-branches",
@@ -548,6 +610,24 @@ try {
       -ExpectedPattern "EvidencePath must be declared"
 
     Assert-Failure `
+      -Name "run-runtime-launch-out-of-scope-evidence" `
+      -Result (Invoke-Cli -Arguments @(
+        "run-runtime-launch",
+        "-InputPath",
+        ".specbridge/runtime-launches/cli-fixture.runtime-launch.json",
+        "-EvidencePath",
+        "README.md",
+        "-OutputPath",
+        ".specbridge/runtime-runs/out-of-scope.runtime-run.json",
+        "-PolicyResult",
+        "Passed in CLI fixture.",
+        "-CompletionStatus",
+        "complete",
+        "-Force"
+      )) `
+      -ExpectedPattern "EvidencePath must be declared"
+
+    Assert-Failure `
       -Name "summarize-runtime-mismatched-result" `
       -Result (Invoke-Cli -Arguments @(
         "summarize-runtime",
@@ -560,6 +640,22 @@ try {
         "-Force"
       )) `
       -ExpectedPattern "source_runtime_launch_path must match InputPath"
+
+    Assert-Failure `
+      -Name "summarize-autonomy-metrics-missing-task" `
+      -Result (Invoke-Cli -Arguments @(
+        "summarize-autonomy-metrics",
+        "-TaskId",
+        "missing-runtime-task",
+        "-InputPath",
+        ".specbridge/runtime-summaries",
+        "-EvidencePath",
+        ".specbridge/runtime-results",
+        "-OutputPath",
+        ".specbridge/metrics/missing-runtime-task.autonomy-metrics.json",
+        "-Force"
+      )) `
+      -ExpectedPattern "No runtime summaries found for TaskId"
   }
   finally {
     Pop-Location

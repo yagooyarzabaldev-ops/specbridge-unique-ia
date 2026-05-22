@@ -86,6 +86,8 @@ Current runtime result evidence includes:
 ```text
 .specbridge/runtime-results/issue-065-record-runtime-results.runtime-result.json
 .specbridge/runtime-results/issue-069-fresh-executor-source-run.runtime-result.json
+.specbridge/runtime-results/issue-071-claude-implementation.runtime-result.json
+.specbridge/runtime-results/issue-071-claude-audit.runtime-result.json
 ```
 
 The issue 069 result was recorded from:
@@ -100,6 +102,8 @@ and:
 .specbridge/runtime-evidence/issue-069-fresh-executor-source-run.executor-output.md
 ```
 
+The issue 071 results were recorded from the two issue 071 runtime launch plans and their executor output evidence files.
+
 ## Next Step
 
-Runtime summaries now use launch plans and runtime results as a source-backed CLI slice. The next runtime task should record multiple fresh executor results from one governed decomposition.
+Runtime summaries and autonomy metrics now use launch plans, runtime runs, and runtime results as source-backed evidence. The next runtime task should apply the same chain to a small real feature.

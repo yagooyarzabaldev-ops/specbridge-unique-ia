@@ -86,6 +86,8 @@ Current launch plan evidence includes:
 ```text
 .specbridge/runtime-launches/issue-063-prepare-runtime-launch-plans.runtime-launch.json
 .specbridge/runtime-launches/issue-069-fresh-executor-source-run.runtime-launch.json
+.specbridge/runtime-launches/issue-071-claude-implementation.runtime-launch.json
+.specbridge/runtime-launches/issue-071-claude-audit.runtime-launch.json
 ```
 
 The issue 069 launch plan was generated from:
@@ -94,6 +96,13 @@ The issue 069 launch plan was generated from:
 .specbridge/executor-packets/issue-069-fresh-executor-source-run-claude-source.executor-packet.json
 ```
 
+The issue 071 launch plans were generated from two executor packets derived from one governed handoff input:
+
+```text
+.specbridge/executor-packets/issue-071-serious-autonomous-test-loop-claude-implementation.executor-packet.json
+.specbridge/executor-packets/issue-071-serious-autonomous-test-loop-claude-audit.executor-packet.json
+```
+
 ## Next Step
 
-Runtime result recording and runtime summaries now use launch plans as evidence inputs. The next runtime expansion should prepare multiple launch plans from one governed goal and keep each executor scope non-overlapping.
+Runtime-run, runtime-result, runtime-summary, and autonomy metrics evidence now use launch plans as source inputs. The next runtime expansion should run a small real feature through the same multi-executor loop.

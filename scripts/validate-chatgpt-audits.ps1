@@ -161,6 +161,41 @@ function Test-NullablePositiveInteger {
   }
 }
 
+function Read-JsonFile {
+  param(
+    [string] $Path,
+    [string] $Description,
+    [string] $AuditFileName
+  )
+
+  try {
+    return Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json
+  }
+  catch {
+    Write-Failure "$Description must contain valid JSON for $AuditFileName`: $Path"
+    return $null
+  }
+}
+
+function Normalize-RepoPath {
+  param(
+    [AllowNull()]
+    [object] $Path
+  )
+
+  if ($null -eq $Path -or $Path.GetType().Name -ne "String") {
+    return ""
+  }
+
+  $normalized = $Path.Trim().Replace("\", "/")
+
+  while ($normalized.StartsWith("./")) {
+    $normalized = $normalized.Substring(2)
+  }
+
+  return $normalized
+}
+
 if (-not (Test-Path $AuditsPath)) {
   Write-Output "FAIL missing ChatGPT audits directory: $AuditsPath"
   exit 1
@@ -257,6 +292,44 @@ foreach ($file in $auditFiles) {
   foreach ($requiredSourceFile in @($audit.audit_packet_path, $audit.execution_contract_path, $audit.final_report_path)) {
     if (-not [string]::IsNullOrWhiteSpace($requiredSourceFile) -and $sourceFiles -notcontains $requiredSourceFile) {
       Write-Failure "source_files must include referenced evidence path in $($file.FullName): $requiredSourceFile"
+    }
+  }
+
+  $auditPacket = $null
+
+  if ($propertyNames -contains "audit_packet_path" -and (Test-Path $audit.audit_packet_path -PathType Leaf)) {
+    $auditPacket = Read-JsonFile -Path $audit.audit_packet_path -Description "audit packet" -AuditFileName $file.FullName
+  }
+
+  if ($null -ne $auditPacket) {
+    $auditPacketProperties = @($auditPacket.PSObject.Properties.Name)
+
+    foreach ($packetRequiredField in @("execution_contract_path", "final_report_path", "completion_status", "validation_results", "policy_result")) {
+      if ($auditPacketProperties -notcontains $packetRequiredField) {
+        Write-Failure "audit packet referenced by $($file.FullName) must include $packetRequiredField"
+      }
+    }
+
+    if ($auditPacketProperties -contains "execution_contract_path" -and (Normalize-RepoPath -Path $auditPacket.execution_contract_path) -ne (Normalize-RepoPath -Path $audit.execution_contract_path)) {
+      Write-Failure "audit execution_contract_path must match audit packet execution_contract_path in $($file.FullName)"
+    }
+
+    if ($auditPacketProperties -contains "final_report_path" -and (Normalize-RepoPath -Path $auditPacket.final_report_path) -ne (Normalize-RepoPath -Path $audit.final_report_path)) {
+      Write-Failure "audit final_report_path must match audit packet final_report_path in $($file.FullName)"
+    }
+
+    if ($audit.merge_allowed -eq $true -and $auditPacketProperties -contains "completion_status") {
+      if ($auditPacket.completion_status -match "^(draft|failed|blocked)$") {
+        Write-Failure "merge_allowed audits cannot reference an incomplete audit packet in $($file.FullName): completion_status=$($auditPacket.completion_status)"
+      }
+    }
+
+    if ($audit.merge_allowed -eq $true -and $auditPacketProperties -contains "validation_results") {
+      foreach ($validationResult in @($auditPacket.validation_results)) {
+        if ($validationResult.PSObject.Properties.Name.Contains("result") -and $validationResult.result -notin @("passed", "not_collected")) {
+          Write-Failure "merge_allowed audits cannot reference failing validation evidence in $($file.FullName): result=$($validationResult.result)"
+        }
+      }
     }
   }
 

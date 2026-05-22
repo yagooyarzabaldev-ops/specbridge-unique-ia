@@ -1,0 +1,55 @@
+{
+  "task_id": "issue-071-serious-autonomous-test-loop",
+  "slices": [
+    {
+      "id": "claude-implementation",
+      "role": "runtime_executor",
+      "goal": "Create the serious autonomous test loop operating document and executor output evidence inside the assigned scope.",
+      "contract_path": ".specbridge/contracts/issue-071-serious-autonomous-test-loop.execution.md",
+      "final_report_path": ".specbridge/reports/issue-071-serious-autonomous-test-loop.final-report.json",
+      "exclusive_write": [
+        "docs/specbridge-serious-autonomous-test-loop.md",
+        ".specbridge/runtime-evidence/issue-071-claude-implementation.executor-output.md"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".specbridge/policy.yaml",
+        ".specbridge/contracts/issue-071-serious-autonomous-test-loop.execution.md",
+        "docs/specbridge-autonomy-backlog.md",
+        "docs/specbridge-fresh-executor-source-run.md"
+      ],
+      "required_validations": [
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1"
+      ]
+    },
+    {
+      "id": "claude-audit",
+      "role": "runtime_executor",
+      "goal": "Create the autonomy metrics operating document and executor output evidence inside the assigned scope.",
+      "contract_path": ".specbridge/contracts/issue-071-serious-autonomous-test-loop.execution.md",
+      "final_report_path": ".specbridge/reports/issue-071-serious-autonomous-test-loop.final-report.json",
+      "exclusive_write": [
+        "docs/specbridge-autonomy-metrics.md",
+        ".specbridge/runtime-evidence/issue-071-claude-audit.executor-output.md"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".specbridge/policy.yaml",
+        ".specbridge/contracts/issue-071-serious-autonomous-test-loop.execution.md",
+        "docs/specbridge-runtime-results.md",
+        "docs/specbridge-runtime-summaries.md"
+      ],
+      "required_validations": [
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1"
+      ]
+    }
+  ]
+}

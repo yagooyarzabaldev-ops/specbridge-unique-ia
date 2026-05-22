@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "record-runtime-result", "summarize-runtime", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -202,8 +202,10 @@ function Invoke-ValidationProfile {
     "./scripts/validate-chatgpt-audits.ps1",
     "./scripts/validate-executor-packets.ps1",
     "./scripts/validate-runtime-launches.ps1",
+    "./scripts/validate-runtime-runs.ps1",
     "./scripts/validate-runtime-results.ps1",
     "./scripts/validate-runtime-summaries.ps1",
+    "./scripts/validate-autonomy-metrics.ps1",
     "./scripts/validate-branch-orchestrations.ps1",
     "./scripts/validate-security-gates.ps1",
     "./scripts/validate-pr-review-reports.ps1",
@@ -1318,6 +1320,152 @@ function Get-JsonObjectFromFile {
   }
 }
 
+function Invoke-RunRuntimeLaunchCommand {
+  $launchPath = Normalize-RepoPath -Path $InputPath -FieldName "InputPath"
+  $evidence = Normalize-RepoPath -Path $EvidencePath -FieldName "EvidencePath"
+  $output = Assert-OutputPath `
+    -Path $OutputPath `
+    -Pattern "^\.specbridge/runtime-runs/.+\.runtime-run\.json$" `
+    -Description "a .specbridge/runtime-runs/*.runtime-run.json runtime run"
+
+  if ($launchPath -notmatch "^\.specbridge/runtime-launches/.+\.runtime-launch\.json$") {
+    Fail "InputPath must be a .specbridge/runtime-launches/*.runtime-launch.json file: $launchPath"
+  }
+
+  if (-not (Test-Path -LiteralPath $launchPath -PathType Leaf)) {
+    Fail "InputPath does not exist: $launchPath"
+  }
+
+  if (-not (Test-Path -LiteralPath $evidence -PathType Leaf)) {
+    Fail "EvidencePath must reference an existing executor evidence file: $evidence"
+  }
+
+  $launch = Get-JsonObjectFromFile -Path $launchPath -Description "runtime launch"
+  $context = "runtime launch $launchPath"
+
+  foreach ($field in @("launch_id", "task_id", "packet_id", "slice_id", "branch_name", "exclusive_write", "allowed_tools", "permission_mode", "max_budget_usd", "stop_conditions", "launch_status")) {
+    if (-not $launch.PSObject.Properties.Name.Contains($field)) {
+      Fail "$context must include $field"
+    }
+  }
+
+  if ($launch.launch_status -ne "ready_for_operator_launch") {
+    Fail "runtime launch status must be ready_for_operator_launch: $launchPath"
+  }
+
+  $exclusiveWrite = @($launch.exclusive_write | ForEach-Object { Normalize-RepoPath -Path $_ -FieldName "exclusive_write" })
+
+  if ($exclusiveWrite -notcontains $evidence) {
+    Fail "EvidencePath must be declared in runtime launch exclusive_write: $evidence"
+  }
+
+  if ($RuntimeExitCode -lt 0 -or $RuntimeExitCode -gt 255) {
+    Fail "RuntimeExitCode must be between 0 and 255"
+  }
+
+  $allowedCompletionStatuses = @("complete", "failed", "blocked", "partial", "needs_human_decision")
+
+  if ($allowedCompletionStatuses -notcontains $CompletionStatus) {
+    Fail "CompletionStatus must be one of: $($allowedCompletionStatuses -join ', ')"
+  }
+
+  if ([string]::IsNullOrWhiteSpace($PolicyResult)) {
+    Fail "PolicyResult is required"
+  }
+
+  $filesWritten = @()
+
+  if ($WrittenFile.Count -le 0) {
+    $filesWritten += $evidence
+  }
+  else {
+    foreach ($path in @($WrittenFile)) {
+      $filesWritten += Normalize-RepoPath -Path $path -FieldName "WrittenFile"
+    }
+  }
+
+  $filesWritten = @($filesWritten | Sort-Object -Unique)
+
+  foreach ($path in $filesWritten) {
+    if ($exclusiveWrite -notcontains $path) {
+      Fail "WrittenFile must be declared in runtime launch exclusive_write: $path"
+    }
+
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
+      Fail "WrittenFile must reference an existing file: $path"
+    }
+  }
+
+  if ($filesWritten -notcontains $evidence) {
+    Fail "WrittenFile must include EvidencePath: $evidence"
+  }
+
+  $validationRecords = @($Validation)
+
+  if ($validationRecords.Count -le 0) {
+    $validationRecords = @("runtime launch evidence capture: recorded")
+  }
+
+  $validationResults = Convert-ValidationRecords -Records $validationRecords
+  $runtimeStatus = "succeeded"
+
+  if ($RuntimeExitCode -ne 0) {
+    $runtimeStatus = "failed"
+  }
+
+  $safeRunId = Convert-ToSafeName -Value ($launch.launch_id + "-runtime-run") -FieldName "run_id"
+
+  $run = [ordered]@{
+    schema_version = "1"
+    run_id = $safeRunId
+    generated_by = "specbridge-cli"
+    runtime_launch_path = $launchPath
+    launch_id = $launch.launch_id
+    task_id = $launch.task_id
+    packet_id = $launch.packet_id
+    slice_id = $launch.slice_id
+    branch_name = $launch.branch_name
+    executor_evidence_path = $evidence
+    exit_code = $RuntimeExitCode
+    files_written = @($filesWritten)
+    validation_results = @($validationResults)
+    tool_restriction = @($launch.allowed_tools)
+    permission_mode = $launch.permission_mode
+    max_budget_usd = $launch.max_budget_usd
+    policy_result = $PolicyResult.Trim()
+    stop_conditions = @($launch.stop_conditions)
+    completion_status = $CompletionStatus
+    runtime_status = $runtimeStatus
+    run_status = "recorded"
+    runner_mode = "evidence_capture"
+    execution_policy = [ordered]@{
+      launches_claude = $false
+      launches_antigravity = $false
+      executes_shell = $false
+      requires_network = $false
+      touches_secrets = $false
+      touches_production = $false
+      installs_dependencies = $false
+      deploys = $false
+    }
+    source_files = @($launchPath, $evidence)
+  }
+
+  Write-Utf8JsonFile -Path $output -Value $run -Depth 10
+
+  Write-CliJson ([ordered]@{
+    command = "run-runtime-launch"
+    ok = $true
+    output_path = $output
+    runtime_launch_path = $launchPath
+    executor_evidence_path = $evidence
+    runtime_status = $runtimeStatus
+    run_status = "recorded"
+  })
+
+  exit 0
+}
+
 function Invoke-SummarizeRuntimeCommand {
   $launchPath = Normalize-RepoPath -Path $InputPath -FieldName "InputPath"
   $resultPath = Normalize-RepoPath -Path $EvidencePath -FieldName "EvidencePath"
@@ -1457,6 +1605,198 @@ function Invoke-SummarizeRuntimeCommand {
     runtime_result_path = $resultPath
     merge_readiness = $mergeReadiness
     blocker_count = @($blockers).Count
+  })
+
+  exit 0
+}
+
+function Add-Count {
+  param(
+    [hashtable] $Table,
+    [string] $Key
+  )
+
+  $safeKey = $Key
+
+  if ([string]::IsNullOrWhiteSpace($safeKey)) {
+    $safeKey = "unknown"
+  }
+
+  if (-not $Table.ContainsKey($safeKey)) {
+    $Table[$safeKey] = 0
+  }
+
+  $Table[$safeKey] = [int] $Table[$safeKey] + 1
+}
+
+function Convert-HashtableToOrderedObject {
+  param(
+    [hashtable] $Table
+  )
+
+  $result = [ordered]@{}
+
+  foreach ($key in @($Table.Keys | Sort-Object)) {
+    $result[$key] = $Table[$key]
+  }
+
+  return $result
+}
+
+function Invoke-SummarizeAutonomyMetricsCommand {
+  $summaryRoot = ".specbridge/runtime-summaries"
+  $resultRoot = ".specbridge/runtime-results"
+
+  if (-not [string]::IsNullOrWhiteSpace($InputPath)) {
+    $summaryRoot = Normalize-RepoPath -Path $InputPath -FieldName "InputPath"
+  }
+
+  if (-not [string]::IsNullOrWhiteSpace($EvidencePath)) {
+    $resultRoot = Normalize-RepoPath -Path $EvidencePath -FieldName "EvidencePath"
+  }
+
+  $output = Assert-OutputPath `
+    -Path $OutputPath `
+    -Pattern "^\.specbridge/metrics/.+\.autonomy-metrics\.json$" `
+    -Description "a .specbridge/metrics/*.autonomy-metrics.json autonomy metrics artifact"
+
+  if (-not (Test-Path -LiteralPath $summaryRoot -PathType Container)) {
+    Fail "InputPath must reference an existing runtime summaries directory: $summaryRoot"
+  }
+
+  if (-not (Test-Path -LiteralPath $resultRoot -PathType Container)) {
+    Fail "EvidencePath must reference an existing runtime results directory: $resultRoot"
+  }
+
+  $taskFilter = $null
+
+  if (-not [string]::IsNullOrWhiteSpace($TaskId)) {
+    $taskFilter = $TaskId.Trim()
+  }
+
+  $summaryRecords = @()
+
+  foreach ($file in @(Get-ChildItem -LiteralPath $summaryRoot -Filter "*.runtime-summary.json" -File | Sort-Object Name)) {
+    $summaryPath = Normalize-RepoPath -Path (Join-Path $summaryRoot $file.Name) -FieldName "runtime_summary"
+    $summary = Get-JsonObjectFromFile -Path $summaryPath -Description "runtime summary"
+
+    if ($null -ne $taskFilter -and $summary.task_id -ne $taskFilter) {
+      continue
+    }
+
+    $summaryRecords += [ordered]@{
+      path = $summaryPath
+      value = $summary
+    }
+  }
+
+  if ($summaryRecords.Count -le 0) {
+    if ($null -eq $taskFilter) {
+      Fail "No runtime summaries found for autonomy metrics"
+    }
+
+    Fail "No runtime summaries found for TaskId: $taskFilter"
+  }
+
+  $resultRecords = @()
+
+  foreach ($file in @(Get-ChildItem -LiteralPath $resultRoot -Filter "*.runtime-result.json" -File | Sort-Object Name)) {
+    $resultPath = Normalize-RepoPath -Path (Join-Path $resultRoot $file.Name) -FieldName "runtime_result"
+    $result = Get-JsonObjectFromFile -Path $resultPath -Description "runtime result"
+
+    if ($null -ne $taskFilter -and $result.task_id -ne $taskFilter) {
+      continue
+    }
+
+    $resultRecords += [ordered]@{
+      path = $resultPath
+      value = $result
+    }
+  }
+
+  $runtimeStatusCounts = @{}
+  $resultStatusCounts = @{}
+  $completionStatusCounts = @{}
+  $mergeReadinessCounts = @{}
+  $sliceIds = @{}
+  $validationTotal = 0
+  $validationPassed = 0
+  $validationFailed = 0
+  $validationOther = 0
+  $readyCount = 0
+  $blockedCount = 0
+
+  foreach ($record in $summaryRecords) {
+    $summary = $record.value
+    Add-Count -Table $runtimeStatusCounts -Key $summary.runtime_status
+    Add-Count -Table $resultStatusCounts -Key $summary.result_status
+    Add-Count -Table $completionStatusCounts -Key $summary.completion_status
+    Add-Count -Table $mergeReadinessCounts -Key $summary.merge_readiness
+    $sliceIds[$summary.slice_id] = $true
+
+    if ($summary.merge_readiness -eq "ready_for_policy_gates") {
+      $readyCount++
+    }
+
+    if ($summary.merge_readiness -eq "blocked") {
+      $blockedCount++
+    }
+
+    if ($summary.PSObject.Properties.Name.Contains("validation_totals")) {
+      $validationTotal += [int] $summary.validation_totals.total
+      $validationPassed += [int] $summary.validation_totals.passed
+      $validationFailed += [int] $summary.validation_totals.failed
+      $validationOther += [int] $summary.validation_totals.other
+    }
+  }
+
+  $readyRate = [math]::Round(($readyCount / $summaryRecords.Count), 4)
+  $metricsIdBase = "all-runtime"
+
+  if ($null -ne $taskFilter) {
+    $metricsIdBase = $taskFilter
+  }
+
+  $metricsId = Convert-ToSafeName -Value ($metricsIdBase + "-autonomy-metrics") -FieldName "metrics_id"
+  $sourceSummaries = @($summaryRecords | ForEach-Object { $_.path })
+  $sourceResults = @($resultRecords | ForEach-Object { $_.path })
+  $sourceFiles = @($sourceSummaries + $sourceResults | Sort-Object -Unique)
+
+  $metrics = [ordered]@{
+    schema_version = "1"
+    metrics_id = $metricsId
+    generated_by = "specbridge-cli"
+    task_filter = $taskFilter
+    summary_count = @($summaryRecords).Count
+    ready_count = $readyCount
+    blocked_count = $blockedCount
+    executor_count = @($sliceIds.Keys).Count
+    validation_totals = [ordered]@{
+      total = $validationTotal
+      passed = $validationPassed
+      failed = $validationFailed
+      other = $validationOther
+    }
+    runtime_status_counts = Convert-HashtableToOrderedObject -Table $runtimeStatusCounts
+    result_status_counts = Convert-HashtableToOrderedObject -Table $resultStatusCounts
+    completion_status_counts = Convert-HashtableToOrderedObject -Table $completionStatusCounts
+    merge_readiness_counts = Convert-HashtableToOrderedObject -Table $mergeReadinessCounts
+    policy_gate_ready_rate = $readyRate
+    source_summaries = @($sourceSummaries)
+    source_results = @($sourceResults)
+    source_files = @($sourceFiles)
+  }
+
+  Write-Utf8JsonFile -Path $output -Value $metrics -Depth 10
+
+  Write-CliJson ([ordered]@{
+    command = "summarize-autonomy-metrics"
+    ok = $true
+    output_path = $output
+    summary_count = @($summaryRecords).Count
+    ready_count = $readyCount
+    blocked_count = $blockedCount
+    policy_gate_ready_rate = $readyRate
   })
 
   exit 0
@@ -1931,8 +2271,10 @@ switch ($Command) {
   "decompose-task" { Invoke-DecomposeTaskCommand }
   "prepare-executors" { Invoke-PrepareExecutorsCommand }
   "prepare-runtime-launch" { Invoke-PrepareRuntimeLaunchCommand }
+  "run-runtime-launch" { Invoke-RunRuntimeLaunchCommand }
   "record-runtime-result" { Invoke-RecordRuntimeResultCommand }
   "summarize-runtime" { Invoke-SummarizeRuntimeCommand }
+  "summarize-autonomy-metrics" { Invoke-SummarizeAutonomyMetricsCommand }
   "plan-executor-branches" { Invoke-PlanExecutorBranchesCommand }
   "record-github-evidence" { Invoke-RecordGithubEvidenceCommand }
   "coordinate-executors" { Invoke-CoordinateExecutorsCommand }

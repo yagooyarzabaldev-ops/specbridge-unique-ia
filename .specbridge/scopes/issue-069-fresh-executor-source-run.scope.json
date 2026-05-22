@@ -1,6 +1,6 @@
 {
   "contract_id": "issue-069-fresh-executor-source-run",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/audit-packets/issue-069-fresh-executor-source-run.audit-packet.json",
     ".specbridge/audits/issue-069-fresh-executor-source-run.chatgpt-audit.json",
