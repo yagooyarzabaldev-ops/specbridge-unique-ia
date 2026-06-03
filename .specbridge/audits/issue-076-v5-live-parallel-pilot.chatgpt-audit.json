@@ -1,0 +1,80 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-076-v5-live-parallel-pilot",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-076-v5-live-parallel-pilot.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md",
+  "final_report_path": ".specbridge/reports/issue-076-v5-live-parallel-pilot.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue 076 follows the active V5 live pilot contract: three executor slices, bounded launch plans, live execution artifacts, runtime evidence, summaries, metrics, final report, audit packet, and repository memory updates.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "runtime-capability-status exists and reports Claude Code plus Antigravity availability. Three packets, three launch plans, four live execution artifacts, three runtime runs, three results, three ready summaries, and autonomy metrics are present. The repeated CLI live failure is recorded and remediated by coordinator evidence.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "Changes stayed inside the issue 076 scope. No protected paths, dependency installation, production, billing, auth, database, CI/CD security weakening, or deployment automation were used.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "runtime-capability-status is a no-launch preflight. execute-runtime-launch artifacts record bounded Claude Code launches with no Antigravity launch, no shell execution in the artifact policy, no secret access, no production access, no dependency installation, and no deployment.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "The final report changed_files list is covered by the issue 076 scope manifest. Existing untracked .agents and .claude/settings.local.json remain outside staged task scope.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "Local v5-pilot-status, runtime-capability-status, contract, scope, executor packet, runtime launch, runtime execution, runtime run, runtime result, runtime summary, autonomy metrics, final report, audit packet, ChatGPT audit, standard validation, CLI tests, negative validation, smoke, security gate, review gate, and git diff checks are recorded as passed or pending external CI.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "Local CI-equivalent validation passed. GitHub PR CI remains a required external merge gate and must pass before automatic merge.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report explicitly records that docs/tests live slices succeeded, the CLI live slice failed twice, coordinator remediation completed the product change, and the remaining risk is live CLI executor reliability.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "medium",
+      "category": "live_executor_reliability",
+      "file": ".specbridge/runtime-executions/issue-076-cli-capability.runtime-execution.json",
+      "line": null,
+      "evidence": "The CLI implementation live executor failed twice with exit code 1, no timeout, no stderr, and no scoped implementation output.",
+      "recommendation": "Add a future diagnostics contract that captures bounded failure reasons and improves implementation-slice prompts before larger live autonomous builds.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending until the branch is pushed and checks run.",
+    "The CLI live executor failed twice with exit code 1 and no stderr; future work should improve live runner diagnostics and implementation-slice prompt feedback."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-076-v5-live-parallel-pilot.audit-packet.json",
+    ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md",
+    ".specbridge/reports/issue-076-v5-live-parallel-pilot.final-report.json"
+  ]
+}

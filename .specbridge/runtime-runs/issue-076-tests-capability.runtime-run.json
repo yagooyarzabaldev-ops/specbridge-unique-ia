@@ -1,0 +1,60 @@
+{
+    "schema_version":  "1",
+    "run_id":  "issue-076-v5-live-parallel-pilot-tests-capability-runtime-launch-runtime-run",
+    "generated_by":  "specbridge-cli",
+    "runtime_launch_path":  ".specbridge/runtime-launches/issue-076-tests-capability.runtime-launch.json",
+    "launch_id":  "issue-076-v5-live-parallel-pilot-tests-capability-runtime-launch",
+    "task_id":  "issue-076-v5-live-parallel-pilot",
+    "packet_id":  "issue-076-v5-live-parallel-pilot-tests-capability",
+    "slice_id":  "tests-capability",
+    "branch_name":  "claude/issue-076-v5-live-parallel-pilot-tests-capability",
+    "executor_evidence_path":  ".specbridge/runtime-evidence/issue-076-tests-capability.executor-output.md",
+    "exit_code":  0,
+    "files_written":  [
+                          ".specbridge/runtime-evidence/issue-076-tests-capability.executor-output.md",
+                          "scripts/test-specbridge-cli.ps1"
+                      ],
+    "validation_results":  [
+                               {
+                                   "command":  "test-specbridge-cli",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "runtime-capability-status-assertion",
+                                   "result":  "passed"
+                               }
+                           ],
+    "tool_restriction":  [
+                             "Edit",
+                             "Read",
+                             "Write"
+                         ],
+    "permission_mode":  "acceptEdits",
+    "max_budget_usd":  "0.25",
+    "policy_result":  "Tests slice completed within declared scope without protected access.",
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "completion_status":  "complete",
+    "runtime_status":  "succeeded",
+    "run_status":  "recorded",
+    "runner_mode":  "evidence_capture",
+    "execution_policy":  {
+                             "launches_claude":  false,
+                             "launches_antigravity":  false,
+                             "executes_shell":  false,
+                             "requires_network":  false,
+                             "touches_secrets":  false,
+                             "touches_production":  false,
+                             "installs_dependencies":  false,
+                             "deploys":  false
+                         },
+    "source_files":  [
+                         ".specbridge/runtime-launches/issue-076-tests-capability.runtime-launch.json",
+                         ".specbridge/runtime-evidence/issue-076-tests-capability.executor-output.md"
+                     ]
+}

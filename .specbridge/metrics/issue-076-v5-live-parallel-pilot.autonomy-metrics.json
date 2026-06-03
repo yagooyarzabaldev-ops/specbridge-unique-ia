@@ -1,0 +1,47 @@
+{
+    "schema_version":  "1",
+    "metrics_id":  "issue-076-v5-live-parallel-pilot-autonomy-metrics",
+    "generated_by":  "specbridge-cli",
+    "task_filter":  "issue-076-v5-live-parallel-pilot",
+    "summary_count":  3,
+    "ready_count":  3,
+    "blocked_count":  0,
+    "executor_count":  3,
+    "validation_totals":  {
+                              "total":  7,
+                              "passed":  7,
+                              "failed":  0,
+                              "other":  0
+                          },
+    "runtime_status_counts":  {
+                                  "succeeded":  3
+                              },
+    "result_status_counts":  {
+                                 "recorded":  3
+                             },
+    "completion_status_counts":  {
+                                     "complete":  3
+                                 },
+    "merge_readiness_counts":  {
+                                   "ready_for_policy_gates":  3
+                               },
+    "policy_gate_ready_rate":  1,
+    "source_summaries":  [
+                             ".specbridge/runtime-summaries/issue-076-cli-capability.runtime-summary.json",
+                             ".specbridge/runtime-summaries/issue-076-docs-capability.runtime-summary.json",
+                             ".specbridge/runtime-summaries/issue-076-tests-capability.runtime-summary.json"
+                         ],
+    "source_results":  [
+                           ".specbridge/runtime-results/issue-076-cli-capability.runtime-result.json",
+                           ".specbridge/runtime-results/issue-076-docs-capability.runtime-result.json",
+                           ".specbridge/runtime-results/issue-076-tests-capability.runtime-result.json"
+                       ],
+    "source_files":  [
+                         ".specbridge/runtime-results/issue-076-cli-capability.runtime-result.json",
+                         ".specbridge/runtime-results/issue-076-docs-capability.runtime-result.json",
+                         ".specbridge/runtime-results/issue-076-tests-capability.runtime-result.json",
+                         ".specbridge/runtime-summaries/issue-076-cli-capability.runtime-summary.json",
+                         ".specbridge/runtime-summaries/issue-076-docs-capability.runtime-summary.json",
+                         ".specbridge/runtime-summaries/issue-076-tests-capability.runtime-summary.json"
+                     ]
+}

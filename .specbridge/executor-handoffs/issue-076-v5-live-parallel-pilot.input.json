@@ -1,0 +1,77 @@
+{
+  "task_id": "issue-076-v5-live-parallel-pilot",
+  "slices": [
+    {
+      "id": "cli-capability",
+      "role": "implementation",
+      "goal": "Implement runtime-capability-status in scripts/specbridge.ps1. The command must return JSON with command, ok, branch, head, claude availability/path/version, Antigravity availability/path, and a policy boundary showing no launch, no deployment, no secrets, no production, no dependency installation. Write executor evidence to .specbridge/runtime-evidence/issue-076-cli-capability.executor-output.md.",
+      "contract_path": ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md",
+      "final_report_path": ".specbridge/reports/issue-076-v5-live-parallel-pilot.final-report.json",
+      "exclusive_write": [
+        "scripts/specbridge.ps1",
+        ".specbridge/runtime-evidence/issue-076-cli-capability.executor-output.md"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".specbridge/policy.yaml",
+        ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md",
+        "docs/specbridge-v5-live-parallel-pilot-boundary.md"
+      ],
+      "required_validations": [
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 runtime-capability-status",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-executions.ps1"
+      ]
+    },
+    {
+      "id": "tests-capability",
+      "role": "validation",
+      "goal": "Update scripts/test-specbridge-cli.ps1 to cover runtime-capability-status. The test must assert that the command returns a JSON command field for runtime-capability-status. Write executor evidence to .specbridge/runtime-evidence/issue-076-tests-capability.executor-output.md.",
+      "contract_path": ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md",
+      "final_report_path": ".specbridge/reports/issue-076-v5-live-parallel-pilot.final-report.json",
+      "exclusive_write": [
+        "scripts/test-specbridge-cli.ps1",
+        ".specbridge/runtime-evidence/issue-076-tests-capability.executor-output.md"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".specbridge/policy.yaml",
+        ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md",
+        "scripts/specbridge.ps1"
+      ],
+      "required_validations": [
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard"
+      ]
+    },
+    {
+      "id": "docs-capability",
+      "role": "documentation",
+      "goal": "Create docs/specbridge-runtime-capability-status.md documenting runtime-capability-status, its output fields, policy boundary, and the distinction between Antigravity availability and Claude Code runner execution. Write executor evidence to .specbridge/runtime-evidence/issue-076-docs-capability.executor-output.md.",
+      "contract_path": ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md",
+      "final_report_path": ".specbridge/reports/issue-076-v5-live-parallel-pilot.final-report.json",
+      "exclusive_write": [
+        "docs/specbridge-runtime-capability-status.md",
+        ".specbridge/runtime-evidence/issue-076-docs-capability.executor-output.md"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".specbridge/policy.yaml",
+        ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md",
+        "docs/specbridge-v5-live-parallel-pilot-boundary.md"
+      ],
+      "required_validations": [
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1"
+      ]
+    }
+  ]
+}

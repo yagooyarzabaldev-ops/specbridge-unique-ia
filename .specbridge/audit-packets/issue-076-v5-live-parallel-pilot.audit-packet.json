@@ -1,0 +1,348 @@
+﻿{
+    "schema_version":  "1",
+    "task_id":  "issue-076-v5-live-parallel-pilot",
+    "generated_by":  "specbridge-audit-packet-generator",
+    "execution_contract_path":  ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md",
+    "changed_files":  [
+                          ".specbridge/audit-packets/issue-076-v5-live-parallel-pilot.audit-packet.json",
+                          ".specbridge/audits/issue-076-v5-live-parallel-pilot.chatgpt-audit.json",
+                          ".specbridge/context/CURRENT_GOAL.md",
+                          ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md",
+                          ".specbridge/executor-handoffs/issue-076-v5-live-parallel-pilot.input.json",
+                          ".specbridge/executor-packets/issue-076-v5-live-parallel-pilot-cli-capability.executor-packet.json",
+                          ".specbridge/executor-packets/issue-076-v5-live-parallel-pilot-docs-capability.executor-packet.json",
+                          ".specbridge/executor-packets/issue-076-v5-live-parallel-pilot-tests-capability.executor-packet.json",
+                          ".specbridge/metrics/issue-076-v5-live-parallel-pilot.autonomy-metrics.json",
+                          ".specbridge/reports/issue-076-v5-live-parallel-pilot.final-report.json",
+                          ".specbridge/runtime-evidence/issue-076-cli-capability.executor-output.md",
+                          ".specbridge/runtime-evidence/issue-076-docs-capability.executor-output.md",
+                          ".specbridge/runtime-evidence/issue-076-tests-capability.executor-output.md",
+                          ".specbridge/runtime-executions/issue-076-cli-capability.runtime-execution.json",
+                          ".specbridge/runtime-executions/issue-076-cli-capability-retry-1.runtime-execution.json",
+                          ".specbridge/runtime-executions/issue-076-docs-capability.runtime-execution.json",
+                          ".specbridge/runtime-executions/issue-076-tests-capability.runtime-execution.json",
+                          ".specbridge/runtime-launches/issue-076-cli-capability.runtime-launch.json",
+                          ".specbridge/runtime-launches/issue-076-docs-capability.runtime-launch.json",
+                          ".specbridge/runtime-launches/issue-076-tests-capability.runtime-launch.json",
+                          ".specbridge/runtime-results/issue-076-cli-capability.runtime-result.json",
+                          ".specbridge/runtime-results/issue-076-docs-capability.runtime-result.json",
+                          ".specbridge/runtime-results/issue-076-tests-capability.runtime-result.json",
+                          ".specbridge/runtime-runs/issue-076-cli-capability.runtime-run.json",
+                          ".specbridge/runtime-runs/issue-076-docs-capability.runtime-run.json",
+                          ".specbridge/runtime-runs/issue-076-tests-capability.runtime-run.json",
+                          ".specbridge/runtime-summaries/issue-076-cli-capability.runtime-summary.json",
+                          ".specbridge/runtime-summaries/issue-076-docs-capability.runtime-summary.json",
+                          ".specbridge/runtime-summaries/issue-076-tests-capability.runtime-summary.json",
+                          ".specbridge/scopes/issue-076-v5-live-parallel-pilot.scope.json",
+                          "docs/specbridge-runtime-capability-status.md",
+                          "docs/specbridge-test-results.md",
+                          "README.md",
+                          "scripts/specbridge.ps1",
+                          "scripts/test-specbridge-cli.ps1"
+                      ],
+    "diff_summary":  [
+                         {
+                             "file":  ".specbridge/audit-packets/issue-076-v5-live-parallel-pilot.audit-packet.json",
+                             "added_lines":  null,
+                             "deleted_lines":  null
+                         },
+                         {
+                             "file":  ".specbridge/audits/issue-076-v5-live-parallel-pilot.chatgpt-audit.json",
+                             "added_lines":  null,
+                             "deleted_lines":  null
+                         },
+                         {
+                             "file":  ".specbridge/context/CURRENT_GOAL.md",
+                             "added_lines":  7,
+                             "deleted_lines":  7
+                         },
+                         {
+                             "file":  ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md",
+                             "added_lines":  198,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-handoffs/issue-076-v5-live-parallel-pilot.input.json",
+                             "added_lines":  77,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-packets/issue-076-v5-live-parallel-pilot-cli-capability.executor-packet.json",
+                             "added_lines":  42,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-packets/issue-076-v5-live-parallel-pilot-docs-capability.executor-packet.json",
+                             "added_lines":  42,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-packets/issue-076-v5-live-parallel-pilot-tests-capability.executor-packet.json",
+                             "added_lines":  42,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/metrics/issue-076-v5-live-parallel-pilot.autonomy-metrics.json",
+                             "added_lines":  47,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/reports/issue-076-v5-live-parallel-pilot.final-report.json",
+                             "added_lines":  73,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-evidence/issue-076-cli-capability.executor-output.md",
+                             "added_lines":  59,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-evidence/issue-076-docs-capability.executor-output.md",
+                             "added_lines":  76,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-evidence/issue-076-tests-capability.executor-output.md",
+                             "added_lines":  45,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-executions/issue-076-cli-capability.runtime-execution.json",
+                             "added_lines":  58,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-executions/issue-076-cli-capability-retry-1.runtime-execution.json",
+                             "added_lines":  58,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-executions/issue-076-docs-capability.runtime-execution.json",
+                             "added_lines":  58,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-executions/issue-076-tests-capability.runtime-execution.json",
+                             "added_lines":  58,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-launches/issue-076-cli-capability.runtime-launch.json",
+                             "added_lines":  69,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-launches/issue-076-docs-capability.runtime-launch.json",
+                             "added_lines":  69,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-launches/issue-076-tests-capability.runtime-launch.json",
+                             "added_lines":  69,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-results/issue-076-cli-capability.runtime-result.json",
+                             "added_lines":  56,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-results/issue-076-docs-capability.runtime-result.json",
+                             "added_lines":  52,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-results/issue-076-tests-capability.runtime-result.json",
+                             "added_lines":  52,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-runs/issue-076-cli-capability.runtime-run.json",
+                             "added_lines":  64,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-runs/issue-076-docs-capability.runtime-run.json",
+                             "added_lines":  60,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-runs/issue-076-tests-capability.runtime-run.json",
+                             "added_lines":  60,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-summaries/issue-076-cli-capability.runtime-summary.json",
+                             "added_lines":  43,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-summaries/issue-076-docs-capability.runtime-summary.json",
+                             "added_lines":  43,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-summaries/issue-076-tests-capability.runtime-summary.json",
+                             "added_lines":  43,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/scopes/issue-076-v5-live-parallel-pilot.scope.json",
+                             "added_lines":  60,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-runtime-capability-status.md",
+                             "added_lines":  157,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-test-results.md",
+                             "added_lines":  16,
+                             "deleted_lines":  4
+                         },
+                         {
+                             "file":  "README.md",
+                             "added_lines":  2,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/specbridge.ps1",
+                             "added_lines":  168,
+                             "deleted_lines":  6
+                         },
+                         {
+                             "file":  "scripts/test-specbridge-cli.ps1",
+                             "added_lines":  5,
+                             "deleted_lines":  0
+                         }
+                     ],
+    "validation_commands":  [
+                                "git diff --check",
+                                "GitHub CI",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 runtime-capability-status",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 v5-pilot-status",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-autonomy-metrics.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-executor-packets.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-executions.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-launches.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-results.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-runs.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-summaries.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1"
+                            ],
+    "validation_results":  [
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 v5-pilot-status",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 runtime-capability-status",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-executor-packets.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-launches.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-executions.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-runs.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-results.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-summaries.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-autonomy-metrics.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "GitHub CI",
+                                   "result":  "not_collected"
+                               },
+                               {
+                                   "command":  "git diff --check",
+                                   "result":  "passed"
+                               }
+                           ],
+    "final_report_path":  ".specbridge/reports/issue-076-v5-live-parallel-pilot.final-report.json",
+    "ci_status":  "not_collected",
+    "pr_review_report_path":  null,
+    "policy_result":  "Passed with recorded autonomy exception. The task stayed inside the issue 076 execution contract and scope manifest. Live Claude Code was launched only through bounded execute-runtime-launch plans. Antigravity availability was verified as a local path check only. The CLI live executor failed twice, no further live retries were made, and coordinator remediation completed the scoped product change. No secrets, production configuration, billing, auth security, database changes, dependency installation, CI/CD security weakening, or deployment automation were involved.",
+    "unresolved_risks":  [
+                             "GitHub PR CI evidence is pending until the branch is pushed and checks run.",
+                             "The CLI live executor failed twice with exit code 1 and no stderr; future work should improve live runner diagnostics, stdout capture policy, and prompt feedback before larger autonomous implementation pilots."
+                         ],
+    "completion_status":  "complete_pending_pr_ci",
+    "source_files":  [
+                         ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md",
+                         ".specbridge/reports/issue-076-v5-live-parallel-pilot.final-report.json"
+                     ],
+    "secret_omission":  "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

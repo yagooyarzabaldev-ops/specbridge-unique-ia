@@ -10,8 +10,8 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 
 - Date: 2026-06-03
 - Environment: local PowerShell workspace
-- Branch: `codex/v5-pilot-readiness`
-- Scope: V5 pilot readiness with `v5-pilot-status`, readiness contract/scope, two executor packets, two runtime launch plans, two dry-run runtime execution artifacts, runtime-run/result/summary evidence, autonomy metrics, final report, audit packet, and ChatGPT/Codex audit
+- Branch: `codex/v5-live-parallel-pilot`
+- Scope: V5 live parallel pilot with `runtime-capability-status`, live Claude Code runtime execution evidence, executor packets, runtime launch plans, runtime-run/result/summary evidence, autonomy metrics, coordinator remediation evidence, final report, audit packet, and ChatGPT/Codex audit
 
 ## Results
 
@@ -68,6 +68,17 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 | V5 readiness runtime result recording | passed |
 | V5 readiness runtime summary generation | passed |
 | V5 readiness autonomy metrics | passed |
+| Runtime capability status CLI feature | passed |
+| V5 live executor packet generation | passed |
+| V5 live runtime launch planning | passed |
+| V5 live docs executor attempt | passed |
+| V5 live tests executor attempt | passed |
+| V5 live CLI executor repeated failure recorded | passed |
+| V5 live CLI coordinator remediation | passed |
+| V5 live runtime-run recording | passed |
+| V5 live runtime result recording | passed |
+| V5 live runtime summary generation | passed |
+| V5 live autonomy metrics | passed |
 | Hardened ChatGPT audit cross-checks | passed |
 | PR review report validation | passed |
 | Claude review workflow validation | passed |
@@ -158,6 +169,7 @@ The negative validation suite verifies:
 - issue 071 autonomy metrics record `summary_count: 2`, `ready_count: 2`, `blocked_count: 0`, and `policy_gate_ready_rate: 1`
 - local CLI standard-loop-status command passes
 - local CLI v5-pilot-status command passes
+- local CLI runtime-capability-status command passes
 - local CLI runtime execution dry-run command passes and writes validated evidence
 - local CLI live runtime execution without `-Force` fails deterministically
 - standard template validation passes
@@ -171,9 +183,9 @@ The negative validation suite verifies:
 
 ## Policy Result
 
-Passed. The change adds a V5 readiness gate, two readiness executor slices, runtime launch plans, dry-run runtime execution evidence, runtime-run/result/summary evidence, autonomy metrics, final report, audit packet, ChatGPT/Codex audit, and updated repository memory. The task does not launch live Claude Code or Antigravity, access protected credentials, touch production, install dependencies, modify auth or billing surfaces, weaken CI/CD security, change database schema, or deploy.
+Passed. The change adds a V5 live pilot contract, three executor slices, runtime launch plans, live Claude Code runtime execution evidence, `runtime-capability-status`, runtime-run/result/summary evidence, autonomy metrics, final report, audit packet, ChatGPT/Codex audit, and updated repository memory. The docs and tests live slices completed. The CLI live slice failed twice and was remediated by the coordinator inside declared scope. The task does not access protected credentials, touch production, install dependencies, modify auth or billing surfaces, weaken CI/CD security, change database schema, or deploy.
 
 ## Unresolved Risks
 
 - GitHub PR CI evidence is pending until the branch is pushed and GitHub runs checks.
-- V5 live parallel execution remains planned and must use a dedicated live pilot contract before any live multi-session Antigravity expansion.
+- The CLI live executor failed twice with exit code `1`; future work should improve live runner diagnostics and prompt feedback so coordinator remediation is needed less often.

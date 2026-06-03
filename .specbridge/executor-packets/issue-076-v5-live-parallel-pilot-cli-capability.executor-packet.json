@@ -1,0 +1,42 @@
+{
+    "schema_version":  "1",
+    "packet_id":  "issue-076-v5-live-parallel-pilot-cli-capability",
+    "task_id":  "issue-076-v5-live-parallel-pilot",
+    "slice_id":  "cli-capability",
+    "agent_role":  "implementation",
+    "goal":  "Implement runtime-capability-status in scripts/specbridge.ps1. The command must return JSON with command, ok, branch, head, claude availability/path/version, Antigravity availability/path, and a policy boundary showing no launch, no deployment, no secrets, no production, no dependency installation. Write executor evidence to .specbridge/runtime-evidence/issue-076-cli-capability.executor-output.md.",
+    "launch_mode":  "manual_antigravity",
+    "branch_name":  "claude/issue-076-v5-live-parallel-pilot-cli-capability",
+    "execution_contract_path":  ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md",
+    "final_report_path":  ".specbridge/reports/issue-076-v5-live-parallel-pilot.final-report.json",
+    "exclusive_write":  [
+                            "scripts/specbridge.ps1",
+                            ".specbridge/runtime-evidence/issue-076-cli-capability.executor-output.md"
+                        ],
+    "read_only":  [
+                      "README.md",
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      "CLAUDE.md",
+                      ".specbridge/policy.yaml",
+                      ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md",
+                      "docs/specbridge-v5-live-parallel-pilot-boundary.md"
+                  ],
+    "required_validations":  [
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 runtime-capability-status",
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-executions.ps1"
+                             ],
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "status":  "ready_for_handoff",
+    "source_files":  [
+                         ".specbridge/executor-handoffs/issue-076-v5-live-parallel-pilot.input.json",
+                         ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md"
+                     ],
+    "generated_by":  "specbridge-cli"
+}

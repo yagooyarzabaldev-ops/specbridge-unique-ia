@@ -155,6 +155,11 @@ try {
       -ExpectedPattern '"readiness_status"\s*:\s*"ready_for_v5_live_contract"'
 
     Assert-Success `
+      -Name "runtime-capability-status" `
+      -Result (Invoke-Cli -Arguments @("runtime-capability-status")) `
+      -ExpectedPattern '"command"\s*:\s*"runtime-capability-status"'
+
+    Assert-Success `
       -Name "validate-standard" `
       -Result (Invoke-Cli -Arguments @("validate", "-Profile", "standard")) `
       -ExpectedPattern '"ok"\s*:\s*true'

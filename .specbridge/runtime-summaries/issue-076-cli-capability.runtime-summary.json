@@ -1,0 +1,43 @@
+{
+    "schema_version":  "1",
+    "summary_id":  "issue-076-v5-live-parallel-pilot-runtime-summary",
+    "generated_by":  "specbridge-cli",
+    "runtime_launch_path":  ".specbridge/runtime-launches/issue-076-cli-capability.runtime-launch.json",
+    "runtime_result_path":  ".specbridge/runtime-results/issue-076-cli-capability.runtime-result.json",
+    "launch_id":  "issue-076-v5-live-parallel-pilot-cli-capability-runtime-launch",
+    "task_id":  "issue-076-v5-live-parallel-pilot",
+    "packet_id":  "issue-076-v5-live-parallel-pilot-cli-capability",
+    "slice_id":  "cli-capability",
+    "branch_name":  "claude/issue-076-v5-live-parallel-pilot-cli-capability",
+    "completion_status":  "complete",
+    "runtime_status":  "succeeded",
+    "result_status":  "recorded",
+    "validation_totals":  {
+                              "total":  3,
+                              "passed":  3,
+                              "failed":  0,
+                              "other":  0
+                          },
+    "policy_result":  "CLI live executor failed twice; coordinator remediation completed scoped command without protected access.",
+    "merge_readiness":  "ready_for_policy_gates",
+    "blockers":  [
+
+                 ],
+    "execution_policy":  {
+                             "launches_claude":  false,
+                             "launches_antigravity":  false,
+                             "executes_shell":  false,
+                             "requires_network":  false,
+                             "touches_secrets":  false,
+                             "touches_production":  false,
+                             "installs_dependencies":  false,
+                             "deploys":  false
+                         },
+    "source_files":  [
+                         ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md",
+                         ".specbridge/executor-packets/issue-076-v5-live-parallel-pilot-cli-capability.executor-packet.json",
+                         ".specbridge/runtime-evidence/issue-076-cli-capability.executor-output.md",
+                         ".specbridge/runtime-launches/issue-076-cli-capability.runtime-launch.json",
+                         ".specbridge/runtime-results/issue-076-cli-capability.runtime-result.json"
+                     ]
+}

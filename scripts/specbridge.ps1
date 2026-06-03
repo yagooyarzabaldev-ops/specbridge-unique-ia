@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "v5-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "v5-pilot-status", "runtime-capability-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -283,6 +283,59 @@ function Get-LatestArtifactPath {
   return Normalize-RepoPath -Path (Join-Path $Path $file.Name) -FieldName "latest_artifact"
 }
 
+function Get-LatestRuntimeDryRunPath {
+  $path = ".specbridge/runtime-executions"
+
+  if (-not (Test-Path -LiteralPath $path)) {
+    return $null
+  }
+
+  $candidates = @()
+
+  foreach ($file in @(Get-ChildItem -LiteralPath $path -Filter "*.runtime-execution.json" -File)) {
+    $repoPath = Normalize-RepoPath -Path (Join-Path $path $file.Name) -FieldName "runtime_execution"
+
+    try {
+      $execution = Get-Content -LiteralPath $file.FullName -Raw | ConvertFrom-Json
+    }
+    catch {
+      continue
+    }
+
+    if (-not ($execution.PSObject.Properties.Name.Contains("dry_run") -and $execution.PSObject.Properties.Name.Contains("execution_status"))) {
+      continue
+    }
+
+    if (-not ([bool] $execution.dry_run) -or $execution.execution_status -ne "dry_run") {
+      continue
+    }
+
+    $issueNumber = -1
+
+    if ($file.Name -match "^issue-(\d+)") {
+      $issueNumber = [int] $Matches[1]
+    }
+
+    $candidates += [pscustomobject]@{
+      Path = $repoPath
+      IssueNumber = $issueNumber
+      Name = $file.Name
+    }
+  }
+
+  $latest = $candidates |
+    Sort-Object `
+      @{ Expression = "IssueNumber"; Descending = $true },
+      @{ Expression = "Name"; Descending = $true } |
+    Select-Object -First 1
+
+  if ($null -eq $latest) {
+    return $null
+  }
+
+  return $latest.Path
+}
+
 function Get-GitValue {
   param(
     [string[]] $Arguments,
@@ -351,6 +404,113 @@ function Invoke-StatusCommand {
   }
 
   Write-CliJson $status
+  exit 0
+}
+
+function Get-ResolvedPathOrNull {
+  param(
+    [string] $Path
+  )
+
+  if ([string]::IsNullOrWhiteSpace($Path)) {
+    return $null
+  }
+
+  if (-not (Test-Path -LiteralPath $Path)) {
+    return $null
+  }
+
+  try {
+    return (Resolve-Path -LiteralPath $Path).Path
+  }
+  catch {
+    return $Path
+  }
+}
+
+function Get-ClaudeCapability {
+  $claudeCommand = Get-Command claude -ErrorAction SilentlyContinue
+  $claudePath = $null
+  $claudeVersion = $null
+
+  if ($null -ne $claudeCommand) {
+    $claudePath = $claudeCommand.Source
+  }
+
+  if (-not [string]::IsNullOrWhiteSpace($claudePath)) {
+    $previousErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+
+    try {
+      $versionOutput = & $claudePath --version 2>$null
+
+      if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace(($versionOutput | Out-String))) {
+        $claudeVersion = (($versionOutput | Select-Object -First 1) | Out-String).Trim()
+      }
+    }
+    catch {
+      $claudeVersion = $null
+    }
+    finally {
+      $ErrorActionPreference = $previousErrorActionPreference
+    }
+  }
+
+  return [ordered]@{
+    available = (-not [string]::IsNullOrWhiteSpace($claudePath))
+    path = $claudePath
+    version = $claudeVersion
+  }
+}
+
+function Get-AntigravityCapability {
+  $candidatePaths = @()
+  $command = Get-Command antigravity -ErrorAction SilentlyContinue
+
+  if ($null -ne $command -and -not [string]::IsNullOrWhiteSpace($command.Source)) {
+    $candidatePaths += $command.Source
+  }
+
+  if (-not [string]::IsNullOrWhiteSpace($env:LOCALAPPDATA)) {
+    $candidatePaths += (Join-Path $env:LOCALAPPDATA "Programs/Antigravity/Antigravity.exe")
+  }
+
+  if (-not [string]::IsNullOrWhiteSpace($env:ProgramFiles)) {
+    $candidatePaths += (Join-Path $env:ProgramFiles "Antigravity/Antigravity.exe")
+  }
+
+  $candidatePaths += "D:/Antigravity"
+
+  $resolvedPath = $null
+
+  foreach ($candidate in @($candidatePaths | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique)) {
+    $resolvedPath = Get-ResolvedPathOrNull -Path $candidate
+
+    if (-not [string]::IsNullOrWhiteSpace($resolvedPath)) {
+      break
+    }
+  }
+
+  return [ordered]@{
+    available = (-not [string]::IsNullOrWhiteSpace($resolvedPath))
+    path = $resolvedPath
+  }
+}
+
+function Invoke-RuntimeCapabilityStatusCommand {
+  $claude = Get-ClaudeCapability
+  $antigravity = Get-AntigravityCapability
+
+  Write-CliJson ([ordered]@{
+    command = "runtime-capability-status"
+    ok = ([bool] $claude.available -and [bool] $antigravity.available)
+    branch = Get-GitValue -Arguments @("branch", "--show-current") -Fallback "unknown"
+    head = Get-GitValue -Arguments @("rev-parse", "--short", "HEAD") -Fallback "unknown"
+    claude = $claude
+    antigravity = $antigravity
+    policy_boundary = "no-launch no-deploy no-secret-access"
+  })
+
   exit 0
 }
 
@@ -590,14 +750,15 @@ function Invoke-V5PilotStatusCommand {
   }
 
   $latestRuntimeExecution = Get-LatestArtifactPath -Path ".specbridge/runtime-executions" -Filter "*.runtime-execution.json"
+  $latestRuntimeDryRunExecution = Get-LatestRuntimeDryRunPath
   $runtimeExecutionDryRunReady = $false
   $runtimeExecutionDetails = @()
 
-  if ($null -eq $latestRuntimeExecution) {
-    $runtimeExecutionDetails += "No runtime execution artifact was found."
+  if ($null -eq $latestRuntimeDryRunExecution) {
+    $runtimeExecutionDetails += "No dry-run runtime execution artifact was found."
   }
   else {
-    $execution = Get-JsonObjectFromFile -Path $latestRuntimeExecution -Description "runtime execution"
+    $execution = Get-JsonObjectFromFile -Path $latestRuntimeDryRunExecution -Description "runtime execution"
 
     if ($execution.PSObject.Properties.Name.Contains("dry_run") -and $execution.PSObject.Properties.Name.Contains("execution_status")) {
       $runtimeExecutionDryRunReady = ([bool] $execution.dry_run -and $execution.execution_status -eq "dry_run")
@@ -610,8 +771,8 @@ function Invoke-V5PilotStatusCommand {
 
   $runtimeExecutionEvidence = "missing"
 
-  if ($null -ne $latestRuntimeExecution) {
-    $runtimeExecutionEvidence = $latestRuntimeExecution
+  if ($null -ne $latestRuntimeDryRunExecution) {
+    $runtimeExecutionEvidence = $latestRuntimeDryRunExecution
   }
 
   $prerequisites = @()
@@ -2950,6 +3111,7 @@ switch ($Command) {
   "summarize-autonomy-metrics" { Invoke-SummarizeAutonomyMetricsCommand }
   "standard-loop-status" { Invoke-StandardLoopStatusCommand }
   "v5-pilot-status" { Invoke-V5PilotStatusCommand }
+  "runtime-capability-status" { Invoke-RuntimeCapabilityStatusCommand }
   "plan-executor-branches" { Invoke-PlanExecutorBranchesCommand }
   "record-github-evidence" { Invoke-RecordGithubEvidenceCommand }
   "coordinate-executors" { Invoke-CoordinateExecutorsCommand }
