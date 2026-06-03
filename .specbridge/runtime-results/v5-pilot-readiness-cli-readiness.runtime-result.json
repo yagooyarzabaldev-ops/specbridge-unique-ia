@@ -1,0 +1,47 @@
+{
+    "schema_version":  "1",
+    "result_id":  "v5-pilot-readiness-cli-readiness-runtime-launch-runtime-result",
+    "generated_by":  "specbridge-cli",
+    "source_runtime_launch_path":  ".specbridge/runtime-launches/v5-pilot-readiness-cli-readiness.runtime-launch.json",
+    "launch_id":  "v5-pilot-readiness-cli-readiness-runtime-launch",
+    "task_id":  "v5-pilot-readiness",
+    "packet_id":  "v5-pilot-readiness-cli-readiness",
+    "slice_id":  "cli-readiness",
+    "branch_name":  "claude/v5-pilot-readiness-cli-readiness",
+    "executor_evidence_path":  ".specbridge/runtime-evidence/v5-pilot-readiness-cli-readiness.executor-output.md",
+    "exit_code":  0,
+    "files_written":  [
+                          ".specbridge/runtime-evidence/v5-pilot-readiness-cli-readiness.executor-output.md"
+                      ],
+    "validation_results":  [
+                               {
+                                   "command":  "execute-runtime-launch dry-run",
+                                   "result":  "passed"
+                               }
+                           ],
+    "policy_result":  "Passed as V5 readiness result evidence; no live Claude Code or Antigravity launch occurred.",
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "completion_status":  "complete",
+    "runtime_status":  "succeeded",
+    "result_status":  "recorded",
+    "execution_policy":  {
+                             "launches_claude":  false,
+                             "launches_antigravity":  false,
+                             "executes_shell":  false,
+                             "requires_network":  false,
+                             "touches_secrets":  false,
+                             "touches_production":  false,
+                             "installs_dependencies":  false,
+                             "deploys":  false
+                         },
+    "source_files":  [
+                         ".specbridge/runtime-launches/v5-pilot-readiness-cli-readiness.runtime-launch.json",
+                         ".specbridge/runtime-evidence/v5-pilot-readiness-cli-readiness.executor-output.md"
+                     ]
+}

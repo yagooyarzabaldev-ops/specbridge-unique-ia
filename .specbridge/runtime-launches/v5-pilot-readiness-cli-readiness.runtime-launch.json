@@ -1,0 +1,68 @@
+{
+    "schema_version":  "1",
+    "launch_id":  "v5-pilot-readiness-cli-readiness-runtime-launch",
+    "generated_by":  "specbridge-cli",
+    "source_executor_packet_path":  ".specbridge/executor-packets/v5-pilot-readiness-cli-readiness.executor-packet.json",
+    "task_id":  "v5-pilot-readiness",
+    "packet_id":  "v5-pilot-readiness-cli-readiness",
+    "slice_id":  "cli-readiness",
+    "agent_role":  "implementation",
+    "goal":  "Implement the V5 pilot readiness status command and preserve the live execution boundary.",
+    "branch_name":  "claude/v5-pilot-readiness-cli-readiness",
+    "execution_contract_path":  ".specbridge/contracts/v5-pilot-readiness.execution.md",
+    "final_report_path":  ".specbridge/reports/v5-pilot-readiness.final-report.json",
+    "exclusive_write":  [
+                            "scripts/specbridge.ps1",
+                            ".specbridge/runtime-evidence/v5-pilot-readiness-cli-readiness.executor-output.md"
+                        ],
+    "read_only":  [
+                      "README.md",
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      "CLAUDE.md",
+                      ".specbridge/policy.yaml",
+                      "docs/specbridge-standard-loop-v1.md",
+                      "docs/specbridge-v5-live-parallel-pilot-boundary.md"
+                  ],
+    "required_validations":  [
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 v5-pilot-status",
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-executions.ps1"
+                             ],
+    "allowed_tools":  [
+                          "Read",
+                          "Write"
+                      ],
+    "permission_mode":  "acceptEdits",
+    "max_budget_usd":  "0.25",
+    "command_summary":  "claude -p --no-session-persistence --max-budget-usd 0.25 --permission-mode acceptEdits --tools \"Read,Write\" --allowedTools \"Read,Write\" \u003cbounded prompt\u003e",
+    "prompt_sections":  [
+                            "Read README.md, SPECBRIDGE.md, AGENTS.md, CLAUDE.md, .specbridge/policy.yaml, the execution contract, and the executor packet before writing.",
+                            "Modify only paths declared in exclusive_write.",
+                            "Treat read_only paths as context only.",
+                            "Run only required validations that are explicitly allowed by the runtime operator.",
+                            "Stop on policy conflict, scope conflict, missing required context, impossible acceptance criteria, protected resource requirement, secrets, production configuration, billing, authentication security, authorization security, dependency installation, database change, CI/CD security change, or deployment automation.",
+                            "Report changed files, validation evidence, policy result, unresolved risks, and completion status."
+                        ],
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "launch_status":  "ready_for_operator_launch",
+    "execution_policy":  {
+                             "launches_claude":  false,
+                             "launches_antigravity":  false,
+                             "executes_shell":  false,
+                             "requires_network":  false,
+                             "touches_secrets":  false,
+                             "touches_production":  false,
+                             "installs_dependencies":  false,
+                             "deploys":  false
+                         },
+    "source_files":  [
+                         ".specbridge/executor-packets/v5-pilot-readiness-cli-readiness.executor-packet.json",
+                         ".specbridge/contracts/v5-pilot-readiness.execution.md"
+                     ]
+}

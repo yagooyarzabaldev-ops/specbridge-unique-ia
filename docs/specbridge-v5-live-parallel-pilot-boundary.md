@@ -19,6 +19,28 @@ Before V5:
 - Templates and schemas are present.
 - CI authority is explicit and validated.
 - ChatGPT/Codex audit validation is strict enough to reject contradictory evidence.
+- `v5-pilot-status` reports `ok: true` from repository evidence.
+
+## Readiness Gate
+
+`v5-pilot-status` is the local readiness gate for the first live V5 pilot.
+
+It checks:
+
+- Standard Loop v1 required paths.
+- Runtime evidence validators.
+- Controlled runner dry-run evidence.
+- V5 boundary documentation.
+- Current goal memory pointing to V5.
+- V5 readiness contract and scope.
+- V5 executor handoff.
+- At least two executor packets.
+- At least two runtime launch plans.
+- At least two dry-run runtime execution artifacts.
+- At least two runtime summaries ready for policy gates.
+- V5 autonomy metrics.
+
+This readiness gate does not authorize live execution by itself. Live execution still requires a dedicated live pilot contract.
 
 ## V5 Pilot Shape
 

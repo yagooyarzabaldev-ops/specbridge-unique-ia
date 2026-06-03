@@ -103,6 +103,7 @@ SpecBridge currently has these governed status layers:
 - Standard Loop v1: implemented as the canonical path from ChatGPT/Codex goal to contract, scope, executor packet, runtime launch, controlled runner dry-run, evidence, audit, GitHub CI authority, review gate, security gate, and policy-gated merge.
 - Standard templates and schemas: implemented for contracts, scope manifests, executor handoffs, runtime launches, final reports, audit packets, ChatGPT audits, executor packets, runtime launches, runtime runs, runtime results, runtime summaries, autonomy metrics, and runtime executions.
 - V5 live parallel pilot boundary: defined as the next phase after Standard Loop v1, with live Antigravity parallel execution allowed only through dedicated contracts, non-overlapping executor scopes, CI authority, security gate, review gate, audit evidence, and no production, billing, secret, auth, database, CI/CD security, or deployment expansion.
+- V5 pilot readiness: implemented as a deterministic `v5-pilot-status` CLI readiness gate with a two-slice dry-run evidence chain, runtime summaries, autonomy metrics, final report, audit packet, and ChatGPT/Codex audit evidence before any live parallel Antigravity expansion.
 - Default automation: Full Autopilot is enabled for autonomous merge after required gates pass; production deployment remains disabled.
 
 See:

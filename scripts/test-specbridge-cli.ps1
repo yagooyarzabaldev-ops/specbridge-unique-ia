@@ -150,6 +150,11 @@ try {
       -ExpectedPattern '"standard"\s*:\s*"SpecBridge Standard Loop v1"'
 
     Assert-Success `
+      -Name "v5-pilot-status" `
+      -Result (Invoke-Cli -Arguments @("v5-pilot-status")) `
+      -ExpectedPattern '"readiness_status"\s*:\s*"ready_for_v5_live_contract"'
+
+    Assert-Success `
       -Name "validate-standard" `
       -Result (Invoke-Cli -Arguments @("validate", "-Profile", "standard")) `
       -ExpectedPattern '"ok"\s*:\s*true'

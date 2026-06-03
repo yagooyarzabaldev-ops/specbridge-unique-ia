@@ -8,10 +8,10 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 
 ## Test Run
 
-- Date: 2026-05-22
+- Date: 2026-06-03
 - Environment: local PowerShell workspace
-- Branch: `codex/standard-loop-v1`
-- Scope: Standard Loop v1 for issue 073 with standard templates, registered schemas, `standard-loop-status`, controlled `execute-runtime-launch -DryRun`, runtime execution evidence, CI authority documentation, V5 boundary, final report, audit packet, and ChatGPT/Codex audit
+- Branch: `codex/v5-pilot-readiness`
+- Scope: V5 pilot readiness with `v5-pilot-status`, readiness contract/scope, two executor packets, two runtime launch plans, two dry-run runtime execution artifacts, runtime-run/result/summary evidence, autonomy metrics, final report, audit packet, and ChatGPT/Codex audit
 
 ## Results
 
@@ -60,6 +60,14 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 | Runtime execution validation | passed |
 | Runtime execution CLI dry-run | passed |
 | V5 live parallel pilot boundary | passed |
+| V5 pilot readiness status CLI feature | passed |
+| V5 readiness executor packet generation | passed |
+| V5 readiness runtime launch planning | passed |
+| V5 readiness runtime dry-run evidence | passed |
+| V5 readiness runtime-run recording | passed |
+| V5 readiness runtime result recording | passed |
+| V5 readiness runtime summary generation | passed |
+| V5 readiness autonomy metrics | passed |
 | Hardened ChatGPT audit cross-checks | passed |
 | PR review report validation | passed |
 | Claude review workflow validation | passed |
@@ -149,6 +157,7 @@ The negative validation suite verifies:
 - issue 071 runtime summaries reach `ready_for_policy_gates` with no blockers
 - issue 071 autonomy metrics record `summary_count: 2`, `ready_count: 2`, `blocked_count: 0`, and `policy_gate_ready_rate: 1`
 - local CLI standard-loop-status command passes
+- local CLI v5-pilot-status command passes
 - local CLI runtime execution dry-run command passes and writes validated evidence
 - local CLI live runtime execution without `-Force` fails deterministically
 - standard template validation passes
@@ -162,9 +171,9 @@ The negative validation suite verifies:
 
 ## Policy Result
 
-Passed. The change standardizes the serious loop into Standard Loop v1, adds templates, schemas, CLI status and controlled dry-run execution, runtime execution validation, CI authority documentation, V5 live parallel pilot boundaries, final report, audit evidence, and repository memory. The task does not access protected credentials, touch production, install dependencies, modify auth or billing surfaces, weaken CI/CD security, change database schema, or deploy.
+Passed. The change adds a V5 readiness gate, two readiness executor slices, runtime launch plans, dry-run runtime execution evidence, runtime-run/result/summary evidence, autonomy metrics, final report, audit packet, ChatGPT/Codex audit, and updated repository memory. The task does not launch live Claude Code or Antigravity, access protected credentials, touch production, install dependencies, modify auth or billing surfaces, weaken CI/CD security, change database schema, or deploy.
 
 ## Unresolved Risks
 
-- Standard Loop v1 PR CI evidence is pending until the branch is pushed and GitHub runs checks.
-- V5 live parallel execution remains planned and must use a dedicated contract before any live multi-session Antigravity expansion.
+- GitHub PR CI evidence is pending until the branch is pushed and GitHub runs checks.
+- V5 live parallel execution remains planned and must use a dedicated live pilot contract before any live multi-session Antigravity expansion.

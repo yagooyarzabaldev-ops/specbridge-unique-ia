@@ -1,0 +1,43 @@
+{
+    "schema_version":  "1",
+    "summary_id":  "v5-pilot-readiness-runtime-summary",
+    "generated_by":  "specbridge-cli",
+    "runtime_launch_path":  ".specbridge/runtime-launches/v5-pilot-readiness-test-readiness.runtime-launch.json",
+    "runtime_result_path":  ".specbridge/runtime-results/v5-pilot-readiness-test-readiness.runtime-result.json",
+    "launch_id":  "v5-pilot-readiness-test-readiness-runtime-launch",
+    "task_id":  "v5-pilot-readiness",
+    "packet_id":  "v5-pilot-readiness-test-readiness",
+    "slice_id":  "test-readiness",
+    "branch_name":  "claude/v5-pilot-readiness-test-readiness",
+    "completion_status":  "complete",
+    "runtime_status":  "succeeded",
+    "result_status":  "recorded",
+    "validation_totals":  {
+                              "total":  1,
+                              "passed":  1,
+                              "failed":  0,
+                              "other":  0
+                          },
+    "policy_result":  "Passed as V5 readiness validation result evidence; no live Claude Code or Antigravity launch occurred.",
+    "merge_readiness":  "ready_for_policy_gates",
+    "blockers":  [
+
+                 ],
+    "execution_policy":  {
+                             "launches_claude":  false,
+                             "launches_antigravity":  false,
+                             "executes_shell":  false,
+                             "requires_network":  false,
+                             "touches_secrets":  false,
+                             "touches_production":  false,
+                             "installs_dependencies":  false,
+                             "deploys":  false
+                         },
+    "source_files":  [
+                         ".specbridge/contracts/v5-pilot-readiness.execution.md",
+                         ".specbridge/executor-packets/v5-pilot-readiness-test-readiness.executor-packet.json",
+                         ".specbridge/runtime-evidence/v5-pilot-readiness-test-readiness.executor-output.md",
+                         ".specbridge/runtime-launches/v5-pilot-readiness-test-readiness.runtime-launch.json",
+                         ".specbridge/runtime-results/v5-pilot-readiness-test-readiness.runtime-result.json"
+                     ]
+}

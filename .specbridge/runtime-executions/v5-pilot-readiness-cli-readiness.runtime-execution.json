@@ -1,0 +1,57 @@
+{
+    "schema_version":  "1",
+    "execution_id":  "v5-pilot-readiness-cli-readiness-runtime-launch-runtime-execution",
+    "generated_by":  "specbridge-cli",
+    "runtime_launch_path":  ".specbridge/runtime-launches/v5-pilot-readiness-cli-readiness.runtime-launch.json",
+    "launch_id":  "v5-pilot-readiness-cli-readiness-runtime-launch",
+    "task_id":  "v5-pilot-readiness",
+    "packet_id":  "v5-pilot-readiness-cli-readiness",
+    "slice_id":  "cli-readiness",
+    "branch_name":  "claude/v5-pilot-readiness-cli-readiness",
+    "dry_run":  true,
+    "timeout_seconds":  30,
+    "allowed_tools":  [
+                          "Read",
+                          "Write"
+                      ],
+    "permission_mode":  "acceptEdits",
+    "max_budget_usd":  "0.25",
+    "command_summary":  "claude -p --no-session-persistence --max-budget-usd 0.25 --permission-mode acceptEdits --tools Read,Write --allowedTools Read,Write --input-format text",
+    "prompt_sections":  [
+                            "Read README.md, SPECBRIDGE.md, AGENTS.md, CLAUDE.md, .specbridge/policy.yaml, the execution contract, and the executor packet before writing.",
+                            "Modify only paths declared in exclusive_write.",
+                            "Treat read_only paths as context only.",
+                            "Run only required validations that are explicitly allowed by the runtime operator.",
+                            "Stop on policy conflict, scope conflict, missing required context, impossible acceptance criteria, protected resource requirement, secrets, production configuration, billing, authentication security, authorization security, dependency installation, database change, CI/CD security change, or deployment automation.",
+                            "Report changed files, validation evidence, policy result, unresolved risks, and completion status."
+                        ],
+    "execution_status":  "dry_run",
+    "exit_code":  null,
+    "timed_out":  false,
+    "stdout":  {
+                   "captured":  false,
+                   "length":  0,
+                   "line_count":  0,
+                   "sha256":  null
+               },
+    "stderr":  {
+                   "captured":  false,
+                   "length":  0,
+                   "line_count":  0,
+                   "sha256":  null
+               },
+    "policy_result":  "Dry run only. Claude Code was not launched.",
+    "execution_policy":  {
+                             "launches_claude":  false,
+                             "launches_antigravity":  false,
+                             "executes_shell":  false,
+                             "requires_network":  false,
+                             "touches_secrets":  false,
+                             "touches_production":  false,
+                             "installs_dependencies":  false,
+                             "deploys":  false
+                         },
+    "source_files":  [
+                         ".specbridge/runtime-launches/v5-pilot-readiness-cli-readiness.runtime-launch.json"
+                     ]
+}

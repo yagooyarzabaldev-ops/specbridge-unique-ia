@@ -1,0 +1,44 @@
+{
+    "schema_version":  "1",
+    "packet_id":  "v5-pilot-readiness-test-readiness",
+    "task_id":  "v5-pilot-readiness",
+    "slice_id":  "test-readiness",
+    "agent_role":  "validation",
+    "goal":  "Verify the V5 pilot readiness command and record readiness test evidence.",
+    "launch_mode":  "manual_antigravity",
+    "branch_name":  "claude/v5-pilot-readiness-test-readiness",
+    "execution_contract_path":  ".specbridge/contracts/v5-pilot-readiness.execution.md",
+    "final_report_path":  ".specbridge/reports/v5-pilot-readiness.final-report.json",
+    "exclusive_write":  [
+                            "scripts/test-specbridge-cli.ps1",
+                            "docs/specbridge-test-results.md",
+                            ".specbridge/runtime-evidence/v5-pilot-readiness-test-readiness.executor-output.md"
+                        ],
+    "read_only":  [
+                      "README.md",
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      "CLAUDE.md",
+                      ".specbridge/policy.yaml",
+                      "scripts/specbridge.ps1",
+                      "docs/specbridge-standard-loop-v1.md",
+                      "docs/specbridge-v5-live-parallel-pilot-boundary.md"
+                  ],
+    "required_validations":  [
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard"
+                             ],
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "status":  "ready_for_handoff",
+    "source_files":  [
+                         ".specbridge/executor-handoffs/v5-pilot-readiness.input.json",
+                         ".specbridge/contracts/v5-pilot-readiness.execution.md"
+                     ],
+    "generated_by":  "specbridge-cli"
+}

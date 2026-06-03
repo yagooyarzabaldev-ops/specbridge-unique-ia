@@ -274,11 +274,11 @@ Acceptance:
 
 ## Current Next Task
 
-After the serious autonomous multi-executor test loop is merged, start a real feature pilot through the same loop.
+After V5 pilot readiness is merged, start a dedicated live V5 pilot through the same standard loop.
 
 Reason:
 
-The repository now has launch plans, runtime-run evidence capture, runtime results, runtime summaries, autonomy metrics, and a two-slice Claude Code proof. The next product proof should use a small behavior change where ChatGPT/Codex defines the spec, Claude Code implements/tests/docs in bounded slices, and ChatGPT/Codex audits the result against the spec and security standards.
+The repository now has Standard Loop v1, a deterministic `v5-pilot-status` readiness gate, launch plans, dry-run runtime execution evidence, runtime-run evidence capture, runtime results, runtime summaries, autonomy metrics, and a two-slice readiness proof. The next product proof should use a small behavior change where ChatGPT/Codex defines the spec, Claude Code implements/tests/docs in live bounded Antigravity slices, and ChatGPT/Codex audits the result against the spec and security standards.
 
 ## Next Runtime Expansion
 
@@ -500,11 +500,12 @@ Run the first live parallel Antigravity pilot from Standard Loop v1 with one sma
 
 Status:
 
-Planned after Standard Loop v1 merges.
+Readiness implemented locally as `v5-pilot-status` with a two-slice dry-run evidence chain. Live parallel execution remains planned and must use a dedicated live pilot contract before launching Antigravity sessions.
 
 Acceptance:
 
 - Standard Loop v1 is merged and `standard-loop-status` reports `ok: true`
+- `v5-pilot-status` reports `ok: true`
 - the pilot has a dedicated execution contract and scope manifest
 - every live executor has a generated packet, runtime launch plan, runtime execution evidence, runtime result, and runtime summary
 - executor write scopes do not overlap

@@ -35,6 +35,7 @@ The local standard surface includes:
 
 - `status`
 - `standard-loop-status`
+- `v5-pilot-status`
 - `validate`
 - `create-contract`
 - `create-report`
@@ -56,6 +57,11 @@ The local standard surface includes:
 `standard-loop-status` is the first real feature pilot for this standard. It reads
 repository files and reports whether the templates, schemas, validators, CI
 authority docs, and latest evidence are present.
+
+`v5-pilot-status` is the readiness gate for the next live parallel pilot. It
+reports whether the repository has V5 boundary docs, a readiness contract and
+scope, two executor packets, runtime launch plans, dry-run execution artifacts,
+runtime summaries, and autonomy metrics before live execution is attempted.
 
 ## Controlled Execution
 

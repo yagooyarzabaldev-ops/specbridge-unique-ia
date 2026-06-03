@@ -1,0 +1,267 @@
+﻿{
+    "schema_version":  "1",
+    "task_id":  "v5-pilot-readiness",
+    "generated_by":  "specbridge-audit-packet-generator",
+    "execution_contract_path":  ".specbridge/contracts/v5-pilot-readiness.execution.md",
+    "changed_files":  [
+                          ".specbridge/audit-packets/v5-pilot-readiness.audit-packet.json",
+                          ".specbridge/audits/v5-pilot-readiness.chatgpt-audit.json",
+                          ".specbridge/context/CURRENT_GOAL.md",
+                          ".specbridge/contracts/v5-pilot-readiness.execution.md",
+                          ".specbridge/executor-handoffs/v5-pilot-readiness.input.json",
+                          ".specbridge/executor-packets/v5-pilot-readiness-cli-readiness.executor-packet.json",
+                          ".specbridge/executor-packets/v5-pilot-readiness-test-readiness.executor-packet.json",
+                          ".specbridge/metrics/v5-pilot-readiness.autonomy-metrics.json",
+                          ".specbridge/reports/v5-pilot-readiness.final-report.json",
+                          ".specbridge/runtime-evidence/v5-pilot-readiness-cli-readiness.executor-output.md",
+                          ".specbridge/runtime-evidence/v5-pilot-readiness-test-readiness.executor-output.md",
+                          ".specbridge/runtime-executions/v5-pilot-readiness-cli-readiness.runtime-execution.json",
+                          ".specbridge/runtime-executions/v5-pilot-readiness-test-readiness.runtime-execution.json",
+                          ".specbridge/runtime-launches/v5-pilot-readiness-cli-readiness.runtime-launch.json",
+                          ".specbridge/runtime-launches/v5-pilot-readiness-test-readiness.runtime-launch.json",
+                          ".specbridge/runtime-results/v5-pilot-readiness-cli-readiness.runtime-result.json",
+                          ".specbridge/runtime-results/v5-pilot-readiness-test-readiness.runtime-result.json",
+                          ".specbridge/runtime-runs/v5-pilot-readiness-cli-readiness.runtime-run.json",
+                          ".specbridge/runtime-runs/v5-pilot-readiness-test-readiness.runtime-run.json",
+                          ".specbridge/runtime-summaries/v5-pilot-readiness-cli-readiness.runtime-summary.json",
+                          ".specbridge/runtime-summaries/v5-pilot-readiness-test-readiness.runtime-summary.json",
+                          ".specbridge/scopes/v5-pilot-readiness.scope.json",
+                          "docs/specbridge-autonomy-backlog.md",
+                          "docs/specbridge-standard-loop-v1.md",
+                          "docs/specbridge-test-results.md",
+                          "docs/specbridge-v5-live-parallel-pilot-boundary.md",
+                          "README.md",
+                          "scripts/specbridge.ps1",
+                          "scripts/test-specbridge-cli.ps1"
+                      ],
+    "diff_summary":  [
+                         {
+                             "file":  ".specbridge/audit-packets/v5-pilot-readiness.audit-packet.json",
+                             "added_lines":  null,
+                             "deleted_lines":  null
+                         },
+                         {
+                             "file":  ".specbridge/audits/v5-pilot-readiness.chatgpt-audit.json",
+                             "added_lines":  null,
+                             "deleted_lines":  null
+                         },
+                         {
+                             "file":  ".specbridge/context/CURRENT_GOAL.md",
+                             "added_lines":  8,
+                             "deleted_lines":  6
+                         },
+                         {
+                             "file":  ".specbridge/contracts/v5-pilot-readiness.execution.md",
+                             "added_lines":  176,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-handoffs/v5-pilot-readiness.input.json",
+                             "added_lines":  55,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-packets/v5-pilot-readiness-cli-readiness.executor-packet.json",
+                             "added_lines":  42,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-packets/v5-pilot-readiness-test-readiness.executor-packet.json",
+                             "added_lines":  44,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/metrics/v5-pilot-readiness.autonomy-metrics.json",
+                             "added_lines":  43,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/reports/v5-pilot-readiness.final-report.json",
+                             "added_lines":  58,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-evidence/v5-pilot-readiness-cli-readiness.executor-output.md",
+                             "added_lines":  16,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-evidence/v5-pilot-readiness-test-readiness.executor-output.md",
+                             "added_lines":  17,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-executions/v5-pilot-readiness-cli-readiness.runtime-execution.json",
+                             "added_lines":  57,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-executions/v5-pilot-readiness-test-readiness.runtime-execution.json",
+                             "added_lines":  57,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-launches/v5-pilot-readiness-cli-readiness.runtime-launch.json",
+                             "added_lines":  68,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-launches/v5-pilot-readiness-test-readiness.runtime-launch.json",
+                             "added_lines":  70,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-results/v5-pilot-readiness-cli-readiness.runtime-result.json",
+                             "added_lines":  47,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-results/v5-pilot-readiness-test-readiness.runtime-result.json",
+                             "added_lines":  47,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-runs/v5-pilot-readiness-cli-readiness.runtime-run.json",
+                             "added_lines":  54,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-runs/v5-pilot-readiness-test-readiness.runtime-run.json",
+                             "added_lines":  54,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-summaries/v5-pilot-readiness-cli-readiness.runtime-summary.json",
+                             "added_lines":  43,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-summaries/v5-pilot-readiness-test-readiness.runtime-summary.json",
+                             "added_lines":  43,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/scopes/v5-pilot-readiness.scope.json",
+                             "added_lines":  53,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-autonomy-backlog.md",
+                             "added_lines":  4,
+                             "deleted_lines":  3
+                         },
+                         {
+                             "file":  "docs/specbridge-standard-loop-v1.md",
+                             "added_lines":  6,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-test-results.md",
+                             "added_lines":  170,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-v5-live-parallel-pilot-boundary.md",
+                             "added_lines":  22,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "README.md",
+                             "added_lines":  1,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/specbridge.ps1",
+                             "added_lines":  287,
+                             "deleted_lines":  1
+                         },
+                         {
+                             "file":  "scripts/test-specbridge-cli.ps1",
+                             "added_lines":  5,
+                             "deleted_lines":  0
+                         }
+                     ],
+    "validation_commands":  [
+                                "git diff --check",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 v5-pilot-status",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-autonomy-metrics.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-executor-packets.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-executions.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-launches.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-results.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-runs.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-summaries.ps1"
+                            ],
+    "validation_results":  [
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 v5-pilot-status",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-executor-packets.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-launches.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-executions.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-runs.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-results.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-summaries.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-autonomy-metrics.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "git diff --check",
+                                   "result":  "passed"
+                               }
+                           ],
+    "final_report_path":  ".specbridge/reports/v5-pilot-readiness.final-report.json",
+    "ci_status":  "not_collected",
+    "pr_review_report_path":  null,
+    "policy_result":  "Passed. The task remained inside the V5 readiness contract, generated dry-run/evidence-capture artifacts only, did not launch live Claude Code or Antigravity, did not access secrets, did not touch production, billing, authentication, authorization, database, dependency installation, CI/CD security, or deployment scope.",
+    "unresolved_risks":  [
+                             "Live parallel Antigravity execution is still not performed in this task and requires a dedicated live pilot contract.",
+                             "GitHub CI evidence must be collected after the branch is pushed and a pull request runs checks."
+                         ],
+    "completion_status":  "complete_pending_ci",
+    "source_files":  [
+                         ".specbridge/contracts/v5-pilot-readiness.execution.md",
+                         ".specbridge/reports/v5-pilot-readiness.final-report.json"
+                     ],
+    "secret_omission":  "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

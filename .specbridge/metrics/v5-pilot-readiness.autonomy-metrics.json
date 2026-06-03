@@ -1,0 +1,43 @@
+{
+    "schema_version":  "1",
+    "metrics_id":  "v5-pilot-readiness-autonomy-metrics",
+    "generated_by":  "specbridge-cli",
+    "task_filter":  "v5-pilot-readiness",
+    "summary_count":  2,
+    "ready_count":  2,
+    "blocked_count":  0,
+    "executor_count":  2,
+    "validation_totals":  {
+                              "total":  2,
+                              "passed":  2,
+                              "failed":  0,
+                              "other":  0
+                          },
+    "runtime_status_counts":  {
+                                  "succeeded":  2
+                              },
+    "result_status_counts":  {
+                                 "recorded":  2
+                             },
+    "completion_status_counts":  {
+                                     "complete":  2
+                                 },
+    "merge_readiness_counts":  {
+                                   "ready_for_policy_gates":  2
+                               },
+    "policy_gate_ready_rate":  1,
+    "source_summaries":  [
+                             ".specbridge/runtime-summaries/v5-pilot-readiness-cli-readiness.runtime-summary.json",
+                             ".specbridge/runtime-summaries/v5-pilot-readiness-test-readiness.runtime-summary.json"
+                         ],
+    "source_results":  [
+                           ".specbridge/runtime-results/v5-pilot-readiness-cli-readiness.runtime-result.json",
+                           ".specbridge/runtime-results/v5-pilot-readiness-test-readiness.runtime-result.json"
+                       ],
+    "source_files":  [
+                         ".specbridge/runtime-results/v5-pilot-readiness-cli-readiness.runtime-result.json",
+                         ".specbridge/runtime-results/v5-pilot-readiness-test-readiness.runtime-result.json",
+                         ".specbridge/runtime-summaries/v5-pilot-readiness-cli-readiness.runtime-summary.json",
+                         ".specbridge/runtime-summaries/v5-pilot-readiness-test-readiness.runtime-summary.json"
+                     ]
+}

@@ -1,0 +1,53 @@
+{
+  "contract_id": "v5-pilot-readiness",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/audit-packets/v5-pilot-readiness.audit-packet.json",
+    ".specbridge/audits/v5-pilot-readiness.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/v5-pilot-readiness.execution.md",
+    ".specbridge/executor-handoffs/v5-pilot-readiness.input.json",
+    ".specbridge/executor-packets/v5-pilot-readiness-cli-readiness.executor-packet.json",
+    ".specbridge/executor-packets/v5-pilot-readiness-test-readiness.executor-packet.json",
+    ".specbridge/metrics/v5-pilot-readiness.autonomy-metrics.json",
+    ".specbridge/reports/v5-pilot-readiness.final-report.json",
+    ".specbridge/runtime-evidence/v5-pilot-readiness-cli-readiness.executor-output.md",
+    ".specbridge/runtime-evidence/v5-pilot-readiness-test-readiness.executor-output.md",
+    ".specbridge/runtime-executions/v5-pilot-readiness-cli-readiness.runtime-execution.json",
+    ".specbridge/runtime-executions/v5-pilot-readiness-test-readiness.runtime-execution.json",
+    ".specbridge/runtime-launches/v5-pilot-readiness-cli-readiness.runtime-launch.json",
+    ".specbridge/runtime-launches/v5-pilot-readiness-test-readiness.runtime-launch.json",
+    ".specbridge/runtime-results/v5-pilot-readiness-cli-readiness.runtime-result.json",
+    ".specbridge/runtime-results/v5-pilot-readiness-test-readiness.runtime-result.json",
+    ".specbridge/runtime-runs/v5-pilot-readiness-cli-readiness.runtime-run.json",
+    ".specbridge/runtime-runs/v5-pilot-readiness-test-readiness.runtime-run.json",
+    ".specbridge/runtime-summaries/v5-pilot-readiness-cli-readiness.runtime-summary.json",
+    ".specbridge/runtime-summaries/v5-pilot-readiness-test-readiness.runtime-summary.json",
+    ".specbridge/scopes/v5-pilot-readiness.scope.json",
+    "README.md",
+    "docs/specbridge-autonomy-backlog.md",
+    "docs/specbridge-standard-loop-v1.md",
+    "docs/specbridge-test-results.md",
+    "docs/specbridge-v5-live-parallel-pilot-boundary.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".github/workflows/foundation-validation.yml",
+    ".github/workflows/specbridge-review-gate.yml",
+    ".github/workflows/specbridge-pr-review-report.yml",
+    ".github/workflows/claude-review-non-blocking.yml",
+    "docs/specbridge-ci-authority-standard.md",
+    "docs/specbridge-runtime-runner.md",
+    "docs/specbridge-standard-templates.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-073-standard-loop-v1"
+  ],
+  "final_report": ".specbridge/reports/v5-pilot-readiness.final-report.json"
+}

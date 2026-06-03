@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "v5-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -449,6 +449,291 @@ function Invoke-StandardLoopStatusCommand {
   Write-CliJson $status -Depth 10
 
   if ($missing.Count -gt 0) {
+    exit 1
+  }
+
+  exit 0
+}
+
+function New-V5Prerequisite {
+  param(
+    [string] $Name,
+    [bool] $Passed,
+    [string] $Evidence,
+    [string[]] $Details = @()
+  )
+
+  if ($null -eq $Details) {
+    $Details = @()
+  }
+
+  return [ordered]@{
+    name = $Name
+    passed = $Passed
+    evidence = $Evidence
+    details = @($Details)
+  }
+}
+
+function Invoke-V5PilotStatusCommand {
+  $standardRequiredPaths = @(
+    "templates/specbridge/execution-contract.template.md",
+    "templates/specbridge/scope-manifest.template.json",
+    "templates/specbridge/executor-handoff.template.json",
+    "templates/specbridge/runtime-launch.template.json",
+    "templates/specbridge/final-report.template.json",
+    "templates/specbridge/audit-packet.template.json",
+    "templates/specbridge/chatgpt-audit.template.json",
+    ".specbridge/schemas/executor-packet.schema.json",
+    ".specbridge/schemas/runtime-launch.schema.json",
+    ".specbridge/schemas/runtime-run.schema.json",
+    ".specbridge/schemas/runtime-result.schema.json",
+    ".specbridge/schemas/runtime-summary.schema.json",
+    ".specbridge/schemas/autonomy-metrics.schema.json",
+    ".specbridge/schemas/runtime-execution.schema.json",
+    "scripts/validate-standard-templates.ps1",
+    "scripts/validate-standard-ci-authority.ps1",
+    "scripts/validate-runtime-executions.ps1",
+    ".github/workflows/foundation-validation.yml",
+    ".github/workflows/specbridge-review-gate.yml",
+    ".github/workflows/specbridge-pr-review-report.yml",
+    ".github/workflows/claude-review-non-blocking.yml"
+  )
+
+  $standardPathStatus = Get-StandardLoopPathStatus -Paths $standardRequiredPaths
+  $missingStandardPaths = @($standardPathStatus | Where-Object { -not $_.exists } | ForEach-Object { $_.path })
+
+  $runtimeValidatorPaths = @(
+    "scripts/validate-runtime-runs.ps1",
+    "scripts/validate-runtime-results.ps1",
+    "scripts/validate-runtime-summaries.ps1",
+    "scripts/validate-autonomy-metrics.ps1",
+    "scripts/validate-runtime-executions.ps1"
+  )
+
+  $runtimeValidatorStatus = Get-StandardLoopPathStatus -Paths $runtimeValidatorPaths
+  $missingRuntimeValidators = @($runtimeValidatorStatus | Where-Object { -not $_.exists } | ForEach-Object { $_.path })
+
+  $v5BoundaryPath = "docs/specbridge-v5-live-parallel-pilot-boundary.md"
+  $currentGoalPath = ".specbridge/context/CURRENT_GOAL.md"
+  $contractPath = ".specbridge/contracts/v5-pilot-readiness.execution.md"
+  $scopePath = ".specbridge/scopes/v5-pilot-readiness.scope.json"
+  $handoffPath = ".specbridge/executor-handoffs/v5-pilot-readiness.input.json"
+  $metricsPath = ".specbridge/metrics/v5-pilot-readiness.autonomy-metrics.json"
+  $packetPaths = @()
+  $runtimeLaunchPaths = @()
+  $runtimeExecutionPaths = @()
+  $runtimeSummaryPaths = @()
+
+  if (Test-Path -LiteralPath ".specbridge/executor-packets") {
+    $packetPaths = @(
+      Get-ChildItem -LiteralPath ".specbridge/executor-packets" -Filter "v5-pilot-readiness-*.executor-packet.json" -File |
+        Sort-Object Name |
+        ForEach-Object { Normalize-RepoPath -Path (Join-Path ".specbridge/executor-packets" $_.Name) -FieldName "v5_executor_packet" }
+    )
+  }
+
+  if (Test-Path -LiteralPath ".specbridge/runtime-launches") {
+    $runtimeLaunchPaths = @(
+      Get-ChildItem -LiteralPath ".specbridge/runtime-launches" -Filter "v5-pilot-readiness-*.runtime-launch.json" -File |
+        Sort-Object Name |
+        ForEach-Object { Normalize-RepoPath -Path (Join-Path ".specbridge/runtime-launches" $_.Name) -FieldName "v5_runtime_launch" }
+    )
+  }
+
+  if (Test-Path -LiteralPath ".specbridge/runtime-executions") {
+    $runtimeExecutionPaths = @(
+      Get-ChildItem -LiteralPath ".specbridge/runtime-executions" -Filter "v5-pilot-readiness-*.runtime-execution.json" -File |
+        Sort-Object Name |
+        ForEach-Object { Normalize-RepoPath -Path (Join-Path ".specbridge/runtime-executions" $_.Name) -FieldName "v5_runtime_execution" }
+    )
+  }
+
+  if (Test-Path -LiteralPath ".specbridge/runtime-summaries") {
+    $runtimeSummaryPaths = @(
+      Get-ChildItem -LiteralPath ".specbridge/runtime-summaries" -Filter "v5-pilot-readiness-*.runtime-summary.json" -File |
+        Sort-Object Name |
+        ForEach-Object { Normalize-RepoPath -Path (Join-Path ".specbridge/runtime-summaries" $_.Name) -FieldName "v5_runtime_summary" }
+    )
+  }
+
+  $runtimeExecutionEvidenceReady = ($runtimeExecutionPaths.Count -ge 2)
+  $runtimeExecutionEvidenceDetails = @()
+
+  foreach ($executionPath in $runtimeExecutionPaths) {
+    $executionArtifact = Get-JsonObjectFromFile -Path $executionPath -Description "V5 runtime execution"
+
+    if (-not ($executionArtifact.PSObject.Properties.Name.Contains("dry_run") -and [bool] $executionArtifact.dry_run -and $executionArtifact.execution_status -eq "dry_run")) {
+      $runtimeExecutionEvidenceReady = $false
+      $runtimeExecutionEvidenceDetails += "$executionPath is not dry_run evidence."
+    }
+  }
+
+  if ($runtimeExecutionPaths.Count -lt 2) {
+    $runtimeExecutionEvidenceDetails += "At least two V5 runtime dry-run execution artifacts are required."
+  }
+
+  $runtimeSummaryReady = ($runtimeSummaryPaths.Count -ge 2)
+  $runtimeSummaryDetails = @()
+
+  foreach ($summaryPath in $runtimeSummaryPaths) {
+    $summaryArtifact = Get-JsonObjectFromFile -Path $summaryPath -Description "V5 runtime summary"
+
+    if ($summaryArtifact.merge_readiness -ne "ready_for_policy_gates") {
+      $runtimeSummaryReady = $false
+      $runtimeSummaryDetails += "$summaryPath is not ready_for_policy_gates."
+    }
+  }
+
+  if ($runtimeSummaryPaths.Count -lt 2) {
+    $runtimeSummaryDetails += "At least two V5 runtime summaries are required."
+  }
+
+  $latestRuntimeExecution = Get-LatestArtifactPath -Path ".specbridge/runtime-executions" -Filter "*.runtime-execution.json"
+  $runtimeExecutionDryRunReady = $false
+  $runtimeExecutionDetails = @()
+
+  if ($null -eq $latestRuntimeExecution) {
+    $runtimeExecutionDetails += "No runtime execution artifact was found."
+  }
+  else {
+    $execution = Get-JsonObjectFromFile -Path $latestRuntimeExecution -Description "runtime execution"
+
+    if ($execution.PSObject.Properties.Name.Contains("dry_run") -and $execution.PSObject.Properties.Name.Contains("execution_status")) {
+      $runtimeExecutionDryRunReady = ([bool] $execution.dry_run -and $execution.execution_status -eq "dry_run")
+    }
+
+    if (-not $runtimeExecutionDryRunReady) {
+      $runtimeExecutionDetails += "Latest runtime execution is not a dry_run evidence artifact."
+    }
+  }
+
+  $runtimeExecutionEvidence = "missing"
+
+  if ($null -ne $latestRuntimeExecution) {
+    $runtimeExecutionEvidence = $latestRuntimeExecution
+  }
+
+  $prerequisites = @()
+  $prerequisites += New-V5Prerequisite `
+    -Name "standard_loop_v1_paths" `
+    -Passed ($missingStandardPaths.Count -eq 0) `
+    -Evidence "standard-loop-status required path set" `
+    -Details $missingStandardPaths
+  $prerequisites += New-V5Prerequisite `
+    -Name "runtime_evidence_validators" `
+    -Passed ($missingRuntimeValidators.Count -eq 0) `
+    -Evidence ($runtimeValidatorPaths -join ", ") `
+    -Details $missingRuntimeValidators
+  $prerequisites += New-V5Prerequisite `
+    -Name "controlled_runner_dry_run_evidence" `
+    -Passed $runtimeExecutionDryRunReady `
+    -Evidence $runtimeExecutionEvidence `
+    -Details $runtimeExecutionDetails
+  $prerequisites += New-V5Prerequisite `
+    -Name "v5_boundary_documented" `
+    -Passed (Test-Path -LiteralPath $v5BoundaryPath) `
+    -Evidence $v5BoundaryPath
+  $prerequisites += New-V5Prerequisite `
+    -Name "current_goal_points_to_v5" `
+    -Passed ((Test-Path -LiteralPath $currentGoalPath) -and ((Get-Content -LiteralPath $currentGoalPath -Raw) -match "V5 live parallel pilot")) `
+    -Evidence $currentGoalPath
+  $prerequisites += New-V5Prerequisite `
+    -Name "v5_readiness_contract_present" `
+    -Passed (Test-Path -LiteralPath $contractPath) `
+    -Evidence $contractPath
+  $prerequisites += New-V5Prerequisite `
+    -Name "v5_readiness_scope_present" `
+    -Passed (Test-Path -LiteralPath $scopePath) `
+    -Evidence $scopePath
+  $prerequisites += New-V5Prerequisite `
+    -Name "v5_executor_handoff_present" `
+    -Passed (Test-Path -LiteralPath $handoffPath) `
+    -Evidence $handoffPath
+  $prerequisites += New-V5Prerequisite `
+    -Name "v5_executor_packets_prepared" `
+    -Passed ($packetPaths.Count -ge 2) `
+    -Evidence ($packetPaths -join ", ") `
+    -Details $(if ($packetPaths.Count -ge 2) { @() } else { @("At least two V5 executor packets are required.") })
+  $prerequisites += New-V5Prerequisite `
+    -Name "v5_runtime_launches_prepared" `
+    -Passed ($runtimeLaunchPaths.Count -ge 2) `
+    -Evidence ($runtimeLaunchPaths -join ", ") `
+    -Details $(if ($runtimeLaunchPaths.Count -ge 2) { @() } else { @("At least two V5 runtime launch plans are required.") })
+  $prerequisites += New-V5Prerequisite `
+    -Name "v5_runtime_dry_runs_recorded" `
+    -Passed $runtimeExecutionEvidenceReady `
+    -Evidence ($runtimeExecutionPaths -join ", ") `
+    -Details $runtimeExecutionEvidenceDetails
+  $prerequisites += New-V5Prerequisite `
+    -Name "v5_runtime_summaries_ready" `
+    -Passed $runtimeSummaryReady `
+    -Evidence ($runtimeSummaryPaths -join ", ") `
+    -Details $runtimeSummaryDetails
+  $prerequisites += New-V5Prerequisite `
+    -Name "v5_autonomy_metrics_present" `
+    -Passed (Test-Path -LiteralPath $metricsPath) `
+    -Evidence $metricsPath
+
+  $failedPrerequisites = @($prerequisites | Where-Object { -not $_.passed })
+  $readinessStatus = "ready_for_v5_live_contract"
+
+  if ($failedPrerequisites.Count -gt 0) {
+    $readinessStatus = "blocked"
+  }
+
+  Write-CliJson ([ordered]@{
+    command = "v5-pilot-status"
+    ok = ($failedPrerequisites.Count -eq 0)
+    phase = "V5 live parallel Antigravity pilot readiness"
+    branch = Get-GitValue -Arguments @("branch", "--show-current") -Fallback "unknown"
+    head = Get-GitValue -Arguments @("rev-parse", "--short", "HEAD") -Fallback "unknown"
+    readiness_status = $readinessStatus
+    prerequisite_count = @($prerequisites).Count
+    failed_prerequisite_count = @($failedPrerequisites).Count
+    prerequisites = @($prerequisites)
+    latest_artifacts = [ordered]@{
+      contract = Get-LatestArtifactPath -Path ".specbridge/contracts" -Filter "*.execution.md"
+      scope = Get-LatestArtifactPath -Path ".specbridge/scopes" -Filter "*.scope.json"
+      runtime_execution = $latestRuntimeExecution
+      runtime_run = Get-LatestArtifactPath -Path ".specbridge/runtime-runs" -Filter "*.runtime-run.json"
+      runtime_result = Get-LatestArtifactPath -Path ".specbridge/runtime-results" -Filter "*.runtime-result.json"
+      runtime_summary = Get-LatestArtifactPath -Path ".specbridge/runtime-summaries" -Filter "*.runtime-summary.json"
+      autonomy_metrics = Get-LatestArtifactPath -Path ".specbridge/metrics" -Filter "*.autonomy-metrics.json"
+      audit_packet = Get-LatestArtifactPath -Path ".specbridge/audit-packets" -Filter "*.audit-packet.json"
+      chatgpt_audit = Get-LatestArtifactPath -Path ".specbridge/audits" -Filter "*.chatgpt-audit.json"
+    }
+    v5_artifacts = [ordered]@{
+      readiness_contract = $contractPath
+      readiness_scope = $scopePath
+      executor_handoff = $handoffPath
+      executor_packets = @($packetPaths)
+      runtime_launches = @($runtimeLaunchPaths)
+      runtime_executions = @($runtimeExecutionPaths)
+      runtime_summaries = @($runtimeSummaryPaths)
+      autonomy_metrics = $metricsPath
+    }
+    live_execution_boundary = [ordered]@{
+      requires_dedicated_execution_contract = $true
+      requires_non_overlapping_executor_scopes = $true
+      requires_runtime_launch_plan_per_executor = $true
+      requires_runtime_result_and_summary_per_executor = $true
+      requires_chatgpt_codex_audit = $true
+      production_deployment_allowed = $false
+      secrets_allowed = $false
+      billing_allowed = $false
+      auth_security_changes_allowed = $false
+      ci_cd_security_changes_allowed = $false
+    }
+    next_required_evidence = @(
+      "Create the live V5 pilot execution contract with one small behavior change.",
+      "Generate one executor packet and runtime launch plan per live executor.",
+      "Run live Antigravity/Claude Code sessions only inside declared exclusive_write scopes.",
+      "Record runtime-run, runtime-result, runtime-summary, autonomy metrics, final report, audit packet, ChatGPT/Codex audit, and GitHub CI evidence before integration."
+    )
+  }) -Depth 10
+
+  if ($failedPrerequisites.Count -gt 0) {
     exit 1
   }
 
@@ -2664,6 +2949,7 @@ switch ($Command) {
   "summarize-runtime" { Invoke-SummarizeRuntimeCommand }
   "summarize-autonomy-metrics" { Invoke-SummarizeAutonomyMetricsCommand }
   "standard-loop-status" { Invoke-StandardLoopStatusCommand }
+  "v5-pilot-status" { Invoke-V5PilotStatusCommand }
   "plan-executor-branches" { Invoke-PlanExecutorBranchesCommand }
   "record-github-evidence" { Invoke-RecordGithubEvidenceCommand }
   "coordinate-executors" { Invoke-CoordinateExecutorsCommand }

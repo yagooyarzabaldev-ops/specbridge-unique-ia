@@ -1,0 +1,55 @@
+{
+  "task_id": "v5-pilot-readiness",
+  "slices": [
+    {
+      "id": "cli-readiness",
+      "role": "implementation",
+      "goal": "Implement the V5 pilot readiness status command and preserve the live execution boundary.",
+      "contract_path": ".specbridge/contracts/v5-pilot-readiness.execution.md",
+      "final_report_path": ".specbridge/reports/v5-pilot-readiness.final-report.json",
+      "exclusive_write": [
+        "scripts/specbridge.ps1",
+        ".specbridge/runtime-evidence/v5-pilot-readiness-cli-readiness.executor-output.md"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".specbridge/policy.yaml",
+        "docs/specbridge-standard-loop-v1.md",
+        "docs/specbridge-v5-live-parallel-pilot-boundary.md"
+      ],
+      "required_validations": [
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 v5-pilot-status",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-executions.ps1"
+      ]
+    },
+    {
+      "id": "test-readiness",
+      "role": "validation",
+      "goal": "Verify the V5 pilot readiness command and record readiness test evidence.",
+      "contract_path": ".specbridge/contracts/v5-pilot-readiness.execution.md",
+      "final_report_path": ".specbridge/reports/v5-pilot-readiness.final-report.json",
+      "exclusive_write": [
+        "scripts/test-specbridge-cli.ps1",
+        "docs/specbridge-test-results.md",
+        ".specbridge/runtime-evidence/v5-pilot-readiness-test-readiness.executor-output.md"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".specbridge/policy.yaml",
+        "scripts/specbridge.ps1",
+        "docs/specbridge-standard-loop-v1.md",
+        "docs/specbridge-v5-live-parallel-pilot-boundary.md"
+      ],
+      "required_validations": [
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard"
+      ]
+    }
+  ]
+}
