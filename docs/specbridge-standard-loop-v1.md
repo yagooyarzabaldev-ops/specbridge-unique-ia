@@ -53,10 +53,17 @@ The local standard surface includes:
 - `record-github-evidence`
 - `coordinate-executors`
 - `review-gate`
+- `standard-loop-orchestrate`
 
 `standard-loop-status` is the first real feature pilot for this standard. It reads
 repository files and reports whether the templates, schemas, validators, CI
 authority docs, and latest evidence are present.
+
+`standard-loop-orchestrate` is the first one-command orchestration surface. It
+does not run the loop. It reports the governed phases, required gates, current
+repository phase, next recommended action, latest artifacts, policy boundaries,
+and optional `.specbridge/standard-loop-runs/*.standard-loop-run.json` artifact
+from repository files.
 
 `v5-pilot-status` is the readiness gate for the next live parallel pilot. It
 reports whether the repository has V5 boundary docs, a readiness contract and

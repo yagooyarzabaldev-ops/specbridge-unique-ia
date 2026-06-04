@@ -149,6 +149,69 @@ try {
       -Result (Invoke-Cli -Arguments @("standard-loop-status")) `
       -ExpectedPattern '"standard"\s*:\s*"SpecBridge Standard Loop v1"'
 
+    $standardLoopOrchestrationResult = Invoke-Cli -Arguments @("standard-loop-orchestrate")
+
+    Assert-Success `
+      -Name "standard-loop-orchestrate" `
+      -Result $standardLoopOrchestrationResult `
+      -ExpectedPattern '"command"\s*:\s*"standard-loop-orchestrate"'
+
+    if ($standardLoopOrchestrationResult.ExitCode -eq 0) {
+      $standardLoopOrchestrationJson = $null
+      try { $standardLoopOrchestrationJson = $standardLoopOrchestrationResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      if ($null -eq $standardLoopOrchestrationJson) {
+        Write-Output "FAIL standard-loop-orchestrate output was not valid JSON."
+        $failed = $true
+      }
+      elseif (@($standardLoopOrchestrationJson.phases).Count -lt 9) {
+        Write-Output "FAIL standard-loop-orchestrate expected at least 9 phases."
+        $failed = $true
+      }
+      elseif (-not $standardLoopOrchestrationJson.required_gates.PSObject.Properties.Name.Contains("github")) {
+        Write-Output "FAIL standard-loop-orchestrate missing required_gates.github."
+        $failed = $true
+      }
+      else {
+        Write-Output "PASS standard-loop-orchestrate includes phases and GitHub gates."
+      }
+    }
+
+    Assert-Success `
+      -Name "standard-loop-orchestrate-output-path" `
+      -Result (Invoke-Cli -Arguments @(
+        "standard-loop-orchestrate",
+        "-TaskId",
+        "cli-fixture",
+        "-OutputPath",
+        ".specbridge/standard-loop-runs/cli-fixture.standard-loop-run.json",
+        "-Force"
+      )) `
+      -ExpectedPattern '"output_path"\s*:\s*"\.specbridge/standard-loop-runs/cli-fixture\.standard-loop-run\.json"'
+
+    if (-not (Test-Path -LiteralPath ".specbridge/standard-loop-runs/cli-fixture.standard-loop-run.json" -PathType Leaf)) {
+      Write-Output "FAIL standard-loop-orchestrate did not write the requested output path."
+      $failed = $true
+    }
+    else {
+      try {
+        $standardLoopRun = Get-Content -LiteralPath ".specbridge/standard-loop-runs/cli-fixture.standard-loop-run.json" -Raw | ConvertFrom-Json
+
+        if ($standardLoopRun.command -ne "standard-loop-orchestrate" -or $standardLoopRun.task_id -ne "cli-fixture") {
+          Write-Output "FAIL standard-loop-orchestrate output artifact has unexpected content."
+          $failed = $true
+        }
+        else {
+          Write-Output "PASS standard-loop-orchestrate output artifact validates by inspection."
+        }
+      }
+      catch {
+        Write-Output "FAIL standard-loop-orchestrate output artifact is not valid JSON."
+        Write-Output $_.Exception.Message
+        $failed = $true
+      }
+    }
+
     Assert-Success `
       -Name "v5-pilot-status" `
       -Result (Invoke-Cli -Arguments @("v5-pilot-status")) `

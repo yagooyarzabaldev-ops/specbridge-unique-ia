@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -607,6 +607,267 @@ function Invoke-StandardLoopStatusCommand {
   }
 
   Write-CliJson $status -Depth 10
+
+  if ($missing.Count -gt 0) {
+    exit 1
+  }
+
+  exit 0
+}
+
+function Get-MarkdownSectionText {
+  param(
+    [string] $Path,
+    [string] $Heading
+  )
+
+  $normalizedPath = Normalize-RepoPath -Path $Path -FieldName "MarkdownPath"
+
+  if (-not (Test-Path -LiteralPath $normalizedPath -PathType Leaf)) {
+    return ""
+  }
+
+  $target = "## $Heading"
+  $capturing = $false
+  $lines = @()
+
+  foreach ($line in (Get-Content -LiteralPath $normalizedPath)) {
+    if ($line.Trim() -eq $target) {
+      $capturing = $true
+      continue
+    }
+
+    if ($capturing -and $line -match "^##\s+") {
+      break
+    }
+
+    if ($capturing) {
+      $lines += $line
+    }
+  }
+
+  return (($lines -join "`n").Trim())
+}
+
+function Invoke-StandardLoopOrchestrateCommand {
+  $templatePaths = @(
+    "templates/specbridge/execution-contract.template.md",
+    "templates/specbridge/scope-manifest.template.json",
+    "templates/specbridge/executor-handoff.template.json",
+    "templates/specbridge/runtime-launch.template.json",
+    "templates/specbridge/final-report.template.json",
+    "templates/specbridge/audit-packet.template.json",
+    "templates/specbridge/chatgpt-audit.template.json"
+  )
+
+  $schemaPaths = @(
+    ".specbridge/schemas/executor-packet.schema.json",
+    ".specbridge/schemas/runtime-launch.schema.json",
+    ".specbridge/schemas/runtime-run.schema.json",
+    ".specbridge/schemas/runtime-result.schema.json",
+    ".specbridge/schemas/runtime-summary.schema.json",
+    ".specbridge/schemas/autonomy-metrics.schema.json",
+    ".specbridge/schemas/runtime-execution.schema.json"
+  )
+
+  $validatorPaths = @(
+    "scripts/validate-foundation.ps1",
+    "scripts/validate-contracts.ps1",
+    "scripts/validate-contract-scopes.ps1",
+    "scripts/validate-final-reports.ps1",
+    "scripts/validate-audit-packets.ps1",
+    "scripts/validate-chatgpt-audits.ps1",
+    "scripts/validate-security-gates.ps1",
+    "scripts/validate-review-gate.ps1",
+    "scripts/specbridge-smoke.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  )
+
+  $workflowPaths = @(
+    ".github/workflows/foundation-validation.yml",
+    ".github/workflows/specbridge-review-gate.yml",
+    ".github/workflows/specbridge-pr-review-report.yml",
+    ".github/workflows/claude-review-non-blocking.yml"
+  )
+
+  $docPaths = @(
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "docs/specbridge-standard-loop-v1.md",
+    "docs/specbridge-ci-authority-standard.md"
+  )
+
+  $templateStatus = Get-StandardLoopPathStatus -Paths $templatePaths
+  $schemaStatus = Get-StandardLoopPathStatus -Paths $schemaPaths
+  $validatorStatus = Get-StandardLoopPathStatus -Paths $validatorPaths
+  $workflowStatus = Get-StandardLoopPathStatus -Paths $workflowPaths
+  $docStatus = Get-StandardLoopPathStatus -Paths $docPaths
+
+  $allRequired = @($templateStatus + $schemaStatus + $validatorStatus + $workflowStatus + $docStatus)
+  $missing = @($allRequired | Where-Object { -not $_.exists } | ForEach-Object { $_.path })
+
+  $currentPhase = Get-MarkdownSectionText -Path ".specbridge/context/CURRENT_GOAL.md" -Heading "Current Phase"
+  $nextRecommendedAction = Get-MarkdownSectionText -Path ".specbridge/context/CURRENT_GOAL.md" -Heading "Next Recommended Task"
+
+  if ([string]::IsNullOrWhiteSpace($currentPhase)) {
+    $currentPhase = "not_declared"
+  }
+
+  if ([string]::IsNullOrWhiteSpace($nextRecommendedAction)) {
+    $nextRecommendedAction = "not_declared"
+  }
+
+  $resolvedTaskId = $TaskId
+  if ([string]::IsNullOrWhiteSpace($resolvedTaskId)) {
+    $resolvedTaskId = "current-goal"
+  }
+
+  $phases = @(
+    [ordered]@{
+      order = 1
+      id = "goal_intake"
+      name = "Goal, acceptance criteria, and risk boundary"
+      required_evidence = @(".specbridge/context/CURRENT_GOAL.md", "GitHub issue")
+      gate = "goal_is_explicit"
+    },
+    [ordered]@{
+      order = 2
+      id = "contract_scope"
+      name = "Execution contract and scope manifest"
+      required_evidence = @(".specbridge/contracts/*.execution.md", ".specbridge/scopes/*.scope.json")
+      gate = "contract_and_scope_validate"
+    },
+    [ordered]@{
+      order = 3
+      id = "executor_preparation"
+      name = "Executor handoff, decomposition, and packets"
+      required_evidence = @(".specbridge/executor-handoffs/*.json", ".specbridge/executor-packets/*.executor-packet.json")
+      gate = "executor_scopes_do_not_overlap"
+    },
+    [ordered]@{
+      order = 4
+      id = "runtime_planning"
+      name = "Runtime launch planning"
+      required_evidence = @(".specbridge/runtime-launches/*.runtime-launch.json")
+      gate = "launch_plan_validates"
+    },
+    [ordered]@{
+      order = 5
+      id = "controlled_execution"
+      name = "Controlled execution and evidence capture"
+      required_evidence = @(".specbridge/runtime-executions/*.runtime-execution.json", ".specbridge/runtime-runs/*.runtime-run.json")
+      gate = "execution_is_bounded_and_recorded"
+    },
+    [ordered]@{
+      order = 6
+      id = "result_summary"
+      name = "Runtime result, summary, and autonomy metrics"
+      required_evidence = @(".specbridge/runtime-results/*.runtime-result.json", ".specbridge/runtime-summaries/*.runtime-summary.json", ".specbridge/metrics/*.autonomy-metrics.json")
+      gate = "summaries_ready_for_policy_gates"
+    },
+    [ordered]@{
+      order = 7
+      id = "report_audit"
+      name = "Final report, audit packet, and ChatGPT/Codex audit"
+      required_evidence = @(".specbridge/reports/*.final-report.json", ".specbridge/audit-packets/*.audit-packet.json", ".specbridge/audits/*.chatgpt-audit.json")
+      gate = "audit_approved"
+    },
+    [ordered]@{
+      order = 8
+      id = "pull_request_ci"
+      name = "Pull request, security gate, review gate, and GitHub CI"
+      required_evidence = @("GitHub pull request", "Foundation Validation", "SpecBridge Review Gate", "SpecBridge PR Review Report")
+      gate = "ci_and_review_pass"
+    },
+    [ordered]@{
+      order = 9
+      id = "merge_closure"
+      name = "Policy-gated merge and repository memory closure"
+      required_evidence = @("merged pull request", ".specbridge/context/CURRENT_GOAL.md")
+      gate = "merge_allowed_by_policy"
+    }
+  )
+
+  $orchestration = [ordered]@{
+    schema_version = "1"
+    command = "standard-loop-orchestrate"
+    ok = ($missing.Count -eq 0)
+    mode = "plan_only"
+    task_id = $resolvedTaskId
+    branch = Get-GitValue -Arguments @("branch", "--show-current") -Fallback "unknown"
+    head = Get-GitValue -Arguments @("rev-parse", "--short", "HEAD") -Fallback "unknown"
+    standard = "SpecBridge Standard Loop v1"
+    current_repository_phase = $currentPhase
+    next_recommended_action = $nextRecommendedAction
+    phases = @($phases)
+    required_gates = [ordered]@{
+      local = @(
+        "validate-contracts",
+        "validate-contract-scopes",
+        "validate-final-reports",
+        "validate-audit-packets",
+        "validate-chatgpt-audits",
+        "validate-security-gates",
+        "validate-review-gate",
+        "specbridge-smoke",
+        "test-specbridge-cli",
+        "git diff --check"
+      )
+      github = @(
+        "Foundation Validation",
+        "SpecBridge Review Gate",
+        "SpecBridge PR Review Report",
+        "Claude Review Non Blocking"
+      )
+    }
+    latest_artifacts = [ordered]@{
+      contract = Get-LatestArtifactPath -Path ".specbridge/contracts" -Filter "*.execution.md"
+      scope = Get-LatestArtifactPath -Path ".specbridge/scopes" -Filter "*.scope.json"
+      runtime_launch = Get-LatestArtifactPath -Path ".specbridge/runtime-launches" -Filter "*.runtime-launch.json"
+      runtime_execution = Get-LatestArtifactPath -Path ".specbridge/runtime-executions" -Filter "*.runtime-execution.json"
+      runtime_run = Get-LatestArtifactPath -Path ".specbridge/runtime-runs" -Filter "*.runtime-run.json"
+      runtime_result = Get-LatestArtifactPath -Path ".specbridge/runtime-results" -Filter "*.runtime-result.json"
+      runtime_summary = Get-LatestArtifactPath -Path ".specbridge/runtime-summaries" -Filter "*.runtime-summary.json"
+      autonomy_metrics = Get-LatestArtifactPath -Path ".specbridge/metrics" -Filter "*.autonomy-metrics.json"
+      final_report = Get-LatestArtifactPath -Path ".specbridge/reports" -Filter "*.final-report.json"
+      audit_packet = Get-LatestArtifactPath -Path ".specbridge/audit-packets" -Filter "*.audit-packet.json"
+      chatgpt_audit = Get-LatestArtifactPath -Path ".specbridge/audits" -Filter "*.chatgpt-audit.json"
+    }
+    required_paths = [ordered]@{
+      docs = @($docStatus)
+      templates = @($templateStatus)
+      schemas = @($schemaStatus)
+      validators = @($validatorStatus)
+      ci_workflows = @($workflowStatus)
+    }
+    missing_required_paths = @($missing)
+    policy_boundaries = @(
+      "no-secrets",
+      "no-production",
+      "no-billing",
+      "no-auth-security-change",
+      "no-authorization-security-change",
+      "no-database-change",
+      "no-dependency-installation",
+      "no-ci-cd-security-change",
+      "no-deployment"
+    )
+    command_boundary = "does-not-launch-claude-code does-not-launch-antigravity does-not-call-github does-not-install-dependencies does-not-deploy"
+    output_path = $null
+  }
+
+  if (-not [string]::IsNullOrWhiteSpace($OutputPath)) {
+    $output = Assert-OutputPath `
+      -Path $OutputPath `
+      -Pattern "^\.specbridge/standard-loop-runs/.+\.standard-loop-run\.json$" `
+      -Description "a .specbridge/standard-loop-runs/*.standard-loop-run.json orchestration artifact"
+
+    $orchestration["output_path"] = $output
+    Write-Utf8JsonFile -Path $output -Value $orchestration -Depth 12
+  }
+
+  Write-CliJson $orchestration -Depth 12
 
   if ($missing.Count -gt 0) {
     exit 1
@@ -3490,6 +3751,7 @@ switch ($Command) {
   "summarize-runtime" { Invoke-SummarizeRuntimeCommand }
   "summarize-autonomy-metrics" { Invoke-SummarizeAutonomyMetricsCommand }
   "standard-loop-status" { Invoke-StandardLoopStatusCommand }
+  "standard-loop-orchestrate" { Invoke-StandardLoopOrchestrateCommand }
   "v5-pilot-status" { Invoke-V5PilotStatusCommand }
   "v5-live-status" { Invoke-V5LiveStatusCommand }
   "v5-autonomy-status" { Invoke-V5AutonomyStatusCommand }

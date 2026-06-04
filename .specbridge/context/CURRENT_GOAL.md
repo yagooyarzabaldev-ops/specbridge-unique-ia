@@ -2,45 +2,50 @@
 
 ## Goal
 
-Complete issue 091 by aligning `AGENTS.md` with the current implemented SpecBridge stage.
+Complete issue 093 by adding the first deterministic one-command Standard Loop orchestrator.
 
-The task must remove stale foundation-only stage guidance while preserving Spec Driven Development, execution-contract requirements, scope boundaries, policy hierarchy, security stop conditions, validation gates, and merge requirements.
+The task must add a file-backed CLI command that reports the governed issue-to-merge sequence from repository files without relying on chat-memory inference.
 
 ## Current Phase
 
-Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test suite active. Multi-agent Antigravity architecture defined. Standard Loop v1 complete. V5 pilot readiness complete. First V5 live parallel pilot complete and merged. V5 live status and runner diagnostics complete and merged. Second V5 live autonomy pilot complete and merged. V5 runner hardening complete and merged. V5 serious pilot status complete and merged through PR 88. Issue 089 post-merge memory closure complete and merged through PR 90. Issue 086 is closed as superseded by issue 087 and PR 88.
+Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test suite active. Multi-agent Antigravity architecture defined. Standard Loop v1 complete. V5 pilot readiness complete. First V5 live parallel pilot complete and merged. V5 live status and runner diagnostics complete and merged. Second V5 live autonomy pilot complete and merged. V5 runner hardening complete and merged. V5 serious pilot status complete and merged through PR 88. Issue 089 post-merge memory closure complete and merged through PR 90. Issue 091 agent stage-policy alignment complete and merged through PR 92. Issue 086 is closed as superseded by issue 087 and PR 88.
 
-Current phase is issue 091 agent stage-policy alignment.
+Current phase is issue 093 one-command Standard Loop orchestration.
 
 ## Active Work
 
-Active contract: `.specbridge/contracts/issue-091-align-agent-stage-policy.execution.md`.
+Active contract: `.specbridge/contracts/issue-093-standard-loop-orchestrator.execution.md`.
 
-Issue 091 updates `AGENTS.md` so future agents do not incorrectly treat the repository as foundation-only.
+Issue 093 adds `standard-loop-orchestrate` to `scripts/specbridge.ps1`.
 
-This task is documentation and policy-memory alignment only:
+The command must:
 
-- no product code changes
-- no script changes
-- no workflow changes
-- no dependency changes
-- no secrets, production, billing, auth, database, CI/CD security, or deployment changes
+- emit deterministic JSON
+- list Standard Loop phases
+- list required local and GitHub gates
+- report current repository phase and next recommended action from repository files
+- report latest known artifacts
+- report policy boundaries
+- optionally write `.specbridge/standard-loop-runs/*.standard-loop-run.json`
+- avoid live launch, GitHub calls, dependency installation, deployment, and workflow changes
 
 ## Required Standard
 
-Issue 091 completion requires:
+Issue 093 completion requires:
 
-- `AGENTS.md` states the repository is in governed standardization and runtime expansion, not foundation-only.
-- `AGENTS.md` still requires active execution contracts, scope manifests, acceptance criteria, validations, security/review/CI gates, final reports, audit packets, and ChatGPT/Codex audits.
-- Protected boundaries remain blocked unless explicit policy and execution contract authorization exists.
-- Issue 091 contract, scope, final report, audit packet, and ChatGPT/Codex audit exist.
-- Local contract, scope, final-report, audit-packet, ChatGPT-audit, security, review, and whitespace validations pass.
+- `standard-loop-orchestrate` exists in the CLI command set.
+- The command prints deterministic JSON with phases, gates, current phase, next action, latest artifacts, missing required paths, and policy boundaries.
+- The command can write an output artifact under `.specbridge/standard-loop-runs/*.standard-loop-run.json` when `-OutputPath` is supplied.
+- CLI tests cover stdout and output-path behavior.
+- README and docs mention the command.
+- Issue 093 contract, scope, final report, audit packet, ChatGPT/Codex audit, and standard-loop-run evidence exist.
+- Local standard validation, smoke validation, CLI tests, security gate, review gate, and whitespace validation pass.
 - GitHub CI passes before merge.
 
 ## Next Recommended Task
 
-After issue 091 merges, start the next ordered standardization task: design and implement a deterministic one-command Standard Loop orchestrator that can report or run the governed issue-to-merge sequence without relying on chat-memory inference.
+After issue 093 merges, run a small real feature through `standard-loop-orchestrate` as the operator entry point, then use the resulting plan artifact to drive the next governed execution contract.
 
 ## Completion Condition
 
-Issue 091 is locally complete when the agent stage-policy guidance and evidence validate. It is repository-complete when its PR passes GitHub CI and merges under policy gates.
+Issue 093 is locally complete when the command, tests, docs, output artifact, and evidence validate. It is repository-complete when its PR passes GitHub CI and merges under policy gates.
