@@ -1,0 +1,32 @@
+{
+  "contract_id": "issue-095-standard-loop-contract-seed",
+  "status": "completed",
+  "exclusive_write": [
+    "README.md",
+    "docs/specbridge-standard-loop-v1.md",
+    "docs/specbridge-standard-loop-orchestrator.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/audit-packets/issue-095-standard-loop-contract-seed.audit-packet.json",
+    ".specbridge/audits/issue-095-standard-loop-contract-seed.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-095-standard-loop-contract-seed.execution.md",
+    ".specbridge/reports/issue-095-standard-loop-contract-seed.final-report.json",
+    ".specbridge/scopes/issue-095-standard-loop-contract-seed.scope.json",
+    ".specbridge/standard-loop-runs/issue-095-standard-loop-contract-seed.standard-loop-run.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    "docs/specbridge-ci-authority-standard.md",
+    ".specbridge/contracts/issue-093-standard-loop-orchestrator.execution.md",
+    ".specbridge/scopes/issue-093-standard-loop-orchestrator.scope.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-093-standard-loop-orchestrator"
+  ],
+  "final_report": ".specbridge/reports/issue-095-standard-loop-contract-seed.final-report.json"
+}

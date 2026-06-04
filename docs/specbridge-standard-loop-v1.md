@@ -65,6 +65,12 @@ repository phase, next recommended action, latest artifacts, policy boundaries,
 and optional `.specbridge/standard-loop-runs/*.standard-loop-run.json` artifact
 from repository files.
 
+It also emits `next_contract_seed`, a deterministic starter block for the next
+governed execution contract. The seed includes the task id, issue reference,
+recommended branch, contract path, scope path, final report path, audit packet
+path, ChatGPT/Codex audit path, standard-loop-run path, suggested local
+commands, and completion gates.
+
 `v5-pilot-status` is the readiness gate for the next live parallel pilot. It
 reports whether the repository has V5 boundary docs, a readiness contract and
 scope, two executor packets, runtime launch plans, dry-run execution artifacts,

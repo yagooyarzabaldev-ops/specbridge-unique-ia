@@ -172,8 +172,16 @@ try {
         Write-Output "FAIL standard-loop-orchestrate missing required_gates.github."
         $failed = $true
       }
+      elseif ($null -eq $standardLoopOrchestrationJson.next_contract_seed) {
+        Write-Output "FAIL standard-loop-orchestrate missing next_contract_seed."
+        $failed = $true
+      }
+      elseif ($standardLoopOrchestrationJson.next_contract_seed.contract_path -ne ".specbridge/contracts/current-goal.execution.md") {
+        Write-Output "FAIL standard-loop-orchestrate next_contract_seed has unexpected contract path."
+        $failed = $true
+      }
       else {
-        Write-Output "PASS standard-loop-orchestrate includes phases and GitHub gates."
+        Write-Output "PASS standard-loop-orchestrate includes phases, GitHub gates, and contract seed."
       }
     }
 
@@ -201,8 +209,16 @@ try {
           Write-Output "FAIL standard-loop-orchestrate output artifact has unexpected content."
           $failed = $true
         }
+        elseif ($standardLoopRun.next_contract_seed.standard_loop_run_path -ne ".specbridge/standard-loop-runs/cli-fixture.standard-loop-run.json") {
+          Write-Output "FAIL standard-loop-orchestrate output artifact has unexpected seed path."
+          $failed = $true
+        }
+        elseif ($standardLoopRun.next_contract_seed.recommended_branch -ne "codex/cli-fixture") {
+          Write-Output "FAIL standard-loop-orchestrate output artifact has unexpected seed branch."
+          $failed = $true
+        }
         else {
-          Write-Output "PASS standard-loop-orchestrate output artifact validates by inspection."
+          Write-Output "PASS standard-loop-orchestrate output artifact and seed validate by inspection."
         }
       }
       catch {

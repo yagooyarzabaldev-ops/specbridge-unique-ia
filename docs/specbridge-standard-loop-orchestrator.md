@@ -32,6 +32,7 @@ The command emits deterministic JSON with:
 - current branch and head
 - current repository phase from `.specbridge/context/CURRENT_GOAL.md`
 - next recommended action from `.specbridge/context/CURRENT_GOAL.md`
+- `next_contract_seed` for starting the next governed execution contract
 - the ordered Standard Loop phases
 - required local and GitHub gates
 - latest known repository artifacts
@@ -57,6 +58,29 @@ The only write it can perform is the explicitly requested `-OutputPath` under:
 ```text
 .specbridge/standard-loop-runs/*.standard-loop-run.json
 ```
+
+## Contract Seed
+
+`next_contract_seed` turns the orchestration plan into concrete next-step
+repository paths.
+
+For a task id such as `issue-095-standard-loop-contract-seed`, the seed includes:
+
+- `recommended_branch`
+- `issue_reference`
+- `contract_path`
+- `scope_path`
+- `final_report_path`
+- `audit_packet_path`
+- `chatgpt_audit_path`
+- `standard_loop_run_path`
+- `required_evidence_paths`
+- `suggested_commands`
+- `completion_gates`
+
+The seed is advisory and file-backed. It does not create the contract, open a
+branch, call GitHub, launch Claude Code, launch Antigravity, install
+dependencies, or deploy.
 
 ## Completion Standard
 

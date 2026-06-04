@@ -1,0 +1,42 @@
+{
+  "summary": "Completed issue 095 locally. SpecBridge now emits a deterministic `next_contract_seed` block from `standard-loop-orchestrate` so the Standard Loop plan directly names the next governed contract paths, branch suggestion, issue reference, required evidence paths, suggested local commands, and completion gates without launching Claude Code, Antigravity, GitHub calls, dependency installation, workflow changes, or deployment.",
+  "changed_files": [
+    "README.md",
+    "docs/specbridge-standard-loop-v1.md",
+    "docs/specbridge-standard-loop-orchestrator.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/audit-packets/issue-095-standard-loop-contract-seed.audit-packet.json",
+    ".specbridge/audits/issue-095-standard-loop-contract-seed.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-095-standard-loop-contract-seed.execution.md",
+    ".specbridge/reports/issue-095-standard-loop-contract-seed.final-report.json",
+    ".specbridge/scopes/issue-095-standard-loop-contract-seed.scope.json",
+    ".specbridge/standard-loop-runs/issue-095-standard-loop-contract-seed.standard-loop-run.json"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 standard-loop-orchestrate -TaskId issue-095-standard-loop-contract-seed: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 standard-loop-orchestrate -TaskId issue-095-standard-loop-contract-seed -OutputPath .specbridge/standard-loop-runs/issue-095-standard-loop-contract-seed.standard-loop-run.json -Force: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "git diff --check: passed",
+    "GitHub CI: not_collected"
+  ],
+  "policy_result": "Passed locally. Work stayed inside the issue 095 execution contract and scope manifest. The command remains deterministic and plan-only. It does not launch Claude Code, launch Antigravity, call GitHub, install dependencies, change workflows, access secrets, touch production, change auth or billing, change databases, weaken CI/CD security, or deploy.",
+  "risk_result": "Medium risk because the local CLI and CLI tests changed. Risk is bounded by deterministic JSON output, output-path restrictions, local validation, security gate, review gate, and no live runtime expansion.",
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending until the branch is pushed and checks run."
+  ],
+  "merge_status": "Pending pull request, GitHub CI, deterministic review gate, and required merge gates.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_pr_ci"
+}

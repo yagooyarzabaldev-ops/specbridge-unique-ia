@@ -649,6 +649,74 @@ function Get-MarkdownSectionText {
   return (($lines -join "`n").Trim())
 }
 
+function New-StandardLoopContractSeed {
+  param(
+    [string] $TaskIdentifier
+  )
+
+  $safeTaskId = Convert-ToSafeName -Value $TaskIdentifier -FieldName "task_id"
+  $contractPath = ".specbridge/contracts/$safeTaskId.execution.md"
+  $scopePath = ".specbridge/scopes/$safeTaskId.scope.json"
+  $finalReportPath = ".specbridge/reports/$safeTaskId.final-report.json"
+  $auditPacketPath = ".specbridge/audit-packets/$safeTaskId.audit-packet.json"
+  $chatGptAuditPath = ".specbridge/audits/$safeTaskId.chatgpt-audit.json"
+  $standardLoopRunPath = ".specbridge/standard-loop-runs/$safeTaskId.standard-loop-run.json"
+
+  $issueReference = "not_declared"
+  if ($safeTaskId -match "^issue-0*([0-9]+)") {
+    $issueReference = "$RepositoryUrl/issues/$($Matches[1])"
+  }
+
+  return [ordered]@{
+    task_id = $safeTaskId
+    issue_reference = $issueReference
+    recommended_branch = "codex/$safeTaskId"
+    contract_path = $contractPath
+    scope_path = $scopePath
+    final_report_path = $finalReportPath
+    audit_packet_path = $auditPacketPath
+    chatgpt_audit_path = $chatGptAuditPath
+    standard_loop_run_path = $standardLoopRunPath
+    required_evidence_paths = @(
+      $contractPath,
+      $scopePath,
+      $finalReportPath,
+      $auditPacketPath,
+      $chatGptAuditPath,
+      $standardLoopRunPath
+    )
+    suggested_commands = [ordered]@{
+      write_orchestration_artifact = "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 standard-loop-orchestrate -TaskId $safeTaskId -OutputPath $standardLoopRunPath -Force"
+      validate_standard = "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard"
+      test_cli = "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1"
+      smoke = "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1"
+      security_gate = "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1"
+      review_gate = "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1"
+    }
+    completion_gates = [ordered]@{
+      local = @(
+        "contract validates",
+        "scope validates",
+        "final report validates",
+        "audit packet validates",
+        "ChatGPT/Codex audit validates",
+        "security gate passes",
+        "review gate passes",
+        "CLI tests pass",
+        "smoke validation passes",
+        "git diff --check passes"
+      )
+      github = @(
+        "Foundation Validation",
+        "SpecBridge Review Gate",
+        "SpecBridge PR Review Report",
+        "Claude Review Non Blocking"
+      )
+    }
+    policy_boundary = "seed-only no-launch no-github-call no-dependency-install no-deploy"
+  }
+}
+
 function Invoke-StandardLoopOrchestrateCommand {
   $templatePaths = @(
     "templates/specbridge/execution-contract.template.md",
@@ -722,6 +790,8 @@ function Invoke-StandardLoopOrchestrateCommand {
   if ([string]::IsNullOrWhiteSpace($resolvedTaskId)) {
     $resolvedTaskId = "current-goal"
   }
+
+  $contractSeed = New-StandardLoopContractSeed -TaskIdentifier $resolvedTaskId
 
   $phases = @(
     [ordered]@{
@@ -800,6 +870,7 @@ function Invoke-StandardLoopOrchestrateCommand {
     standard = "SpecBridge Standard Loop v1"
     current_repository_phase = $currentPhase
     next_recommended_action = $nextRecommendedAction
+    next_contract_seed = $contractSeed
     phases = @($phases)
     required_gates = [ordered]@{
       local = @(
