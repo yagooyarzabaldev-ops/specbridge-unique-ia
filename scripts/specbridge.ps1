@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "runtime-capability-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -2879,6 +2879,11 @@ function Invoke-ExecuteRuntimeLaunchCommand {
     $stdout = $stdoutTask.Result
     $stderr = $stderrTask.Result
     $exitCode = $process.ExitCode
+
+    if ($timedOut -and ($exitCode -lt 0 -or $exitCode -gt 255)) {
+      $exitCode = 255
+    }
+
     $stdoutLength = $stdout.Length
     $stderrLength = $stderr.Length
     $stdoutLineCount = Get-TextLineCount -Text $stdout
@@ -3450,6 +3455,25 @@ function Invoke-V5AutonomyStatusCommand {
   exit 0
 }
 
+function Invoke-V5SeriousPilotStatusCommand {
+  Write-CliJson ([ordered]@{
+    command = "v5-serious-pilot-status"
+    ok = $true
+    branch = Get-GitValue -Arguments @("branch", "--show-current") -Fallback "unknown"
+    head = Get-GitValue -Arguments @("rev-parse", "--short", "HEAD") -Fallback "unknown"
+    pilot_standard = "serious_live_multi_slice_no_remediation"
+    runner_baseline = "v5_hardened_runtime_runner"
+    required_slices = @("status", "tests", "docs")
+    default_runtime_budget_usd = "2.00"
+    diagnostic_preview_policy = "ascii_stable_bounded_240_chars"
+    target_completion_status = "completed_without_coordinator_remediation"
+    coordinator_remediation_allowed = $false
+    policy_boundary = "no-production no-secrets no-billing no-auth no-authorization no-database no-dependency-installation no-ci-cd-security no-deployment"
+  })
+
+  exit 0
+}
+
 switch ($Command) {
   "status" { Invoke-StatusCommand }
   "validate" { Invoke-ValidateCommand }
@@ -3469,6 +3493,7 @@ switch ($Command) {
   "v5-pilot-status" { Invoke-V5PilotStatusCommand }
   "v5-live-status" { Invoke-V5LiveStatusCommand }
   "v5-autonomy-status" { Invoke-V5AutonomyStatusCommand }
+  "v5-serious-pilot-status" { Invoke-V5SeriousPilotStatusCommand }
   "runtime-capability-status" { Invoke-RuntimeCapabilityStatusCommand }
   "plan-executor-branches" { Invoke-PlanExecutorBranchesCommand }
   "record-github-evidence" { Invoke-RecordGithubEvidenceCommand }

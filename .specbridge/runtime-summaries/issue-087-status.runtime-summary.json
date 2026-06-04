@@ -1,0 +1,43 @@
+{
+    "schema_version":  "1",
+    "summary_id":  "issue-087-budget-aware-v5-status-runtime-summary",
+    "generated_by":  "specbridge-cli",
+    "runtime_launch_path":  ".specbridge/runtime-launches/issue-087-status.runtime-launch.json",
+    "runtime_result_path":  ".specbridge/runtime-results/issue-087-status.runtime-result.json",
+    "launch_id":  "issue-087-budget-aware-v5-status-status-runtime-launch",
+    "task_id":  "issue-087-budget-aware-v5-status",
+    "packet_id":  "issue-087-budget-aware-v5-status-status",
+    "slice_id":  "status",
+    "branch_name":  "claude/issue-087-budget-aware-v5-status-status",
+    "completion_status":  "complete",
+    "runtime_status":  "succeeded",
+    "result_status":  "recorded",
+    "validation_totals":  {
+                              "total":  3,
+                              "passed":  3,
+                              "failed":  0,
+                              "other":  0
+                          },
+    "policy_result":  "Passed. Live status executor completed on retry after a prior usage-limit failure; no coordinator remediation of the status slice was performed.",
+    "merge_readiness":  "ready_for_policy_gates",
+    "blockers":  [
+
+                 ],
+    "execution_policy":  {
+                             "launches_claude":  false,
+                             "launches_antigravity":  false,
+                             "executes_shell":  false,
+                             "requires_network":  false,
+                             "touches_secrets":  false,
+                             "touches_production":  false,
+                             "installs_dependencies":  false,
+                             "deploys":  false
+                         },
+    "source_files":  [
+                         ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md",
+                         ".specbridge/executor-packets/issue-087-budget-aware-v5-status-status.executor-packet.json",
+                         ".specbridge/runtime-evidence/issue-087-status.executor-output.md",
+                         ".specbridge/runtime-launches/issue-087-status.runtime-launch.json",
+                         ".specbridge/runtime-results/issue-087-status.runtime-result.json"
+                     ]
+}

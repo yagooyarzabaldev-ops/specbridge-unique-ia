@@ -1,0 +1,43 @@
+{
+    "schema_version":  "1",
+    "packet_id":  "issue-087-budget-aware-v5-status-status",
+    "task_id":  "issue-087-budget-aware-v5-status",
+    "slice_id":  "status",
+    "agent_role":  "implementation",
+    "goal":  "Add v5-serious-pilot-status to scripts/specbridge.ps1. Add it to the command ValidateSet and command switch. Implement a deterministic JSON status command with command, ok, branch, head, pilot_standard, runner_baseline, required_slices, default_runtime_budget_usd, diagnostic_preview_policy, target_completion_status, coordinator_remediation_allowed, and policy_boundary. Static values: pilot_standard=serious_live_multi_slice_no_remediation, runner_baseline=v5_hardened_runtime_runner, required_slices=[status, tests, docs], default_runtime_budget_usd=2.00, diagnostic_preview_policy=ascii_stable_bounded_240_chars, target_completion_status=completed_without_coordinator_remediation, coordinator_remediation_allowed=false, policy_boundary=no-production no-secrets no-billing no-auth no-authorization no-database no-dependency-installation no-ci-cd-security no-deployment. Write concise executor evidence to .specbridge/runtime-evidence/issue-087-status.executor-output.md.",
+    "launch_mode":  "manual_antigravity",
+    "branch_name":  "claude/issue-087-budget-aware-v5-status-status",
+    "execution_contract_path":  ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md",
+    "final_report_path":  ".specbridge/reports/issue-087-budget-aware-v5-status.final-report.json",
+    "exclusive_write":  [
+                            "scripts/specbridge.ps1",
+                            ".specbridge/runtime-evidence/issue-087-status.executor-output.md"
+                        ],
+    "read_only":  [
+                      "README.md",
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      "CLAUDE.md",
+                      ".specbridge/policy.yaml",
+                      ".specbridge/context/CURRENT_GOAL.md",
+                      ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md",
+                      "docs/specbridge-v5-autonomy-status.md",
+                      "docs/specbridge-runtime-runner.md"
+                  ],
+    "required_validations":  [
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 v5-serious-pilot-status"
+                             ],
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "status":  "ready_for_handoff",
+    "source_files":  [
+                         ".specbridge/executor-handoffs/issue-087-budget-aware-v5-status.input.json",
+                         ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md"
+                     ],
+    "generated_by":  "specbridge-cli"
+}

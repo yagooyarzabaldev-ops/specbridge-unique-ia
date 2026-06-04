@@ -1,0 +1,47 @@
+{
+    "schema_version":  "1",
+    "metrics_id":  "issue-087-budget-aware-v5-status-autonomy-metrics",
+    "generated_by":  "specbridge-cli",
+    "task_filter":  "issue-087-budget-aware-v5-status",
+    "summary_count":  3,
+    "ready_count":  3,
+    "blocked_count":  0,
+    "executor_count":  3,
+    "validation_totals":  {
+                              "total":  9,
+                              "passed":  9,
+                              "failed":  0,
+                              "other":  0
+                          },
+    "runtime_status_counts":  {
+                                  "succeeded":  3
+                              },
+    "result_status_counts":  {
+                                 "recorded":  3
+                             },
+    "completion_status_counts":  {
+                                     "complete":  3
+                                 },
+    "merge_readiness_counts":  {
+                                   "ready_for_policy_gates":  3
+                               },
+    "policy_gate_ready_rate":  1,
+    "source_summaries":  [
+                             ".specbridge/runtime-summaries/issue-087-docs.runtime-summary.json",
+                             ".specbridge/runtime-summaries/issue-087-status.runtime-summary.json",
+                             ".specbridge/runtime-summaries/issue-087-tests.runtime-summary.json"
+                         ],
+    "source_results":  [
+                           ".specbridge/runtime-results/issue-087-docs.runtime-result.json",
+                           ".specbridge/runtime-results/issue-087-status.runtime-result.json",
+                           ".specbridge/runtime-results/issue-087-tests.runtime-result.json"
+                       ],
+    "source_files":  [
+                         ".specbridge/runtime-results/issue-087-docs.runtime-result.json",
+                         ".specbridge/runtime-results/issue-087-status.runtime-result.json",
+                         ".specbridge/runtime-results/issue-087-tests.runtime-result.json",
+                         ".specbridge/runtime-summaries/issue-087-docs.runtime-summary.json",
+                         ".specbridge/runtime-summaries/issue-087-status.runtime-summary.json",
+                         ".specbridge/runtime-summaries/issue-087-tests.runtime-summary.json"
+                     ]
+}

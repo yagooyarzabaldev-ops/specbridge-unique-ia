@@ -174,6 +174,52 @@ try {
       Write-Output "PASS v5-autonomy-status includes autonomy_standard field."
     }
 
+    $v5SeriousPilotStatusResult = Invoke-Cli -Arguments @("v5-serious-pilot-status")
+
+    Assert-Success `
+      -Name "v5-serious-pilot-status" `
+      -Result $v5SeriousPilotStatusResult `
+      -ExpectedPattern '"command"\s*:\s*"v5-serious-pilot-status"'
+
+    if ($v5SeriousPilotStatusResult.ExitCode -eq 0) {
+      $v5SeriousPilotStatusJson = $null
+      try { $v5SeriousPilotStatusJson = $v5SeriousPilotStatusResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      foreach ($fieldCheck in @(
+        [pscustomobject]@{ Field = "runner_baseline"; Expected = "v5_hardened_runtime_runner" },
+        [pscustomobject]@{ Field = "default_runtime_budget_usd"; Expected = "2.00" },
+        [pscustomobject]@{ Field = "diagnostic_preview_policy"; Expected = "ascii_stable_bounded_240_chars" }
+      )) {
+        $actual = if ($null -ne $v5SeriousPilotStatusJson) { $v5SeriousPilotStatusJson.($fieldCheck.Field) } else { $null }
+        if ($actual -ne $fieldCheck.Expected) {
+          Write-Output "FAIL v5-serious-pilot-status $($fieldCheck.Field) expected '$($fieldCheck.Expected)' got '$actual'."
+          $failed = $true
+        }
+        else {
+          Write-Output "PASS v5-serious-pilot-status $($fieldCheck.Field) is $($fieldCheck.Expected)."
+        }
+      }
+
+      $coordinatorRemediationAllowed = if ($null -ne $v5SeriousPilotStatusJson) { $v5SeriousPilotStatusJson.coordinator_remediation_allowed } else { $null }
+      if ($coordinatorRemediationAllowed -ne $false) {
+        Write-Output "FAIL v5-serious-pilot-status coordinator_remediation_allowed expected false got '$coordinatorRemediationAllowed'."
+        $failed = $true
+      }
+      else {
+        Write-Output "PASS v5-serious-pilot-status coordinator_remediation_allowed is false."
+      }
+
+      $requiredSlices = if ($null -ne $v5SeriousPilotStatusJson) { @($v5SeriousPilotStatusJson.required_slices) } else { @() }
+      $missingSlices = @("status", "tests", "docs") | Where-Object { $requiredSlices -notcontains $_ }
+      if ($missingSlices.Count -gt 0) {
+        Write-Output "FAIL v5-serious-pilot-status required_slices missing: $($missingSlices -join ', ')."
+        $failed = $true
+      }
+      else {
+        Write-Output "PASS v5-serious-pilot-status required_slices includes status, tests, docs."
+      }
+    }
+
     Assert-Success `
       -Name "runtime-capability-status" `
       -Result (Invoke-Cli -Arguments @("runtime-capability-status")) `
@@ -473,6 +519,62 @@ try {
       }
       else {
         Write-Output "PASS fake Claude runtime execution normalizes non-ASCII diagnostic previews."
+      }
+    }
+
+    Set-Content -LiteralPath $fakeClaudePath -Encoding ASCII -Value @(
+      "@echo off",
+      ":loop",
+      "ping -n 2 127.0.0.1 > nul",
+      "goto loop"
+    )
+
+    try {
+      $env:PATH = "$fakeBin;$previousPath"
+
+      $fakeTimeoutResult = Invoke-Cli -Arguments @(
+        "execute-runtime-launch",
+        "-InputPath",
+        ".specbridge/runtime-launches/cli-fixture.runtime-launch.json",
+        "-OutputPath",
+        ".specbridge/runtime-executions/cli-fake-timeout.runtime-execution.json",
+        "-TimeoutSeconds",
+        "30",
+        "-Force"
+      )
+    }
+    finally {
+      $env:PATH = $previousPath
+    }
+
+    if ($fakeTimeoutResult.ExitCode -eq 0) {
+      Write-Output "FAIL fake Claude timeout runtime execution did not fail."
+      Write-Output $fakeTimeoutResult.Text
+      $failed = $true
+    }
+    elseif (-not (Test-Path -LiteralPath ".specbridge/runtime-executions/cli-fake-timeout.runtime-execution.json" -PathType Leaf)) {
+      Write-Output "FAIL fake Claude timeout runtime execution did not write an artifact."
+      Write-Output $fakeTimeoutResult.Text
+      $failed = $true
+    }
+    else {
+      $timeoutExecution = Get-Content -LiteralPath ".specbridge/runtime-executions/cli-fake-timeout.runtime-execution.json" -Raw | ConvertFrom-Json
+
+      if (
+        $timeoutExecution.execution_status -ne "timed_out" -or
+        $timeoutExecution.exit_code -ne 255 -or
+        $timeoutExecution.timed_out -ne $true -or
+        $timeoutExecution.failure_diagnostics.status -ne "recorded" -or
+        $timeoutExecution.failure_diagnostics.reason -ne "timeout" -or
+        $timeoutExecution.failure_diagnostics.exit_code -ne 255 -or
+        $timeoutExecution.failure_diagnostics.timed_out -ne $true
+      ) {
+        Write-Output "FAIL fake Claude timeout runtime execution did not normalize timeout exit code as expected."
+        Write-Output ($timeoutExecution | ConvertTo-Json -Depth 8)
+        $failed = $true
+      }
+      else {
+        Write-Output "PASS fake Claude timeout runtime execution normalizes timeout exit code."
       }
     }
 

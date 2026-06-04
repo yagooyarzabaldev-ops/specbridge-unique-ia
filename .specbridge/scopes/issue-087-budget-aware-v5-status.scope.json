@@ -1,0 +1,59 @@
+{
+  "contract_id": "issue-087-budget-aware-v5-status",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/audit-packets/issue-087-budget-aware-v5-status.audit-packet.json",
+    ".specbridge/audits/issue-087-budget-aware-v5-status.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md",
+    ".specbridge/executor-handoffs/issue-087-budget-aware-v5-status.input.json",
+    ".specbridge/executor-packets/issue-087-budget-aware-v5-status-docs.executor-packet.json",
+    ".specbridge/executor-packets/issue-087-budget-aware-v5-status-status.executor-packet.json",
+    ".specbridge/executor-packets/issue-087-budget-aware-v5-status-tests.executor-packet.json",
+    ".specbridge/metrics/issue-087-budget-aware-v5-status.autonomy-metrics.json",
+    ".specbridge/reports/issue-087-budget-aware-v5-status.final-report.json",
+    ".specbridge/runtime-evidence/issue-087-docs.executor-output.md",
+    ".specbridge/runtime-evidence/issue-087-status.executor-output.md",
+    ".specbridge/runtime-evidence/issue-087-tests.executor-output.md",
+    ".specbridge/runtime-executions/issue-087-docs.runtime-execution.json",
+    ".specbridge/runtime-executions/issue-087-docs-retry-1.runtime-execution.json",
+    ".specbridge/runtime-executions/issue-087-status.runtime-execution.json",
+    ".specbridge/runtime-executions/issue-087-status-retry-1.runtime-execution.json",
+    ".specbridge/runtime-executions/issue-087-tests.runtime-execution.json",
+    ".specbridge/runtime-executions/issue-087-tests-retry-1.runtime-execution.json",
+    ".specbridge/runtime-launches/issue-087-docs.runtime-launch.json",
+    ".specbridge/runtime-launches/issue-087-status.runtime-launch.json",
+    ".specbridge/runtime-launches/issue-087-tests.runtime-launch.json",
+    ".specbridge/runtime-results/issue-087-docs.runtime-result.json",
+    ".specbridge/runtime-results/issue-087-status.runtime-result.json",
+    ".specbridge/runtime-results/issue-087-tests.runtime-result.json",
+    ".specbridge/runtime-runs/issue-087-docs.runtime-run.json",
+    ".specbridge/runtime-runs/issue-087-status.runtime-run.json",
+    ".specbridge/runtime-runs/issue-087-tests.runtime-run.json",
+    ".specbridge/runtime-summaries/issue-087-docs.runtime-summary.json",
+    ".specbridge/runtime-summaries/issue-087-status.runtime-summary.json",
+    ".specbridge/runtime-summaries/issue-087-tests.runtime-summary.json",
+    ".specbridge/scopes/issue-087-budget-aware-v5-status.scope.json",
+    "README.md",
+    "docs/specbridge-runtime-runner.md",
+    "docs/specbridge-v5-serious-pilot-status.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/contracts/issue-086-serious-v5-live-pilot.execution.md",
+    ".specbridge/reports/issue-086-serious-v5-live-pilot.final-report.json",
+    "docs/specbridge-v5-autonomy-status.md"
+  ],
+  "coordinator_owned": [
+    "runtime timeout artifact normalization in scripts/specbridge.ps1 and related CLI test before live status slices start"
+  ],
+  "dependencies": [
+    "issue-086-serious-v5-live-pilot"
+  ],
+  "final_report": ".specbridge/reports/issue-087-budget-aware-v5-status.final-report.json"
+}

@@ -1,0 +1,44 @@
+{
+    "schema_version":  "1",
+    "packet_id":  "issue-087-budget-aware-v5-status-tests",
+    "task_id":  "issue-087-budget-aware-v5-status",
+    "slice_id":  "tests",
+    "agent_role":  "validation",
+    "goal":  "Update scripts/test-specbridge-cli.ps1 to cover v5-serious-pilot-status and timeout exit-code normalization. Assert command=v5-serious-pilot-status, runner_baseline=v5_hardened_runtime_runner, default_runtime_budget_usd=2.00, diagnostic_preview_policy=ascii_stable_bounded_240_chars, coordinator_remediation_allowed=false, and required_slices includes status, tests, docs. Add or update a bounded fake Claude timeout test only if it can run deterministically without network or secrets. Write concise executor evidence to .specbridge/runtime-evidence/issue-087-tests.executor-output.md.",
+    "launch_mode":  "manual_antigravity",
+    "branch_name":  "claude/issue-087-budget-aware-v5-status-tests",
+    "execution_contract_path":  ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md",
+    "final_report_path":  ".specbridge/reports/issue-087-budget-aware-v5-status.final-report.json",
+    "exclusive_write":  [
+                            "scripts/test-specbridge-cli.ps1",
+                            ".specbridge/runtime-evidence/issue-087-tests.executor-output.md"
+                        ],
+    "read_only":  [
+                      "README.md",
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      "CLAUDE.md",
+                      ".specbridge/policy.yaml",
+                      ".specbridge/context/CURRENT_GOAL.md",
+                      ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md",
+                      "scripts/specbridge.ps1",
+                      "docs/specbridge-runtime-runner.md"
+                  ],
+    "required_validations":  [
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 v5-serious-pilot-status"
+                             ],
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "status":  "ready_for_handoff",
+    "source_files":  [
+                         ".specbridge/executor-handoffs/issue-087-budget-aware-v5-status.input.json",
+                         ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md"
+                     ],
+    "generated_by":  "specbridge-cli"
+}

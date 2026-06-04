@@ -1,0 +1,83 @@
+{
+  "task_id": "issue-087-budget-aware-v5-status",
+  "slices": [
+    {
+      "id": "status",
+      "role": "implementation",
+      "goal": "Add v5-serious-pilot-status to scripts/specbridge.ps1. Add it to the command ValidateSet and command switch. Implement a deterministic JSON status command with command, ok, branch, head, pilot_standard, runner_baseline, required_slices, default_runtime_budget_usd, diagnostic_preview_policy, target_completion_status, coordinator_remediation_allowed, and policy_boundary. Static values: pilot_standard=serious_live_multi_slice_no_remediation, runner_baseline=v5_hardened_runtime_runner, required_slices=[status, tests, docs], default_runtime_budget_usd=2.00, diagnostic_preview_policy=ascii_stable_bounded_240_chars, target_completion_status=completed_without_coordinator_remediation, coordinator_remediation_allowed=false, policy_boundary=no-production no-secrets no-billing no-auth no-authorization no-database no-dependency-installation no-ci-cd-security no-deployment. Write concise executor evidence to .specbridge/runtime-evidence/issue-087-status.executor-output.md.",
+      "contract_path": ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md",
+      "final_report_path": ".specbridge/reports/issue-087-budget-aware-v5-status.final-report.json",
+      "exclusive_write": [
+        "scripts/specbridge.ps1",
+        ".specbridge/runtime-evidence/issue-087-status.executor-output.md"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".specbridge/policy.yaml",
+        ".specbridge/context/CURRENT_GOAL.md",
+        ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md",
+        "docs/specbridge-v5-autonomy-status.md",
+        "docs/specbridge-runtime-runner.md"
+      ],
+      "required_validations": [
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 v5-serious-pilot-status"
+      ]
+    },
+    {
+      "id": "tests",
+      "role": "validation",
+      "goal": "Update scripts/test-specbridge-cli.ps1 to cover v5-serious-pilot-status and timeout exit-code normalization. Assert command=v5-serious-pilot-status, runner_baseline=v5_hardened_runtime_runner, default_runtime_budget_usd=2.00, diagnostic_preview_policy=ascii_stable_bounded_240_chars, coordinator_remediation_allowed=false, and required_slices includes status, tests, docs. Add or update a bounded fake Claude timeout test only if it can run deterministically without network or secrets. Write concise executor evidence to .specbridge/runtime-evidence/issue-087-tests.executor-output.md.",
+      "contract_path": ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md",
+      "final_report_path": ".specbridge/reports/issue-087-budget-aware-v5-status.final-report.json",
+      "exclusive_write": [
+        "scripts/test-specbridge-cli.ps1",
+        ".specbridge/runtime-evidence/issue-087-tests.executor-output.md"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".specbridge/policy.yaml",
+        ".specbridge/context/CURRENT_GOAL.md",
+        ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md",
+        "scripts/specbridge.ps1",
+        "docs/specbridge-runtime-runner.md"
+      ],
+      "required_validations": [
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 v5-serious-pilot-status"
+      ]
+    },
+    {
+      "id": "docs",
+      "role": "documentation",
+      "goal": "Create docs/specbridge-v5-serious-pilot-status.md and update README.md with the new command. Documentation must explain v5-serious-pilot-status, hardened runner baseline, required slices [status, tests, docs], default 2.00 runtime budget, ASCII-stable diagnostic preview policy, timeout artifact normalization, no-remediation target, and policy boundary. Write concise executor evidence to .specbridge/runtime-evidence/issue-087-docs.executor-output.md.",
+      "contract_path": ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md",
+      "final_report_path": ".specbridge/reports/issue-087-budget-aware-v5-status.final-report.json",
+      "exclusive_write": [
+        "README.md",
+        "docs/specbridge-v5-serious-pilot-status.md",
+        ".specbridge/runtime-evidence/issue-087-docs.executor-output.md"
+      ],
+      "read_only": [
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".specbridge/policy.yaml",
+        ".specbridge/context/CURRENT_GOAL.md",
+        ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md",
+        "scripts/specbridge.ps1",
+        "docs/specbridge-runtime-runner.md",
+        "docs/specbridge-v5-autonomy-status.md"
+      ],
+      "required_validations": [
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1"
+      ]
+    }
+  ]
+}
