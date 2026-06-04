@@ -2,45 +2,49 @@
 
 ## Goal
 
-Run issue 087, the budget-aware V5 serious status completion after the blocked issue 086 pilot.
+Close issue 089, the post-merge memory closure after PR 88 merged issue 087 and issue 086 was superseded by the budget-aware V5 serious pilot completion path.
 
-The task must fix the timeout runtime-execution artifact bug, then complete `v5-serious-pilot-status` through smaller live Claude Code executor slices using `Edit`, `Read`, and `Write`.
+The task must update repository memory and evidence only. It must not change product code, scripts, workflows, runtime behavior, dependency manifests, secrets, production configuration, authentication, authorization, database, billing, CI/CD security, or deployment automation.
 
 ## Current Phase
 
-Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test suite active. Multi-agent Antigravity architecture defined. Standard Loop v1 complete. V5 pilot readiness complete. First V5 live parallel pilot complete and merged. V5 live status and runner diagnostics complete and merged. Second V5 live autonomy pilot complete and merged. V5 runner hardening complete and merged.
+Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test suite active. Multi-agent Antigravity architecture defined. Standard Loop v1 complete. V5 pilot readiness complete. First V5 live parallel pilot complete and merged. V5 live status and runner diagnostics complete and merged. Second V5 live autonomy pilot complete and merged. V5 runner hardening complete and merged. V5 serious pilot status complete and merged through PR 88.
 
-Current phase is issue 087 PR, CI, and merge gating.
+Current phase is issue 089 post-merge memory closure.
 
 ## Active Work
 
-Active contract: `.specbridge/contracts/issue-087-budget-aware-v5-status.execution.md`.
+Active contract: `.specbridge/contracts/issue-089-post-merge-memory-closure.execution.md`.
 
-Issue 086 is blocked before product implementation because the implementation slice failed twice under the no-remediation contract:
+Issue 087 is repository-complete:
 
-- first launch: timed out after 900 seconds with no product changes
-- single allowed retry: failed with `Error: Exceeded USD budget (2)`
+- PR 88 merged into `main` with squash commit `3b63d15a9e5f32b6b854fab0bf036cacfe7add12`.
+- GitHub CI for PR 88 passed.
+- Issue 087 closed as completed.
+- `v5-serious-pilot-status` is implemented, tested, documented, and merged.
+- Runtime summaries report three ready slices, zero blocked slices, and `policy_gate_ready_rate` 1.
 
-No coordinator-authored product remediation was performed for issue 086.
+Issue 086 is superseded and closed:
 
-Issue 087 completed its local implementation phases:
-
-- coordinator-owned runner fix: timeout runtime-execution exit codes now normalize to a validator-compatible value
-- live status slice: added `v5-serious-pilot-status` to `scripts/specbridge.ps1`
-- live tests slice: covered `v5-serious-pilot-status` and timeout normalization in `scripts/test-specbridge-cli.ps1`
-- live documentation slice: documented `v5-serious-pilot-status`, timeout normalization, and README link
-
-Coordinator-authored remediation of live status/tests/docs slices is not allowed after those live slices start. The coordinator may prepare contracts, launch plans, runtime records, summaries, metrics, final reports, audit packets, ChatGPT/Codex audits, pull requests, and merge evidence.
+- Issue 086 stopped under its no-remediation contract after timeout and budget failure.
+- Issue 087 completed the same product objective through smaller budget-aware live slices using `Edit`, `Read`, and `Write`.
+- Issue 086 was closed as `not_planned` with a GitHub comment referencing issue 087, PR 88, and issue 089 closure evidence.
 
 ## Required Standard
 
-PR completion requires:
+Issue 089 completion requires:
 
-- GitHub pull request opened from `codex/issue087-budget-aware-v5-status`
-- GitHub CI passes
-- deterministic security and review gates pass
-- branch is merged under policy
+- `CURRENT_GOAL.md` no longer claims issue 087 is pending PR, CI, or merge gates.
+- Issue 087 final report, audit packet, and ChatGPT/Codex audit record PR 88 CI and merge completion.
+- Issue 089 closure contract, scope, final report, audit packet, ChatGPT/Codex audit, and GitHub evidence exist.
+- Issue 086 is closed with a comment explaining that issue 087 and PR 88 superseded it.
+- Local contract, scope, final-report, audit-packet, ChatGPT-audit, security, review, and whitespace validations pass.
+- GitHub CI passes before merge.
+
+## Next Recommended Task
+
+After issue 089 merges, start the next ordered standardization task: align `AGENTS.md` with the implemented SpecBridge stage so future agents do not read stale foundation-only guidance while keeping all security and execution-contract rules intact.
 
 ## Completion Condition
 
-Issue 087 is locally complete. It is repository-complete when GitHub CI passes and the branch is merged under policy gates.
+Issue 089 is locally complete when repository memory and closure evidence validate. It is repository-complete when its PR passes GitHub CI and merges under policy gates.

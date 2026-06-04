@@ -1,0 +1,19 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-089-post-merge-memory-closure",
+  "created_by": "ChatGPT/Codex",
+  "created_at": "2026-06-04",
+  "source_issue": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/89",
+  "superseded_issue": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/86",
+  "completion_issue": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/87",
+  "completion_pull_request": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/88",
+  "merge_commit": "3b63d15a9e5f32b6b854fab0bf036cacfe7add12",
+  "github_ci_status": "passed",
+  "cleanup_decision": "Close issue 086 as not planned because issue 087 completed the same V5 serious pilot objective through smaller budget-aware live executor slices and PR 88 merged successfully.",
+  "issue_086_status_after_cleanup": "closed_not_planned",
+  "issue_086_closed_at": "2026-06-04T21:10:36Z",
+  "issue_086_closure_comment": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/86#issuecomment-4626127754",
+  "issue_087_status": "closed_completed",
+  "policy_result": "No secrets, production, billing, auth, authorization, database, dependency installation, CI/CD security, or deployment changes.",
+  "next_recommended_task": "Align AGENTS.md with the implemented SpecBridge stage while preserving execution-contract and security rules."
+}

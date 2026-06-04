@@ -1,0 +1,31 @@
+{
+  "contract_id": "issue-089-post-merge-memory-closure",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/audit-packets/issue-087-budget-aware-v5-status.audit-packet.json",
+    ".specbridge/audit-packets/issue-089-post-merge-memory-closure.audit-packet.json",
+    ".specbridge/audits/issue-087-budget-aware-v5-status.chatgpt-audit.json",
+    ".specbridge/audits/issue-089-post-merge-memory-closure.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-089-post-merge-memory-closure.execution.md",
+    ".specbridge/github-evidence/issue-089-post-merge-memory-closure.cleanup.json",
+    ".specbridge/reports/issue-087-budget-aware-v5-status.final-report.json",
+    ".specbridge/reports/issue-089-post-merge-memory-closure.final-report.json",
+    ".specbridge/scopes/issue-089-post-merge-memory-closure.scope.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/contracts/issue-086-serious-v5-live-pilot.execution.md",
+    ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md",
+    ".specbridge/scopes/issue-087-budget-aware-v5-status.scope.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-087-budget-aware-v5-status"
+  ],
+  "final_report": ".specbridge/reports/issue-089-post-merge-memory-closure.final-report.json"
+}

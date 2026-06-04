@@ -45,33 +45,30 @@
     {
       "name": "ci_evidence",
       "result": "pass",
-      "evidence": "GitHub CI is not collected yet and remains an external merge gate. The audit packet marks CI as not_collected rather than passed.",
+      "evidence": "GitHub CI for PR 88 passed before merge. PR 88 merged into main as squash commit 3b63d15a9e5f32b6b854fab0bf036cacfe7add12.",
       "blocking": false
     },
     {
       "name": "final_report_honesty",
       "result": "pass",
-      "evidence": "The final report records local completion, live slice retry context, no deployment, and pending PR/CI/merge gates.",
+      "evidence": "The final report records completed merge status, live slice retry context, no deployment, and no unresolved risks.",
       "blocking": false
     }
   ],
   "findings": [
     {
       "severity": "info",
-      "category": "external_ci_pending",
+      "category": "post_merge_complete",
       "file": ".specbridge/reports/issue-087-budget-aware-v5-status.final-report.json",
       "line": null,
-      "evidence": "Local gates passed, but GitHub CI cannot be marked passed until a pull request runs checks.",
-      "recommendation": "Open the pull request, wait for CI, and merge only if required checks pass.",
+      "evidence": "PR 88 passed GitHub CI and merged issue 087 into main as squash commit 3b63d15a9e5f32b6b854fab0bf036cacfe7add12.",
+      "recommendation": "Use issue 089 closure evidence as the repository memory handoff to the next standardization task.",
       "blocking": false
     }
   ],
   "outcome": "approved",
   "merge_allowed": true,
-  "unresolved_risks": [
-    "GitHub PR CI evidence is pending.",
-    "Merge remains pending until GitHub checks pass."
-  ],
+  "unresolved_risks": [],
   "source_files": [
     ".specbridge/audit-packets/issue-087-budget-aware-v5-status.audit-packet.json",
     ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md",

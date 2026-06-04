@@ -1,0 +1,80 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-089-post-merge-memory-closure",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-089-post-merge-memory-closure.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-089-post-merge-memory-closure.execution.md",
+  "final_report_path": ".specbridge/reports/issue-089-post-merge-memory-closure.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue 089 only closes post-merge repository memory for issue 087 and records issue 086 as superseded by issue 087 and PR 88.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "CURRENT_GOAL no longer claims issue 087 is pending gates. Issue 087 final report, audit packet, and ChatGPT audit now record PR 88 CI and merge completion. Issue 086 supersession and closure are recorded in GitHub evidence.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The task changed only declared repository memory and evidence files under the issue 089 scope. Product code, scripts, workflows, dependencies, production, auth, billing, database, and deployment surfaces were untouched.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "No .env files, secrets, private keys, production configuration, billing configuration, authentication security, authorization security, CI/CD security controls, or destructive infrastructure paths were modified.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed files are declared in .specbridge/scopes/issue-089-post-merge-memory-closure.scope.json.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "Required local validators for contracts, scopes, final reports, audit packets, ChatGPT audits, security gate, review gate, and diff whitespace are recorded in the audit packet.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub CI for issue 089 is not collected yet and remains an external merge gate. The audit packet marks it not_collected rather than passed.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records local completion, GitHub CI as not_collected, pending pull request and merge gates, no deployment, and no product-code risk.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "external_ci_pending",
+      "file": ".specbridge/reports/issue-089-post-merge-memory-closure.final-report.json",
+      "line": null,
+      "evidence": "Issue 089 local evidence is ready, but GitHub CI cannot be recorded as passed until the branch is pushed and checks run.",
+      "recommendation": "Push the branch, open a pull request, wait for GitHub checks, and merge only if required gates pass.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-089-post-merge-memory-closure.audit-packet.json",
+    ".specbridge/contracts/issue-089-post-merge-memory-closure.execution.md",
+    ".specbridge/reports/issue-089-post-merge-memory-closure.final-report.json",
+    ".specbridge/github-evidence/issue-089-post-merge-memory-closure.cleanup.json"
+  ]
+}

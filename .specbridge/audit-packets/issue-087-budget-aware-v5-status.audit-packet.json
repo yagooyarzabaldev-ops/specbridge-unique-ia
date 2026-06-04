@@ -121,17 +121,14 @@
     { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1", "result": "passed" },
     { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1", "result": "passed" },
     { "command": "git diff --check", "result": "passed" },
-    { "command": "GitHub CI", "result": "not_collected" }
+    { "command": "GitHub CI", "result": "passed" }
   ],
   "final_report_path": ".specbridge/reports/issue-087-budget-aware-v5-status.final-report.json",
-  "ci_status": "not_collected",
+  "ci_status": "passed",
   "pr_review_report_path": null,
   "policy_result": "Passed locally. Work stayed inside issue 087 contract and scope. The coordinator-owned runner timeout normalization occurred before live status, tests, and docs slices began. Live status, tests, and docs slices completed through Claude Code execution with no coordinator remediation of those slices. No protected credentials, production change, dependency installation, authentication or billing change, database change, CI/CD security change, or deployment occurred.",
-  "unresolved_risks": [
-    "GitHub PR CI evidence is pending.",
-    "Merge remains pending until GitHub checks pass."
-  ],
-  "completion_status": "complete_pending_pr_ci",
+  "unresolved_risks": [],
+  "completion_status": "complete",
   "source_files": [
     ".specbridge/contracts/issue-087-budget-aware-v5-status.execution.md",
     ".specbridge/reports/issue-087-budget-aware-v5-status.final-report.json",
