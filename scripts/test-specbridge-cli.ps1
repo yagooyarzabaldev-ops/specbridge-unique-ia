@@ -155,6 +155,11 @@ try {
       -ExpectedPattern '"readiness_status"\s*:\s*"ready_for_v5_live_contract"'
 
     Assert-Success `
+      -Name "v5-live-status" `
+      -Result (Invoke-Cli -Arguments @("v5-live-status")) `
+      -ExpectedPattern '"live_status"\s*:\s*"completed_with_coordinator_remediation"'
+
+    Assert-Success `
       -Name "runtime-capability-status" `
       -Result (Invoke-Cli -Arguments @("runtime-capability-status")) `
       -ExpectedPattern '"command"\s*:\s*"runtime-capability-status"'
@@ -371,6 +376,21 @@ try {
         "-Force"
       )) `
       -ExpectedPattern '"execution_status"\s*:\s*"dry_run"'
+
+    $runtimeExecution = Get-Content -LiteralPath ".specbridge/runtime-executions/cli-fixture.runtime-execution.json" -Raw | ConvertFrom-Json
+
+    if (-not $runtimeExecution.PSObject.Properties.Name.Contains("failure_diagnostics")) {
+      Write-Output "FAIL CLI-created runtime execution is missing failure_diagnostics."
+      $failed = $true
+    }
+    elseif ($runtimeExecution.failure_diagnostics.status -ne "not_applicable" -or $runtimeExecution.failure_diagnostics.reason -ne "dry_run") {
+      Write-Output "FAIL CLI-created runtime execution has unexpected dry-run failure diagnostics."
+      Write-Output ($runtimeExecution.failure_diagnostics | ConvertTo-Json -Depth 8)
+      $failed = $true
+    }
+    else {
+      Write-Output "PASS CLI-created runtime execution records dry-run failure diagnostics."
+    }
 
     $runtimeExecutionValidation = & powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-executions.ps1 2>&1
 

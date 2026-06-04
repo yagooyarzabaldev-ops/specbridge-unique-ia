@@ -35,9 +35,18 @@ $requiredFields = @(
   "source_files"
 )
 
-$allowedFields = $requiredFields
+$allowedFields = $requiredFields + @("failure_diagnostics")
 $allowedExecutionStatuses = @("dry_run", "succeeded", "failed", "timed_out")
 $allowedTools = @("Read", "Write", "Edit")
+$allowedDiagnosticStatuses = @("not_applicable", "recorded")
+$allowedDiagnosticReasons = @(
+  "dry_run",
+  "execution_succeeded",
+  "timeout",
+  "stderr_nonempty",
+  "stdout_only_failure",
+  "process_exit_without_output"
+)
 
 function Write-Failure {
   param(
@@ -168,6 +177,156 @@ function Test-StreamEvidence {
   }
 }
 
+function Test-RedactedPreview {
+  param(
+    [object] $Preview,
+    [string] $FieldName,
+    [string] $FileName
+  )
+
+  if ($null -eq $Preview -or $Preview.GetType().Name -notmatch "Object") {
+    Write-Failure "$FieldName must be an object in $FileName"
+    return
+  }
+
+  foreach ($required in @("text", "original_length", "preview_length", "max_length", "truncated")) {
+    if (-not $Preview.PSObject.Properties.Name.Contains($required)) {
+      Write-Failure "$FieldName missing $required in $FileName"
+    }
+  }
+
+  if ($Preview.PSObject.Properties.Name.Contains("text")) {
+    if ($Preview.text -isnot [string]) {
+      Write-Failure "$FieldName.text must be a string in $FileName"
+    }
+    else {
+      if ($Preview.text -match "sk-[A-Za-z0-9_-]{16,}" -or $Preview.text -match "gh[pousr]_[A-Za-z0-9_]{16,}" -or $Preview.text -match "xox[baprs]-[A-Za-z0-9-]{16,}") {
+        Write-Failure "$FieldName.text appears to contain an unredacted token in $FileName"
+      }
+
+      if ($Preview.text -match "(?i)authorization\s*[:=]\s*bearer\s+[^\s,;]+") {
+        Write-Failure "$FieldName.text appears to contain an unredacted bearer credential in $FileName"
+      }
+    }
+  }
+
+  foreach ($integerField in @("original_length", "preview_length", "max_length")) {
+    if ($Preview.PSObject.Properties.Name.Contains($integerField)) {
+      $value = $Preview.$integerField
+
+      if ($value -isnot [int] -and $value -isnot [long]) {
+        Write-Failure "$FieldName.$integerField must be an integer in $FileName"
+      }
+      elseif ($value -lt 0) {
+        Write-Failure "$FieldName.$integerField must not be negative in $FileName"
+      }
+    }
+  }
+
+  if ($Preview.PSObject.Properties.Name.Contains("max_length") -and $Preview.max_length -le 0) {
+    Write-Failure "$FieldName.max_length must be greater than zero in $FileName"
+  }
+
+  if ($Preview.PSObject.Properties.Name.Contains("truncated") -and $Preview.truncated -isnot [bool]) {
+    Write-Failure "$FieldName.truncated must be boolean in $FileName"
+  }
+
+  if (
+    $Preview.PSObject.Properties.Name.Contains("text") -and
+    $Preview.PSObject.Properties.Name.Contains("preview_length") -and
+    $Preview.text -is [string] -and
+    $Preview.preview_length -is [int]
+  ) {
+    if ($Preview.preview_length -ne $Preview.text.Length) {
+      Write-Failure "$FieldName.preview_length must equal the preview text length in $FileName"
+    }
+  }
+
+  if (
+    $Preview.PSObject.Properties.Name.Contains("text") -and
+    $Preview.PSObject.Properties.Name.Contains("max_length") -and
+    $Preview.text -is [string] -and
+    ($Preview.max_length -is [int] -or $Preview.max_length -is [long])
+  ) {
+    if ($Preview.text.Length -gt $Preview.max_length) {
+      Write-Failure "$FieldName.text must not exceed max_length in $FileName"
+    }
+  }
+}
+
+function Test-FailureDiagnostics {
+  param(
+    [object] $Diagnostics,
+    [object] $Execution,
+    [string] $FileName
+  )
+
+  if ($null -eq $Diagnostics -or $Diagnostics.GetType().Name -notmatch "Object") {
+    Write-Failure "failure_diagnostics must be an object in $FileName"
+    return
+  }
+
+  foreach ($required in @("status", "reason", "exit_code", "timed_out", "redaction_policy", "stdout_preview", "stderr_preview")) {
+    if (-not $Diagnostics.PSObject.Properties.Name.Contains($required)) {
+      Write-Failure "failure_diagnostics missing $required in $FileName"
+    }
+  }
+
+  foreach ($stringField in @("status", "reason", "redaction_policy")) {
+    if ($Diagnostics.PSObject.Properties.Name.Contains($stringField)) {
+      $value = $Diagnostics.$stringField
+
+      if ($null -eq $value -or $value.GetType().Name -ne "String" -or [string]::IsNullOrWhiteSpace($value)) {
+        Write-Failure "failure_diagnostics.$stringField must be a non-empty string in $FileName"
+      }
+    }
+  }
+
+  if ($Diagnostics.PSObject.Properties.Name.Contains("status") -and $allowedDiagnosticStatuses -notcontains $Diagnostics.status) {
+    Write-Failure "failure_diagnostics.status is not allowed in $FileName`: $($Diagnostics.status)"
+  }
+
+  if ($Diagnostics.PSObject.Properties.Name.Contains("reason") -and $allowedDiagnosticReasons -notcontains $Diagnostics.reason) {
+    Write-Failure "failure_diagnostics.reason is not allowed in $FileName`: $($Diagnostics.reason)"
+  }
+
+  if ($Diagnostics.PSObject.Properties.Name.Contains("exit_code") -and $null -ne $Diagnostics.exit_code) {
+    if ($Diagnostics.exit_code -isnot [int] -and $Diagnostics.exit_code -isnot [long]) {
+      Write-Failure "failure_diagnostics.exit_code must be null or an integer in $FileName"
+    }
+    elseif ($Diagnostics.exit_code -lt 0 -or $Diagnostics.exit_code -gt 255) {
+      Write-Failure "failure_diagnostics.exit_code must be between 0 and 255 in $FileName"
+    }
+  }
+
+  if ($Diagnostics.PSObject.Properties.Name.Contains("timed_out") -and $Diagnostics.timed_out -isnot [bool]) {
+    Write-Failure "failure_diagnostics.timed_out must be boolean in $FileName"
+  }
+
+  if ($Diagnostics.PSObject.Properties.Name.Contains("redaction_policy") -and $Diagnostics.redaction_policy -ne "bounded_preview_240_chars_with_secret_token_patterns_redacted") {
+    Write-Failure "failure_diagnostics.redaction_policy is not recognized in $FileName"
+  }
+
+  if ($Execution.dry_run -eq $true) {
+    if ($Diagnostics.status -ne "not_applicable" -or $Diagnostics.reason -ne "dry_run") {
+      Write-Failure "dry-run failure_diagnostics must be not_applicable/dry_run in $FileName"
+    }
+  }
+  elseif ($Execution.execution_status -eq "succeeded") {
+    if ($Diagnostics.status -ne "not_applicable" -or $Diagnostics.reason -ne "execution_succeeded") {
+      Write-Failure "succeeded failure_diagnostics must be not_applicable/execution_succeeded in $FileName"
+    }
+  }
+  elseif ($Execution.execution_status -in @("failed", "timed_out")) {
+    if ($Diagnostics.status -ne "recorded") {
+      Write-Failure "failed or timed-out failure_diagnostics must be recorded in $FileName"
+    }
+  }
+
+  Test-RedactedPreview -Preview $Diagnostics.stdout_preview -FieldName "failure_diagnostics.stdout_preview" -FileName $FileName
+  Test-RedactedPreview -Preview $Diagnostics.stderr_preview -FieldName "failure_diagnostics.stderr_preview" -FileName $FileName
+}
+
 if (-not (Test-Path -LiteralPath $RuntimeExecutionsPath -PathType Container)) {
   Write-Output "FAIL missing runtime executions directory: $RuntimeExecutionsPath"
   exit 1
@@ -291,6 +450,10 @@ foreach ($file in $executionFiles) {
 
   Test-StreamEvidence -Stream $execution.stdout -FieldName "stdout" -FileName $file.FullName
   Test-StreamEvidence -Stream $execution.stderr -FieldName "stderr" -FileName $file.FullName
+
+  if ($propertyNames -contains "failure_diagnostics") {
+    Test-FailureDiagnostics -Diagnostics $execution.failure_diagnostics -Execution $execution -FileName $file.FullName
+  }
 
   if ($propertyNames -contains "execution_policy") {
     if ($null -eq $execution.execution_policy -or $execution.execution_policy.GetType().Name -notmatch "Object") {

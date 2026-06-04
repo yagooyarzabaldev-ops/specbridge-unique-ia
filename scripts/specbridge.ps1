@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "v5-pilot-status", "runtime-capability-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "v5-pilot-status", "v5-live-status", "runtime-capability-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -895,6 +895,238 @@ function Invoke-V5PilotStatusCommand {
   }) -Depth 10
 
   if ($failedPrerequisites.Count -gt 0) {
+    exit 1
+  }
+
+  exit 0
+}
+
+function Invoke-V5LiveStatusCommand {
+  $liveContractPath = ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md"
+  $liveReportPath = ".specbridge/reports/issue-076-v5-live-parallel-pilot.final-report.json"
+  $liveAuditPath = ".specbridge/audits/issue-076-v5-live-parallel-pilot.chatgpt-audit.json"
+  $liveMetricsPath = ".specbridge/metrics/issue-076-v5-live-parallel-pilot.autonomy-metrics.json"
+  $currentGoalPath = ".specbridge/context/CURRENT_GOAL.md"
+
+  $requiredArtifactPaths = @(
+    $liveContractPath,
+    $liveReportPath,
+    $liveAuditPath,
+    $liveMetricsPath,
+    $currentGoalPath
+  )
+
+  $artifactStatus = @()
+
+  foreach ($path in $requiredArtifactPaths) {
+    $artifactStatus += [ordered]@{
+      path = $path
+      exists = (Test-Path -LiteralPath $path -PathType Leaf)
+    }
+  }
+
+  $runtimeExecutionPaths = @()
+  $runtimeSummaryPaths = @()
+
+  if (Test-Path -LiteralPath ".specbridge/runtime-executions" -PathType Container) {
+    $runtimeExecutionPaths = @(
+      Get-ChildItem -LiteralPath ".specbridge/runtime-executions" -Filter "issue-076-*.runtime-execution.json" -File |
+        Sort-Object Name |
+        ForEach-Object { Normalize-RepoPath -Path (Join-Path ".specbridge/runtime-executions" $_.Name) -FieldName "v5_live_runtime_execution" }
+    )
+  }
+
+  if (Test-Path -LiteralPath ".specbridge/runtime-summaries" -PathType Container) {
+    $runtimeSummaryPaths = @(
+      Get-ChildItem -LiteralPath ".specbridge/runtime-summaries" -Filter "issue-076-*.runtime-summary.json" -File |
+        Sort-Object Name |
+        ForEach-Object { Normalize-RepoPath -Path (Join-Path ".specbridge/runtime-summaries" $_.Name) -FieldName "v5_live_runtime_summary" }
+    )
+  }
+
+  $executionRecords = @()
+  $executionStatusCounts = @{}
+  $executionDiagnosticsCount = 0
+
+  foreach ($executionPath in $runtimeExecutionPaths) {
+    $execution = Get-JsonObjectFromFile -Path $executionPath -Description "V5 live runtime execution"
+    $status = $execution.execution_status
+
+    if ([string]::IsNullOrWhiteSpace($status)) {
+      $status = "unknown"
+    }
+
+    if (-not $executionStatusCounts.ContainsKey($status)) {
+      $executionStatusCounts[$status] = 0
+    }
+
+    $executionStatusCounts[$status] += 1
+
+    $hasFailureDiagnostics = $execution.PSObject.Properties.Name.Contains("failure_diagnostics")
+
+    if ($hasFailureDiagnostics) {
+      $executionDiagnosticsCount += 1
+    }
+
+    $diagnosticReason = $null
+
+    if ($hasFailureDiagnostics -and $execution.failure_diagnostics.PSObject.Properties.Name.Contains("reason")) {
+      $diagnosticReason = $execution.failure_diagnostics.reason
+    }
+
+    $executionRecords += [ordered]@{
+      slice_id = $execution.slice_id
+      execution_status = $execution.execution_status
+      exit_code = $execution.exit_code
+      timed_out = $execution.timed_out
+      dry_run = $execution.dry_run
+      has_failure_diagnostics = $hasFailureDiagnostics
+      failure_reason = $diagnosticReason
+      source_execution_path = $executionPath
+    }
+  }
+
+  $summaryRecords = @()
+  $summaryReady = ($runtimeSummaryPaths.Count -ge 3)
+
+  foreach ($summaryPath in $runtimeSummaryPaths) {
+    $summary = Get-JsonObjectFromFile -Path $summaryPath -Description "V5 live runtime summary"
+    $blockerCount = @($summary.blockers).Count
+
+    if ($summary.merge_readiness -ne "ready_for_policy_gates" -or $summary.completion_status -ne "complete") {
+      $summaryReady = $false
+    }
+
+    $summaryRecords += [ordered]@{
+      slice_id = $summary.slice_id
+      runtime_status = $summary.runtime_status
+      completion_status = $summary.completion_status
+      merge_readiness = $summary.merge_readiness
+      blocker_count = $blockerCount
+      policy_result = $summary.policy_result
+      source_summary_path = $summaryPath
+    }
+  }
+
+  $auditApproved = $false
+  $auditMergeAllowed = $false
+
+  if (Test-Path -LiteralPath $liveAuditPath -PathType Leaf) {
+    $audit = Get-JsonObjectFromFile -Path $liveAuditPath -Description "V5 live ChatGPT audit"
+    $auditApproved = ($audit.outcome -eq "approved")
+    $auditMergeAllowed = ([bool] $audit.merge_allowed)
+  }
+
+  $metricsReady = $false
+  $metricsSummary = [ordered]@{
+    ready_count = 0
+    blocked_count = $null
+    policy_gate_ready_rate = $null
+  }
+
+  if (Test-Path -LiteralPath $liveMetricsPath -PathType Leaf) {
+    $metrics = Get-JsonObjectFromFile -Path $liveMetricsPath -Description "V5 live autonomy metrics"
+    $metricsReady = (($metrics.ready_count -ge 3) -and ($metrics.blocked_count -eq 0))
+    $metricsSummary = [ordered]@{
+      ready_count = $metrics.ready_count
+      blocked_count = $metrics.blocked_count
+      policy_gate_ready_rate = $metrics.policy_gate_ready_rate
+    }
+  }
+
+  $reportText = ""
+  $currentGoalText = ""
+
+  if (Test-Path -LiteralPath $liveReportPath -PathType Leaf) {
+    $reportText = Get-Content -LiteralPath $liveReportPath -Raw
+  }
+
+  if (Test-Path -LiteralPath $currentGoalPath -PathType Leaf) {
+    $currentGoalText = Get-Content -LiteralPath $currentGoalPath -Raw
+  }
+
+  $coordinatorRemediationRecorded = (
+    $reportText -match "coordinator remediation" -or
+    $reportText -match "coordinator remediated" -or
+    $currentGoalText -match "coordinator remediation"
+  )
+
+  $failedLiveExecutions = @($executionRecords | Where-Object { $_.dry_run -eq $false -and $_.execution_status -eq "failed" })
+  $timedOutLiveExecutions = @($executionRecords | Where-Object { $_.dry_run -eq $false -and $_.execution_status -eq "timed_out" })
+  $liveExecutionRecords = @($executionRecords | Where-Object { $_.dry_run -eq $false })
+  $requiredArtifactsPresent = (@($artifactStatus | Where-Object { -not $_.exists }).Count -eq 0)
+  $livePilotComplete = (
+    $requiredArtifactsPresent -and
+    $runtimeExecutionPaths.Count -ge 4 -and
+    $runtimeSummaryPaths.Count -ge 3 -and
+    $summaryReady -and
+    $metricsReady -and
+    $auditApproved -and
+    $auditMergeAllowed -and
+    $coordinatorRemediationRecorded
+  )
+
+  $liveStatus = "blocked_or_incomplete"
+  $readinessStatus = "blocked"
+
+  if ($livePilotComplete) {
+    $liveStatus = "completed_with_coordinator_remediation"
+    $readinessStatus = "ready_for_second_live_pilot"
+  }
+
+  Write-CliJson ([ordered]@{
+    command = "v5-live-status"
+    ok = $livePilotComplete
+    phase = "V5 live parallel pilot completion status"
+    branch = Get-GitValue -Arguments @("branch", "--show-current") -Fallback "unknown"
+    head = Get-GitValue -Arguments @("rev-parse", "--short", "HEAD") -Fallback "unknown"
+    live_status = $liveStatus
+    readiness_status = $readinessStatus
+    live_pilot_artifacts = [ordered]@{
+      contract = $liveContractPath
+      final_report = $liveReportPath
+      chatgpt_audit = $liveAuditPath
+      autonomy_metrics = $liveMetricsPath
+      current_goal = $currentGoalPath
+      required_artifacts = @($artifactStatus)
+    }
+    runtime_execution_counts = [ordered]@{
+      total = @($executionRecords).Count
+      live = @($liveExecutionRecords).Count
+      failed_live = @($failedLiveExecutions).Count
+      timed_out_live = @($timedOutLiveExecutions).Count
+      with_failure_diagnostics = $executionDiagnosticsCount
+      by_status = Convert-HashtableToOrderedObject -Table $executionStatusCounts
+    }
+    live_execution_outcomes = @($executionRecords)
+    slice_outcomes = @($summaryRecords)
+    coordinator_remediation = [ordered]@{
+      recorded = $coordinatorRemediationRecorded
+      required_for_completion = $true
+      cli_failed_live_attempts = @($failedLiveExecutions).Count
+      note = "The first V5 live pilot completed only after coordinator remediation of the CLI slice."
+    }
+    readiness_evidence = [ordered]@{
+      summaries_ready = $summaryReady
+      audit_approved = $auditApproved
+      audit_merge_allowed = $auditMergeAllowed
+      metrics = $metricsSummary
+    }
+    diagnostics = [ordered]@{
+      current_runner_records_failure_diagnostics = $true
+      historical_issue_076_execution_count = @($executionRecords).Count
+      historical_issue_076_diagnostics_count = $executionDiagnosticsCount
+      historical_issue_076_failed_execution_count = @($failedLiveExecutions).Count
+      note = "Historical issue 076 execution artifacts predate failure_diagnostics; new execute-runtime-launch artifacts include bounded redacted diagnostics."
+    }
+    remaining_risks = @(
+      "Live CLI executor reliability remains unproven because the first implementation slice failed twice before coordinator remediation.",
+      "The next live pilot should require implementation, tests, and docs slices to complete without coordinator remediation."
+    )
+    next_recommended_action = "Run a second serious live pilot with diagnostics enabled and no coordinator remediation target."
+  }) -Depth 12
+
+  if (-not $livePilotComplete) {
     exit 1
   }
 
@@ -2383,6 +2615,92 @@ function Get-TextLineCount {
   return @($Text -split "\r?\n").Count
 }
 
+function Get-RedactedPreview {
+  param(
+    [AllowNull()]
+    [string] $Text,
+    [int] $MaxLength = 240
+  )
+
+  if ($MaxLength -lt 1) {
+    Fail "MaxLength must be greater than zero for redacted previews"
+  }
+
+  if ($null -eq $Text) {
+    $Text = ""
+  }
+
+  $originalLength = $Text.Length
+  $redacted = $Text.Replace("`r`n", "`n").Replace("`r", "`n")
+  $redacted = [regex]::Replace($redacted, "[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]", "?")
+  $redacted = [regex]::Replace($redacted, "(?i)(authorization\s*[:=]\s*bearer\s+)[^\s,;]+", '$1[REDACTED]')
+  $redacted = [regex]::Replace($redacted, "(?i)((api[_-]?key|token|secret|password)\s*[:=]\s*)['""]?[^'""\s,;}]+", '$1[REDACTED]')
+  $redacted = [regex]::Replace($redacted, "sk-[A-Za-z0-9_-]{16,}", "sk-[REDACTED]")
+  $redacted = [regex]::Replace($redacted, "gh[pousr]_[A-Za-z0-9_]{16,}", "gh_[REDACTED]")
+  $redacted = [regex]::Replace($redacted, "xox[baprs]-[A-Za-z0-9-]{16,}", "xox-[REDACTED]")
+
+  $truncated = $redacted.Length -gt $MaxLength
+
+  if ($truncated) {
+    $redacted = $redacted.Substring(0, $MaxLength)
+  }
+
+  return [ordered]@{
+    text = $redacted
+    original_length = $originalLength
+    preview_length = $redacted.Length
+    max_length = $MaxLength
+    truncated = $truncated
+  }
+}
+
+function New-FailureDiagnostics {
+  param(
+    [bool] $DryRun,
+    [string] $ExecutionStatus,
+    [AllowNull()]
+    [object] $ExitCode,
+    [bool] $TimedOut,
+    [AllowNull()]
+    [string] $Stdout,
+    [AllowNull()]
+    [string] $Stderr
+  )
+
+  $status = "not_applicable"
+  $reason = "execution_succeeded"
+
+  if ($DryRun) {
+    $reason = "dry_run"
+  }
+  elseif ($ExecutionStatus -in @("failed", "timed_out") -or $TimedOut) {
+    $status = "recorded"
+
+    if ($TimedOut -or $ExecutionStatus -eq "timed_out") {
+      $reason = "timeout"
+    }
+    elseif (-not [string]::IsNullOrWhiteSpace($Stderr)) {
+      $reason = "stderr_nonempty"
+    }
+    elseif (-not [string]::IsNullOrWhiteSpace($Stdout)) {
+      $reason = "stdout_only_failure"
+    }
+    else {
+      $reason = "process_exit_without_output"
+    }
+  }
+
+  return [ordered]@{
+    status = $status
+    reason = $reason
+    exit_code = $ExitCode
+    timed_out = $TimedOut
+    redaction_policy = "bounded_preview_240_chars_with_secret_token_patterns_redacted"
+    stdout_preview = Get-RedactedPreview -Text $Stdout -MaxLength 240
+    stderr_preview = Get-RedactedPreview -Text $Stderr -MaxLength 240
+  }
+}
+
 function New-RuntimeExecutionPrompt {
   param(
     [object] $Launch
@@ -2499,6 +2817,8 @@ function Invoke-ExecuteRuntimeLaunchCommand {
   $stderrLineCount = 0
   $stdoutSha256 = $null
   $stderrSha256 = $null
+  $stdout = ""
+  $stderr = ""
 
   if (-not $DryRun) {
     $claudeCommand = Get-Command claude -ErrorAction SilentlyContinue
@@ -2603,6 +2923,13 @@ function Invoke-ExecuteRuntimeLaunchCommand {
       line_count = $stderrLineCount
       sha256 = $stderrSha256
     }
+    failure_diagnostics = New-FailureDiagnostics `
+      -DryRun ([bool] $DryRun) `
+      -ExecutionStatus $executionStatus `
+      -ExitCode $exitCode `
+      -TimedOut $timedOut `
+      -Stdout $stdout `
+      -Stderr $stderr
     policy_result = $policyResult
     execution_policy = [ordered]@{
       launches_claude = (-not [bool] $DryRun)
@@ -3111,6 +3438,7 @@ switch ($Command) {
   "summarize-autonomy-metrics" { Invoke-SummarizeAutonomyMetricsCommand }
   "standard-loop-status" { Invoke-StandardLoopStatusCommand }
   "v5-pilot-status" { Invoke-V5PilotStatusCommand }
+  "v5-live-status" { Invoke-V5LiveStatusCommand }
   "runtime-capability-status" { Invoke-RuntimeCapabilityStatusCommand }
   "plan-executor-branches" { Invoke-PlanExecutorBranchesCommand }
   "record-github-evidence" { Invoke-RecordGithubEvidenceCommand }

@@ -52,6 +52,57 @@
     "timed_out": { "type": "boolean" },
     "stdout": { "type": "object" },
     "stderr": { "type": "object" },
+    "failure_diagnostics": {
+      "type": "object",
+      "required": [
+        "status",
+        "reason",
+        "exit_code",
+        "timed_out",
+        "redaction_policy",
+        "stdout_preview",
+        "stderr_preview"
+      ],
+      "properties": {
+        "status": { "type": "string", "enum": ["not_applicable", "recorded"] },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "dry_run",
+            "execution_succeeded",
+            "timeout",
+            "stderr_nonempty",
+            "stdout_only_failure",
+            "process_exit_without_output"
+          ]
+        },
+        "exit_code": { "type": ["integer", "null"] },
+        "timed_out": { "type": "boolean" },
+        "redaction_policy": { "type": "string" },
+        "stdout_preview": {
+          "type": "object",
+          "required": ["text", "original_length", "preview_length", "max_length", "truncated"],
+          "properties": {
+            "text": { "type": "string" },
+            "original_length": { "type": "integer", "minimum": 0 },
+            "preview_length": { "type": "integer", "minimum": 0 },
+            "max_length": { "type": "integer", "minimum": 1 },
+            "truncated": { "type": "boolean" }
+          }
+        },
+        "stderr_preview": {
+          "type": "object",
+          "required": ["text", "original_length", "preview_length", "max_length", "truncated"],
+          "properties": {
+            "text": { "type": "string" },
+            "original_length": { "type": "integer", "minimum": 0 },
+            "preview_length": { "type": "integer", "minimum": 0 },
+            "max_length": { "type": "integer", "minimum": 1 },
+            "truncated": { "type": "boolean" }
+          }
+        }
+      }
+    },
     "policy_result": { "type": "string" },
     "execution_policy": { "type": "object" },
     "source_files": { "type": "array", "items": { "type": "string" } }

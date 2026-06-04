@@ -1,6 +1,6 @@
 {
   "contract_id": "issue-076-v5-live-parallel-pilot",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/audit-packets/issue-076-v5-live-parallel-pilot.audit-packet.json",
     ".specbridge/audits/issue-076-v5-live-parallel-pilot.chatgpt-audit.json",

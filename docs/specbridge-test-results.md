@@ -8,10 +8,10 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 
 ## Test Run
 
-- Date: 2026-06-03
+- Date: 2026-06-04
 - Environment: local PowerShell workspace
-- Branch: `codex/v5-live-parallel-pilot`
-- Scope: V5 live parallel pilot with `runtime-capability-status`, live Claude Code runtime execution evidence, executor packets, runtime launch plans, runtime-run/result/summary evidence, autonomy metrics, coordinator remediation evidence, final report, audit packet, and ChatGPT/Codex audit
+- Branch: `codex/v5-live-status-diagnostics`
+- Scope: post-V5 live hardening with `v5-live-status`, bounded redacted `execute-runtime-launch` failure diagnostics, runtime execution schema and validator updates, current goal closure, and test coverage for the new CLI behavior
 
 ## Results
 
@@ -69,6 +69,8 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 | V5 readiness runtime summary generation | passed |
 | V5 readiness autonomy metrics | passed |
 | Runtime capability status CLI feature | passed |
+| V5 live status CLI feature | passed |
+| Runtime execution failure diagnostics | passed |
 | V5 live executor packet generation | passed |
 | V5 live runtime launch planning | passed |
 | V5 live docs executor attempt | passed |
@@ -169,8 +171,9 @@ The negative validation suite verifies:
 - issue 071 autonomy metrics record `summary_count: 2`, `ready_count: 2`, `blocked_count: 0`, and `policy_gate_ready_rate: 1`
 - local CLI standard-loop-status command passes
 - local CLI v5-pilot-status command passes
+- local CLI v5-live-status command passes
 - local CLI runtime-capability-status command passes
-- local CLI runtime execution dry-run command passes and writes validated evidence
+- local CLI runtime execution dry-run command passes, writes validated evidence, and records `failure_diagnostics`
 - local CLI live runtime execution without `-Force` fails deterministically
 - standard template validation passes
 - standard template missing `{{TASK_ID}}` placeholder fails deterministically
@@ -183,9 +186,9 @@ The negative validation suite verifies:
 
 ## Policy Result
 
-Passed. The change adds a V5 live pilot contract, three executor slices, runtime launch plans, live Claude Code runtime execution evidence, `runtime-capability-status`, runtime-run/result/summary evidence, autonomy metrics, final report, audit packet, ChatGPT/Codex audit, and updated repository memory. The docs and tests live slices completed. The CLI live slice failed twice and was remediated by the coordinator inside declared scope. The task does not access protected credentials, touch production, install dependencies, modify auth or billing surfaces, weaken CI/CD security, change database schema, or deploy.
+Passed. The change closes the completed V5 live pilot as repository memory, adds `v5-live-status`, and adds bounded redacted `execute-runtime-launch` failure diagnostics for future runtime execution artifacts. Historical issue 076 artifacts remain valid without diagnostics. The task does not launch live Claude Code or Antigravity sessions, access protected credentials, touch production, install dependencies, modify auth or billing surfaces, weaken CI/CD security, change database schema, or deploy.
 
 ## Unresolved Risks
 
 - GitHub PR CI evidence is pending until the branch is pushed and GitHub runs checks.
-- The CLI live executor failed twice with exit code `1`; future work should improve live runner diagnostics and prompt feedback so coordinator remediation is needed less often.
+- The first V5 live pilot still required coordinator remediation for the CLI implementation slice. The next serious live pilot should target live completion without coordinator remediation.

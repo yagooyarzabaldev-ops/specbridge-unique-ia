@@ -105,6 +105,7 @@ SpecBridge currently has these governed status layers:
 - V5 live parallel pilot boundary: defined as the next phase after Standard Loop v1, with live Antigravity parallel execution allowed only through dedicated contracts, non-overlapping executor scopes, CI authority, security gate, review gate, audit evidence, and no production, billing, secret, auth, database, CI/CD security, or deployment expansion.
 - V5 pilot readiness: implemented as a deterministic `v5-pilot-status` CLI readiness gate with a two-slice dry-run evidence chain, runtime summaries, autonomy metrics, final report, audit packet, and ChatGPT/Codex audit evidence before any live parallel Antigravity expansion.
 - V5 live parallel pilot: implemented as a three-slice governed pilot with bounded live Claude Code runtime attempts, `runtime-capability-status`, executor packets, launch plans, runtime execution evidence, runtime-run/result/summary artifacts, autonomy metrics, and coordinator remediation evidence. Docs and tests slices completed live; the CLI live slice failed twice and was remediated by the coordinator inside declared scope.
+- V5 live status and runner diagnostics: implemented as a deterministic `v5-live-status` CLI view over the completed live pilot plus bounded redacted `execute-runtime-launch` failure diagnostics for future executor attempts.
 - Default automation: Full Autopilot is enabled for autonomous merge after required gates pass; production deployment remains disabled.
 
 See:
@@ -130,5 +131,6 @@ See:
 - `docs/specbridge-standard-templates.md`
 - `docs/specbridge-ci-authority-standard.md`
 - `docs/specbridge-v5-live-parallel-pilot-boundary.md`
+- `docs/specbridge-v5-live-status.md`
 - `docs/specbridge-runtime-capability-status.md`
 - `docs/specbridge-autonomy-backlog.md`

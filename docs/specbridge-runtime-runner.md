@@ -29,6 +29,53 @@ The command is evidence capture only. It does not launch Claude Code, launch
 Antigravity, run shell commands inside the executor, call GitHub, install
 dependencies, touch secrets, touch production, or deploy.
 
+## Controlled Runtime Execution Diagnostics
+
+`execute-runtime-launch` produces runtime execution artifacts under:
+
+```text
+.specbridge/runtime-executions/*.runtime-execution.json
+```
+
+New runtime execution artifacts include `failure_diagnostics`.
+
+The diagnostics object records:
+
+- status
+- reason
+- exit code
+- timeout state
+- redaction policy
+- bounded stdout preview
+- bounded stderr preview
+
+The previews are capped at 240 characters, redact common token and bearer
+credential patterns, and do not store raw unbounded stdout or stderr.
+
+For dry runs, diagnostics are recorded as:
+
+```text
+status: not_applicable
+reason: dry_run
+```
+
+For successful live runs, diagnostics are recorded as:
+
+```text
+status: not_applicable
+reason: execution_succeeded
+```
+
+For failed or timed-out live runs, diagnostics are recorded as:
+
+```text
+status: recorded
+reason: timeout | stderr_nonempty | stdout_only_failure | process_exit_without_output
+```
+
+Historical runtime execution artifacts remain valid when they do not have this
+field. New artifacts created by `execute-runtime-launch` include it.
+
 ## Artifact
 
 Runtime runs live under:

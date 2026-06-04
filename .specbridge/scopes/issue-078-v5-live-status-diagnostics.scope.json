@@ -1,0 +1,41 @@
+{
+  "contract_id": "issue-078-v5-live-status-diagnostics",
+  "status": "active",
+  "exclusive_write": [
+    ".specbridge/audit-packets/issue-078-v5-live-status-diagnostics.audit-packet.json",
+    ".specbridge/audits/issue-078-v5-live-status-diagnostics.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-078-v5-live-status-diagnostics.execution.md",
+    ".specbridge/reports/issue-078-v5-live-status-diagnostics.final-report.json",
+    ".specbridge/scopes/issue-076-v5-live-parallel-pilot.scope.json",
+    ".specbridge/scopes/issue-078-v5-live-status-diagnostics.scope.json",
+    ".specbridge/schemas/runtime-execution.schema.json",
+    "README.md",
+    "docs/specbridge-runtime-runner.md",
+    "docs/specbridge-test-results.md",
+    "docs/specbridge-v5-live-status.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "scripts/validate-runtime-executions.ps1"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".github/workflows/foundation-validation.yml",
+    ".github/workflows/specbridge-review-gate.yml",
+    ".github/workflows/specbridge-pr-review-report.yml",
+    ".github/workflows/claude-review-non-blocking.yml",
+    ".specbridge/contracts/issue-076-v5-live-parallel-pilot.execution.md",
+    ".specbridge/reports/issue-076-v5-live-parallel-pilot.final-report.json",
+    ".specbridge/audits/issue-076-v5-live-parallel-pilot.chatgpt-audit.json",
+    ".specbridge/runtime-executions/issue-076-cli-capability.runtime-execution.json",
+    ".specbridge/runtime-executions/issue-076-cli-capability-retry-1.runtime-execution.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-076-v5-live-parallel-pilot"
+  ],
+  "final_report": ".specbridge/reports/issue-078-v5-live-status-diagnostics.final-report.json"
+}
