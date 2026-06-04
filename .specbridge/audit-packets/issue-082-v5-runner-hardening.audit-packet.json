@@ -57,7 +57,7 @@
     "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
     "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
     "git diff --check",
-    "GitHub CI"
+    "GitHub CI for PR 83"
   ],
   "validation_results": [
     { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1", "result": "passed" },
@@ -75,17 +75,16 @@
     { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1", "result": "passed" },
     { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1", "result": "passed" },
     { "command": "git diff --check", "result": "passed" },
-    { "command": "GitHub CI", "result": "not_collected" }
+    { "command": "GitHub CI for PR 83", "result": "passed" }
   ],
   "final_report_path": ".specbridge/reports/issue-082-v5-runner-hardening.final-report.json",
-  "ci_status": "not_collected",
+  "ci_status": "passed",
   "pr_review_report_path": null,
-  "policy_result": "Passed locally. Work stayed inside issue 082 contract and scope. The runner default budget remains bounded by MaxBudgetUsd validation, diagnostic preview normalization affects bounded previews only, and local-only agent settings files are ignored without being committed. No protected credentials, production change, dependency installation, authentication or billing change, database change, CI/CD security change, or deployment occurred.",
+  "policy_result": "Passed locally and through GitHub PR gates. Work stayed inside issue 082 contract and scope. PR 83 passed GitHub CI and was squash-merged into main as commit b47b396c4b277444f598292cc85e0183ce009eec. The runner default budget remains bounded by MaxBudgetUsd validation, diagnostic preview normalization affects bounded previews only, and local-only agent settings files are ignored without being committed. No protected credentials, production change, dependency installation, authentication or billing change, database change, CI/CD security change, or deployment occurred.",
   "unresolved_risks": [
-    "GitHub PR CI evidence is pending.",
     "The next serious live pilot should prove the hardened runner default in a real multi-slice Claude Code run."
   ],
-  "completion_status": "complete_pending_pr_ci",
+  "completion_status": "complete",
   "source_files": [
     ".specbridge/contracts/issue-082-v5-runner-hardening.execution.md",
     ".specbridge/reports/issue-082-v5-runner-hardening.final-report.json",

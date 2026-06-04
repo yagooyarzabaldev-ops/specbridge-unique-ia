@@ -45,31 +45,30 @@
     {
       "name": "ci_evidence",
       "result": "pass",
-      "evidence": "GitHub CI for issue 082 is not collected yet and remains an external merge gate. The audit packet marks it not_collected rather than passed.",
+      "evidence": "PR 83 GitHub CI passed before merge. The branch was squash-merged into main as commit b47b396c4b277444f598292cc85e0183ce009eec.",
       "blocking": false
     },
     {
       "name": "final_report_honesty",
       "result": "pass",
-      "evidence": "The final report records local completion, GitHub CI as not_collected, pending pull request and merge gates, no deployment, and the remaining need to prove the hardened default in a future serious live pilot.",
+      "evidence": "The final report records PR 83 GitHub CI and merge completion, no deployment, and the remaining need to prove the hardened default in a future serious live pilot.",
       "blocking": false
     }
   ],
   "findings": [
     {
       "severity": "info",
-      "category": "external_ci_pending",
+      "category": "future_live_pilot",
       "file": ".specbridge/reports/issue-082-v5-runner-hardening.final-report.json",
       "line": null,
-      "evidence": "Issue 082 local evidence is ready, but GitHub CI cannot be recorded as passed until the branch is pushed and checks run.",
-      "recommendation": "Push the branch, open a pull request, wait for GitHub checks, and merge only if required gates pass.",
+      "evidence": "Issue 082 hardened the runner default and preview diagnostics. The next proof should exercise this baseline in a real multi-slice Claude Code pilot.",
+      "recommendation": "Create a dedicated execution contract for the next serious live pilot and require no coordinator remediation.",
       "blocking": false
     }
   ],
   "outcome": "approved",
   "merge_allowed": true,
   "unresolved_risks": [
-    "GitHub PR CI evidence is pending.",
     "The next serious live pilot should prove the hardened runner default in a real multi-slice Claude Code run."
   ],
   "source_files": [

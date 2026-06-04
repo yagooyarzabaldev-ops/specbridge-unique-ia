@@ -1,0 +1,29 @@
+{
+  "contract_id": "issue-084-post-merge-closure",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/audit-packets/issue-082-v5-runner-hardening.audit-packet.json",
+    ".specbridge/audit-packets/issue-084-post-merge-closure.audit-packet.json",
+    ".specbridge/audits/issue-082-v5-runner-hardening.chatgpt-audit.json",
+    ".specbridge/audits/issue-084-post-merge-closure.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-084-post-merge-closure.execution.md",
+    ".specbridge/reports/issue-082-v5-runner-hardening.final-report.json",
+    ".specbridge/reports/issue-084-post-merge-closure.final-report.json",
+    ".specbridge/scopes/issue-084-post-merge-closure.scope.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/contracts/issue-082-v5-runner-hardening.execution.md",
+    ".specbridge/scopes/issue-082-v5-runner-hardening.scope.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-082-v5-runner-hardening"
+  ],
+  "final_report": ".specbridge/reports/issue-084-post-merge-closure.final-report.json"
+}
