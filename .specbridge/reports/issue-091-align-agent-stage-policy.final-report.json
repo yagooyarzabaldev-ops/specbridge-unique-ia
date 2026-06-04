@@ -1,0 +1,31 @@
+{
+  "summary": "Completed issue 091 locally. AGENTS.md now reflects the implemented SpecBridge stage as governed standardization and runtime expansion instead of stale foundation-only guidance, while preserving execution-contract requirements, scope manifests, acceptance criteria, validations, security/review/CI gates, protected boundaries, final reports, audit packets, and ChatGPT/Codex audits.",
+  "changed_files": [
+    "AGENTS.md",
+    ".specbridge/audit-packets/issue-091-align-agent-stage-policy.audit-packet.json",
+    ".specbridge/audits/issue-091-align-agent-stage-policy.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-091-align-agent-stage-policy.execution.md",
+    ".specbridge/reports/issue-091-align-agent-stage-policy.final-report.json",
+    ".specbridge/scopes/issue-091-align-agent-stage-policy.scope.json"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "git diff --check: passed",
+    "GitHub CI: not_collected"
+  ],
+  "policy_result": "Passed locally. Work stayed inside the issue 091 execution contract and scope manifest. The task updated AGENTS.md and repository memory/evidence only. It did not change product code, scripts, workflows, protected credentials, production configuration, dependency manifests, authentication, authorization, billing, database, CI/CD security, or deployment automation.",
+  "risk_result": "Low risk. The task corrects stale agent-stage guidance while preserving all policy and security controls.",
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending until the branch is pushed and checks run."
+  ],
+  "merge_status": "Pending pull request, GitHub CI, deterministic review gate, and required merge gates.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_pr_ci"
+}

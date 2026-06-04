@@ -196,17 +196,37 @@ The user should receive results, not step-by-step noise.
 
 ## Current Repository Stage
 
-This repository is currently in foundation phase.
+This repository is no longer foundation-only.
 
-No product implementation code should be added until the following are defined:
+Foundation, repository-first MVP, Standard Loop v1, V5 readiness, V5 live pilot evidence, V5 runner hardening, and V5 serious pilot status are complete as recorded in `README.md`, `SPECBRIDGE.md`, `.specbridge/context/CURRENT_GOAL.md`, specs, contracts, reports, audit packets, ChatGPT/Codex audits, and GitHub PR history.
 
-- `README.md`
-- `SPECBRIDGE.md`
-- `AGENTS.md`
-- `CLAUDE.md`
-- `.specbridge/policy.yaml`
-- `.specbridge/autonomy.yaml`
-- `.specbridge/risk-rules.yaml`
-- initial specs under `specs/`
+The current stage is governed standardization and runtime expansion.
 
-During foundation phase, agents should focus on product contract, policy, architecture, and execution model.
+Agents may work on product, runtime, documentation, policy, tests, and evidence only when an active execution contract explicitly authorizes the task scope.
+
+Every new implementation task still requires:
+
+- an execution contract under `.specbridge/contracts/`
+- a scope manifest under `.specbridge/scopes/`
+- declared allowed and blocked scope
+- acceptance criteria
+- required validation commands
+- security, review, and CI gates
+- final report, audit packet, and ChatGPT/Codex audit evidence
+
+Agents must not treat this stage as permission for open-ended implementation.
+
+The following remain blocked unless a dedicated policy and execution contract explicitly authorize them:
+
+- secrets or private keys
+- production configuration
+- billing or payment-provider configuration
+- authentication security changes
+- authorization security changes
+- destructive database changes
+- CI/CD security changes
+- dependency installation
+- deployment automation
+- production deployment
+
+When deciding what to do next, agents must read `.specbridge/context/CURRENT_GOAL.md` and prefer the next task recorded in repository evidence over chat-memory inference.

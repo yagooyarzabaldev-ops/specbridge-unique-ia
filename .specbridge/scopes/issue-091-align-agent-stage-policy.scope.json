@@ -1,0 +1,26 @@
+{
+  "contract_id": "issue-091-align-agent-stage-policy",
+  "status": "completed",
+  "exclusive_write": [
+    "AGENTS.md",
+    ".specbridge/audit-packets/issue-091-align-agent-stage-policy.audit-packet.json",
+    ".specbridge/audits/issue-091-align-agent-stage-policy.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-091-align-agent-stage-policy.execution.md",
+    ".specbridge/reports/issue-091-align-agent-stage-policy.final-report.json",
+    ".specbridge/scopes/issue-091-align-agent-stage-policy.scope.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/contracts/issue-089-post-merge-memory-closure.execution.md",
+    ".specbridge/scopes/issue-089-post-merge-memory-closure.scope.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-089-post-merge-memory-closure"
+  ],
+  "final_report": ".specbridge/reports/issue-091-align-agent-stage-policy.final-report.json"
+}
