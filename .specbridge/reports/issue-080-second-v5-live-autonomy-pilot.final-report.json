@@ -60,17 +60,16 @@
     "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
     "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
     "git diff --check: passed",
-    "GitHub CI: not_collected"
+    "GitHub CI for PR 81: passed"
   ],
-  "policy_result": "Passed locally. The task stayed inside the issue 080 execution contract and scope manifest. Live product slices used bounded Claude Code launch plans with declared write scopes. The coordinator did not author product remediation in scripts/specbridge.ps1, scripts/test-specbridge-cli.ps1, README.md, or docs/specbridge-v5-autonomy-status.md after live execution started. The only coordinator artifact correction was a runtime execution diagnostic preview normalization for schema validation; it did not change exit code, status, stdout hash, stderr hash, product files, or validation outcomes.",
-  "risk_result": "Medium risk. This task used live Claude Code execution and modified local CLI behavior, tests, documentation, and runtime evidence. No secrets, production configuration, billing, authentication, authorization, database, dependency installation, CI/CD security change, or deployment automation were involved. Remaining external risk is GitHub CI and merge gate completion.",
+  "policy_result": "Passed locally and through GitHub PR gates. The task stayed inside the issue 080 execution contract and scope manifest. Live product slices used bounded Claude Code launch plans with declared write scopes. PR 81 passed GitHub CI and was squash-merged into main as commit b6c817d82e6814ee9dc66bcf640e42b213b6f9f4. The coordinator did not author product remediation in scripts/specbridge.ps1, scripts/test-specbridge-cli.ps1, README.md, or docs/specbridge-v5-autonomy-status.md after live execution started. The only coordinator artifact correction was a runtime execution diagnostic preview normalization for schema validation; it did not change exit code, status, stdout hash, stderr hash, product files, or validation outcomes.",
+  "risk_result": "Medium risk. This task used live Claude Code execution and modified local CLI behavior, tests, documentation, and runtime evidence. No secrets, production configuration, billing, authentication, authorization, database, dependency installation, CI/CD security change, or deployment automation were involved. GitHub CI and merge gates completed successfully through PR 81.",
   "unresolved_risks": [
-    "GitHub PR CI evidence is pending until the branch is pushed and checks run.",
     "The first implementation attempt failed only because max_budget_usd 0.25 was too low; it produced no product changes and the one allowed live retry succeeded.",
     "The tests runtime execution required one live retry because the first successful runtime artifact had an invalid multibyte diagnostic preview.",
     "The docs runtime execution required one live retry to align documented example values with the implemented CLI output."
   ],
-  "merge_status": "Pending pull request, GitHub CI, deterministic review gate, and required merge gates.",
+  "merge_status": "Merged through PR 81 with squash commit b6c817d82e6814ee9dc66bcf640e42b213b6f9f4 after GitHub CI passed.",
   "deployment_status": "Not applicable.",
-  "completion_status": "complete_pending_pr_ci"
+  "completion_status": "complete"
 }

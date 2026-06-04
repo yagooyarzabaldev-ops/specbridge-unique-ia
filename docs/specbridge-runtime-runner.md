@@ -50,7 +50,8 @@ The diagnostics object records:
 - bounded stderr preview
 
 The previews are capped at 240 characters, redact common token and bearer
-credential patterns, and do not store raw unbounded stdout or stderr.
+credential patterns, normalize non-ASCII or multibyte characters to `?` before
+truncation, and do not store raw unbounded stdout or stderr.
 
 For dry runs, diagnostics are recorded as:
 

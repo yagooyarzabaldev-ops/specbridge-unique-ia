@@ -2,40 +2,46 @@
 
 ## Goal
 
-Run the second V5 live autonomy pilot and prove that implementation, tests, and documentation slices can complete through live Claude Code execution without coordinator remediation.
+Close the merged second V5 live autonomy pilot state and harden the live runtime runner defaults discovered during that pilot.
 
-The product change is intentionally small: add `v5-autonomy-status`, a deterministic local CLI status command that reports the current V5 live autonomy standard and the no-coordinator-remediation target for the next pilot.
+The task closes issue 080 repository memory after PR 81 merge, raises the bounded live runtime budget default, and makes runtime diagnostic previews deterministic when Claude output contains non-ASCII text.
 
 ## Current Phase
 
-Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test suite active. Multi-agent Antigravity architecture defined. Standard Loop v1 complete. V5 pilot readiness complete. First V5 live parallel pilot complete and merged. V5 live status and runner diagnostics complete and merged.
+Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test suite active. Multi-agent Antigravity architecture defined. Standard Loop v1 complete. V5 pilot readiness complete. First V5 live parallel pilot complete and merged. V5 live status and runner diagnostics complete and merged. Second V5 live autonomy pilot complete and merged.
 
-Current phase is second V5 live autonomy pilot.
+Current phase is V5 runner hardening completed locally, pending GitHub PR gates before merge.
 
-## Active Work
+## Gate Status
 
-Active contract: `.specbridge/contracts/issue-080-second-v5-live-autonomy-pilot.execution.md`.
+Local issue 082 implementation and evidence work is complete under `.specbridge/contracts/issue-082-v5-runner-hardening.execution.md`.
 
-This task must use three bounded live executor slices:
+Completed local updates:
 
-- implementation slice: add `v5-autonomy-status` to `scripts/specbridge.ps1`
-- tests slice: cover `v5-autonomy-status` in `scripts/test-specbridge-cli.ps1`
-- documentation slice: document `v5-autonomy-status` and link it from `README.md`
+- mark issue 080 scope, report, audit packet, and ChatGPT/Codex audit as post-merge complete
+- raise the default `prepare-runtime-launch` budget to `2.00`
+- normalize non-ASCII diagnostic preview text before truncation and validation
+- ignore local-only `.agents/` and `.claude/settings.local.json` without committing their contents
 
-Coordinator-authored product remediation is not allowed for this pilot. If a product slice fails and cannot be completed by live executor output inside the declared retry limit, the pilot must stop and report the autonomy gap honestly.
+Remaining external gates before merge:
+
+- GitHub CI
+- deterministic review gate
+- security gate
+- policy-gated merge
 
 ## Required Standard
 
-Completion requires:
+The next serious live pilot should use this hardened runner baseline and target a real multi-slice Claude Code run without coordinator remediation.
 
-- every product slice has a successful live `execute-runtime-launch` artifact
-- every product slice writes only declared exclusive paths
-- every product file change is attributable to live executor output
-- no coordinator-authored product remediation
-- runtime-run/result/summary evidence for each slice
-- autonomy metrics showing three ready slices and zero blocked slices
+Repository completion for issue 082 requires:
+
+- issue 080 memory reflects PR 81 merge and GitHub CI success
+- runtime launch plans default to `MaxBudgetUsd 2.00`
+- runtime diagnostic previews validate after non-ASCII output
+- focused CLI tests cover the default budget and fake non-ASCII Claude failure artifact
 - local gates, GitHub CI, review gate, security gate, audit packet, and ChatGPT/Codex audit pass
 
 ## Completion Condition
 
-Issue 080 is complete when `v5-autonomy-status` exists and passes CLI tests, all three live slices complete without coordinator remediation, all runtime and audit evidence validates, GitHub CI passes, and the branch is merged only under policy gates.
+Issue 082 is complete when post-merge issue 080 evidence is closed, runner hardening is implemented and tested, all evidence validates, GitHub CI passes, and the branch is merged only under policy gates.

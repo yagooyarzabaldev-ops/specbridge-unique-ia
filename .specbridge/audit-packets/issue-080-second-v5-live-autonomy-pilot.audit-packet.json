@@ -100,7 +100,7 @@
     "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
     "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
     "git diff --check",
-    "GitHub CI"
+    "GitHub CI for PR 81"
   ],
   "validation_results": [
     { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 runtime-capability-status", "result": "passed" },
@@ -125,17 +125,16 @@
     { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1", "result": "passed" },
     { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1", "result": "passed" },
     { "command": "git diff --check", "result": "passed" },
-    { "command": "GitHub CI", "result": "not_collected" }
+    { "command": "GitHub CI for PR 81", "result": "passed" }
   ],
   "final_report_path": ".specbridge/reports/issue-080-second-v5-live-autonomy-pilot.final-report.json",
-  "ci_status": "not_collected",
+  "ci_status": "passed",
   "pr_review_report_path": null,
-  "policy_result": "Passed locally. Work stayed inside issue 080 contract and scope. Product changes were authored through live executor output. No protected credentials, production change, dependency installation, authentication or billing change, database change, CI/CD security change, or deployment occurred.",
+  "policy_result": "Passed locally and through GitHub PR gates. Work stayed inside issue 080 contract and scope. Product changes were authored through live executor output. PR 81 passed GitHub CI and was squash-merged into main as commit b6c817d82e6814ee9dc66bcf640e42b213b6f9f4. No protected credentials, production change, dependency installation, authentication or billing change, database change, CI/CD security change, or deployment occurred.",
   "unresolved_risks": [
-    "GitHub PR CI evidence is pending.",
-    "Issue 080 still requires PR review and merge gates before complete merge status."
+    "Follow-up issue 082 addresses the budget default and Unicode diagnostic preview hardening discovered during issue 080."
   ],
-  "completion_status": "complete_pending_pr_ci",
+  "completion_status": "complete",
   "source_files": [
     ".specbridge/contracts/issue-080-second-v5-live-autonomy-pilot.execution.md",
     ".specbridge/reports/issue-080-second-v5-live-autonomy-pilot.final-report.json",

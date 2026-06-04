@@ -10,8 +10,8 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 
 - Date: 2026-06-04
 - Environment: local PowerShell workspace
-- Branch: `codex/v5-live-status-diagnostics`
-- Scope: post-V5 live hardening with `v5-live-status`, bounded redacted `execute-runtime-launch` failure diagnostics, runtime execution schema and validator updates, current goal closure, and test coverage for the new CLI behavior
+- Branch: `codex/v5-runner-hardening`
+- Scope: post-merge issue 080 closure plus V5 runner hardening for default runtime budget, ASCII-stable diagnostic previews, local-only agent settings ignore rules, and focused CLI coverage
 
 ## Results
 
@@ -71,6 +71,10 @@ CI evidence must still be read from GitHub pull request checks after the branch 
 | Runtime capability status CLI feature | passed |
 | V5 live status CLI feature | passed |
 | Runtime execution failure diagnostics | passed |
+| Runtime launch default budget | passed |
+| Runtime execution Unicode diagnostic preview normalization | passed |
+| Issue 080 post-merge repository memory closure | passed |
+| Local-only agent settings ignore rules | passed |
 | V5 live executor packet generation | passed |
 | V5 live runtime launch planning | passed |
 | V5 live docs executor attempt | passed |
@@ -174,6 +178,8 @@ The negative validation suite verifies:
 - local CLI v5-live-status command passes
 - local CLI runtime-capability-status command passes
 - local CLI runtime execution dry-run command passes, writes validated evidence, and records `failure_diagnostics`
+- local CLI runtime launch generation uses the default `max_budget_usd: 2.00` when no explicit budget is provided
+- local CLI fake live runtime execution failure records stdout-only diagnostics and normalizes non-ASCII preview text before validation
 - local CLI live runtime execution without `-Force` fails deterministically
 - standard template validation passes
 - standard template missing `{{TASK_ID}}` placeholder fails deterministically
@@ -186,9 +192,9 @@ The negative validation suite verifies:
 
 ## Policy Result
 
-Passed. The change closes the completed V5 live pilot as repository memory, adds `v5-live-status`, and adds bounded redacted `execute-runtime-launch` failure diagnostics for future runtime execution artifacts. Historical issue 076 artifacts remain valid without diagnostics. The task does not launch live Claude Code or Antigravity sessions, access protected credentials, touch production, install dependencies, modify auth or billing surfaces, weaken CI/CD security, change database schema, or deploy.
+Passed. The change closes issue 080 repository memory after PR 81 merge, keeps local-only `.agents/` and `.claude/settings.local.json` out of committed scope, raises the bounded default live runtime budget to `2.00`, and makes `execute-runtime-launch` diagnostic previews ASCII-stable before truncation. The task uses a fake local `claude` fixture for failure diagnostics and does not launch real live Claude Code or Antigravity sessions, access protected credentials, touch production, install dependencies, modify auth or billing surfaces, weaken CI/CD security, change database schema, or deploy.
 
 ## Unresolved Risks
 
 - GitHub PR CI evidence is pending until the branch is pushed and GitHub runs checks.
-- The first V5 live pilot still required coordinator remediation for the CLI implementation slice. The next serious live pilot should target live completion without coordinator remediation.
+- The next serious live pilot should use the hardened `2.00` default and should target live completion without coordinator remediation.

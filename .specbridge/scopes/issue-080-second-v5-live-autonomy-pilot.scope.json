@@ -1,6 +1,6 @@
 {
   "contract_id": "issue-080-second-v5-live-autonomy-pilot",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/audit-packets/issue-080-second-v5-live-autonomy-pilot.audit-packet.json",
     ".specbridge/audits/issue-080-second-v5-live-autonomy-pilot.chatgpt-audit.json",

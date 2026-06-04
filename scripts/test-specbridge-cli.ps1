@@ -360,8 +360,6 @@ try {
         "Read,Write",
         "-PermissionMode",
         "acceptEdits",
-        "-MaxBudgetUsd",
-        "0.25",
         "-Force"
       )) `
       -ExpectedPattern '"launch_status"\s*:\s*"ready_for_operator_launch"'
@@ -375,6 +373,17 @@ try {
     }
     else {
       Write-Output "PASS CLI-created runtime launch validates."
+    }
+
+    $runtimeLaunch = Get-Content -LiteralPath ".specbridge/runtime-launches/cli-fixture.runtime-launch.json" -Raw | ConvertFrom-Json
+
+    if ($runtimeLaunch.max_budget_usd -ne "2.00") {
+      Write-Output "FAIL CLI-created runtime launch did not use default max_budget_usd 2.00."
+      Write-Output ($runtimeLaunch | ConvertTo-Json -Depth 8)
+      $failed = $true
+    }
+    else {
+      Write-Output "PASS CLI-created runtime launch uses default max_budget_usd 2.00."
     }
 
     Assert-Success `
@@ -405,6 +414,66 @@ try {
     }
     else {
       Write-Output "PASS CLI-created runtime execution records dry-run failure diagnostics."
+    }
+
+    $fakeBin = Join-Path $caseDir "fake-bin"
+    New-Item -ItemType Directory -Force -Path $fakeBin | Out-Null
+    $fakeClaudePath = Join-Path $fakeBin "claude.cmd"
+    Set-Content -LiteralPath $fakeClaudePath -Encoding ASCII -Value @(
+      "@echo off",
+      'powershell -NoProfile -ExecutionPolicy Bypass -Command "[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false); $s = ''Fake Claude failure with unicode: '' + [char]0x00E1 + '' '' + [char]0x00F1 + '' '' + [char]0x2713 + '' repeated 1234567890 1234567890 1234567890 1234567890 1234567890''; Write-Output $s"',
+      "exit /b 1"
+    )
+
+    $previousPath = $env:PATH
+
+    try {
+      $env:PATH = "$fakeBin;$previousPath"
+
+      $fakeClaudeResult = Invoke-Cli -Arguments @(
+        "execute-runtime-launch",
+        "-InputPath",
+        ".specbridge/runtime-launches/cli-fixture.runtime-launch.json",
+        "-OutputPath",
+        ".specbridge/runtime-executions/cli-fake-unicode.runtime-execution.json",
+        "-TimeoutSeconds",
+        "30",
+        "-Force"
+      )
+    }
+    finally {
+      $env:PATH = $previousPath
+    }
+
+    if ($fakeClaudeResult.ExitCode -eq 0) {
+      Write-Output "FAIL fake Claude runtime execution did not fail."
+      Write-Output $fakeClaudeResult.Text
+      $failed = $true
+    }
+    elseif (-not (Test-Path -LiteralPath ".specbridge/runtime-executions/cli-fake-unicode.runtime-execution.json" -PathType Leaf)) {
+      Write-Output "FAIL fake Claude runtime execution did not write an artifact."
+      Write-Output $fakeClaudeResult.Text
+      $failed = $true
+    }
+    else {
+      $unicodeExecution = Get-Content -LiteralPath ".specbridge/runtime-executions/cli-fake-unicode.runtime-execution.json" -Raw | ConvertFrom-Json
+      $stdoutPreview = $unicodeExecution.failure_diagnostics.stdout_preview
+
+      if (
+        $unicodeExecution.execution_status -ne "failed" -or
+        $unicodeExecution.failure_diagnostics.status -ne "recorded" -or
+        $unicodeExecution.failure_diagnostics.reason -ne "stdout_only_failure" -or
+        $stdoutPreview.preview_length -ne $stdoutPreview.text.Length -or
+        $stdoutPreview.text.Length -gt $stdoutPreview.max_length -or
+        $stdoutPreview.text -match "[^\u0009\u000A\u0020-\u007E]"
+      ) {
+        Write-Output "FAIL fake Claude runtime execution did not normalize diagnostic preview as expected."
+        Write-Output ($unicodeExecution.failure_diagnostics | ConvertTo-Json -Depth 8)
+        $failed = $true
+      }
+      else {
+        Write-Output "PASS fake Claude runtime execution normalizes non-ASCII diagnostic previews."
+      }
     }
 
     $runtimeExecutionValidation = & powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-executions.ps1 2>&1

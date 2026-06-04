@@ -14,12 +14,16 @@ powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 pre
   -OutputPath .specbridge/runtime-launches/<task>.runtime-launch.json `
   -AllowedTool Read,Write `
   -PermissionMode acceptEdits `
-  -MaxBudgetUsd 0.25
+  -MaxBudgetUsd 2.00
 ```
 
 The command reads one executor packet and writes one runtime launch plan.
 
 It does not launch Claude Code, launch Antigravity, run shell commands, call GitHub, install dependencies, touch secrets, or deploy anything.
+
+When `-MaxBudgetUsd` is omitted, SpecBridge uses the bounded default `2.00`.
+Operators may still pass an explicit budget greater than `0` and no more than
+`10`.
 
 ## Artifact
 

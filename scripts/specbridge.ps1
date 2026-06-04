@@ -26,7 +26,7 @@ param(
   [string[]] $AllowedTool = @("Read", "Write"),
   [ValidateSet("acceptEdits", "auto", "default", "dontAsk", "plan")]
   [string] $PermissionMode = "acceptEdits",
-  [string] $MaxBudgetUsd = "0.25",
+  [string] $MaxBudgetUsd = "2.00",
   [int] $RuntimeExitCode = 0,
   [int] $TimeoutSeconds = 300,
   [string[]] $WrittenFile = @(),
@@ -2638,6 +2638,8 @@ function Get-RedactedPreview {
   $redacted = [regex]::Replace($redacted, "sk-[A-Za-z0-9_-]{16,}", "sk-[REDACTED]")
   $redacted = [regex]::Replace($redacted, "gh[pousr]_[A-Za-z0-9_]{16,}", "gh_[REDACTED]")
   $redacted = [regex]::Replace($redacted, "xox[baprs]-[A-Za-z0-9-]{16,}", "xox-[REDACTED]")
+  # Keep diagnostic previews ASCII-stable so validators and shells agree on length.
+  $redacted = [regex]::Replace($redacted, "[^\x09\x0A\x20-\x7E]", "?")
 
   $truncated = $redacted.Length -gt $MaxLength
 
@@ -2827,8 +2829,18 @@ function Invoke-ExecuteRuntimeLaunchCommand {
       Fail "Claude Code CLI is not available on PATH"
     }
 
+    $claudeExecutable = $claudeCommand.Source
+
+    if ([string]::IsNullOrWhiteSpace($claudeExecutable) -and $claudeCommand.PSObject.Properties.Name.Contains("Path")) {
+      $claudeExecutable = $claudeCommand.Path
+    }
+
+    if ([string]::IsNullOrWhiteSpace($claudeExecutable)) {
+      $claudeExecutable = "claude"
+    }
+
     $psi = New-Object System.Diagnostics.ProcessStartInfo
-    $psi.FileName = "claude"
+    $psi.FileName = $claudeExecutable
     $psi.UseShellExecute = $false
     $psi.RedirectStandardInput = $true
     $psi.RedirectStandardOutput = $true

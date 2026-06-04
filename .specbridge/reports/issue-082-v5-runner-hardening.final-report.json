@@ -1,0 +1,49 @@
+{
+  "summary": "Completed issue 082 V5 runner hardening locally. Issue 080 repository memory now reflects PR 81 merge and GitHub CI success, the runtime launch default budget is 2.00, execute-runtime-launch diagnostic previews normalize non-ASCII text before truncation, CLI tests cover default budget and fake Unicode stdout failure diagnostics, runtime docs are aligned, and local-only agent settings paths are ignored without committing their contents.",
+  "changed_files": [
+    ".gitignore",
+    ".specbridge/audit-packets/issue-080-second-v5-live-autonomy-pilot.audit-packet.json",
+    ".specbridge/audit-packets/issue-082-v5-runner-hardening.audit-packet.json",
+    ".specbridge/audits/issue-080-second-v5-live-autonomy-pilot.chatgpt-audit.json",
+    ".specbridge/audits/issue-082-v5-runner-hardening.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-082-v5-runner-hardening.execution.md",
+    ".specbridge/reports/issue-080-second-v5-live-autonomy-pilot.final-report.json",
+    ".specbridge/reports/issue-082-v5-runner-hardening.final-report.json",
+    ".specbridge/scopes/issue-080-second-v5-live-autonomy-pilot.scope.json",
+    ".specbridge/scopes/issue-082-v5-runner-hardening.scope.json",
+    "README.md",
+    "docs/specbridge-runtime-launch-plans.md",
+    "docs/specbridge-runtime-runner.md",
+    "docs/specbridge-test-results.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-schemas.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-executions.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-launches.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-negative-validations.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "git diff --check: passed",
+    "GitHub CI: not_collected"
+  ],
+  "policy_result": "Passed locally. Work stayed inside the issue 082 execution contract and scope manifest. The task did not access protected credentials, touch production, install dependencies, change authentication, authorization, billing, database, CI/CD security, or deployment automation. Local-only .agents and .claude/settings.local.json remain uncommitted.",
+  "risk_result": "Medium risk. The change modifies bounded runtime launch defaults and runtime failure diagnostics. The new default remains capped by existing MaxBudgetUsd validation of greater than 0 and no more than 10. Non-ASCII diagnostic previews are normalized only in bounded preview text; stdout and stderr lengths, line counts, hashes, execution status, and exit codes remain based on captured process output.",
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending until the branch is pushed and checks run.",
+    "The next serious live pilot still needs to prove the hardened default in a real multi-slice Claude Code run without coordinator remediation."
+  ],
+  "merge_status": "Pending pull request, GitHub CI, deterministic review gate, and required merge gates.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_pr_ci"
+}

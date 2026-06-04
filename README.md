@@ -107,6 +107,7 @@ SpecBridge currently has these governed status layers:
 - V5 live parallel pilot: implemented as a three-slice governed pilot with bounded live Claude Code runtime attempts, `runtime-capability-status`, executor packets, launch plans, runtime execution evidence, runtime-run/result/summary artifacts, autonomy metrics, and coordinator remediation evidence. Docs and tests slices completed live; the CLI live slice failed twice and was remediated by the coordinator inside declared scope.
 - V5 live status and runner diagnostics: implemented as a deterministic `v5-live-status` CLI view over the completed live pilot plus bounded redacted `execute-runtime-launch` failure diagnostics for future executor attempts.
 - V5 autonomy status: implemented as a deterministic `v5-autonomy-status` CLI command that reports the no-coordinator-remediation target standard, required slices, prior and target pilot status, and policy boundary for the second V5 live pilot.
+- V5 runner hardening: implemented as post-merge closure for the second V5 live autonomy pilot, a bounded `2.00` default live runtime budget, ASCII-stable runtime diagnostic previews, and local-only agent settings ignore rules.
 - Default automation: Full Autopilot is enabled for autonomous merge after required gates pass; production deployment remains disabled.
 
 See:

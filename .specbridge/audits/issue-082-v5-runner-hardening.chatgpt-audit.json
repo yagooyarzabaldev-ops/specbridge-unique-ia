@@ -1,0 +1,80 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-082-v5-runner-hardening",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-082-v5-runner-hardening.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-082-v5-runner-hardening.execution.md",
+  "final_report_path": ".specbridge/reports/issue-082-v5-runner-hardening.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "The task follows issue 082: it closes issue 080 post-merge memory, raises the runtime launch default budget to 2.00, normalizes bounded diagnostic previews before truncation, updates docs and tests, and ignores local-only agent settings paths.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "Issue 080 scope is completed, issue 080 report/audit evidence records PR 81 merge and CI success, prepare-runtime-launch defaults to 2.00, CLI tests assert the default budget, and fake Claude stdout failure diagnostics normalize non-ASCII preview text.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The task stayed inside the issue 082 scope manifest. It did not change workflows, production configuration, dependency manifests, auth or billing surfaces, database schema, deployment automation, or protected credential paths.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "No .env files, private keys, protected credential material, production configuration, billing configuration, authentication security, authorization security, CI/CD security controls, or destructive infrastructure paths were modified.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed files are declared in .specbridge/scopes/issue-082-v5-runner-hardening.scope.json. The local .agents directory and .claude/settings.local.json remain uncommitted and are covered by .gitignore.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "Local CLI tests cover default runtime launch budget and a fake live Claude failure with non-ASCII stdout. Contract, scope, schema, runtime launch, runtime execution, final report, audit packet, ChatGPT audit, standard profile, negative validation, smoke, security gate, review gate, and git diff checks are expected in the issue 082 gate list.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub CI for issue 082 is not collected yet and remains an external merge gate. The audit packet marks it not_collected rather than passed.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records local completion, GitHub CI as not_collected, pending pull request and merge gates, no deployment, and the remaining need to prove the hardened default in a future serious live pilot.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "external_ci_pending",
+      "file": ".specbridge/reports/issue-082-v5-runner-hardening.final-report.json",
+      "line": null,
+      "evidence": "Issue 082 local evidence is ready, but GitHub CI cannot be recorded as passed until the branch is pushed and checks run.",
+      "recommendation": "Push the branch, open a pull request, wait for GitHub checks, and merge only if required gates pass.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending.",
+    "The next serious live pilot should prove the hardened runner default in a real multi-slice Claude Code run."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-082-v5-runner-hardening.audit-packet.json",
+    ".specbridge/contracts/issue-082-v5-runner-hardening.execution.md",
+    ".specbridge/reports/issue-082-v5-runner-hardening.final-report.json"
+  ]
+}

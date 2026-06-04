@@ -1,0 +1,43 @@
+{
+  "contract_id": "issue-082-v5-runner-hardening",
+  "status": "completed",
+  "exclusive_write": [
+    ".gitignore",
+    ".specbridge/audit-packets/issue-080-second-v5-live-autonomy-pilot.audit-packet.json",
+    ".specbridge/audit-packets/issue-082-v5-runner-hardening.audit-packet.json",
+    ".specbridge/audits/issue-080-second-v5-live-autonomy-pilot.chatgpt-audit.json",
+    ".specbridge/audits/issue-082-v5-runner-hardening.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-082-v5-runner-hardening.execution.md",
+    ".specbridge/reports/issue-080-second-v5-live-autonomy-pilot.final-report.json",
+    ".specbridge/reports/issue-082-v5-runner-hardening.final-report.json",
+    ".specbridge/scopes/issue-080-second-v5-live-autonomy-pilot.scope.json",
+    ".specbridge/scopes/issue-082-v5-runner-hardening.scope.json",
+    "README.md",
+    "docs/specbridge-runtime-launch-plans.md",
+    "docs/specbridge-runtime-runner.md",
+    "docs/specbridge-test-results.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".github/workflows/foundation-validation.yml",
+    ".github/workflows/specbridge-review-gate.yml",
+    ".github/workflows/specbridge-pr-review-report.yml",
+    ".github/workflows/claude-review-non-blocking.yml",
+    ".specbridge/contracts/issue-080-second-v5-live-autonomy-pilot.execution.md",
+    ".specbridge/metrics/issue-080-second-v5-live-autonomy-pilot.autonomy-metrics.json",
+    ".specbridge/runtime-executions/issue-080-implementation-retry-1.runtime-execution.json",
+    ".specbridge/runtime-executions/issue-080-tests-retry-1.runtime-execution.json",
+    ".specbridge/runtime-executions/issue-080-docs-retry-1.runtime-execution.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-080-second-v5-live-autonomy-pilot"
+  ],
+  "final_report": ".specbridge/reports/issue-082-v5-runner-hardening.final-report.json"
+}
