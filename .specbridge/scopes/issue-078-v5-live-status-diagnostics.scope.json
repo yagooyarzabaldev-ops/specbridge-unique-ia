@@ -1,6 +1,6 @@
 {
   "contract_id": "issue-078-v5-live-status-diagnostics",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/audit-packets/issue-078-v5-live-status-diagnostics.audit-packet.json",
     ".specbridge/audits/issue-078-v5-live-status-diagnostics.chatgpt-audit.json",

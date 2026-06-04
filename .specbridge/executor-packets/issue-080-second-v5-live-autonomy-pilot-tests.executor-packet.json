@@ -1,0 +1,42 @@
+{
+    "schema_version":  "1",
+    "packet_id":  "issue-080-second-v5-live-autonomy-pilot-tests",
+    "task_id":  "issue-080-second-v5-live-autonomy-pilot",
+    "slice_id":  "tests",
+    "agent_role":  "validation",
+    "goal":  "Update scripts/test-specbridge-cli.ps1 to cover v5-autonomy-status. The test must assert that the command returns command=v5-autonomy-status and an autonomy_standard field. Write executor evidence to .specbridge/runtime-evidence/issue-080-tests.executor-output.md.",
+    "launch_mode":  "manual_antigravity",
+    "branch_name":  "claude/issue-080-second-v5-live-autonomy-pilot-tests",
+    "execution_contract_path":  ".specbridge/contracts/issue-080-second-v5-live-autonomy-pilot.execution.md",
+    "final_report_path":  ".specbridge/reports/issue-080-second-v5-live-autonomy-pilot.final-report.json",
+    "exclusive_write":  [
+                            "scripts/test-specbridge-cli.ps1",
+                            ".specbridge/runtime-evidence/issue-080-tests.executor-output.md"
+                        ],
+    "read_only":  [
+                      "README.md",
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      "CLAUDE.md",
+                      ".specbridge/policy.yaml",
+                      ".specbridge/contracts/issue-080-second-v5-live-autonomy-pilot.execution.md",
+                      "scripts/specbridge.ps1"
+                  ],
+    "required_validations":  [
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 v5-autonomy-status"
+                             ],
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "status":  "ready_for_handoff",
+    "source_files":  [
+                         ".specbridge/executor-handoffs/issue-080-second-v5-live-autonomy-pilot.input.json",
+                         ".specbridge/contracts/issue-080-second-v5-live-autonomy-pilot.execution.md"
+                     ],
+    "generated_by":  "specbridge-cli"
+}

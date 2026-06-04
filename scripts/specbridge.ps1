@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "v5-pilot-status", "v5-live-status", "runtime-capability-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "runtime-capability-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -3421,6 +3421,23 @@ function Invoke-ReviewGateCommand {
   exit 0
 }
 
+function Invoke-V5AutonomyStatusCommand {
+  Write-CliJson ([ordered]@{
+    command = "v5-autonomy-status"
+    ok = $true
+    branch = Get-GitValue -Arguments @("branch", "--show-current") -Fallback "unknown"
+    head = Get-GitValue -Arguments @("rev-parse", "--short", "HEAD") -Fallback "unknown"
+    autonomy_standard = "v5_live_no_coordinator_remediation"
+    prior_live_pilot_status = "completed_with_coordinator_remediation"
+    target_live_pilot_status = "completed_without_coordinator_remediation"
+    required_slices = @("implementation", "tests", "docs")
+    coordinator_remediation_allowed = $false
+    policy_boundary = "no-production no-secrets no-billing no-auth no-authorization no-database no-dependency-installation no-ci-cd-security no-deployment"
+  })
+
+  exit 0
+}
+
 switch ($Command) {
   "status" { Invoke-StatusCommand }
   "validate" { Invoke-ValidateCommand }
@@ -3439,6 +3456,7 @@ switch ($Command) {
   "standard-loop-status" { Invoke-StandardLoopStatusCommand }
   "v5-pilot-status" { Invoke-V5PilotStatusCommand }
   "v5-live-status" { Invoke-V5LiveStatusCommand }
+  "v5-autonomy-status" { Invoke-V5AutonomyStatusCommand }
   "runtime-capability-status" { Invoke-RuntimeCapabilityStatusCommand }
   "plan-executor-branches" { Invoke-PlanExecutorBranchesCommand }
   "record-github-evidence" { Invoke-RecordGithubEvidenceCommand }

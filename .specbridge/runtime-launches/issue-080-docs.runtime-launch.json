@@ -1,0 +1,71 @@
+{
+    "schema_version":  "1",
+    "launch_id":  "issue-080-second-v5-live-autonomy-pilot-docs-runtime-launch",
+    "generated_by":  "specbridge-cli",
+    "source_executor_packet_path":  ".specbridge/executor-packets/issue-080-second-v5-live-autonomy-pilot-docs.executor-packet.json",
+    "task_id":  "issue-080-second-v5-live-autonomy-pilot",
+    "packet_id":  "issue-080-second-v5-live-autonomy-pilot-docs",
+    "slice_id":  "docs",
+    "agent_role":  "documentation",
+    "goal":  "Update docs/specbridge-v5-autonomy-status.md so every documented example value matches the implemented v5-autonomy-status command in scripts/specbridge.ps1. The docs must use autonomy_standard=v5_live_no_coordinator_remediation and policy_boundary=no-production no-secrets no-billing no-auth no-authorization no-database no-dependency-installation no-ci-cd-security no-deployment. Preserve the README See list and current status entry. Write executor evidence to .specbridge/runtime-evidence/issue-080-docs.executor-output.md.",
+    "branch_name":  "claude/issue-080-second-v5-live-autonomy-pilot-docs",
+    "execution_contract_path":  ".specbridge/contracts/issue-080-second-v5-live-autonomy-pilot.execution.md",
+    "final_report_path":  ".specbridge/reports/issue-080-second-v5-live-autonomy-pilot.final-report.json",
+    "exclusive_write":  [
+                            "README.md",
+                            "docs/specbridge-v5-autonomy-status.md",
+                            ".specbridge/runtime-evidence/issue-080-docs.executor-output.md"
+                        ],
+    "read_only":  [
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      "CLAUDE.md",
+                      ".specbridge/policy.yaml",
+                      ".specbridge/contracts/issue-080-second-v5-live-autonomy-pilot.execution.md",
+                      "docs/specbridge-v5-live-status.md",
+                      "docs/specbridge-runtime-runner.md",
+                      "scripts/specbridge.ps1"
+                  ],
+    "required_validations":  [
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1"
+                             ],
+    "allowed_tools":  [
+                          "Edit",
+                          "Read",
+                          "Write"
+                      ],
+    "permission_mode":  "acceptEdits",
+    "max_budget_usd":  "2.00",
+    "command_summary":  "claude -p --no-session-persistence --max-budget-usd 2.00 --permission-mode acceptEdits --tools \"Edit,Read,Write\" --allowedTools \"Edit,Read,Write\" \u003cbounded prompt\u003e",
+    "prompt_sections":  [
+                            "Read README.md, SPECBRIDGE.md, AGENTS.md, CLAUDE.md, .specbridge/policy.yaml, the execution contract, and the executor packet before writing.",
+                            "Modify only paths declared in exclusive_write.",
+                            "Treat read_only paths as context only.",
+                            "Run only required validations that are explicitly allowed by the runtime operator.",
+                            "Stop on policy conflict, scope conflict, missing required context, impossible acceptance criteria, protected resource requirement, secrets, production configuration, billing, authentication security, authorization security, dependency installation, database change, CI/CD security change, or deployment automation.",
+                            "Report changed files, validation evidence, policy result, unresolved risks, and completion status."
+                        ],
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "launch_status":  "ready_for_operator_launch",
+    "execution_policy":  {
+                             "launches_claude":  false,
+                             "launches_antigravity":  false,
+                             "executes_shell":  false,
+                             "requires_network":  false,
+                             "touches_secrets":  false,
+                             "touches_production":  false,
+                             "installs_dependencies":  false,
+                             "deploys":  false
+                         },
+    "source_files":  [
+                         ".specbridge/executor-packets/issue-080-second-v5-live-autonomy-pilot-docs.executor-packet.json",
+                         ".specbridge/contracts/issue-080-second-v5-live-autonomy-pilot.execution.md"
+                     ]
+}

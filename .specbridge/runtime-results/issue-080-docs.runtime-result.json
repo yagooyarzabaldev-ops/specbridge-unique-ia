@@ -1,0 +1,57 @@
+{
+    "schema_version":  "1",
+    "result_id":  "issue-080-second-v5-live-autonomy-pilot-docs-runtime-launch-runtime-result",
+    "generated_by":  "specbridge-cli",
+    "source_runtime_launch_path":  ".specbridge/runtime-launches/issue-080-docs.runtime-launch.json",
+    "launch_id":  "issue-080-second-v5-live-autonomy-pilot-docs-runtime-launch",
+    "task_id":  "issue-080-second-v5-live-autonomy-pilot",
+    "packet_id":  "issue-080-second-v5-live-autonomy-pilot-docs",
+    "slice_id":  "docs",
+    "branch_name":  "claude/issue-080-second-v5-live-autonomy-pilot-docs",
+    "executor_evidence_path":  ".specbridge/runtime-evidence/issue-080-docs.executor-output.md",
+    "exit_code":  0,
+    "files_written":  [
+                          ".specbridge/runtime-evidence/issue-080-docs.executor-output.md",
+                          "docs/specbridge-v5-autonomy-status.md",
+                          "README.md"
+                      ],
+    "validation_results":  [
+                               {
+                                   "command":  "execute-runtime-launch docs retry",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "documentation values match v5-autonomy-status",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "validate-runtime-executions",
+                                   "result":  "passed"
+                               }
+                           ],
+    "policy_result":  "Live documentation executor completed without coordinator-authored product remediation; retry aligned documented example values with the implemented CLI output.",
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "completion_status":  "complete",
+    "runtime_status":  "succeeded",
+    "result_status":  "recorded",
+    "execution_policy":  {
+                             "launches_claude":  false,
+                             "launches_antigravity":  false,
+                             "executes_shell":  false,
+                             "requires_network":  false,
+                             "touches_secrets":  false,
+                             "touches_production":  false,
+                             "installs_dependencies":  false,
+                             "deploys":  false
+                         },
+    "source_files":  [
+                         ".specbridge/runtime-launches/issue-080-docs.runtime-launch.json",
+                         ".specbridge/runtime-evidence/issue-080-docs.executor-output.md"
+                     ]
+}

@@ -2,34 +2,40 @@
 
 ## Goal
 
-Close the completed V5 live parallel pilot and prepare SpecBridge for a second, stricter live autonomy pilot.
+Run the second V5 live autonomy pilot and prove that implementation, tests, and documentation slices can complete through live Claude Code execution without coordinator remediation.
 
-The repository must now make the V5 live result easy to inspect, record the remaining live executor reliability gap, and improve runtime failure diagnostics before the next larger autonomous implementation test.
+The product change is intentionally small: add `v5-autonomy-status`, a deterministic local CLI status command that reports the current V5 live autonomy standard and the no-coordinator-remediation target for the next pilot.
 
 ## Current Phase
 
-Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test suite active. Multi-agent Antigravity architecture defined. Standard Loop v1 complete. V5 pilot readiness complete. First V5 live parallel pilot complete and merged.
+Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test suite active. Multi-agent Antigravity architecture defined. Standard Loop v1 complete. V5 pilot readiness complete. First V5 live parallel pilot complete and merged. V5 live status and runner diagnostics complete and merged.
 
-Current phase is post-V5 live hardening.
+Current phase is second V5 live autonomy pilot.
 
 ## Active Work
 
-Active contract: `.specbridge/contracts/issue-078-v5-live-status-diagnostics.execution.md`.
+Active contract: `.specbridge/contracts/issue-080-second-v5-live-autonomy-pilot.execution.md`.
 
-This task closes the previous issue 076 scope, adds safe bounded failure diagnostics for `execute-runtime-launch`, and adds `v5-live-status` so operators can inspect the completed live pilot without reading every artifact manually.
+This task must use three bounded live executor slices:
 
-The first V5 live pilot outcome is:
+- implementation slice: add `v5-autonomy-status` to `scripts/specbridge.ps1`
+- tests slice: cover `v5-autonomy-status` in `scripts/test-specbridge-cli.ps1`
+- documentation slice: document `v5-autonomy-status` and link it from `README.md`
 
-- docs live executor slice: completed
-- tests live executor slice: completed
-- CLI live executor slice: failed twice, then completed through coordinator remediation inside declared scope
+Coordinator-authored product remediation is not allowed for this pilot. If a product slice fails and cannot be completed by live executor output inside the declared retry limit, the pilot must stop and report the autonomy gap honestly.
 
-## Next Product Direction
+## Required Standard
 
-After issue 078 passes, the next recommended task is a second serious live pilot where all implementation, test, and documentation slices must complete through live Claude Code execution without coordinator remediation.
+Completion requires:
 
-That future task should use the new diagnostics to explain any failed executor quickly and safely.
+- every product slice has a successful live `execute-runtime-launch` artifact
+- every product slice writes only declared exclusive paths
+- every product file change is attributable to live executor output
+- no coordinator-authored product remediation
+- runtime-run/result/summary evidence for each slice
+- autonomy metrics showing three ready slices and zero blocked slices
+- local gates, GitHub CI, review gate, security gate, audit packet, and ChatGPT/Codex audit pass
 
 ## Completion Condition
 
-Issue 078 is complete when `v5-live-status` returns `ok: true`, runtime execution diagnostics validate, local standard/CLI/negative/smoke validations pass, security and review gates pass, final report and ChatGPT/Codex audit evidence validate, GitHub CI passes, and the branch is merged only under policy gates.
+Issue 080 is complete when `v5-autonomy-status` exists and passes CLI tests, all three live slices complete without coordinator remediation, all runtime and audit evidence validates, GitHub CI passes, and the branch is merged only under policy gates.

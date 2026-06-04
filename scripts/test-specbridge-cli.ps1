@@ -159,6 +159,21 @@ try {
       -Result (Invoke-Cli -Arguments @("v5-live-status")) `
       -ExpectedPattern '"live_status"\s*:\s*"completed_with_coordinator_remediation"'
 
+    $v5AutonomyStatusResult = Invoke-Cli -Arguments @("v5-autonomy-status")
+
+    Assert-Success `
+      -Name "v5-autonomy-status" `
+      -Result $v5AutonomyStatusResult `
+      -ExpectedPattern '"command"\s*:\s*"v5-autonomy-status"'
+
+    if ($v5AutonomyStatusResult.Text -notmatch '"autonomy_standard"') {
+      Write-Output "FAIL v5-autonomy-status output is missing autonomy_standard field."
+      $script:failed = $true
+    }
+    else {
+      Write-Output "PASS v5-autonomy-status includes autonomy_standard field."
+    }
+
     Assert-Success `
       -Name "runtime-capability-status" `
       -Result (Invoke-Cli -Arguments @("runtime-capability-status")) `

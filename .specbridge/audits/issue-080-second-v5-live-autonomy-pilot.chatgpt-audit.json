@@ -1,0 +1,102 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-080-second-v5-live-autonomy-pilot",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-080-second-v5-live-autonomy-pilot.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-080-second-v5-live-autonomy-pilot.execution.md",
+  "final_report_path": ".specbridge/reports/issue-080-second-v5-live-autonomy-pilot.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue 080 follows the active execution contract: issue 078 scope is completed, CURRENT_GOAL points to issue 080, v5-autonomy-status exists, tests and docs were added, three live executor slices have runtime execution evidence, and runtime-run/result/summary plus autonomy metrics are present.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "runtime-capability-status and v5-live-status passed before live execution. v5-autonomy-status returns ok true with command, branch, head, autonomy_standard, prior and target pilot status, required_slices, coordinator_remediation_allowed false, and policy_boundary. Autonomy metrics report summary_count 3, ready_count 3, blocked_count 0, and policy_gate_ready_rate 1.",
+      "blocking": false
+    },
+    {
+      "name": "no_coordinator_product_remediation",
+      "result": "pass",
+      "evidence": "scripts/specbridge.ps1, scripts/test-specbridge-cli.ps1, README.md, and docs/specbridge-v5-autonomy-status.md were changed by live Claude Code executor output. The coordinator did not author product edits after live execution started. Docs correction was handled by a live docs retry.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The task did not access secrets, production configuration, billing, authentication, authorization, database, dependency installation, CI/CD security controls, deployment automation, or protected infrastructure. Runtime launch plans used bounded tools, budget, timeout, and declared write scopes.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "No .env files, secrets, tokens, private keys, production configuration, billing configuration, authentication security, authorization security, CI/CD security controls, or destructive infrastructure paths were modified. Runtime diagnostic previews remain bounded and redacted.",
+      "blocking": false
+    },
+    {
+      "name": "runtime_evidence",
+      "result": "pass",
+      "evidence": "Runtime executions validate. Implementation succeeded on the one allowed retry after an initial budget-only failure with no product changes. Tests succeeded on retry after a diagnostic preview artifact issue. Docs succeeded on retry after aligning documented values with the implemented CLI output.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed task files are declared in .specbridge/scopes/issue-080-second-v5-live-autonomy-pilot.scope.json. Existing untracked .agents and .claude/settings.local.json remain outside staged task scope.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "Local contract, scope, executor packet, runtime launch, runtime execution, runtime run, runtime result, runtime summary, autonomy metrics, final report, audit packet, ChatGPT audit, standard profile, CLI tests, negative validations, smoke, security gate, review gate, and git diff checks passed.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub CI is not collected yet and remains an external merge gate. The audit packet marks it not_collected rather than passed.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records pending GitHub CI, pending merge gates, no deployment, the implementation budget retry, the tests diagnostic retry, and the docs value-alignment retry.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "runtime_budget_configuration",
+      "file": ".specbridge/runtime-launches/issue-080-implementation.runtime-launch.json",
+      "line": null,
+      "evidence": "The first implementation launch used max_budget_usd 0.25 and failed before product changes. The bounded retry used max_budget_usd 2.00 and completed.",
+      "recommendation": "Future live pilots should default implementation slices to a realistic bounded budget so schema-valid retry evidence does not require launch plan mutation.",
+      "blocking": false
+    },
+    {
+      "severity": "info",
+      "category": "diagnostic_preview_encoding",
+      "file": ".specbridge/runtime-executions/issue-080-tests-retry-1.runtime-execution.json",
+      "line": null,
+      "evidence": "A successful tests runtime artifact contained multibyte text in the bounded stdout preview. The coordinator normalized the diagnostic preview text while preserving exit code, status, stdout hash, stderr hash, product files, and validation outcomes.",
+      "recommendation": "A future contract should make Get-RedactedPreview and the validator agree on Unicode length semantics.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending.",
+    "Merge has not occurred yet."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-080-second-v5-live-autonomy-pilot.audit-packet.json",
+    ".specbridge/contracts/issue-080-second-v5-live-autonomy-pilot.execution.md",
+    ".specbridge/reports/issue-080-second-v5-live-autonomy-pilot.final-report.json",
+    ".specbridge/metrics/issue-080-second-v5-live-autonomy-pilot.autonomy-metrics.json"
+  ]
+}

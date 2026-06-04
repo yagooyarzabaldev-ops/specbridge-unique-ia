@@ -1,0 +1,79 @@
+{
+    "schema_version":  "1",
+    "execution_id":  "issue-080-second-v5-live-autonomy-pilot-implementation-runtime-launch-runtime-execution",
+    "generated_by":  "specbridge-cli",
+    "runtime_launch_path":  ".specbridge/runtime-launches/issue-080-implementation.runtime-launch.json",
+    "launch_id":  "issue-080-second-v5-live-autonomy-pilot-implementation-runtime-launch",
+    "task_id":  "issue-080-second-v5-live-autonomy-pilot",
+    "packet_id":  "issue-080-second-v5-live-autonomy-pilot-implementation",
+    "slice_id":  "implementation",
+    "branch_name":  "claude/issue-080-second-v5-live-autonomy-pilot-implementation",
+    "dry_run":  false,
+    "timeout_seconds":  900,
+    "allowed_tools":  [
+                          "Edit",
+                          "Read",
+                          "Write"
+                      ],
+    "permission_mode":  "acceptEdits",
+    "max_budget_usd":  "2.00",
+    "command_summary":  "claude -p --no-session-persistence --max-budget-usd 2.00 --permission-mode acceptEdits --tools Edit,Read,Write --allowedTools Edit,Read,Write --input-format text",
+    "prompt_sections":  [
+                            "Read README.md, SPECBRIDGE.md, AGENTS.md, CLAUDE.md, .specbridge/policy.yaml, the execution contract, and the executor packet before writing.",
+                            "Modify only paths declared in exclusive_write.",
+                            "Treat read_only paths as context only.",
+                            "Run only required validations that are explicitly allowed by the runtime operator.",
+                            "Stop on policy conflict, scope conflict, missing required context, impossible acceptance criteria, protected resource requirement, secrets, production configuration, billing, authentication security, authorization security, dependency installation, database change, CI/CD security change, or deployment automation.",
+                            "Report changed files, validation evidence, policy result, unresolved risks, and completion status."
+                        ],
+    "execution_status":  "succeeded",
+    "exit_code":  0,
+    "timed_out":  false,
+    "stdout":  {
+                   "captured":  true,
+                   "length":  1298,
+                   "line_count":  34,
+                   "sha256":  "ef56addf6e115a0a7b8052fb1eb959ce77b28edb2cd15e0be91a0bca058e9cbf"
+               },
+    "stderr":  {
+                   "captured":  true,
+                   "length":  0,
+                   "line_count":  0,
+                   "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+               },
+    "failure_diagnostics":  {
+                                "status":  "not_applicable",
+                                "reason":  "execution_succeeded",
+                                "exit_code":  0,
+                                "timed_out":  false,
+                                "redaction_policy":  "bounded_preview_240_chars_with_secret_token_patterns_redacted",
+                                "stdout_preview":  {
+                                                       "text":  "All three changes are correct. Here is the final report:\n\n---\n\n```text\nSummary:\n- Added v5-autonomy-status command to scripts/specbridge.ps1 with deterministic static values\n  for autonomy_standard, required_slices, prior/target pilot statu",
+                                                       "original_length":  1298,
+                                                       "preview_length":  240,
+                                                       "max_length":  240,
+                                                       "truncated":  true
+                                                   },
+                                "stderr_preview":  {
+                                                       "text":  "",
+                                                       "original_length":  0,
+                                                       "preview_length":  0,
+                                                       "max_length":  240,
+                                                       "truncated":  false
+                                                   }
+                            },
+    "policy_result":  "Controlled Claude Code launch executed with bounded tools, budget, timeout, and repository-scoped launch plan.",
+    "execution_policy":  {
+                             "launches_claude":  true,
+                             "launches_antigravity":  false,
+                             "executes_shell":  false,
+                             "requires_network":  true,
+                             "touches_secrets":  false,
+                             "touches_production":  false,
+                             "installs_dependencies":  false,
+                             "deploys":  false
+                         },
+    "source_files":  [
+                         ".specbridge/runtime-launches/issue-080-implementation.runtime-launch.json"
+                     ]
+}

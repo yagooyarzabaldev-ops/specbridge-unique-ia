@@ -1,0 +1,44 @@
+{
+    "schema_version":  "1",
+    "packet_id":  "issue-080-second-v5-live-autonomy-pilot-docs",
+    "task_id":  "issue-080-second-v5-live-autonomy-pilot",
+    "slice_id":  "docs",
+    "agent_role":  "documentation",
+    "goal":  "Update docs/specbridge-v5-autonomy-status.md so every documented example value matches the implemented v5-autonomy-status command in scripts/specbridge.ps1. The docs must use autonomy_standard=v5_live_no_coordinator_remediation and policy_boundary=no-production no-secrets no-billing no-auth no-authorization no-database no-dependency-installation no-ci-cd-security no-deployment. Preserve the README See list and current status entry. Write executor evidence to .specbridge/runtime-evidence/issue-080-docs.executor-output.md.",
+    "launch_mode":  "manual_antigravity",
+    "branch_name":  "claude/issue-080-second-v5-live-autonomy-pilot-docs",
+    "execution_contract_path":  ".specbridge/contracts/issue-080-second-v5-live-autonomy-pilot.execution.md",
+    "final_report_path":  ".specbridge/reports/issue-080-second-v5-live-autonomy-pilot.final-report.json",
+    "exclusive_write":  [
+                            "README.md",
+                            "docs/specbridge-v5-autonomy-status.md",
+                            ".specbridge/runtime-evidence/issue-080-docs.executor-output.md"
+                        ],
+    "read_only":  [
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      "CLAUDE.md",
+                      ".specbridge/policy.yaml",
+                      ".specbridge/contracts/issue-080-second-v5-live-autonomy-pilot.execution.md",
+                       "docs/specbridge-v5-live-status.md",
+                       "docs/specbridge-runtime-runner.md",
+                       "scripts/specbridge.ps1"
+                  ],
+    "required_validations":  [
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1"
+                             ],
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "status":  "ready_for_handoff",
+    "source_files":  [
+                         ".specbridge/executor-handoffs/issue-080-second-v5-live-autonomy-pilot.input.json",
+                         ".specbridge/contracts/issue-080-second-v5-live-autonomy-pilot.execution.md"
+                     ],
+    "generated_by":  "specbridge-cli"
+}
