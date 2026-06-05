@@ -33,6 +33,7 @@ specbridge status
 | `decompose-task` | Creates a file-backed multi-agent decomposition from a declared JSON input. | Yes |
 | `prepare-executors` | Creates Antigravity executor handoff packets from declared slice inputs. | Yes |
 | `prepare-runtime-launch` | Creates a bounded runtime launch plan from one executor packet. | Yes |
+| `preflight-runtime-launches` | Checks prepared runtime launch plans for required slices, non-overlap, budget, tools, and plan-only policy. | Optional |
 | `record-runtime-result` | Records bounded runtime execution evidence from a launch plan and executor output. | Yes |
 | `summarize-runtime` | Links one runtime launch plan and one runtime result into a validated runtime summary. | Yes |
 | `plan-executor-branches` | Creates one planned executor branch record per executor packet. | Yes |
@@ -60,7 +61,7 @@ The default profile is `standard`.
 powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 status -IncludeLatestArtifacts
 ```
 
-When enabled, the JSON output includes `latest_artifacts` with the newest known contract, scope, final report, audit packet, ChatGPT audit, runtime launch, runtime result, and runtime summary paths.
+When enabled, the JSON output includes `latest_artifacts` with the newest known contract, scope, final report, audit packet, ChatGPT audit, runtime launch, runtime preflight, runtime result, and runtime summary paths.
 
 The selection is deterministic: artifact names that begin with `issue-<number>` are ordered by issue number first, then by file name.
 
@@ -151,6 +152,16 @@ powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 prepare-runtim
 ```
 
 The output must be declared under `.specbridge/runtime-launches/` and end with `.runtime-launch.json`.
+
+`preflight-runtime-launches` expects a comma-separated list of runtime launch plans or a directory under `.specbridge/runtime-launches`:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 preflight-runtime-launches -InputPath ".specbridge/runtime-launches/issue-097-status.runtime-launch.json,.specbridge/runtime-launches/issue-097-tests.runtime-launch.json,.specbridge/runtime-launches/issue-097-docs.runtime-launch.json" -RequiredSlice status,tests,docs -AllowedTool Read,Write,Edit -MaxBudgetUsd 2.00 -OutputPath .specbridge/preflights/issue-099-runtime-launch-preflight.runtime-preflight.json
+```
+
+When `OutputPath` is provided, it must be declared under `.specbridge/preflights/` and end with `.runtime-preflight.json`.
+
+The command fails deterministically when required slices are missing, slice ids are duplicated, write scopes overlap, a launch budget exceeds the preflight limit, a launch uses a tool outside the configured allow-list, or any plan-only execution policy boolean is missing, non-boolean, or not `false`.
 
 `record-runtime-result` expects one runtime launch plan and one declared executor evidence file:
 

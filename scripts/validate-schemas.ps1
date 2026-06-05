@@ -14,6 +14,7 @@ $requiredSchemas = @(
   ".specbridge/schemas/final-report.schema.json",
   ".specbridge/schemas/runtime-execution.schema.json",
   ".specbridge/schemas/runtime-launch.schema.json",
+  ".specbridge/schemas/runtime-preflight.schema.json",
   ".specbridge/schemas/runtime-result.schema.json",
   ".specbridge/schemas/runtime-run.schema.json",
   ".specbridge/schemas/runtime-summary.schema.json"

@@ -512,6 +512,35 @@ try {
     }
 
     Assert-Success `
+      -Name "preflight-runtime-launches" `
+      -Result (Invoke-Cli -Arguments @(
+        "preflight-runtime-launches",
+        "-InputPath",
+        ".specbridge/runtime-launches/cli-fixture.runtime-launch.json",
+        "-RequiredSlice",
+        "agent-a-implementation",
+        "-AllowedTool",
+        "Read,Write",
+        "-MaxBudgetUsd",
+        "2.00",
+        "-OutputPath",
+        ".specbridge/preflights/cli-fixture.runtime-preflight.json",
+        "-Force"
+      )) `
+      -ExpectedPattern '"ok"\s*:\s*true'
+
+    $runtimePreflightValidation = & powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-preflights.ps1 2>&1
+
+    if ($LASTEXITCODE -ne 0) {
+      Write-Output "FAIL CLI-created runtime preflight did not validate."
+      Write-Output ($runtimePreflightValidation | Out-String)
+      $failed = $true
+    }
+    else {
+      Write-Output "PASS CLI-created runtime preflight validates."
+    }
+
+    Assert-Success `
       -Name "execute-runtime-launch-dry-run" `
       -Result (Invoke-Cli -Arguments @(
         "execute-runtime-launch",
@@ -914,6 +943,85 @@ try {
         "-Force"
       )) `
       -ExpectedPattern "AllowedTool must include Write"
+
+    $overlapLaunch = Get-Content -LiteralPath ".specbridge/runtime-launches/cli-fixture.runtime-launch.json" -Raw | ConvertFrom-Json
+    $overlapLaunch.launch_id = "cli-overlap-runtime-launch"
+    $overlapLaunch.packet_id = "cli-overlap"
+    $overlapLaunch.slice_id = "agent-a-overlap"
+    $overlapLaunch.branch_name = "claude/cli-overlap"
+    Set-Content `
+      -LiteralPath ".specbridge/runtime-launches/cli-overlap.runtime-launch.json" `
+      -Value ($overlapLaunch | ConvertTo-Json -Depth 10) `
+      -NoNewline
+
+    Assert-Failure `
+      -Name "preflight-runtime-launches-overlap" `
+      -Result (Invoke-Cli -Arguments @(
+        "preflight-runtime-launches",
+        "-InputPath",
+        ".specbridge/runtime-launches/cli-fixture.runtime-launch.json,.specbridge/runtime-launches/cli-overlap.runtime-launch.json",
+        "-RequiredSlice",
+        "agent-a-implementation,agent-a-overlap",
+        "-AllowedTool",
+        "Read,Write",
+        "-MaxBudgetUsd",
+        "2.00"
+      )) `
+      -ExpectedPattern "exclusive_write overlap"
+
+    $overBudgetLaunch = Get-Content -LiteralPath ".specbridge/runtime-launches/cli-fixture.runtime-launch.json" -Raw | ConvertFrom-Json
+    $overBudgetLaunch.launch_id = "cli-over-budget-runtime-launch"
+    $overBudgetLaunch.packet_id = "cli-over-budget"
+    $overBudgetLaunch.slice_id = "agent-a-over-budget"
+    $overBudgetLaunch.branch_name = "claude/cli-over-budget"
+    $overBudgetLaunch.max_budget_usd = "5.00"
+    $overBudgetLaunch.exclusive_write = @(".specbridge/runtime-evidence/cli-over-budget.executor-output.md")
+    Set-Content `
+      -LiteralPath ".specbridge/runtime-launches/cli-over-budget.runtime-launch.json" `
+      -Value ($overBudgetLaunch | ConvertTo-Json -Depth 10) `
+      -NoNewline
+
+    Assert-Failure `
+      -Name "preflight-runtime-launches-over-budget" `
+      -Result (Invoke-Cli -Arguments @(
+        "preflight-runtime-launches",
+        "-InputPath",
+        ".specbridge/runtime-launches/cli-over-budget.runtime-launch.json",
+        "-RequiredSlice",
+        "agent-a-over-budget",
+        "-AllowedTool",
+        "Read,Write",
+        "-MaxBudgetUsd",
+        "2.00"
+      )) `
+      -ExpectedPattern "max_budget_usd exceeds preflight limit"
+
+    $unsafePolicyLaunch = Get-Content -LiteralPath ".specbridge/runtime-launches/cli-fixture.runtime-launch.json" -Raw | ConvertFrom-Json
+    $unsafePolicyLaunch.launch_id = "cli-unsafe-policy-runtime-launch"
+    $unsafePolicyLaunch.packet_id = "cli-unsafe-policy"
+    $unsafePolicyLaunch.slice_id = "agent-a-unsafe-policy"
+    $unsafePolicyLaunch.branch_name = "claude/cli-unsafe-policy"
+    $unsafePolicyLaunch.exclusive_write = @(".specbridge/runtime-evidence/cli-unsafe-policy.executor-output.md")
+    $unsafePolicyLaunch.execution_policy.executes_shell = $true
+    Set-Content `
+      -LiteralPath ".specbridge/runtime-launches/cli-unsafe-policy.runtime-launch.json" `
+      -Value ($unsafePolicyLaunch | ConvertTo-Json -Depth 10) `
+      -NoNewline
+
+    Assert-Failure `
+      -Name "preflight-runtime-launches-unsafe-policy" `
+      -Result (Invoke-Cli -Arguments @(
+        "preflight-runtime-launches",
+        "-InputPath",
+        ".specbridge/runtime-launches/cli-unsafe-policy.runtime-launch.json",
+        "-RequiredSlice",
+        "agent-a-unsafe-policy",
+        "-AllowedTool",
+        "Read,Write",
+        "-MaxBudgetUsd",
+        "2.00"
+      )) `
+      -ExpectedPattern "execution_policy.executes_shell must be false"
 
     Assert-Failure `
       -Name "record-runtime-result-out-of-scope-evidence" `

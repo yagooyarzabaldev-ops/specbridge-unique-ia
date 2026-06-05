@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -18,6 +18,7 @@ param(
   [string] $Summary = "",
   [string[]] $ChangedFile = @(),
   [string[]] $Validation = @(),
+  [string[]] $RequiredSlice = @(),
   [string] $PolicyResult = "",
   [string] $RiskResult = "",
   [string] $CompletionStatus = "draft",
@@ -204,6 +205,7 @@ function Invoke-ValidationProfile {
     "./scripts/validate-chatgpt-audits.ps1",
     "./scripts/validate-executor-packets.ps1",
     "./scripts/validate-runtime-launches.ps1",
+    "./scripts/validate-runtime-preflights.ps1",
     "./scripts/validate-runtime-runs.ps1",
     "./scripts/validate-runtime-results.ps1",
     "./scripts/validate-runtime-summaries.ps1",
@@ -384,6 +386,7 @@ function Invoke-StatusCommand {
       audit_packets = Get-FileCount -Path ".specbridge/audit-packets" -Filter "*.audit-packet.json"
       chatgpt_audits = Get-FileCount -Path ".specbridge/audits" -Filter "*.chatgpt-audit.json"
       runtime_launches = Get-FileCount -Path ".specbridge/runtime-launches" -Filter "*.runtime-launch.json"
+      runtime_preflights = Get-FileCount -Path ".specbridge/preflights" -Filter "*.runtime-preflight.json"
       runtime_results = Get-FileCount -Path ".specbridge/runtime-results" -Filter "*.runtime-result.json"
       runtime_summaries = Get-FileCount -Path ".specbridge/runtime-summaries" -Filter "*.runtime-summary.json"
     }
@@ -398,6 +401,7 @@ function Invoke-StatusCommand {
       audit_packet = Get-LatestArtifactPath -Path ".specbridge/audit-packets" -Filter "*.audit-packet.json"
       chatgpt_audit = Get-LatestArtifactPath -Path ".specbridge/audits" -Filter "*.chatgpt-audit.json"
       runtime_launch = Get-LatestArtifactPath -Path ".specbridge/runtime-launches" -Filter "*.runtime-launch.json"
+      runtime_preflight = Get-LatestArtifactPath -Path ".specbridge/preflights" -Filter "*.runtime-preflight.json"
       runtime_result = Get-LatestArtifactPath -Path ".specbridge/runtime-results" -Filter "*.runtime-result.json"
       runtime_summary = Get-LatestArtifactPath -Path ".specbridge/runtime-summaries" -Filter "*.runtime-summary.json"
     }
@@ -546,6 +550,7 @@ function Invoke-StandardLoopStatusCommand {
   $schemaPaths = @(
     ".specbridge/schemas/executor-packet.schema.json",
     ".specbridge/schemas/runtime-launch.schema.json",
+    ".specbridge/schemas/runtime-preflight.schema.json",
     ".specbridge/schemas/runtime-run.schema.json",
     ".specbridge/schemas/runtime-result.schema.json",
     ".specbridge/schemas/runtime-summary.schema.json",
@@ -556,6 +561,7 @@ function Invoke-StandardLoopStatusCommand {
   $validatorPaths = @(
     "scripts/validate-standard-templates.ps1",
     "scripts/validate-standard-ci-authority.ps1",
+    "scripts/validate-runtime-preflights.ps1",
     "scripts/validate-runtime-executions.ps1"
   )
 
@@ -588,6 +594,7 @@ function Invoke-StandardLoopStatusCommand {
       contract = Get-LatestArtifactPath -Path ".specbridge/contracts" -Filter "*.execution.md"
       scope = Get-LatestArtifactPath -Path ".specbridge/scopes" -Filter "*.scope.json"
       runtime_launch = Get-LatestArtifactPath -Path ".specbridge/runtime-launches" -Filter "*.runtime-launch.json"
+      runtime_preflight = Get-LatestArtifactPath -Path ".specbridge/preflights" -Filter "*.runtime-preflight.json"
       runtime_run = Get-LatestArtifactPath -Path ".specbridge/runtime-runs" -Filter "*.runtime-run.json"
       runtime_result = Get-LatestArtifactPath -Path ".specbridge/runtime-results" -Filter "*.runtime-result.json"
       runtime_summary = Get-LatestArtifactPath -Path ".specbridge/runtime-summaries" -Filter "*.runtime-summary.json"
@@ -700,6 +707,7 @@ function New-StandardLoopContractSeed {
         "final report validates",
         "audit packet validates",
         "ChatGPT/Codex audit validates",
+        "runtime preflight validates",
         "security gate passes",
         "review gate passes",
         "CLI tests pass",
@@ -731,6 +739,7 @@ function Invoke-StandardLoopOrchestrateCommand {
   $schemaPaths = @(
     ".specbridge/schemas/executor-packet.schema.json",
     ".specbridge/schemas/runtime-launch.schema.json",
+    ".specbridge/schemas/runtime-preflight.schema.json",
     ".specbridge/schemas/runtime-run.schema.json",
     ".specbridge/schemas/runtime-result.schema.json",
     ".specbridge/schemas/runtime-summary.schema.json",
@@ -745,6 +754,7 @@ function Invoke-StandardLoopOrchestrateCommand {
     "scripts/validate-final-reports.ps1",
     "scripts/validate-audit-packets.ps1",
     "scripts/validate-chatgpt-audits.ps1",
+    "scripts/validate-runtime-preflights.ps1",
     "scripts/validate-security-gates.ps1",
     "scripts/validate-review-gate.ps1",
     "scripts/specbridge-smoke.ps1",
@@ -877,9 +887,10 @@ function Invoke-StandardLoopOrchestrateCommand {
         "validate-contracts",
         "validate-contract-scopes",
         "validate-final-reports",
-        "validate-audit-packets",
-        "validate-chatgpt-audits",
-        "validate-security-gates",
+                                         "validate-audit-packets",
+                                         "validate-chatgpt-audits",
+                                         "validate-runtime-preflights",
+                                         "validate-security-gates",
         "validate-review-gate",
         "specbridge-smoke",
         "test-specbridge-cli",
@@ -896,6 +907,7 @@ function Invoke-StandardLoopOrchestrateCommand {
       contract = Get-LatestArtifactPath -Path ".specbridge/contracts" -Filter "*.execution.md"
       scope = Get-LatestArtifactPath -Path ".specbridge/scopes" -Filter "*.scope.json"
       runtime_launch = Get-LatestArtifactPath -Path ".specbridge/runtime-launches" -Filter "*.runtime-launch.json"
+      runtime_preflight = Get-LatestArtifactPath -Path ".specbridge/preflights" -Filter "*.runtime-preflight.json"
       runtime_execution = Get-LatestArtifactPath -Path ".specbridge/runtime-executions" -Filter "*.runtime-execution.json"
       runtime_run = Get-LatestArtifactPath -Path ".specbridge/runtime-runs" -Filter "*.runtime-run.json"
       runtime_result = Get-LatestArtifactPath -Path ".specbridge/runtime-results" -Filter "*.runtime-result.json"
@@ -2230,6 +2242,440 @@ function Invoke-PrepareRuntimeLaunchCommand {
     source_executor_packet_path = $input
     launch_status = "ready_for_operator_launch"
   })
+
+  exit 0
+}
+
+function Get-PreflightStringList {
+  param(
+    [string[]] $Values,
+    [string] $FieldName,
+    [bool] $AllowEmpty = $false
+  )
+
+  $items = @()
+
+  foreach ($entry in @($Values)) {
+    if ($null -eq $entry) {
+      continue
+    }
+
+    foreach ($value in @($entry -split ",")) {
+      $trimmed = $value.Trim()
+
+      if ([string]::IsNullOrWhiteSpace($trimmed)) {
+        continue
+      }
+
+      $items += $trimmed
+    }
+  }
+
+  $items = @($items | Sort-Object -Unique)
+
+  if (-not $AllowEmpty -and $items.Count -le 0) {
+    Fail "$FieldName must include at least one value"
+  }
+
+  return @($items)
+}
+
+function Get-PreflightRuntimeLaunchPaths {
+  if ([string]::IsNullOrWhiteSpace($InputPath)) {
+    Fail "InputPath is required"
+  }
+
+  $paths = @()
+
+  foreach ($entry in @($InputPath -split "[,;]")) {
+    $trimmed = $entry.Trim()
+
+    if ([string]::IsNullOrWhiteSpace($trimmed)) {
+      continue
+    }
+
+    $normalized = Normalize-RepoPath -Path $trimmed -FieldName "InputPath"
+
+    if (Test-Path -LiteralPath $normalized -PathType Container) {
+      if ($normalized -notmatch "^\.specbridge/runtime-launches($|/)") {
+        Fail "InputPath directory must be under .specbridge/runtime-launches: $normalized"
+      }
+
+      $paths += @(Get-ChildItem -LiteralPath $normalized -Filter "*.runtime-launch.json" -File | ForEach-Object {
+        Normalize-RepoPath -Path (Join-Path $normalized $_.Name) -FieldName "InputPath"
+      })
+
+      continue
+    }
+
+    if ($normalized -notmatch "^\.specbridge/runtime-launches/.+\.runtime-launch\.json$") {
+      Fail "InputPath must be a .specbridge/runtime-launches/*.runtime-launch.json file or directory: $normalized"
+    }
+
+    $paths += $normalized
+  }
+
+  $paths = @($paths | Sort-Object -Unique)
+
+  if ($paths.Count -le 0) {
+    Fail "InputPath did not resolve to any runtime launch files"
+  }
+
+  foreach ($path in $paths) {
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
+      Fail "InputPath does not exist: $path"
+    }
+  }
+
+  return @($paths)
+}
+
+function Test-PreflightPathOverlap {
+  param(
+    [string] $First,
+    [string] $Second
+  )
+
+  if ($First -eq $Second) {
+    return $true
+  }
+
+  if ($First.StartsWith("$Second/") -or $Second.StartsWith("$First/")) {
+    return $true
+  }
+
+  return $false
+}
+
+function Invoke-PreflightRuntimeLaunchesCommand {
+  $launchPaths = Get-PreflightRuntimeLaunchPaths
+  $requiredSlices = Get-PreflightStringList -Values $RequiredSlice -FieldName "RequiredSlice" -AllowEmpty $true
+  $allowedToolLimit = Get-PreflightStringList -Values $AllowedTool -FieldName "AllowedTool" -AllowEmpty $false
+  $approvedToolNames = @("Read", "Write", "Edit")
+
+  foreach ($tool in $allowedToolLimit) {
+    if ($approvedToolNames -notcontains $tool) {
+      Fail "AllowedTool is not approved for runtime launch preflight: $tool"
+    }
+  }
+
+  if ($MaxBudgetUsd -notmatch "^[0-9]+(\.[0-9]{1,2})?$") {
+    Fail "MaxBudgetUsd must be a positive decimal string with up to two fractional digits"
+  }
+
+  $maxBudget = [decimal]::Parse($MaxBudgetUsd, [System.Globalization.CultureInfo]::InvariantCulture)
+
+  if ($maxBudget -le 0 -or $maxBudget -gt 10) {
+    Fail "MaxBudgetUsd must be greater than 0 and no more than 10"
+  }
+
+  $output = $null
+
+  if (-not [string]::IsNullOrWhiteSpace($OutputPath)) {
+    $output = Assert-OutputPath `
+      -Path $OutputPath `
+      -Pattern "^\.specbridge/preflights/.+\.runtime-preflight\.json$" `
+      -Description "a .specbridge/preflights/*.runtime-preflight.json runtime preflight"
+  }
+
+  $blockers = @()
+  $loadedLaunches = @()
+  $sliceCounts = @{}
+  $writeOwners = @()
+  $overlapConflicts = @()
+  $budgetViolations = @()
+  $toolViolations = @()
+  $policyViolations = @()
+  $totalBudget = [decimal] 0
+  $policyFields = @(
+    "launches_claude",
+    "launches_antigravity",
+    "executes_shell",
+    "requires_network",
+    "touches_secrets",
+    "touches_production",
+    "installs_dependencies",
+    "deploys"
+  )
+
+  foreach ($path in $launchPaths) {
+    $launch = Get-JsonObjectFromFile -Path $path -Description "runtime launch"
+    $propertyNames = @($launch.PSObject.Properties.Name)
+    $requiredFields = @(
+      "launch_id",
+      "task_id",
+      "packet_id",
+      "slice_id",
+      "branch_name",
+      "exclusive_write",
+      "allowed_tools",
+      "max_budget_usd",
+      "launch_status",
+      "execution_policy"
+    )
+
+    foreach ($field in $requiredFields) {
+      if ($propertyNames -notcontains $field) {
+        $blockers += "runtime launch missing required field: $path $field"
+      }
+    }
+
+    $sliceId = ""
+
+    if ($propertyNames -contains "slice_id" -and $null -ne $launch.slice_id) {
+      $sliceId = $launch.slice_id.ToString().Trim()
+    }
+
+    if ([string]::IsNullOrWhiteSpace($sliceId)) {
+      $sliceId = "unknown"
+      $blockers += "runtime launch slice_id must be non-empty: $path"
+    }
+
+    if (-not $sliceCounts.ContainsKey($sliceId)) {
+      $sliceCounts[$sliceId] = 0
+    }
+
+    $sliceCounts[$sliceId] += 1
+
+    if ($propertyNames -contains "launch_status" -and $launch.launch_status -ne "ready_for_operator_launch") {
+      $blockers += "launch_status must be ready_for_operator_launch: $sliceId"
+    }
+
+    $exclusiveWrite = @()
+
+    if ($propertyNames -contains "exclusive_write" -and $null -ne $launch.exclusive_write -and $launch.exclusive_write -is [System.Array]) {
+      foreach ($writePath in @($launch.exclusive_write)) {
+        $normalizedWrite = Normalize-RepoPath -Path $writePath -FieldName "exclusive_write"
+        $exclusiveWrite += $normalizedWrite
+
+        foreach ($owner in @($writeOwners)) {
+          if (Test-PreflightPathOverlap -First $owner.path -Second $normalizedWrite) {
+            $overlapConflicts += [ordered]@{
+              path = $normalizedWrite
+              existing_path = $owner.path
+              first_slice = $owner.slice_id
+              second_slice = $sliceId
+            }
+            $blockers += "exclusive_write overlap: $normalizedWrite between $($owner.slice_id) and $sliceId"
+          }
+        }
+
+        $writeOwners += [ordered]@{
+          path = $normalizedWrite
+          slice_id = $sliceId
+        }
+      }
+    }
+    else {
+      $blockers += "exclusive_write must be a non-empty array: $sliceId"
+    }
+
+    $exclusiveWrite = @($exclusiveWrite | Sort-Object -Unique)
+
+    if ($exclusiveWrite.Count -le 0) {
+      $blockers += "exclusive_write must not be empty: $sliceId"
+    }
+
+    $launchTools = @()
+
+    if ($propertyNames -contains "allowed_tools" -and $null -ne $launch.allowed_tools -and $launch.allowed_tools -is [System.Array]) {
+      foreach ($tool in @($launch.allowed_tools)) {
+        if ($null -eq $tool -or $tool.GetType().Name -ne "String" -or [string]::IsNullOrWhiteSpace($tool)) {
+          $toolViolations += [ordered]@{
+            slice_id = $sliceId
+            tool = ""
+            reason = "empty_tool"
+          }
+          $blockers += "allowed_tools must contain only non-empty strings: $sliceId"
+          continue
+        }
+
+        $trimmedTool = $tool.Trim()
+        $launchTools += $trimmedTool
+
+        if ($allowedToolLimit -notcontains $trimmedTool) {
+          $toolViolations += [ordered]@{
+            slice_id = $sliceId
+            tool = $trimmedTool
+            reason = "not_in_preflight_allow_list"
+          }
+          $blockers += "allowed_tools outside preflight allow-list: $sliceId $trimmedTool"
+        }
+      }
+    }
+    else {
+      $toolViolations += [ordered]@{
+        slice_id = $sliceId
+        tool = ""
+        reason = "missing_allowed_tools"
+      }
+      $blockers += "allowed_tools must be a non-empty array: $sliceId"
+    }
+
+    $launchTools = @($launchTools | Sort-Object -Unique)
+
+    if ($launchTools.Count -le 0) {
+      $blockers += "allowed_tools must not be empty: $sliceId"
+    }
+
+    $launchBudgetText = ""
+
+    if ($propertyNames -contains "max_budget_usd" -and $null -ne $launch.max_budget_usd) {
+      $launchBudgetText = $launch.max_budget_usd.ToString().Trim()
+    }
+
+    if ($launchBudgetText -notmatch "^[0-9]+(\.[0-9]{1,2})?$") {
+      $budgetViolations += [ordered]@{
+        slice_id = $sliceId
+        max_budget_usd = $launchBudgetText
+        reason = "invalid_budget"
+      }
+      $blockers += "max_budget_usd must be a positive decimal string: $sliceId"
+    }
+    else {
+      $launchBudget = [decimal]::Parse($launchBudgetText, [System.Globalization.CultureInfo]::InvariantCulture)
+      $totalBudget += $launchBudget
+
+      if ($launchBudget -le 0) {
+        $budgetViolations += [ordered]@{
+          slice_id = $sliceId
+          max_budget_usd = $launchBudgetText
+          reason = "non_positive_budget"
+        }
+        $blockers += "max_budget_usd must be greater than 0: $sliceId"
+      }
+
+      if ($launchBudget -gt $maxBudget) {
+        $budgetViolations += [ordered]@{
+          slice_id = $sliceId
+          max_budget_usd = $launchBudgetText
+          limit = $MaxBudgetUsd
+          reason = "over_preflight_limit"
+        }
+        $blockers += "max_budget_usd exceeds preflight limit: $sliceId $launchBudgetText > $MaxBudgetUsd"
+      }
+    }
+
+    if ($propertyNames -contains "execution_policy" -and $null -ne $launch.execution_policy -and $launch.execution_policy.GetType().Name -match "Object") {
+      foreach ($policyField in $policyFields) {
+        if (-not $launch.execution_policy.PSObject.Properties.Name.Contains($policyField)) {
+          $policyViolations += [ordered]@{
+            slice_id = $sliceId
+            field = $policyField
+            reason = "missing"
+          }
+          $blockers += "execution_policy.$policyField is required: $sliceId"
+          continue
+        }
+
+        if ($launch.execution_policy.$policyField -isnot [bool]) {
+          $policyViolations += [ordered]@{
+            slice_id = $sliceId
+            field = $policyField
+            reason = "not_boolean"
+          }
+          $blockers += "execution_policy.$policyField must be boolean: $sliceId"
+          continue
+        }
+
+        if ($launch.execution_policy.$policyField -ne $false) {
+          $policyViolations += [ordered]@{
+            slice_id = $sliceId
+            field = $policyField
+            reason = "not_false"
+          }
+          $blockers += "execution_policy.$policyField must be false: $sliceId"
+        }
+      }
+    }
+    else {
+      $policyViolations += [ordered]@{
+        slice_id = $sliceId
+        field = "execution_policy"
+        reason = "missing_or_invalid"
+      }
+      $blockers += "execution_policy must be an object: $sliceId"
+    }
+
+    $loadedLaunches += [ordered]@{
+      path = $path
+      launch_id = $launch.launch_id
+      task_id = $launch.task_id
+      packet_id = $launch.packet_id
+      slice_id = $sliceId
+      branch_name = $launch.branch_name
+      max_budget_usd = $launchBudgetText
+      allowed_tools = @($launchTools)
+      exclusive_write = @($exclusiveWrite)
+    }
+  }
+
+  $presentSlices = @($sliceCounts.Keys | Sort-Object)
+  $missingSlices = @()
+
+  foreach ($slice in $requiredSlices) {
+    if (-not $sliceCounts.ContainsKey($slice)) {
+      $missingSlices += $slice
+      $blockers += "missing required slice: $slice"
+    }
+  }
+
+  $duplicateSlices = @($sliceCounts.GetEnumerator() | Where-Object { $_.Value -gt 1 } | ForEach-Object { $_.Key } | Sort-Object)
+
+  foreach ($slice in $duplicateSlices) {
+    $blockers += "duplicate slice id: $slice"
+  }
+
+  $blockers = @($blockers | Sort-Object -Unique)
+  $ok = ($blockers.Count -eq 0)
+  $totalBudgetText = $totalBudget.ToString("0.00", [System.Globalization.CultureInfo]::InvariantCulture)
+
+  $result = [ordered]@{
+    schema_version = "1"
+    command = "preflight-runtime-launches"
+    ok = $ok
+    mode = "plan_only_preflight"
+    input_paths = @($launchPaths)
+    loaded_launches = @($loadedLaunches)
+    required_slices = @($requiredSlices)
+    present_slices = @($presentSlices)
+    missing_required_slices = @($missingSlices)
+    duplicate_slices = @($duplicateSlices)
+    non_overlap = [ordered]@{
+      result = $(if ($overlapConflicts.Count -eq 0) { "pass" } else { "fail" })
+      conflicts = @($overlapConflicts)
+    }
+    budget = [ordered]@{
+      result = $(if ($budgetViolations.Count -eq 0) { "pass" } else { "fail" })
+      max_budget_usd = $MaxBudgetUsd
+      total_budget_usd = $totalBudgetText
+      violations = @($budgetViolations)
+    }
+    tools = [ordered]@{
+      result = $(if ($toolViolations.Count -eq 0) { "pass" } else { "fail" })
+      allowed_tools = @($allowedToolLimit)
+      violations = @($toolViolations)
+    }
+    execution_policy = [ordered]@{
+      result = $(if ($policyViolations.Count -eq 0) { "pass" } else { "fail" })
+      required_false_fields = @($policyFields)
+      violations = @($policyViolations)
+    }
+    blockers = @($blockers)
+    policy_boundary = "plan-only no-launch no-antigravity no-shell no-network no-secrets no-production no-dependency-installation no-deploy"
+    source_files = @($launchPaths)
+    output_path = $output
+  }
+
+  if ($output) {
+    Write-Utf8JsonFile -Path $output -Value $result -Depth 12
+  }
+
+  Write-CliJson $result -Depth 12
+
+  if (-not $ok) {
+    exit 1
+  }
 
   exit 0
 }
@@ -3816,6 +4262,7 @@ switch ($Command) {
   "decompose-task" { Invoke-DecomposeTaskCommand }
   "prepare-executors" { Invoke-PrepareExecutorsCommand }
   "prepare-runtime-launch" { Invoke-PrepareRuntimeLaunchCommand }
+  "preflight-runtime-launches" { Invoke-PreflightRuntimeLaunchesCommand }
   "execute-runtime-launch" { Invoke-ExecuteRuntimeLaunchCommand }
   "run-runtime-launch" { Invoke-RunRuntimeLaunchCommand }
   "record-runtime-result" { Invoke-RecordRuntimeResultCommand }

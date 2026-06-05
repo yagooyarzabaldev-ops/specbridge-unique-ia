@@ -1,0 +1,359 @@
+{
+    "schema_version":  "1",
+    "command":  "standard-loop-orchestrate",
+    "ok":  true,
+    "mode":  "plan_only",
+    "task_id":  "issue-099-runtime-launch-preflight",
+    "branch":  "codex/issue099-runtime-launch-preflight",
+    "head":  "038a893",
+    "standard":  "SpecBridge Standard Loop v1",
+    "current_repository_phase":  "Foundation complete. Repository-first MVP complete. Full Autopilot enabled. Test suite active. Multi-agent Antigravity architecture defined. Standard Loop v1 complete. V5 pilot readiness complete. First V5 live parallel pilot complete and merged. V5 live status and runner diagnostics complete and merged. Second V5 live autonomy pilot complete and merged. V5 runner hardening complete and merged. V5 serious pilot status complete and merged through PR 88. Issue 089 post-merge memory closure complete and merged through PR 90. Issue 091 agent stage-policy alignment complete and merged through PR 92. Issue 093 one-command Standard Loop orchestration complete and merged through PR 94. Issue 095 Standard Loop contract seed complete and merged through PR 96. Issue 097 multi-slice live pilot contract preparation complete and merged through PR 98.\n\nCurrent phase is issue 099 runtime launch preflight.",
+    "next_recommended_action":  "After issue 099 merges, use `preflight-runtime-launches` against the prepared issue 097 launch plans, then choose one bounded live slice for a dedicated follow-up contract if the preflight and gates pass.",
+    "next_contract_seed":  {
+                               "task_id":  "issue-099-runtime-launch-preflight",
+                               "issue_reference":  "https://github.com/yagooyarzabaldev-ops/specbridge/issues/99",
+                               "recommended_branch":  "codex/issue-099-runtime-launch-preflight",
+                               "contract_path":  ".specbridge/contracts/issue-099-runtime-launch-preflight.execution.md",
+                               "scope_path":  ".specbridge/scopes/issue-099-runtime-launch-preflight.scope.json",
+                               "final_report_path":  ".specbridge/reports/issue-099-runtime-launch-preflight.final-report.json",
+                               "audit_packet_path":  ".specbridge/audit-packets/issue-099-runtime-launch-preflight.audit-packet.json",
+                               "chatgpt_audit_path":  ".specbridge/audits/issue-099-runtime-launch-preflight.chatgpt-audit.json",
+                               "standard_loop_run_path":  ".specbridge/standard-loop-runs/issue-099-runtime-launch-preflight.standard-loop-run.json",
+                               "required_evidence_paths":  [
+                                                               ".specbridge/contracts/issue-099-runtime-launch-preflight.execution.md",
+                                                               ".specbridge/scopes/issue-099-runtime-launch-preflight.scope.json",
+                                                               ".specbridge/reports/issue-099-runtime-launch-preflight.final-report.json",
+                                                               ".specbridge/audit-packets/issue-099-runtime-launch-preflight.audit-packet.json",
+                                                               ".specbridge/audits/issue-099-runtime-launch-preflight.chatgpt-audit.json",
+                                                               ".specbridge/standard-loop-runs/issue-099-runtime-launch-preflight.standard-loop-run.json"
+                                                           ],
+                               "suggested_commands":  {
+                                                          "write_orchestration_artifact":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 standard-loop-orchestrate -TaskId issue-099-runtime-launch-preflight -OutputPath .specbridge/standard-loop-runs/issue-099-runtime-launch-preflight.standard-loop-run.json -Force",
+                                                          "validate_standard":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+                                                          "test_cli":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+                                                          "smoke":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                                          "security_gate":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+                                                          "review_gate":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1"
+                                                      },
+                               "completion_gates":  {
+                                                        "local":  [
+                                                                      "contract validates",
+                                                                      "scope validates",
+                                                                      "final report validates",
+                                                                      "audit packet validates",
+                                                                      "ChatGPT/Codex audit validates",
+                                                                      "runtime preflight validates",
+                                                                      "security gate passes",
+                                                                      "review gate passes",
+                                                                      "CLI tests pass",
+                                                                      "smoke validation passes",
+                                                                      "git diff --check passes"
+                                                                  ],
+                                                        "github":  [
+                                                                       "Foundation Validation",
+                                                                       "SpecBridge Review Gate",
+                                                                       "SpecBridge PR Review Report",
+                                                                       "Claude Review Non Blocking"
+                                                                   ]
+                                                    },
+                               "policy_boundary":  "seed-only no-launch no-github-call no-dependency-install no-deploy"
+                           },
+    "phases":  [
+                   {
+                       "order":  1,
+                       "id":  "goal_intake",
+                       "name":  "Goal, acceptance criteria, and risk boundary",
+                       "required_evidence":  [
+                                                 ".specbridge/context/CURRENT_GOAL.md",
+                                                 "GitHub issue"
+                                             ],
+                       "gate":  "goal_is_explicit"
+                   },
+                   {
+                       "order":  2,
+                       "id":  "contract_scope",
+                       "name":  "Execution contract and scope manifest",
+                       "required_evidence":  [
+                                                 ".specbridge/contracts/*.execution.md",
+                                                 ".specbridge/scopes/*.scope.json"
+                                             ],
+                       "gate":  "contract_and_scope_validate"
+                   },
+                   {
+                       "order":  3,
+                       "id":  "executor_preparation",
+                       "name":  "Executor handoff, decomposition, and packets",
+                       "required_evidence":  [
+                                                 ".specbridge/executor-handoffs/*.json",
+                                                 ".specbridge/executor-packets/*.executor-packet.json"
+                                             ],
+                       "gate":  "executor_scopes_do_not_overlap"
+                   },
+                   {
+                       "order":  4,
+                       "id":  "runtime_planning",
+                       "name":  "Runtime launch planning",
+                       "required_evidence":  [
+                                                 ".specbridge/runtime-launches/*.runtime-launch.json"
+                                             ],
+                       "gate":  "launch_plan_validates"
+                   },
+                   {
+                       "order":  5,
+                       "id":  "controlled_execution",
+                       "name":  "Controlled execution and evidence capture",
+                       "required_evidence":  [
+                                                 ".specbridge/runtime-executions/*.runtime-execution.json",
+                                                 ".specbridge/runtime-runs/*.runtime-run.json"
+                                             ],
+                       "gate":  "execution_is_bounded_and_recorded"
+                   },
+                   {
+                       "order":  6,
+                       "id":  "result_summary",
+                       "name":  "Runtime result, summary, and autonomy metrics",
+                       "required_evidence":  [
+                                                 ".specbridge/runtime-results/*.runtime-result.json",
+                                                 ".specbridge/runtime-summaries/*.runtime-summary.json",
+                                                 ".specbridge/metrics/*.autonomy-metrics.json"
+                                             ],
+                       "gate":  "summaries_ready_for_policy_gates"
+                   },
+                   {
+                       "order":  7,
+                       "id":  "report_audit",
+                       "name":  "Final report, audit packet, and ChatGPT/Codex audit",
+                       "required_evidence":  [
+                                                 ".specbridge/reports/*.final-report.json",
+                                                 ".specbridge/audit-packets/*.audit-packet.json",
+                                                 ".specbridge/audits/*.chatgpt-audit.json"
+                                             ],
+                       "gate":  "audit_approved"
+                   },
+                   {
+                       "order":  8,
+                       "id":  "pull_request_ci",
+                       "name":  "Pull request, security gate, review gate, and GitHub CI",
+                       "required_evidence":  [
+                                                 "GitHub pull request",
+                                                 "Foundation Validation",
+                                                 "SpecBridge Review Gate",
+                                                 "SpecBridge PR Review Report"
+                                             ],
+                       "gate":  "ci_and_review_pass"
+                   },
+                   {
+                       "order":  9,
+                       "id":  "merge_closure",
+                       "name":  "Policy-gated merge and repository memory closure",
+                       "required_evidence":  [
+                                                 "merged pull request",
+                                                 ".specbridge/context/CURRENT_GOAL.md"
+                                             ],
+                       "gate":  "merge_allowed_by_policy"
+                   }
+               ],
+    "required_gates":  {
+                           "local":  [
+                                         "validate-contracts",
+                                         "validate-contract-scopes",
+                                         "validate-final-reports",
+                                         "validate-audit-packets",
+                                         "validate-chatgpt-audits",
+                                         "validate-runtime-preflights",
+                                         "validate-security-gates",
+                                         "validate-review-gate",
+                                         "specbridge-smoke",
+                                         "test-specbridge-cli",
+                                         "git diff --check"
+                                     ],
+                           "github":  [
+                                          "Foundation Validation",
+                                          "SpecBridge Review Gate",
+                                          "SpecBridge PR Review Report",
+                                          "Claude Review Non Blocking"
+                                      ]
+                       },
+    "latest_artifacts":  {
+                             "contract":  ".specbridge/contracts/issue-099-runtime-launch-preflight.execution.md",
+                             "scope":  ".specbridge/scopes/issue-099-runtime-launch-preflight.scope.json",
+                             "runtime_launch":  ".specbridge/runtime-launches/issue-097-tests.runtime-launch.json",
+                             "runtime_preflight":  ".specbridge/preflights/issue-099-runtime-launch-preflight.runtime-preflight.json",
+                             "runtime_execution":  ".specbridge/runtime-executions/issue-087-tests.runtime-execution.json",
+                             "runtime_run":  ".specbridge/runtime-runs/issue-087-tests.runtime-run.json",
+                             "runtime_result":  ".specbridge/runtime-results/issue-087-tests.runtime-result.json",
+                             "runtime_summary":  ".specbridge/runtime-summaries/issue-087-tests.runtime-summary.json",
+                             "autonomy_metrics":  ".specbridge/metrics/issue-087-budget-aware-v5-status.autonomy-metrics.json",
+                             "final_report":  ".specbridge/reports/issue-099-runtime-launch-preflight.final-report.json",
+                             "audit_packet":  ".specbridge/audit-packets/issue-099-runtime-launch-preflight.audit-packet.json",
+                             "chatgpt_audit":  ".specbridge/audits/issue-099-runtime-launch-preflight.chatgpt-audit.json"
+                         },
+    "required_paths":  {
+                           "docs":  [
+                                        {
+                                            "path":  "README.md",
+                                            "exists":  true
+                                        },
+                                        {
+                                            "path":  "SPECBRIDGE.md",
+                                            "exists":  true
+                                        },
+                                        {
+                                            "path":  "AGENTS.md",
+                                            "exists":  true
+                                        },
+                                        {
+                                            "path":  "docs/specbridge-standard-loop-v1.md",
+                                            "exists":  true
+                                        },
+                                        {
+                                            "path":  "docs/specbridge-ci-authority-standard.md",
+                                            "exists":  true
+                                        }
+                                    ],
+                           "templates":  [
+                                             {
+                                                 "path":  "templates/specbridge/execution-contract.template.md",
+                                                 "exists":  true
+                                             },
+                                             {
+                                                 "path":  "templates/specbridge/scope-manifest.template.json",
+                                                 "exists":  true
+                                             },
+                                             {
+                                                 "path":  "templates/specbridge/executor-handoff.template.json",
+                                                 "exists":  true
+                                             },
+                                             {
+                                                 "path":  "templates/specbridge/runtime-launch.template.json",
+                                                 "exists":  true
+                                             },
+                                             {
+                                                 "path":  "templates/specbridge/final-report.template.json",
+                                                 "exists":  true
+                                             },
+                                             {
+                                                 "path":  "templates/specbridge/audit-packet.template.json",
+                                                 "exists":  true
+                                             },
+                                             {
+                                                 "path":  "templates/specbridge/chatgpt-audit.template.json",
+                                                 "exists":  true
+                                             }
+                                         ],
+                           "schemas":  [
+                                           {
+                                               "path":  ".specbridge/schemas/executor-packet.schema.json",
+                                               "exists":  true
+                                           },
+                                           {
+                                               "path":  ".specbridge/schemas/runtime-launch.schema.json",
+                                               "exists":  true
+                                           },
+                                           {
+                                               "path":  ".specbridge/schemas/runtime-preflight.schema.json",
+                                               "exists":  true
+                                           },
+                                           {
+                                               "path":  ".specbridge/schemas/runtime-run.schema.json",
+                                               "exists":  true
+                                           },
+                                           {
+                                               "path":  ".specbridge/schemas/runtime-result.schema.json",
+                                               "exists":  true
+                                           },
+                                           {
+                                               "path":  ".specbridge/schemas/runtime-summary.schema.json",
+                                               "exists":  true
+                                           },
+                                           {
+                                               "path":  ".specbridge/schemas/autonomy-metrics.schema.json",
+                                               "exists":  true
+                                           },
+                                           {
+                                               "path":  ".specbridge/schemas/runtime-execution.schema.json",
+                                               "exists":  true
+                                           }
+                                       ],
+                           "validators":  [
+                                              {
+                                                  "path":  "scripts/validate-foundation.ps1",
+                                                  "exists":  true
+                                              },
+                                              {
+                                                  "path":  "scripts/validate-contracts.ps1",
+                                                  "exists":  true
+                                              },
+                                              {
+                                                  "path":  "scripts/validate-contract-scopes.ps1",
+                                                  "exists":  true
+                                              },
+                                              {
+                                                  "path":  "scripts/validate-final-reports.ps1",
+                                                  "exists":  true
+                                              },
+                                              {
+                                                  "path":  "scripts/validate-audit-packets.ps1",
+                                                  "exists":  true
+                                              },
+                                              {
+                                                  "path":  "scripts/validate-chatgpt-audits.ps1",
+                                                  "exists":  true
+                                              },
+                                              {
+                                                  "path":  "scripts/validate-runtime-preflights.ps1",
+                                                  "exists":  true
+                                              },
+                                              {
+                                                  "path":  "scripts/validate-security-gates.ps1",
+                                                  "exists":  true
+                                              },
+                                              {
+                                                  "path":  "scripts/validate-review-gate.ps1",
+                                                  "exists":  true
+                                              },
+                                              {
+                                                  "path":  "scripts/specbridge-smoke.ps1",
+                                                  "exists":  true
+                                              },
+                                              {
+                                                  "path":  "scripts/test-specbridge-cli.ps1",
+                                                  "exists":  true
+                                              }
+                                          ],
+                           "ci_workflows":  [
+                                                {
+                                                    "path":  ".github/workflows/foundation-validation.yml",
+                                                    "exists":  true
+                                                },
+                                                {
+                                                    "path":  ".github/workflows/specbridge-review-gate.yml",
+                                                    "exists":  true
+                                                },
+                                                {
+                                                    "path":  ".github/workflows/specbridge-pr-review-report.yml",
+                                                    "exists":  true
+                                                },
+                                                {
+                                                    "path":  ".github/workflows/claude-review-non-blocking.yml",
+                                                    "exists":  true
+                                                }
+                                            ]
+                       },
+    "missing_required_paths":  [
+
+                               ],
+    "policy_boundaries":  [
+                              "no-secrets",
+                              "no-production",
+                              "no-billing",
+                              "no-auth-security-change",
+                              "no-authorization-security-change",
+                              "no-database-change",
+                              "no-dependency-installation",
+                              "no-ci-cd-security-change",
+                              "no-deployment"
+                          ],
+    "command_boundary":  "does-not-launch-claude-code does-not-launch-antigravity does-not-call-github does-not-install-dependencies does-not-deploy",
+    "output_path":  ".specbridge/standard-loop-runs/issue-099-runtime-launch-preflight.standard-loop-run.json"
+}

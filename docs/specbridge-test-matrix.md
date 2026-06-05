@@ -69,6 +69,7 @@ Out of scope:
 | ST-P017 | Smoke | `./scripts/specbridge-smoke.ps1` | The deterministic validation chain passes. |
 | ST-P018 | Branch Orchestration | `./scripts/validate-branch-orchestrations.ps1` | Branch plan and coordinator orchestration artifacts are valid, simulation evidence is explicit, and simulated evidence cannot authorize merge. |
 | ST-P019 | Controlled GitHub Evidence | `./scripts/test-specbridge-branch-orchestration.ps1` | GitHub evidence recording accepts real PR URLs, rejects simulation URLs, and marks integration ready only when child CI passed and ChatGPT audit is approved. |
+| ST-P020 | Runtime Preflights | `./scripts/validate-runtime-preflights.ps1` | Runtime preflight artifacts are valid and record passing required-slice, non-overlap, budget, tool, execution-policy, and blocker checks. |
 
 ## Negative Tests
 
@@ -96,6 +97,7 @@ Out of scope:
 | ST-N020 | Final Reports | Add a final report missing required fields in a temporary copy. | Final report validation fails with missing required property. |
 | ST-N021 | Review Gate | Stage `src/blocked.txt` in a temporary Git repo. | Review gate fails with blocked path changed. |
 | ST-N022 | Branch Orchestration | Add two executor packets with the same branch name in a temporary copy. | Branch planning fails before orchestration with duplicate branch evidence. |
+| ST-N023 | Runtime Preflights | Preflight runtime launches with overlapping write scopes, over-budget settings, or unsafe execution policy. | Runtime preflight fails before any live launch. |
 
 ## Positive Fixtures
 
@@ -105,7 +107,7 @@ Out of scope:
 | ST-F002 | Audit Packets | Generate an audit packet from a fixture contract and final report, then validate it. | Audit packet validation passes. |
 | ST-F003 | ChatGPT Audits | Add a valid approved audit artifact with all required dimensions. | ChatGPT audit validation passes. |
 | ST-F004 | Security Gate | Add safe documentation in a temporary Git repo. | Security gate validation passes. |
-| ST-F005 | Local CLI | Run `status`, `status -IncludeLatestArtifacts`, `validate`, `create-contract`, `create-report`, `audit-packet`, `decompose-task`, `prepare-executors`, `detect-conflicts`, and `review-gate` in a temporary copy. | CLI validation passes and generated artifacts validate. |
+| ST-F005 | Local CLI | Run `status`, `status -IncludeLatestArtifacts`, `validate`, `create-contract`, `create-report`, `audit-packet`, `decompose-task`, `prepare-executors`, `prepare-runtime-launch`, `preflight-runtime-launches`, `detect-conflicts`, and `review-gate` in a temporary copy. | CLI validation passes and generated artifacts validate. |
 | ST-F006 | Multi-Agent Pilot | Generate a three-agent decomposition in a temporary copy. | Decomposition succeeds with three disjoint write scopes and a duplicate write-scope fixture fails. |
 | ST-F007 | Executor Handoff | Generate three executor packets in a temporary copy. | Executor packet validation passes and a duplicate branch fixture fails. |
 | ST-F008 | Branch Orchestration | Generate a branch plan and simulation orchestration in a temporary copy. | Branch orchestration validation passes and simulated evidence remains non-mergeable. |

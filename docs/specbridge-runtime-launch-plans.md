@@ -83,6 +83,18 @@ Runtime launch plans are preparation artifacts only.
 
 They do not certify that the executor ran, that tests passed, or that merge is allowed. Runtime result artifacts capture executor exit code, written files, validation results, policy result, and completion status after a bounded run.
 
+Before using multiple prepared launch plans for a future operator launch, run the runtime launch preflight:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 preflight-runtime-launches `
+  -InputPath ".specbridge/runtime-launches/issue-097-status.runtime-launch.json,.specbridge/runtime-launches/issue-097-tests.runtime-launch.json,.specbridge/runtime-launches/issue-097-docs.runtime-launch.json" `
+  -RequiredSlice status,tests,docs `
+  -AllowedTool Read,Write,Edit `
+  -MaxBudgetUsd 2.00
+```
+
+The preflight also remains plan-only. It checks required slices, write-scope non-overlap, budget, tools, and execution policy without launching anything.
+
 ## Current Evidence
 
 Current launch plan evidence includes:
@@ -109,4 +121,4 @@ The issue 071 launch plans were generated from two executor packets derived from
 
 ## Next Step
 
-Runtime-run, runtime-result, runtime-summary, and autonomy metrics evidence now use launch plans as source inputs. The next runtime expansion should run a small real feature through the same multi-executor loop.
+Runtime-run, runtime-result, runtime-summary, autonomy metrics, and runtime preflight evidence now use launch plans as source inputs. The next runtime expansion should run a small real feature through the same multi-executor loop only after preflight passes.
