@@ -1,0 +1,41 @@
+{
+  "contract_id": "issue-107-post-preflight-live-pilot-closure",
+  "status": "completed",
+  "exclusive_write": [
+    "README.md",
+    "docs/specbridge-multi-slice-live-pilot-contract.md",
+    ".specbridge/audit-packets/issue-107-post-preflight-live-pilot-closure.audit-packet.json",
+    ".specbridge/audits/issue-107-post-preflight-live-pilot-closure.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-107-post-preflight-live-pilot-closure.execution.md",
+    ".specbridge/metrics/issue-107-post-preflight-live-pilot-closure.autonomy-metrics.json",
+    ".specbridge/pilot-closures/issue-107-post-preflight-live-pilot-closure.pilot-closure.json",
+    ".specbridge/reports/issue-107-post-preflight-live-pilot-closure.final-report.json",
+    ".specbridge/scopes/issue-107-post-preflight-live-pilot-closure.scope.json",
+    ".specbridge/standard-loop-runs/issue-107-post-preflight-live-pilot-closure.standard-loop-run.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/runtime-summaries/issue-101-docs.runtime-summary.json",
+    ".specbridge/runtime-summaries/issue-103-tests.runtime-summary.json",
+    ".specbridge/runtime-summaries/issue-105-status.runtime-summary.json",
+    ".specbridge/runtime-results/issue-101-docs.runtime-result.json",
+    ".specbridge/runtime-results/issue-103-tests.runtime-result.json",
+    ".specbridge/runtime-results/issue-105-status.runtime-result.json",
+    ".specbridge/reports/issue-101-bounded-live-docs-slice.final-report.json",
+    ".specbridge/reports/issue-103-bounded-live-tests-slice.final-report.json",
+    ".specbridge/reports/issue-105-bounded-live-status-slice.final-report.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-097-multi-slice-live-pilot-contract",
+    "issue-099-runtime-launch-preflight",
+    "issue-101-bounded-live-docs-slice",
+    "issue-103-bounded-live-tests-slice",
+    "issue-105-bounded-live-status-slice"
+  ],
+  "final_report": ".specbridge/reports/issue-107-post-preflight-live-pilot-closure.final-report.json"
+}

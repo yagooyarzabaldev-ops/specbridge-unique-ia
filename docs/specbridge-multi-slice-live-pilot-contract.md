@@ -46,22 +46,22 @@ A future live execution must use a dedicated contract and must still respect the
 declared executor packet, launch plan, budget, tools, stop conditions, security
 gate, review gate, and GitHub CI authority.
 
-## Status Slice
+## Prepared Status Slice
 
-The `status` slice adds a `runtime-capability-status` CLI command to `scripts/specbridge.ps1`.
+The `status` slice is the implementation lane for one bounded SpecBridge status surface in `scripts/specbridge.ps1`.
 
-This command:
+The prepared status slice must:
 
-- reads the current runtime environment
-- verifies that bounded execution requirements are met
-- reports readiness for live executor launch
+- modify only the declared status surface file and executor evidence file
+- stay inside the issue 097 launch plan tool, budget, and stop-condition boundary
+- report changed files, validation evidence, policy result, unresolved risks, and completion status
 
 The `status` slice exclusive write scope is:
 
 - `scripts/specbridge.ps1`
 - `.specbridge/runtime-evidence/issue-097-status.executor-output.md`
 
-The `status` and `tests` slices remain prepared but unlaunched until a future contract explicitly authorizes their execution.
+The status slice was later executed by issue 105.
 
 ## Runtime Boundary
 
@@ -110,6 +110,39 @@ Stop conditions evaluated: none triggered.
 The executor stayed within the declared exclusive write scope. No secrets, production, billing, auth, database, dependency installation, CI/CD security, or deployment paths were touched.
 
 The coordinator recorded runtime execution, runtime-run, runtime result, runtime summary, and standard-loop-run evidence under issue 103.
+
+## Live Status Slice Outcome
+
+Issue 105 authorized the third post-preflight bounded live execution of this status slice.
+
+The live executor ran under the executor packet `issue-097-multi-slice-live-pilot-contract-status` and the issue 105 contract.
+
+Files written by the live executor:
+
+- `scripts/specbridge.ps1`
+- `.specbridge/runtime-evidence/issue-097-status.executor-output.md`
+
+The status slice expanded the repository-local status surface by adding `runtime_run` and `runtime_execution` latest artifact fields, runtime run/execution counts, and a bounded `bounded-live-pilot-status` command for the issue 097 live pilot chain.
+
+Stop conditions evaluated: none triggered.
+
+The executor stayed within the declared exclusive write scope. No secrets, production, billing, auth, database, dependency installation, CI/CD security, or deployment paths were touched.
+
+The coordinator recorded runtime execution, runtime-run, runtime result, runtime summary, and standard-loop-run evidence under issue 105.
+
+## Post-Preflight Live Pilot Closure
+
+Issue 107 closes the full issue 097 post-preflight live pilot evidence chain.
+
+Closure evidence:
+
+- `docs` completed through issue 101 and PR 102.
+- `tests` completed through issue 103 and PR 104.
+- `status` completed through issue 105 and PR 106.
+- `.specbridge/metrics/issue-107-post-preflight-live-pilot-closure.autonomy-metrics.json` records 3 summaries, 3 ready, 0 blocked, 3 executors, 9/9 validation checks passed, and policy gate ready rate 1.
+- `.specbridge/pilot-closures/issue-107-post-preflight-live-pilot-closure.pilot-closure.json` records the slice, issue, PR, runtime, policy, and next-standard evidence.
+
+The next standardization target is a governed one-command issue-to-merge operator that preserves policy gates while reducing manual orchestration.
 
 ## Validation
 
