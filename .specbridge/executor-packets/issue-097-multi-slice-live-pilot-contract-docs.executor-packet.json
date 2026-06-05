@@ -1,0 +1,44 @@
+{
+    "schema_version":  "1",
+    "packet_id":  "issue-097-multi-slice-live-pilot-contract-docs",
+    "task_id":  "issue-097-multi-slice-live-pilot-contract",
+    "slice_id":  "docs",
+    "agent_role":  "documentation",
+    "goal":  "Prepare a future docs-slice executor to document the status slice and runtime boundary. This packet is for a later operator launch only. Write executor evidence to .specbridge/runtime-evidence/issue-097-docs.executor-output.md.",
+    "launch_mode":  "manual_antigravity",
+    "branch_name":  "claude/issue-097-multi-slice-live-pilot-contract-docs",
+    "execution_contract_path":  ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+    "final_report_path":  ".specbridge/reports/issue-097-multi-slice-live-pilot-contract.final-report.json",
+    "exclusive_write":  [
+                            "docs/specbridge-multi-slice-live-pilot-contract.md",
+                            ".specbridge/runtime-evidence/issue-097-docs.executor-output.md"
+                        ],
+    "read_only":  [
+                      "README.md",
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      "CLAUDE.md",
+                      ".specbridge/policy.yaml",
+                      ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+                      "docs/specbridge-v5-live-parallel-pilot-boundary.md",
+                      "docs/specbridge-live-antigravity-executor-handoff.md",
+                      "scripts/specbridge.ps1"
+                  ],
+    "required_validations":  [
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1"
+                             ],
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "status":  "ready_for_handoff",
+    "source_files":  [
+                         ".specbridge/executor-handoffs/issue-097-multi-slice-live-pilot-contract.input.json",
+                         ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md"
+                     ],
+    "generated_by":  "specbridge-cli"
+}

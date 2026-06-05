@@ -102,6 +102,7 @@ SpecBridge currently has these governed status layers:
 - Serious autonomous multi-executor test loop: implemented as a two-slice Claude Code runtime proof from one governed goal, with non-overlapping executor write scopes, runtime launch plans, runtime-run artifacts, runtime results, runtime summaries, autonomy metrics, hardened ChatGPT/Codex audit validation, and policy-gated completion evidence.
 - Standard Loop v1: implemented as the canonical path from ChatGPT/Codex goal to contract, scope, executor packet, runtime launch, controlled runner dry-run, evidence, audit, GitHub CI authority, review gate, security gate, and policy-gated merge.
 - Standard Loop orchestrator: implemented as a deterministic `standard-loop-orchestrate` CLI command that reports the governed issue-to-merge phases, required gates, current repository phase, next recommended action, next contract seed, latest artifacts, policy boundaries, and optional file-backed orchestration artifact without launching Claude Code, Antigravity, GitHub calls, dependency installation, or deployment.
+- Multi-slice live pilot contract preparation: implemented as a governed three-slice handoff from the Standard Loop `next_contract_seed`, with non-overlapping `status`, `tests`, and `docs` executor scopes, executor packets, plan-only runtime launch artifacts, documentation, final report, audit packet, and ChatGPT/Codex audit evidence before any future live operator launch.
 - Standard templates and schemas: implemented for contracts, scope manifests, executor handoffs, runtime launches, final reports, audit packets, ChatGPT audits, executor packets, runtime launches, runtime runs, runtime results, runtime summaries, autonomy metrics, and runtime executions.
 - V5 live parallel pilot boundary: defined as the next phase after Standard Loop v1, with live Antigravity parallel execution allowed only through dedicated contracts, non-overlapping executor scopes, CI authority, security gate, review gate, audit evidence, and no production, billing, secret, auth, database, CI/CD security, or deployment expansion.
 - V5 pilot readiness: implemented as a deterministic `v5-pilot-status` CLI readiness gate with a two-slice dry-run evidence chain, runtime summaries, autonomy metrics, final report, audit packet, and ChatGPT/Codex audit evidence before any live parallel Antigravity expansion.
@@ -132,6 +133,7 @@ See:
 - `docs/specbridge-autonomy-metrics.md`
 - `docs/specbridge-standard-loop-v1.md`
 - `docs/specbridge-standard-loop-orchestrator.md`
+- `docs/specbridge-multi-slice-live-pilot-contract.md`
 - `docs/specbridge-standard-loop-feature-pilot.md`
 - `docs/specbridge-standard-templates.md`
 - `docs/specbridge-ci-authority-standard.md`

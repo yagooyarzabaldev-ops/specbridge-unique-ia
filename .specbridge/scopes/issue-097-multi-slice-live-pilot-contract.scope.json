@@ -1,0 +1,42 @@
+{
+  "contract_id": "issue-097-multi-slice-live-pilot-contract",
+  "status": "completed",
+  "exclusive_write": [
+    "README.md",
+    "docs/specbridge-multi-slice-live-pilot-contract.md",
+    ".specbridge/audit-packets/issue-097-multi-slice-live-pilot-contract.audit-packet.json",
+    ".specbridge/audits/issue-097-multi-slice-live-pilot-contract.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+    ".specbridge/executor-handoffs/issue-097-multi-slice-live-pilot-contract.input.json",
+    ".specbridge/executor-packets/issue-097-multi-slice-live-pilot-contract-status.executor-packet.json",
+    ".specbridge/executor-packets/issue-097-multi-slice-live-pilot-contract-tests.executor-packet.json",
+    ".specbridge/executor-packets/issue-097-multi-slice-live-pilot-contract-docs.executor-packet.json",
+    ".specbridge/reports/issue-097-multi-slice-live-pilot-contract.final-report.json",
+    ".specbridge/runtime-launches/issue-097-status.runtime-launch.json",
+    ".specbridge/runtime-launches/issue-097-tests.runtime-launch.json",
+    ".specbridge/runtime-launches/issue-097-docs.runtime-launch.json",
+    ".specbridge/scopes/issue-097-multi-slice-live-pilot-contract.scope.json",
+    ".specbridge/standard-loop-runs/issue-097-multi-slice-live-pilot-contract.standard-loop-run.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    "docs/specbridge-standard-loop-orchestrator.md",
+    "docs/specbridge-v5-live-parallel-pilot-boundary.md",
+    "docs/specbridge-runtime-launch-plans.md",
+    "docs/specbridge-live-antigravity-executor-handoff.md",
+    "scripts/specbridge.ps1",
+    "scripts/validate-executor-packets.ps1",
+    "scripts/validate-runtime-launches.ps1",
+    ".specbridge/contracts/issue-095-standard-loop-contract-seed.execution.md",
+    ".specbridge/scopes/issue-095-standard-loop-contract-seed.scope.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-095-standard-loop-contract-seed"
+  ],
+  "final_report": ".specbridge/reports/issue-097-multi-slice-live-pilot-contract.final-report.json"
+}

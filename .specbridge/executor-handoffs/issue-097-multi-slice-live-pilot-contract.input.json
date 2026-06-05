@@ -1,0 +1,81 @@
+{
+  "task_id": "issue-097-multi-slice-live-pilot-contract",
+  "slices": [
+    {
+      "id": "status",
+      "role": "implementation",
+      "goal": "Prepare a future status-slice executor to add or update one bounded SpecBridge status surface. This packet is for a later operator launch only. Write executor evidence to .specbridge/runtime-evidence/issue-097-status.executor-output.md.",
+      "contract_path": ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+      "final_report_path": ".specbridge/reports/issue-097-multi-slice-live-pilot-contract.final-report.json",
+      "exclusive_write": [
+        "scripts/specbridge.ps1",
+        ".specbridge/runtime-evidence/issue-097-status.executor-output.md"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".specbridge/policy.yaml",
+        ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+        "docs/specbridge-standard-loop-orchestrator.md",
+        "docs/specbridge-runtime-launch-plans.md"
+      ],
+      "required_validations": [
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-launches.ps1"
+      ]
+    },
+    {
+      "id": "tests",
+      "role": "validation",
+      "goal": "Prepare a future tests-slice executor to add focused CLI coverage for the status slice. This packet is for a later operator launch only. Write executor evidence to .specbridge/runtime-evidence/issue-097-tests.executor-output.md.",
+      "contract_path": ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+      "final_report_path": ".specbridge/reports/issue-097-multi-slice-live-pilot-contract.final-report.json",
+      "exclusive_write": [
+        "scripts/test-specbridge-cli.ps1",
+        ".specbridge/runtime-evidence/issue-097-tests.executor-output.md"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".specbridge/policy.yaml",
+        ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+        "scripts/specbridge.ps1",
+        "docs/specbridge-standard-loop-orchestrator.md"
+      ],
+      "required_validations": [
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard"
+      ]
+    },
+    {
+      "id": "docs",
+      "role": "documentation",
+      "goal": "Prepare a future docs-slice executor to document the status slice and runtime boundary. This packet is for a later operator launch only. Write executor evidence to .specbridge/runtime-evidence/issue-097-docs.executor-output.md.",
+      "contract_path": ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+      "final_report_path": ".specbridge/reports/issue-097-multi-slice-live-pilot-contract.final-report.json",
+      "exclusive_write": [
+        "docs/specbridge-multi-slice-live-pilot-contract.md",
+        ".specbridge/runtime-evidence/issue-097-docs.executor-output.md"
+      ],
+      "read_only": [
+        "README.md",
+        "SPECBRIDGE.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".specbridge/policy.yaml",
+        ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+        "docs/specbridge-v5-live-parallel-pilot-boundary.md",
+        "docs/specbridge-live-antigravity-executor-handoff.md",
+        "scripts/specbridge.ps1"
+      ],
+      "required_validations": [
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1"
+      ]
+    }
+  ]
+}

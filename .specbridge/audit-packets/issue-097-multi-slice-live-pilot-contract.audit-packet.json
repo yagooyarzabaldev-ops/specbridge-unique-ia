@@ -1,0 +1,199 @@
+﻿{
+    "schema_version":  "1",
+    "task_id":  "issue-097-multi-slice-live-pilot-contract",
+    "generated_by":  "specbridge-audit-packet-generator",
+    "execution_contract_path":  ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+    "changed_files":  [
+                          ".specbridge/audit-packets/issue-097-multi-slice-live-pilot-contract.audit-packet.json",
+                          ".specbridge/audits/issue-097-multi-slice-live-pilot-contract.chatgpt-audit.json",
+                          ".specbridge/context/CURRENT_GOAL.md",
+                          ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+                          ".specbridge/executor-handoffs/issue-097-multi-slice-live-pilot-contract.input.json",
+                          ".specbridge/executor-packets/issue-097-multi-slice-live-pilot-contract-docs.executor-packet.json",
+                          ".specbridge/executor-packets/issue-097-multi-slice-live-pilot-contract-status.executor-packet.json",
+                          ".specbridge/executor-packets/issue-097-multi-slice-live-pilot-contract-tests.executor-packet.json",
+                          ".specbridge/reports/issue-097-multi-slice-live-pilot-contract.final-report.json",
+                          ".specbridge/runtime-launches/issue-097-docs.runtime-launch.json",
+                          ".specbridge/runtime-launches/issue-097-status.runtime-launch.json",
+                          ".specbridge/runtime-launches/issue-097-tests.runtime-launch.json",
+                          ".specbridge/scopes/issue-097-multi-slice-live-pilot-contract.scope.json",
+                          ".specbridge/standard-loop-runs/issue-097-multi-slice-live-pilot-contract.standard-loop-run.json",
+                          "docs/specbridge-multi-slice-live-pilot-contract.md",
+                          "README.md"
+                      ],
+    "diff_summary":  [
+                         {
+                             "file":  ".specbridge/audit-packets/issue-097-multi-slice-live-pilot-contract.audit-packet.json",
+                             "added_lines":  199,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/audits/issue-097-multi-slice-live-pilot-contract.chatgpt-audit.json",
+                             "added_lines":  82,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/context/CURRENT_GOAL.md",
+                             "added_lines":  32,
+                             "deleted_lines":  25
+                         },
+                         {
+                             "file":  ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+                             "added_lines":  159,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-handoffs/issue-097-multi-slice-live-pilot-contract.input.json",
+                             "added_lines":  81,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-packets/issue-097-multi-slice-live-pilot-contract-docs.executor-packet.json",
+                             "added_lines":  44,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-packets/issue-097-multi-slice-live-pilot-contract-status.executor-packet.json",
+                             "added_lines":  43,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-packets/issue-097-multi-slice-live-pilot-contract-tests.executor-packet.json",
+                             "added_lines":  43,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/reports/issue-097-multi-slice-live-pilot-contract.final-report.json",
+                             "added_lines":  47,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-launches/issue-097-docs.runtime-launch.json",
+                             "added_lines":  71,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-launches/issue-097-status.runtime-launch.json",
+                             "added_lines":  70,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-launches/issue-097-tests.runtime-launch.json",
+                             "added_lines":  70,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/scopes/issue-097-multi-slice-live-pilot-contract.scope.json",
+                             "added_lines":  42,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/standard-loop-runs/issue-097-multi-slice-live-pilot-contract.standard-loop-run.json",
+                             "added_lines":  348,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "docs/specbridge-multi-slice-live-pilot-contract.md",
+                             "added_lines":  58,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "README.md",
+                             "added_lines":  2,
+                             "deleted_lines":  0
+                         }
+                     ],
+    "validation_commands":  [
+                                "git diff --check",
+                                "GitHub CI",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 standard-loop-orchestrate -TaskId issue-097-multi-slice-live-pilot-contract",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 standard-loop-orchestrate -TaskId issue-097-multi-slice-live-pilot-contract -OutputPath .specbridge/standard-loop-runs/issue-097-multi-slice-live-pilot-contract.standard-loop-run.json -Force",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-executor-packets.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-launches.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1"
+                            ],
+    "validation_results":  [
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 standard-loop-orchestrate -TaskId issue-097-multi-slice-live-pilot-contract",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 standard-loop-orchestrate -TaskId issue-097-multi-slice-live-pilot-contract -OutputPath .specbridge/standard-loop-runs/issue-097-multi-slice-live-pilot-contract.standard-loop-run.json -Force",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-executor-packets.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-launches.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "git diff --check",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "GitHub CI",
+                                   "result":  "not_collected"
+                               }
+                           ],
+    "final_report_path":  ".specbridge/reports/issue-097-multi-slice-live-pilot-contract.final-report.json",
+    "ci_status":  "not_collected",
+    "pr_review_report_path":  null,
+    "policy_result":  "Passed locally. Work stayed inside the issue 097 execution contract and scope manifest. The generated runtime launch plans are plan-only and record launches_claude=false, launches_antigravity=false, executes_shell=false, installs_dependencies=false, and deploys=false. The task did not access secrets, touch production, change billing, change auth or authorization security, change databases, install dependencies, change workflows, execute runtime plans, or deploy.",
+    "unresolved_risks":  [
+                             "GitHub PR CI evidence is pending until the branch is pushed and checks run.",
+                             "No live Claude Code or Antigravity execution is performed by this contract; any future live slice requires a dedicated operator launch or follow-up contract."
+                         ],
+    "completion_status":  "complete_pending_pr_ci",
+    "source_files":  [
+                         ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+                         ".specbridge/reports/issue-097-multi-slice-live-pilot-contract.final-report.json"
+                     ],
+    "secret_omission":  "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

@@ -1,0 +1,82 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-097-multi-slice-live-pilot-contract",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-097-multi-slice-live-pilot-contract.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+  "final_report_path": ".specbridge/reports/issue-097-multi-slice-live-pilot-contract.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue 097 prepares the next governed multi-slice live pilot contract from the Standard Loop `next_contract_seed` and records the contract, scope, standard-loop run, handoff, executor packets, runtime launch plans, docs, final report, and audit packet paths.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "The executor handoff defines three slices (`status`, `tests`, `docs`) with non-overlapping exclusive write scopes; executor packets and runtime launch plans validate; launch plans remain plan-only.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The contract blocks live Claude Code launch, live Antigravity launch, runtime execution, dependency installation, workflow changes, secrets, production, billing, auth, database, and deployment scope.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "No .env files, secrets, private keys, production configuration, billing configuration, authentication security, authorization security, CI/CD security controls, dependency manifests, database paths, or deployment automation were modified.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed files are declared in `.specbridge/scopes/issue-097-multi-slice-live-pilot-contract.scope.json`.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "Standard Loop orchestration, executor packet validation, runtime launch validation, contract validation, scope validation, report validation, audit validation, ChatGPT/Codex audit validation, security gate, review gate, smoke validation, and diff whitespace checks are recorded as local gates.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub CI for issue 097 is not collected yet and remains an external merge gate. The audit packet marks CI as not_collected rather than passed.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records local completion, GitHub CI as not_collected, pending pull request and merge gates, no deployment, and the plan-only runtime boundary.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "external_ci_pending",
+      "file": ".specbridge/reports/issue-097-multi-slice-live-pilot-contract.final-report.json",
+      "line": null,
+      "evidence": "Issue 097 local evidence is ready, but GitHub CI cannot be recorded as passed until the branch is pushed and checks run.",
+      "recommendation": "Push the branch, open a pull request, wait for GitHub checks, and merge only if required gates pass.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending.",
+    "Future live runtime execution remains out of scope for this contract."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-097-multi-slice-live-pilot-contract.audit-packet.json",
+    ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+    ".specbridge/reports/issue-097-multi-slice-live-pilot-contract.final-report.json",
+    ".specbridge/scopes/issue-097-multi-slice-live-pilot-contract.scope.json",
+    ".specbridge/standard-loop-runs/issue-097-multi-slice-live-pilot-contract.standard-loop-run.json"
+  ]
+}
