@@ -1,0 +1,31 @@
+{
+  "contract_id": "issue-111-issue-to-merge-operator-pilot",
+  "status": "completed",
+  "exclusive_write": [
+    "README.md",
+    "docs/specbridge-issue-to-merge-operator.md",
+    ".specbridge/audit-packets/issue-111-issue-to-merge-operator-pilot.audit-packet.json",
+    ".specbridge/audits/issue-111-issue-to-merge-operator-pilot.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-111-issue-to-merge-operator-pilot.execution.md",
+    ".specbridge/issue-to-merge-runs/issue-111-issue-to-merge-operator-pilot.issue-to-merge-run.json",
+    ".specbridge/reports/issue-111-issue-to-merge-operator-pilot.final-report.json",
+    ".specbridge/scopes/issue-111-issue-to-merge-operator-pilot.scope.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    "docs/specbridge-local-cli.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/issue-to-merge-runs/issue-109-governed-issue-to-merge-operator.issue-to-merge-run.json",
+    ".specbridge/reports/issue-109-governed-issue-to-merge-operator.final-report.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-109-governed-issue-to-merge-operator"
+  ],
+  "final_report": ".specbridge/reports/issue-111-issue-to-merge-operator-pilot.final-report.json"
+}

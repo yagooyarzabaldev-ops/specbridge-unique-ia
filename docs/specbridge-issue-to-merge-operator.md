@@ -77,6 +77,34 @@ The only write it can perform is the explicitly requested `-OutputPath` under:
 .specbridge/issue-to-merge-runs/*.issue-to-merge-run.json
 ```
 
+## Safe Pilot
+
+Issue 111 is the first safe pilot of the operator after issue 109.
+
+The pilot runs:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 issue-to-merge-plan `
+  -TaskId issue-111-issue-to-merge-operator-pilot `
+  -Title "Pilot issue-to-merge operator" `
+  -Goal "Pilot the deterministic plan-only SpecBridge issue-to-merge operator with a safe documentation and evidence task before any future GitHub-mutating operator mode." `
+  -RelatedIssue https://github.com/yagooyarzabaldev-ops/specbridge/issues/111 `
+  -OutputPath .specbridge/issue-to-merge-runs/issue-111-issue-to-merge-operator-pilot.issue-to-merge-run.json `
+  -Force
+```
+
+The pilot result is intentionally documentation and evidence only:
+
+- one issue-backed execution contract
+- one scope manifest
+- one file-backed issue-to-merge run artifact
+- one final report
+- one audit packet
+- one ChatGPT/Codex audit
+- README and current-goal memory updates
+
+This pilot does not authorize a GitHub-mutating operator mode. Creating issues, opening PRs, waiting on CI, merging, and post-merge issue closure remain actions performed by the surrounding governed process, not by `issue-to-merge-plan`.
+
 ## Merge Conditions
 
 The plan records these merge conditions:
