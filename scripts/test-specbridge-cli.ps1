@@ -134,15 +134,84 @@ try {
       $ErrorActionPreference = $previousErrorActionPreference
     }
 
+    $statusResult = Invoke-Cli -Arguments @("status")
+
     Assert-Success `
       -Name "status" `
-      -Result (Invoke-Cli -Arguments @("status")) `
+      -Result $statusResult `
       -ExpectedPattern '"command"\s*:\s*"status"'
+
+    if ($statusResult.ExitCode -eq 0) {
+      $statusJson = $null
+      try { $statusJson = $statusResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      if ($null -eq $statusJson) {
+        Write-Output "FAIL status output was not valid JSON for detail inspection."
+        $script:failed = $true
+      }
+      else {
+        foreach ($fieldCheck in @(
+          [pscustomobject]@{ Field = "ok"; Expected = $true },
+          [pscustomobject]@{ Field = "repository"; Expected = "specbridge" },
+          [pscustomobject]@{ Field = "current_goal_path"; Expected = ".specbridge/context/CURRENT_GOAL.md" }
+        )) {
+          $actual = $statusJson.($fieldCheck.Field)
+          if ($actual -ne $fieldCheck.Expected) {
+            Write-Output "FAIL status field $($fieldCheck.Field) expected '$($fieldCheck.Expected)' got '$actual'."
+            $script:failed = $true
+          }
+          else {
+            Write-Output "PASS status field $($fieldCheck.Field) is $($fieldCheck.Expected)."
+          }
+        }
+
+        if (-not $statusJson.PSObject.Properties.Name.Contains("default_mode")) {
+          Write-Output "FAIL status missing default_mode field."
+          $script:failed = $true
+        }
+        else {
+          Write-Output "PASS status includes default_mode field."
+        }
+
+        $countsFields = @("contracts", "scopes", "reports", "audit_packets", "chatgpt_audits", "runtime_launches", "runtime_preflights", "runtime_results", "runtime_summaries")
+        $missingCountFields = $countsFields | Where-Object { -not $statusJson.counts.PSObject.Properties.Name.Contains($_) }
+        if ($missingCountFields.Count -gt 0) {
+          Write-Output "FAIL status counts missing fields: $($missingCountFields -join ', ')."
+          $script:failed = $true
+        }
+        else {
+          Write-Output "PASS status counts includes all expected fields."
+        }
+      }
+    }
+
+    $statusLatestResult = Invoke-Cli -Arguments @("status", "-IncludeLatestArtifacts")
 
     Assert-Success `
       -Name "status-latest-artifacts" `
-      -Result (Invoke-Cli -Arguments @("status", "-IncludeLatestArtifacts")) `
+      -Result $statusLatestResult `
       -ExpectedPattern '"latest_artifacts"'
+
+    if ($statusLatestResult.ExitCode -eq 0) {
+      $statusLatestJson = $null
+      try { $statusLatestJson = $statusLatestResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      if ($null -eq $statusLatestJson) {
+        Write-Output "FAIL status -IncludeLatestArtifacts output was not valid JSON for detail inspection."
+        $script:failed = $true
+      }
+      else {
+        $artifactFields = @("contract", "scope", "final_report", "audit_packet", "chatgpt_audit", "runtime_launch", "runtime_preflight", "runtime_result", "runtime_summary")
+        $missingArtifactFields = $artifactFields | Where-Object { -not $statusLatestJson.latest_artifacts.PSObject.Properties.Name.Contains($_) }
+        if ($missingArtifactFields.Count -gt 0) {
+          Write-Output "FAIL status latest_artifacts missing fields: $($missingArtifactFields -join ', ')."
+          $script:failed = $true
+        }
+        else {
+          Write-Output "PASS status latest_artifacts includes all expected fields."
+        }
+      }
+    }
 
     Assert-Success `
       -Name "standard-loop-status" `

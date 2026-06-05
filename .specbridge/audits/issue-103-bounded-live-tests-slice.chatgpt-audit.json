@@ -1,0 +1,106 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-103-bounded-live-tests-slice",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-103-bounded-live-tests-slice.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-103-bounded-live-tests-slice.execution.md",
+  "final_report_path": ".specbridge/reports/issue-103-bounded-live-tests-slice.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue 103 ran exactly one bounded live tests slice using `.specbridge/runtime-launches/issue-097-tests.runtime-launch.json` after runtime capability and runtime preflight passed.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "Runtime execution succeeded, executor evidence exists, runtime-run/result/summary artifacts validate, and the summary reports `ready_for_policy_gates` with zero blockers.",
+      "blocking": false
+    },
+    {
+      "name": "live_execution_boundary",
+      "result": "pass",
+      "evidence": "Only the tests slice was launched. The issue 097 status runtime launch plan remains unlaunched by this contract; the docs slice was already completed by issue 101.",
+      "blocking": false
+    },
+    {
+      "name": "executor_scope",
+      "result": "pass",
+      "evidence": "Executor-written files are limited to `scripts/test-specbridge-cli.ps1` and `.specbridge/runtime-evidence/issue-097-tests.executor-output.md`.",
+      "blocking": false
+    },
+    {
+      "name": "runtime_diagnostics",
+      "result": "pass",
+      "evidence": "The runtime execution artifact records bounded redacted diagnostics and stores stdout/stderr length, line count, and SHA-256 metadata instead of raw unbounded streams.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "No secrets, production, billing, auth or authorization security, database, dependency installation, CI/CD security, deployment automation, or production deployment paths were touched.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "Changed files do not include .env files, secrets, private keys, production configuration, billing configuration, authentication security, authorization security, CI/CD security controls, dependency manifests, database paths, or deployment automation.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed files are declared in `.specbridge/scopes/issue-103-bounded-live-tests-slice.scope.json`; executor-written files stayed inside the tests launch exclusive write paths.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "Runtime execution, runtime-run, runtime result, runtime summary, runtime preflight, contract, scope, final report, audit packet, ChatGPT audit, security gate, review gate, standard profile, CLI tests, smoke, and whitespace validators passed.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub CI for issue 103 is not collected yet and remains an external merge gate. The audit packet marks CI as not_collected rather than passed.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records local completion pending PR CI, GitHub CI as not_collected, pending pull request and merge gates, no deployment, and unlaunched status slice as residual risk.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "external_ci_pending",
+      "file": ".specbridge/reports/issue-103-bounded-live-tests-slice.final-report.json",
+      "line": null,
+      "evidence": "Issue 103 local evidence is being prepared, but GitHub CI cannot be recorded as passed until the branch is pushed and checks run.",
+      "recommendation": "Push the branch, open a pull request, wait for GitHub checks, and merge only if required gates pass.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending.",
+    "Status slice remains prepared but unlaunched."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-103-bounded-live-tests-slice.audit-packet.json",
+    ".specbridge/audits/issue-103-bounded-live-tests-slice.chatgpt-audit.json",
+    ".specbridge/contracts/issue-103-bounded-live-tests-slice.execution.md",
+    ".specbridge/preflights/issue-103-bounded-live-tests-slice.runtime-preflight.json",
+    ".specbridge/reports/issue-103-bounded-live-tests-slice.final-report.json",
+    ".specbridge/runtime-executions/issue-103-tests.runtime-execution.json",
+    ".specbridge/runtime-results/issue-103-tests.runtime-result.json",
+    ".specbridge/runtime-runs/issue-103-tests.runtime-run.json",
+    ".specbridge/runtime-summaries/issue-103-tests.runtime-summary.json",
+    ".specbridge/scopes/issue-103-bounded-live-tests-slice.scope.json",
+    ".specbridge/standard-loop-runs/issue-103-bounded-live-tests-slice.standard-loop-run.json"
+  ]
+}

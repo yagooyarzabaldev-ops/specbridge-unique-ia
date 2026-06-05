@@ -1,0 +1,134 @@
+{
+    "schema_version":  "1",
+    "command":  "preflight-runtime-launches",
+    "ok":  true,
+    "mode":  "plan_only_preflight",
+    "input_paths":  [
+                        ".specbridge/runtime-launches/issue-097-docs.runtime-launch.json",
+                        ".specbridge/runtime-launches/issue-097-status.runtime-launch.json",
+                        ".specbridge/runtime-launches/issue-097-tests.runtime-launch.json"
+                    ],
+    "loaded_launches":  [
+                            {
+                                "path":  ".specbridge/runtime-launches/issue-097-docs.runtime-launch.json",
+                                "launch_id":  "issue-097-multi-slice-live-pilot-contract-docs-runtime-launch",
+                                "task_id":  "issue-097-multi-slice-live-pilot-contract",
+                                "packet_id":  "issue-097-multi-slice-live-pilot-contract-docs",
+                                "slice_id":  "docs",
+                                "branch_name":  "claude/issue-097-multi-slice-live-pilot-contract-docs",
+                                "max_budget_usd":  "2.00",
+                                "allowed_tools":  [
+                                                      "Edit",
+                                                      "Read",
+                                                      "Write"
+                                                  ],
+                                "exclusive_write":  [
+                                                        ".specbridge/runtime-evidence/issue-097-docs.executor-output.md",
+                                                        "docs/specbridge-multi-slice-live-pilot-contract.md"
+                                                    ]
+                            },
+                            {
+                                "path":  ".specbridge/runtime-launches/issue-097-status.runtime-launch.json",
+                                "launch_id":  "issue-097-multi-slice-live-pilot-contract-status-runtime-launch",
+                                "task_id":  "issue-097-multi-slice-live-pilot-contract",
+                                "packet_id":  "issue-097-multi-slice-live-pilot-contract-status",
+                                "slice_id":  "status",
+                                "branch_name":  "claude/issue-097-multi-slice-live-pilot-contract-status",
+                                "max_budget_usd":  "2.00",
+                                "allowed_tools":  [
+                                                      "Edit",
+                                                      "Read",
+                                                      "Write"
+                                                  ],
+                                "exclusive_write":  [
+                                                        ".specbridge/runtime-evidence/issue-097-status.executor-output.md",
+                                                        "scripts/specbridge.ps1"
+                                                    ]
+                            },
+                            {
+                                "path":  ".specbridge/runtime-launches/issue-097-tests.runtime-launch.json",
+                                "launch_id":  "issue-097-multi-slice-live-pilot-contract-tests-runtime-launch",
+                                "task_id":  "issue-097-multi-slice-live-pilot-contract",
+                                "packet_id":  "issue-097-multi-slice-live-pilot-contract-tests",
+                                "slice_id":  "tests",
+                                "branch_name":  "claude/issue-097-multi-slice-live-pilot-contract-tests",
+                                "max_budget_usd":  "2.00",
+                                "allowed_tools":  [
+                                                      "Edit",
+                                                      "Read",
+                                                      "Write"
+                                                  ],
+                                "exclusive_write":  [
+                                                        ".specbridge/runtime-evidence/issue-097-tests.executor-output.md",
+                                                        "scripts/test-specbridge-cli.ps1"
+                                                    ]
+                            }
+                        ],
+    "required_slices":  [
+                            "docs",
+                            "status",
+                            "tests"
+                        ],
+    "present_slices":  [
+                           "docs",
+                           "status",
+                           "tests"
+                       ],
+    "missing_required_slices":  [
+
+                                ],
+    "duplicate_slices":  [
+
+                         ],
+    "non_overlap":  {
+                        "result":  "pass",
+                        "conflicts":  [
+
+                                      ]
+                    },
+    "budget":  {
+                   "result":  "pass",
+                   "max_budget_usd":  "2.00",
+                   "total_budget_usd":  "6.00",
+                   "violations":  [
+
+                                  ]
+               },
+    "tools":  {
+                  "result":  "pass",
+                  "allowed_tools":  [
+                                        "Edit",
+                                        "Read",
+                                        "Write"
+                                    ],
+                  "violations":  [
+
+                                 ]
+              },
+    "execution_policy":  {
+                             "result":  "pass",
+                             "required_false_fields":  [
+                                                           "launches_claude",
+                                                           "launches_antigravity",
+                                                           "executes_shell",
+                                                           "requires_network",
+                                                           "touches_secrets",
+                                                           "touches_production",
+                                                           "installs_dependencies",
+                                                           "deploys"
+                                                       ],
+                             "violations":  [
+
+                                            ]
+                         },
+    "blockers":  [
+
+                 ],
+    "policy_boundary":  "plan-only no-launch no-antigravity no-shell no-network no-secrets no-production no-dependency-installation no-deploy",
+    "source_files":  [
+                         ".specbridge/runtime-launches/issue-097-docs.runtime-launch.json",
+                         ".specbridge/runtime-launches/issue-097-status.runtime-launch.json",
+                         ".specbridge/runtime-launches/issue-097-tests.runtime-launch.json"
+                     ],
+    "output_path":  ".specbridge/preflights/issue-103-bounded-live-tests-slice.runtime-preflight.json"
+}

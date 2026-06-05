@@ -1,0 +1,43 @@
+{
+    "schema_version":  "1",
+    "summary_id":  "issue-097-multi-slice-live-pilot-contract-runtime-summary",
+    "generated_by":  "specbridge-cli",
+    "runtime_launch_path":  ".specbridge/runtime-launches/issue-097-tests.runtime-launch.json",
+    "runtime_result_path":  ".specbridge/runtime-results/issue-103-tests.runtime-result.json",
+    "launch_id":  "issue-097-multi-slice-live-pilot-contract-tests-runtime-launch",
+    "task_id":  "issue-097-multi-slice-live-pilot-contract",
+    "packet_id":  "issue-097-multi-slice-live-pilot-contract-tests",
+    "slice_id":  "tests",
+    "branch_name":  "claude/issue-097-multi-slice-live-pilot-contract-tests",
+    "completion_status":  "complete",
+    "runtime_status":  "succeeded",
+    "result_status":  "recorded",
+    "validation_totals":  {
+                              "total":  3,
+                              "passed":  3,
+                              "failed":  0,
+                              "other":  0
+                          },
+    "policy_result":  "Passed. Live tests executor completed inside the issue 097 tests launch scope under issue 103 coordinator review.",
+    "merge_readiness":  "ready_for_policy_gates",
+    "blockers":  [
+
+                 ],
+    "execution_policy":  {
+                             "launches_claude":  false,
+                             "launches_antigravity":  false,
+                             "executes_shell":  false,
+                             "requires_network":  false,
+                             "touches_secrets":  false,
+                             "touches_production":  false,
+                             "installs_dependencies":  false,
+                             "deploys":  false
+                         },
+    "source_files":  [
+                         ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+                         ".specbridge/executor-packets/issue-097-multi-slice-live-pilot-contract-tests.executor-packet.json",
+                         ".specbridge/runtime-evidence/issue-097-tests.executor-output.md",
+                         ".specbridge/runtime-launches/issue-097-tests.runtime-launch.json",
+                         ".specbridge/runtime-results/issue-103-tests.runtime-result.json"
+                     ]
+}

@@ -1,0 +1,79 @@
+{
+    "schema_version":  "1",
+    "execution_id":  "issue-097-multi-slice-live-pilot-contract-tests-runtime-launch-runtime-execution",
+    "generated_by":  "specbridge-cli",
+    "runtime_launch_path":  ".specbridge/runtime-launches/issue-097-tests.runtime-launch.json",
+    "launch_id":  "issue-097-multi-slice-live-pilot-contract-tests-runtime-launch",
+    "task_id":  "issue-097-multi-slice-live-pilot-contract",
+    "packet_id":  "issue-097-multi-slice-live-pilot-contract-tests",
+    "slice_id":  "tests",
+    "branch_name":  "claude/issue-097-multi-slice-live-pilot-contract-tests",
+    "dry_run":  false,
+    "timeout_seconds":  900,
+    "allowed_tools":  [
+                          "Edit",
+                          "Read",
+                          "Write"
+                      ],
+    "permission_mode":  "acceptEdits",
+    "max_budget_usd":  "2.00",
+    "command_summary":  "claude -p --no-session-persistence --max-budget-usd 2.00 --permission-mode acceptEdits --tools Edit,Read,Write --allowedTools Edit,Read,Write --input-format text",
+    "prompt_sections":  [
+                            "Read README.md, SPECBRIDGE.md, AGENTS.md, CLAUDE.md, .specbridge/policy.yaml, the execution contract, and the executor packet before writing.",
+                            "Modify only paths declared in exclusive_write.",
+                            "Treat read_only paths as context only.",
+                            "Run only required validations that are explicitly allowed by the runtime operator.",
+                            "Stop on policy conflict, scope conflict, missing required context, impossible acceptance criteria, protected resource requirement, secrets, production configuration, billing, authentication security, authorization security, dependency installation, database change, CI/CD security change, or deployment automation.",
+                            "Report changed files, validation evidence, policy result, unresolved risks, and completion status."
+                        ],
+    "execution_status":  "succeeded",
+    "exit_code":  0,
+    "timed_out":  false,
+    "stdout":  {
+                   "captured":  true,
+                   "length":  1344,
+                   "line_count":  30,
+                   "sha256":  "19070fc236fe1e3e715d86da9fc61084799774c3fea064b31c55f81338db37b4"
+               },
+    "stderr":  {
+                   "captured":  true,
+                   "length":  0,
+                   "line_count":  0,
+                   "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+               },
+    "failure_diagnostics":  {
+                                "status":  "not_applicable",
+                                "reason":  "execution_succeeded",
+                                "exit_code":  0,
+                                "timed_out":  false,
+                                "redaction_policy":  "bounded_preview_240_chars_with_secret_token_patterns_redacted",
+                                "stdout_preview":  {
+                                                       "text":  "The edit is correct. The focused status tests are in place and the rest of the file is intact.\n\n---\n\n```\nSummary:\n- Added focused CLI coverage for the status slice to scripts/test-specbridge-cli.ps1: captures status output in variables, par",
+                                                       "original_length":  1344,
+                                                       "preview_length":  240,
+                                                       "max_length":  240,
+                                                       "truncated":  true
+                                                   },
+                                "stderr_preview":  {
+                                                       "text":  "",
+                                                       "original_length":  0,
+                                                       "preview_length":  0,
+                                                       "max_length":  240,
+                                                       "truncated":  false
+                                                   }
+                            },
+    "policy_result":  "Controlled Claude Code launch executed with bounded tools, budget, timeout, and repository-scoped launch plan.",
+    "execution_policy":  {
+                             "launches_claude":  true,
+                             "launches_antigravity":  false,
+                             "executes_shell":  false,
+                             "requires_network":  true,
+                             "touches_secrets":  false,
+                             "touches_production":  false,
+                             "installs_dependencies":  false,
+                             "deploys":  false
+                         },
+    "source_files":  [
+                         ".specbridge/runtime-launches/issue-097-tests.runtime-launch.json"
+                     ]
+}

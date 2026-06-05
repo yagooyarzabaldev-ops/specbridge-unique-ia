@@ -1,0 +1,47 @@
+{
+  "contract_id": "issue-103-bounded-live-tests-slice",
+  "status": "completed",
+  "exclusive_write": [
+    "README.md",
+    "docs/specbridge-multi-slice-live-pilot-contract.md",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/audit-packets/issue-103-bounded-live-tests-slice.audit-packet.json",
+    ".specbridge/audits/issue-103-bounded-live-tests-slice.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-103-bounded-live-tests-slice.execution.md",
+    ".specbridge/preflights/issue-103-bounded-live-tests-slice.runtime-preflight.json",
+    ".specbridge/reports/issue-103-bounded-live-tests-slice.final-report.json",
+    ".specbridge/runtime-evidence/issue-097-tests.executor-output.md",
+    ".specbridge/runtime-executions/issue-103-tests.runtime-execution.json",
+    ".specbridge/runtime-results/issue-103-tests.runtime-result.json",
+    ".specbridge/runtime-runs/issue-103-tests.runtime-run.json",
+    ".specbridge/runtime-summaries/issue-103-tests.runtime-summary.json",
+    ".specbridge/scopes/issue-103-bounded-live-tests-slice.scope.json",
+    ".specbridge/standard-loop-runs/issue-103-bounded-live-tests-slice.standard-loop-run.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/autonomy.yaml",
+    ".specbridge/risk-rules.yaml",
+    ".specbridge/preflights/issue-099-runtime-launch-preflight.runtime-preflight.json",
+    ".specbridge/runtime-launches/issue-097-docs.runtime-launch.json",
+    ".specbridge/runtime-launches/issue-097-status.runtime-launch.json",
+    ".specbridge/runtime-launches/issue-097-tests.runtime-launch.json",
+    ".specbridge/executor-packets/issue-097-multi-slice-live-pilot-contract-tests.executor-packet.json",
+    ".specbridge/contracts/issue-097-multi-slice-live-pilot-contract.execution.md",
+    ".specbridge/reports/issue-101-bounded-live-docs-slice.final-report.json",
+    "docs/specbridge-runtime-capability-status.md",
+    "docs/specbridge-runtime-launch-preflight.md",
+    "docs/specbridge-runtime-runner.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-097-multi-slice-live-pilot-contract",
+    "issue-099-runtime-launch-preflight",
+    "issue-101-bounded-live-docs-slice"
+  ],
+  "final_report": ".specbridge/reports/issue-103-bounded-live-tests-slice.final-report.json"
+}
