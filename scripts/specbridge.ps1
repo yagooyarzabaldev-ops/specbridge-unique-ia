@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "issue-to-merge-plan", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "issue-to-merge-plan", "issue-to-merge-github", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -33,10 +33,15 @@ param(
   [string[]] $WrittenFile = @(),
   [ValidateSet("simulation", "github")]
   [string] $EvidenceMode = "simulation",
+  [ValidateSet("dry_run", "apply")]
+  [string] $MutationMode = "dry_run",
+  [ValidateSet("issue_create", "pr_open", "ci_wait", "merge", "issue_close", "post_merge_memory")]
+  [string[]] $GithubOperation = @(),
   [string] $RepositoryUrl = "https://github.com/yagooyarzabaldev-ops/specbridge",
   [string] $BaseBranch = "main",
   [switch] $IncludeLatestArtifacts,
   [switch] $DryRun,
+  [switch] $ConfirmGithubMutation,
   [switch] $Force
 )
 
@@ -1157,6 +1162,273 @@ function Invoke-IssueToMergePlanCommand {
   }
 
   Write-CliJson $operator -Depth 12
+  exit 0
+}
+
+function New-GithubMutationOperation {
+  param(
+    [string] $Id,
+    [string] $Name,
+    [string[]] $RequiredEvidence,
+    [string[]] $Preconditions,
+    [string] $ConnectorAction,
+    [bool] $MutatesGithub = $true,
+    [bool] $WritesRepositoryFiles = $false
+  )
+
+  return [ordered]@{
+    id = $Id
+    name = $Name
+    mutates_github = $MutatesGithub
+    writes_repository_files = $WritesRepositoryFiles
+    connector_action = $ConnectorAction
+    required_evidence = @($RequiredEvidence)
+    preconditions = @($Preconditions)
+    stop_if_missing_evidence = $true
+  }
+}
+
+function Invoke-IssueToMergeGithubCommand {
+  if ([string]::IsNullOrWhiteSpace($TaskId)) {
+    Fail "TaskId is required for issue-to-merge-github"
+  }
+
+  if ($DryRun -and $MutationMode -eq "apply") {
+    Fail "DryRun cannot be combined with MutationMode apply"
+  }
+
+  $safeTaskId = Convert-ToSafeName -Value $TaskId -FieldName "task_id"
+  $contractSeed = New-StandardLoopContractSeed -TaskIdentifier $safeTaskId
+
+  $issueReference = $RelatedIssue
+  if ([string]::IsNullOrWhiteSpace($issueReference)) {
+    $issueReference = $contractSeed.issue_reference
+  }
+
+  if ([string]::IsNullOrWhiteSpace($issueReference) -or $issueReference -eq "not_declared") {
+    $issueReference = "not_declared"
+  }
+
+  $resolvedTitle = $Title
+  if ([string]::IsNullOrWhiteSpace($resolvedTitle)) {
+    $resolvedTitle = $safeTaskId
+  }
+
+  $resolvedGoal = $Goal
+  if ([string]::IsNullOrWhiteSpace($resolvedGoal)) {
+    $resolvedGoal = "Run bounded GitHub operator steps for $safeTaskId."
+  }
+
+  $selectedOperations = @($GithubOperation)
+  if ($selectedOperations.Count -eq 0) {
+    $selectedOperations = @("issue_create", "pr_open", "ci_wait", "merge", "issue_close", "post_merge_memory")
+  }
+
+  $currentBranch = Get-GitValue -Arguments @("branch", "--show-current") -Fallback "unknown"
+  $head = Get-GitValue -Arguments @("rev-parse", "--short", "HEAD") -Fallback "unknown"
+  $runPath = ".specbridge/issue-to-merge-runs/$safeTaskId.github-mutation-run.json"
+
+  $operationCatalog = [ordered]@{
+    issue_create = New-GithubMutationOperation `
+      -Id "issue_create" `
+      -Name "Create or verify GitHub issue" `
+      -RequiredEvidence @("task goal", "allowed scope", "blocked scope", "acceptance criteria", "policy boundaries") `
+      -Preconditions @("TaskId is declared", "title and goal are non-empty", "protected scope is not required") `
+      -ConnectorAction "github.issue.create_or_verify"
+
+    pr_open = New-GithubMutationOperation `
+      -Id "pr_open" `
+      -Name "Open or update pull request" `
+      -RequiredEvidence @("branch pushed", "execution contract", "scope manifest", "final report draft", "audit packet draft", "ChatGPT/Codex audit draft") `
+      -Preconditions @("local branch exists", "working tree is clean", "scope validation passes", "security gate passes") `
+      -ConnectorAction "github.pull_request.open_or_update"
+
+    ci_wait = New-GithubMutationOperation `
+      -Id "ci_wait" `
+      -Name "Wait for GitHub CI and review checks" `
+      -RequiredEvidence @("pull request URL", "Foundation Validation", "SpecBridge Review Gate", "SpecBridge PR Review Report", "Claude Review Non Blocking") `
+      -Preconditions @("pull request exists", "required GitHub checks are declared") `
+      -ConnectorAction "github.checks.wait_required" `
+      -MutatesGithub $false
+
+    merge = New-GithubMutationOperation `
+      -Id "merge" `
+      -Name "Policy-gated merge" `
+      -RequiredEvidence @("CI passed", "tests passed", "security gate passed", "review gate passed", "ChatGPT/Codex audit approved", "no protected files changed", "branch mergeable") `
+      -Preconditions @("autonomous merge enabled", "deployment not requested", "merge method declared", "expected head SHA matches") `
+      -ConnectorAction "github.pull_request.merge"
+
+    issue_close = New-GithubMutationOperation `
+      -Id "issue_close" `
+      -Name "Close completed issue" `
+      -RequiredEvidence @("merged pull request", "completion status complete", "final report recorded") `
+      -Preconditions @("related issue exists", "merge completed") `
+      -ConnectorAction "github.issue.close_completed"
+
+    post_merge_memory = New-GithubMutationOperation `
+      -Id "post_merge_memory" `
+      -Name "Post-merge repository memory closure" `
+      -RequiredEvidence @("merged pull request", "closed issue", ".specbridge/context/CURRENT_GOAL.md next task") `
+      -Preconditions @("main is updated", "next recommended task is recorded") `
+      -ConnectorAction "repository.memory.update_after_merge" `
+      -MutatesGithub $false `
+      -WritesRepositoryFiles $true
+  }
+
+  $operations = @()
+  foreach ($operationId in $selectedOperations) {
+    $operations += $operationCatalog[$operationId]
+  }
+
+  $applyEvidence = $null
+  $applyEvidencePath = $null
+  $applyAllowed = $false
+  $applyBlockers = @()
+
+  if ($MutationMode -eq "apply") {
+    if (-not $Force) {
+      Fail "issue-to-merge-github apply mode requires -Force"
+    }
+
+    if (-not $ConfirmGithubMutation) {
+      Fail "issue-to-merge-github apply mode requires -ConfirmGithubMutation"
+    }
+
+    if ([string]::IsNullOrWhiteSpace($EvidencePath)) {
+      Fail "EvidencePath is required for issue-to-merge-github apply mode"
+    }
+
+    $applyEvidencePath = Normalize-RepoPath -Path $EvidencePath -FieldName "EvidencePath"
+
+    if ($applyEvidencePath -notmatch "^\.specbridge/github-evidence/.+\.github-mutation-evidence\.json$") {
+      Fail "EvidencePath must be a .specbridge/github-evidence/*.github-mutation-evidence.json file: $applyEvidencePath"
+    }
+
+    if (-not (Test-Path -LiteralPath $applyEvidencePath -PathType Leaf)) {
+      Fail "EvidencePath does not exist: $applyEvidencePath"
+    }
+
+    $applyEvidence = Get-JsonObjectFromFile -Path $applyEvidencePath -Description "GitHub mutation evidence"
+
+    foreach ($field in @("task_id", "local_gates_passed", "security_gate_passed", "review_gate_passed", "github_ci_passed", "chatgpt_audit_approved", "no_protected_files_changed", "deployment_not_requested")) {
+      if (-not $applyEvidence.PSObject.Properties.Name.Contains($field)) {
+        Fail "GitHub mutation evidence must include $field"
+      }
+    }
+
+    if ($applyEvidence.task_id -ne $safeTaskId) {
+      Fail "GitHub mutation evidence task_id must match TaskId: expected=$safeTaskId actual=$($applyEvidence.task_id)"
+    }
+
+    foreach ($booleanField in @("local_gates_passed", "security_gate_passed", "review_gate_passed", "github_ci_passed", "chatgpt_audit_approved", "no_protected_files_changed", "deployment_not_requested")) {
+      if ($applyEvidence.$booleanField -ne $true) {
+        $applyBlockers += $booleanField
+      }
+    }
+
+    $applyAllowed = ($applyBlockers.Count -eq 0)
+  }
+
+  $operator = [ordered]@{
+    schema_version = "1"
+    command = "issue-to-merge-github"
+    ok = $true
+    mutation_mode = $MutationMode
+    dry_run = ($MutationMode -eq "dry_run")
+    task_id = $safeTaskId
+    title = $resolvedTitle
+    goal = $resolvedGoal
+    issue_reference = $issueReference
+    repository_url = $RepositoryUrl
+    base_branch = $BaseBranch
+    current_branch = $currentBranch
+    head = $head
+    selected_operations = @($selectedOperations)
+    operations = @($operations)
+    apply_requested = ($MutationMode -eq "apply")
+    apply_allowed = $applyAllowed
+    apply_blockers = @($applyBlockers)
+    github_calls_performed = $false
+    mutation_execution = if ($MutationMode -eq "dry_run") { "dry_run_no_github_calls" } else { "external_connector_action_envelope_ready" }
+    connector_action_envelope = [ordered]@{
+      connector = "github"
+      execution_owner = "SpecBridge coordinator with GitHub connector"
+      performs_local_secret_access = $false
+      actions = @($operations | ForEach-Object { $_.connector_action })
+    }
+    evidence_paths = [ordered]@{
+      contract = $contractSeed.contract_path
+      scope = $contractSeed.scope_path
+      final_report = $contractSeed.final_report_path
+      audit_packet = $contractSeed.audit_packet_path
+      chatgpt_audit = $contractSeed.chatgpt_audit_path
+      github_mutation_run = $runPath
+      apply_evidence = $applyEvidencePath
+    }
+    required_local_gates = @(
+      "validate-contracts",
+      "validate-contract-scopes",
+      "validate-final-reports",
+      "validate-audit-packets",
+      "validate-chatgpt-audits",
+      "validate-security-gates",
+      "validate-review-gate",
+      "test-specbridge-cli",
+      "specbridge-smoke",
+      "git diff --check"
+    )
+    required_github_gates = @(
+      "Foundation Validation",
+      "SpecBridge Review Gate",
+      "SpecBridge PR Review Report",
+      "Claude Review Non Blocking"
+    )
+    merge_conditions = @(
+      "ci_passed",
+      "tests_passed",
+      "no_policy_violation",
+      "no_protected_files_changed",
+      "chatgpt_codex_audit_approved",
+      "branch_mergeable",
+      "expected_head_sha_matches",
+      "deployment_not_requested"
+    )
+    policy_boundaries = @(
+      "no-secrets",
+      "no-production",
+      "no-billing",
+      "no-auth-security-change",
+      "no-authorization-security-change",
+      "no-database-change",
+      "no-dependency-installation",
+      "no-ci-cd-security-change",
+      "no-deployment"
+    )
+    stop_conditions = @(
+      "missing_required_evidence",
+      "failed_local_gate",
+      "failed_github_ci",
+      "blocking_review",
+      "protected_file_changed",
+      "head_sha_mismatch",
+      "deployment_requested",
+      "policy_boundary_reached"
+    )
+    command_boundary = "dry-run-by-default apply-requires-force-confirmation-and-evidence emits-connector-action-envelope does-not-store-secrets does-not-launch-claude-code does-not-launch-antigravity does-not-install-dependencies does-not-deploy"
+    output_path = $null
+  }
+
+  if (-not [string]::IsNullOrWhiteSpace($OutputPath)) {
+    $output = Assert-OutputPath `
+      -Path $OutputPath `
+      -Pattern "^\.specbridge/issue-to-merge-runs/.+\.github-mutation-run\.json$" `
+      -Description "a .specbridge/issue-to-merge-runs/*.github-mutation-run.json GitHub mutation operator artifact"
+
+    $operator["output_path"] = $output
+    Write-Utf8JsonFile -Path $output -Value $operator -Depth 14
+  }
+
+  Write-CliJson $operator -Depth 14
   exit 0
 }
 
@@ -4511,6 +4783,7 @@ switch ($Command) {
   "standard-loop-status" { Invoke-StandardLoopStatusCommand }
   "standard-loop-orchestrate" { Invoke-StandardLoopOrchestrateCommand }
   "issue-to-merge-plan" { Invoke-IssueToMergePlanCommand }
+  "issue-to-merge-github" { Invoke-IssueToMergeGithubCommand }
   "v5-pilot-status" { Invoke-V5PilotStatusCommand }
   "v5-live-status" { Invoke-V5LiveStatusCommand }
   "v5-autonomy-status" { Invoke-V5AutonomyStatusCommand }

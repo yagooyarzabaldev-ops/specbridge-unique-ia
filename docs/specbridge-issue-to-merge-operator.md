@@ -105,6 +105,33 @@ The pilot result is intentionally documentation and evidence only:
 
 This pilot does not authorize a GitHub-mutating operator mode. Creating issues, opening PRs, waiting on CI, merging, and post-merge issue closure remain actions performed by the surrounding governed process, not by `issue-to-merge-plan`.
 
+## Bounded GitHub Mutation Mode
+
+Issue 113 adds `issue-to-merge-github`, the first bounded GitHub mutation operator mode.
+
+The command is dry-run by default:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 issue-to-merge-github `
+  -TaskId issue-113-bounded-github-mutation-operator `
+  -RelatedIssue https://github.com/yagooyarzabaldev-ops/specbridge/issues/113 `
+  -OutputPath .specbridge/issue-to-merge-runs/issue-113-bounded-github-mutation-operator.github-mutation-run.json `
+  -Force
+```
+
+The dry-run artifact records explicit connector actions for:
+
+- creating or verifying the issue
+- opening or updating the PR
+- waiting for required GitHub checks
+- merging only after policy gates pass
+- closing the completed issue
+- updating post-merge repository memory
+
+Apply mode is not implicit. It requires `-MutationMode apply`, `-Force`, `-ConfirmGithubMutation`, and a declared `.specbridge/github-evidence/*.github-mutation-evidence.json` file proving local gates, security gate, review gate, GitHub CI, ChatGPT/Codex audit, protected-file status, and no-deployment status.
+
+This keeps GitHub mutation as a governed connector action envelope instead of an unrestricted local shell action.
+
 ## Merge Conditions
 
 The plan records these merge conditions:

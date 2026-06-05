@@ -41,6 +41,7 @@ specbridge status
 | `coordinate-executors` | Aggregates executor branch evidence into a coordinator orchestration artifact. | Yes |
 | `review-gate` | Runs security gate validation and PR review gate validation. | No |
 | `issue-to-merge-plan` | Creates a governed plan-only issue-to-merge operator artifact with phases, gates, merge conditions, evidence paths, and post-merge memory closure requirements. | Optional |
+| `issue-to-merge-github` | Creates a bounded GitHub mutation operator artifact with explicit connector actions, dry-run default behavior, apply evidence gates, and policy boundaries. | Optional |
 
 ## Validation Profiles
 
@@ -125,6 +126,64 @@ powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 issue-to-merge
 The command is plan-only. It records the governed issue-to-merge phases, local gates, GitHub gates, merge conditions, policy boundaries, and post-merge memory requirements.
 
 It does not create issues, open PRs, wait for CI, merge, launch Claude Code, launch Antigravity, install dependencies, change workflow security controls, or deploy.
+
+## Bounded GitHub Mutation Operator
+
+`issue-to-merge-github` requires:
+
+- `TaskId`
+
+Optional inputs:
+
+- `Title`
+- `Goal`
+- `RelatedIssue`
+- `GithubOperation`
+- `MutationMode`
+- `EvidencePath`
+- `OutputPath`
+
+The default `MutationMode` is `dry_run`.
+
+When `OutputPath` is provided, it must be under `.specbridge/issue-to-merge-runs/` and end with `.github-mutation-run.json`.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 issue-to-merge-github `
+  -TaskId issue-113-bounded-github-mutation-operator `
+  -RelatedIssue https://github.com/yagooyarzabaldev-ops/specbridge/issues/113 `
+  -OutputPath .specbridge/issue-to-merge-runs/issue-113-bounded-github-mutation-operator.github-mutation-run.json `
+  -Force
+```
+
+The command records these bounded operations:
+
+- `issue_create`
+- `pr_open`
+- `ci_wait`
+- `merge`
+- `issue_close`
+- `post_merge_memory`
+
+Dry-run mode performs no GitHub calls. It emits the connector action envelope, required evidence, preconditions, stop conditions, merge conditions, and policy boundaries.
+
+Apply mode is intentionally gated. It fails unless all of these are provided:
+
+- `-MutationMode apply`
+- `-Force`
+- `-ConfirmGithubMutation`
+- `-EvidencePath .specbridge/github-evidence/*.github-mutation-evidence.json`
+
+The evidence file must match `TaskId` and prove:
+
+- local gates passed
+- security gate passed
+- review gate passed
+- GitHub CI passed
+- ChatGPT/Codex audit approved
+- no protected files changed
+- deployment was not requested
+
+The local CLI still does not store secrets, launch Claude Code, launch Antigravity, install dependencies, change workflow security controls, or deploy. GitHub mutation execution belongs to the governed GitHub connector action envelope and must stop when required evidence is missing.
 
 ## Decomposition Input
 
@@ -264,8 +323,11 @@ Simulation mode writes explicit simulated PR, CI, and audit evidence and cannot 
 - `detect-conflicts`
 - `review-gate`
 - `issue-to-merge-plan`
+- `issue-to-merge-github`
 - deterministic failure when a required output path is missing
 - deterministic failure when `issue-to-merge-plan` is missing `TaskId`
+- deterministic failure when `issue-to-merge-github` is missing `TaskId`
+- deterministic failure when `issue-to-merge-github` apply mode lacks force or evidence
 - deterministic failure when runtime launch and runtime result artifacts do not match
 
 `scripts/specbridge-smoke.ps1` runs the CLI suite in CI.

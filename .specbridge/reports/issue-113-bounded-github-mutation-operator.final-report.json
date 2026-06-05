@@ -1,0 +1,41 @@
+{
+  "summary": "Completed issue 113 locally. SpecBridge now has a deterministic `issue-to-merge-github` operator command that defaults to dry-run, records explicit GitHub connector actions for issue creation or verification, PR opening or update, CI wait, policy-gated merge, issue closure, and post-merge memory, and blocks apply mode unless force, explicit confirmation, and declared gate evidence are present.",
+  "changed_files": [
+    "README.md",
+    "docs/specbridge-issue-to-merge-operator.md",
+    "docs/specbridge-local-cli.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/audit-packets/issue-113-bounded-github-mutation-operator.audit-packet.json",
+    ".specbridge/audits/issue-113-bounded-github-mutation-operator.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-113-bounded-github-mutation-operator.execution.md",
+    ".specbridge/issue-to-merge-runs/issue-113-bounded-github-mutation-operator.github-mutation-run.json",
+    ".specbridge/reports/issue-113-bounded-github-mutation-operator.final-report.json",
+    ".specbridge/scopes/issue-113-bounded-github-mutation-operator.scope.json"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 issue-to-merge-github -TaskId issue-113-bounded-github-mutation-operator -Title \"Add bounded GitHub mutation operator mode\" -Goal \"Add a deterministic bounded issue-to-merge GitHub mutation operator surface with dry-run default, explicit connector action envelope, apply evidence gates, docs, tests, and audit evidence.\" -RelatedIssue https://github.com/yagooyarzabaldev-ops/specbridge/issues/113 -OutputPath .specbridge/issue-to-merge-runs/issue-113-bounded-github-mutation-operator.github-mutation-run.json -Force: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "git diff --check: passed",
+    "GitHub CI: not_collected"
+  ],
+  "policy_result": "Passed locally. The command is dry-run by default, records bounded connector actions, performs no GitHub calls in dry-run, and apply mode is blocked unless force, explicit confirmation, and declared local/GitHub gate evidence are present. No secrets, production, billing, auth, authorization, database, dependency installation, CI/CD security, or deployment scope was changed.",
+  "risk_result": "Medium risk because the local CLI product surface now defines bounded GitHub mutation operations. Risk is bounded by dry-run default behavior, explicit operation selection, apply evidence gates, focused CLI tests, documentation, audit evidence, security gate, review gate, and GitHub CI as external authority.",
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending until the branch is pushed and checks run.",
+    "A future live operator run should compare the connector action envelope with real GitHub issue, PR, CI, merge, and issue closure evidence."
+  ],
+  "merge_status": "Pending pull request, GitHub CI, review gate, security gate, and policy-gated merge.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_pr_ci"
+}

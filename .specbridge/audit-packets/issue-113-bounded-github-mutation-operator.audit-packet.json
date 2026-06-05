@@ -1,0 +1,166 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-113-bounded-github-mutation-operator",
+  "generated_by": "ChatGPT/Codex",
+  "execution_contract_path": ".specbridge/contracts/issue-113-bounded-github-mutation-operator.execution.md",
+  "changed_files": [
+    "README.md",
+    "docs/specbridge-issue-to-merge-operator.md",
+    "docs/specbridge-local-cli.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/audit-packets/issue-113-bounded-github-mutation-operator.audit-packet.json",
+    ".specbridge/audits/issue-113-bounded-github-mutation-operator.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-113-bounded-github-mutation-operator.execution.md",
+    ".specbridge/issue-to-merge-runs/issue-113-bounded-github-mutation-operator.github-mutation-run.json",
+    ".specbridge/reports/issue-113-bounded-github-mutation-operator.final-report.json",
+    ".specbridge/scopes/issue-113-bounded-github-mutation-operator.scope.json"
+  ],
+  "diff_summary": [
+    {
+      "file": "README.md",
+      "added_lines": 1,
+      "deleted_lines": 0
+    },
+    {
+      "file": "docs/specbridge-issue-to-merge-operator.md",
+      "added_lines": 27,
+      "deleted_lines": 0
+    },
+    {
+      "file": "docs/specbridge-local-cli.md",
+      "added_lines": 62,
+      "deleted_lines": 0
+    },
+    {
+      "file": "scripts/specbridge.ps1",
+      "added_lines": 274,
+      "deleted_lines": 1
+    },
+    {
+      "file": "scripts/test-specbridge-cli.ps1",
+      "added_lines": 119,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/context/CURRENT_GOAL.md",
+      "added_lines": 21,
+      "deleted_lines": 17
+    },
+    {
+      "file": ".specbridge/contracts/issue-113-bounded-github-mutation-operator.execution.md",
+      "added_lines": 121,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/issue-to-merge-runs/issue-113-bounded-github-mutation-operator.github-mutation-run.json",
+      "added_lines": 222,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/reports/issue-113-bounded-github-mutation-operator.final-report.json",
+      "added_lines": 41,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/scopes/issue-113-bounded-github-mutation-operator.scope.json",
+      "added_lines": 31,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/audit-packets/issue-113-bounded-github-mutation-operator.audit-packet.json",
+      "added_lines": 166,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/audits/issue-113-bounded-github-mutation-operator.chatgpt-audit.json",
+      "added_lines": 88,
+      "deleted_lines": 0
+    }
+  ],
+  "validation_commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 issue-to-merge-github -TaskId issue-113-bounded-github-mutation-operator -Title \"Add bounded GitHub mutation operator mode\" -Goal \"Add a deterministic bounded issue-to-merge GitHub mutation operator surface with dry-run default, explicit connector action envelope, apply evidence gates, docs, tests, and audit evidence.\" -RelatedIssue https://github.com/yagooyarzabaldev-ops/specbridge/issues/113 -OutputPath .specbridge/issue-to-merge-runs/issue-113-bounded-github-mutation-operator.github-mutation-run.json -Force",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+    "git diff --check",
+    "GitHub CI"
+  ],
+  "validation_results": [
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 issue-to-merge-github -TaskId issue-113-bounded-github-mutation-operator -Title \"Add bounded GitHub mutation operator mode\" -Goal \"Add a deterministic bounded issue-to-merge GitHub mutation operator surface with dry-run default, explicit connector action envelope, apply evidence gates, docs, tests, and audit evidence.\" -RelatedIssue https://github.com/yagooyarzabaldev-ops/specbridge/issues/113 -OutputPath .specbridge/issue-to-merge-runs/issue-113-bounded-github-mutation-operator.github-mutation-run.json -Force",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    },
+    {
+      "command": "GitHub CI",
+      "result": "not_collected"
+    }
+  ],
+  "final_report_path": ".specbridge/reports/issue-113-bounded-github-mutation-operator.final-report.json",
+  "ci_status": "not_collected",
+  "pr_review_report_path": null,
+  "policy_result": "Passed locally. The command defaults to dry-run, performs no GitHub calls in dry-run, emits bounded connector actions, and blocks apply mode unless force, explicit confirmation, and declared gate evidence are present.",
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending.",
+    "A future live operator run should compare the connector action envelope with real GitHub issue, PR, CI, merge, and issue closure evidence."
+  ],
+  "completion_status": "complete_pending_pr_ci",
+  "source_files": [
+    ".specbridge/contracts/issue-113-bounded-github-mutation-operator.execution.md",
+    ".specbridge/reports/issue-113-bounded-github-mutation-operator.final-report.json",
+    ".specbridge/issue-to-merge-runs/issue-113-bounded-github-mutation-operator.github-mutation-run.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, tokens, private keys, or credential values."
+}

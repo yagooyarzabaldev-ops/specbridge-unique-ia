@@ -1,0 +1,31 @@
+{
+  "contract_id": "issue-113-bounded-github-mutation-operator",
+  "status": "completed",
+  "exclusive_write": [
+    "README.md",
+    "docs/specbridge-issue-to-merge-operator.md",
+    "docs/specbridge-local-cli.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/audit-packets/issue-113-bounded-github-mutation-operator.audit-packet.json",
+    ".specbridge/audits/issue-113-bounded-github-mutation-operator.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-113-bounded-github-mutation-operator.execution.md",
+    ".specbridge/issue-to-merge-runs/issue-113-bounded-github-mutation-operator.github-mutation-run.json",
+    ".specbridge/reports/issue-113-bounded-github-mutation-operator.final-report.json",
+    ".specbridge/scopes/issue-113-bounded-github-mutation-operator.scope.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/issue-to-merge-runs/issue-111-issue-to-merge-operator-pilot.issue-to-merge-run.json",
+    ".specbridge/reports/issue-111-issue-to-merge-operator-pilot.final-report.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-111-issue-to-merge-operator-pilot"
+  ],
+  "final_report": ".specbridge/reports/issue-113-bounded-github-mutation-operator.final-report.json"
+}

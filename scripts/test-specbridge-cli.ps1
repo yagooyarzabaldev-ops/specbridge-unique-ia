@@ -420,6 +420,95 @@ try {
       }
     }
 
+    $issueToMergeGithubResult = Invoke-Cli -Arguments @(
+      "issue-to-merge-github",
+      "-TaskId",
+      "issue-113-bounded-github-mutation-operator",
+      "-RelatedIssue",
+      "https://github.com/yagooyarzabaldev-ops/specbridge/issues/113"
+    )
+
+    Assert-Success `
+      -Name "issue-to-merge-github" `
+      -Result $issueToMergeGithubResult `
+      -ExpectedPattern '"command"\s*:\s*"issue-to-merge-github"'
+
+    if ($issueToMergeGithubResult.ExitCode -eq 0) {
+      $issueToMergeGithubJson = $null
+      try { $issueToMergeGithubJson = $issueToMergeGithubResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      if ($null -eq $issueToMergeGithubJson) {
+        Write-Output "FAIL issue-to-merge-github output was not valid JSON."
+        $script:failed = $true
+      }
+      elseif ($issueToMergeGithubJson.mutation_mode -ne "dry_run") {
+        Write-Output "FAIL issue-to-merge-github expected dry_run mode."
+        $script:failed = $true
+      }
+      elseif ($issueToMergeGithubJson.github_calls_performed -ne $false) {
+        Write-Output "FAIL issue-to-merge-github dry-run must not perform GitHub calls."
+        $script:failed = $true
+      }
+      elseif (@($issueToMergeGithubJson.operations).Count -lt 6) {
+        Write-Output "FAIL issue-to-merge-github expected the default GitHub operation set."
+        $script:failed = $true
+      }
+      elseif ($issueToMergeGithubJson.command_boundary -notmatch "apply-requires-force-confirmation-and-evidence") {
+        Write-Output "FAIL issue-to-merge-github command boundary did not record apply gates."
+        $script:failed = $true
+      }
+      else {
+        Write-Output "PASS issue-to-merge-github includes dry-run mutation gates and boundaries."
+      }
+    }
+
+    Assert-Success `
+      -Name "issue-to-merge-github-output-path" `
+      -Result (Invoke-Cli -Arguments @(
+        "issue-to-merge-github",
+        "-TaskId",
+        "cli-fixture",
+        "-RelatedIssue",
+        "https://github.com/yagooyarzabaldev-ops/specbridge/issues/999",
+        "-GithubOperation",
+        "pr_open",
+        "-OutputPath",
+        ".specbridge/issue-to-merge-runs/cli-fixture.github-mutation-run.json",
+        "-Force"
+      )) `
+      -ExpectedPattern '"output_path"\s*:\s*"\.specbridge/issue-to-merge-runs/cli-fixture\.github-mutation-run\.json"'
+
+    if (-not (Test-Path -LiteralPath ".specbridge/issue-to-merge-runs/cli-fixture.github-mutation-run.json" -PathType Leaf)) {
+      Write-Output "FAIL issue-to-merge-github did not write the requested output path."
+      $script:failed = $true
+    }
+    else {
+      try {
+        $issueToMergeGithubRun = Get-Content -LiteralPath ".specbridge/issue-to-merge-runs/cli-fixture.github-mutation-run.json" -Raw | ConvertFrom-Json
+
+        if ($issueToMergeGithubRun.command -ne "issue-to-merge-github" -or $issueToMergeGithubRun.task_id -ne "cli-fixture") {
+          Write-Output "FAIL issue-to-merge-github output artifact has unexpected content."
+          $script:failed = $true
+        }
+        elseif (@($issueToMergeGithubRun.operations).Count -ne 1 -or $issueToMergeGithubRun.operations[0].id -ne "pr_open") {
+          Write-Output "FAIL issue-to-merge-github output artifact has unexpected selected operations."
+          $script:failed = $true
+        }
+        elseif ($issueToMergeGithubRun.connector_action_envelope.actions[0] -ne "github.pull_request.open_or_update") {
+          Write-Output "FAIL issue-to-merge-github output artifact has unexpected connector action."
+          $script:failed = $true
+        }
+        else {
+          Write-Output "PASS issue-to-merge-github output artifact validates by inspection."
+        }
+      }
+      catch {
+        Write-Output "FAIL issue-to-merge-github output artifact is not valid JSON."
+        Write-Output $_.Exception.Message
+        $script:failed = $true
+      }
+    }
+
     Assert-Success `
       -Name "v5-pilot-status" `
       -Result (Invoke-Cli -Arguments @("v5-pilot-status")) `
@@ -1097,6 +1186,36 @@ try {
       -Name "issue-to-merge-plan-missing-task" `
       -Result (Invoke-Cli -Arguments @("issue-to-merge-plan")) `
       -ExpectedPattern "TaskId is required for issue-to-merge-plan"
+
+    Assert-Failure `
+      -Name "issue-to-merge-github-missing-task" `
+      -Result (Invoke-Cli -Arguments @("issue-to-merge-github")) `
+      -ExpectedPattern "TaskId is required for issue-to-merge-github"
+
+    Assert-Failure `
+      -Name "issue-to-merge-github-apply-without-force" `
+      -Result (Invoke-Cli -Arguments @(
+        "issue-to-merge-github",
+        "-TaskId",
+        "cli-fixture",
+        "-MutationMode",
+        "apply",
+        "-ConfirmGithubMutation"
+      )) `
+      -ExpectedPattern "apply mode requires -Force"
+
+    Assert-Failure `
+      -Name "issue-to-merge-github-apply-without-evidence" `
+      -Result (Invoke-Cli -Arguments @(
+        "issue-to-merge-github",
+        "-TaskId",
+        "cli-fixture",
+        "-MutationMode",
+        "apply",
+        "-ConfirmGithubMutation",
+        "-Force"
+      )) `
+      -ExpectedPattern "EvidencePath is required for issue-to-merge-github apply mode"
 
     Assert-Failure `
       -Name "create-contract-missing-output" `

@@ -1,0 +1,223 @@
+{
+    "schema_version":  "1",
+    "command":  "issue-to-merge-github",
+    "ok":  true,
+    "mutation_mode":  "dry_run",
+    "dry_run":  true,
+    "task_id":  "issue-113-bounded-github-mutation-operator",
+    "title":  "Add bounded GitHub mutation operator mode",
+    "goal":  "Add a deterministic bounded issue-to-merge GitHub mutation operator surface with dry-run default, explicit connector action envelope, apply evidence gates, docs, tests, and audit evidence.",
+    "issue_reference":  "https://github.com/yagooyarzabaldev-ops/specbridge/issues/113",
+    "repository_url":  "https://github.com/yagooyarzabaldev-ops/specbridge",
+    "base_branch":  "main",
+    "current_branch":  "codex/issue113-bounded-github-mutation-operator",
+    "head":  "e90a60b",
+    "selected_operations":  [
+                                "issue_create",
+                                "pr_open",
+                                "ci_wait",
+                                "merge",
+                                "issue_close",
+                                "post_merge_memory"
+                            ],
+    "operations":  [
+                       {
+                           "id":  "issue_create",
+                           "name":  "Create or verify GitHub issue",
+                           "mutates_github":  true,
+                           "writes_repository_files":  false,
+                           "connector_action":  "github.issue.create_or_verify",
+                           "required_evidence":  [
+                                                     "task goal",
+                                                     "allowed scope",
+                                                     "blocked scope",
+                                                     "acceptance criteria",
+                                                     "policy boundaries"
+                                                 ],
+                           "preconditions":  [
+                                                 "TaskId is declared",
+                                                 "title and goal are non-empty",
+                                                 "protected scope is not required"
+                                             ],
+                           "stop_if_missing_evidence":  true
+                       },
+                       {
+                           "id":  "pr_open",
+                           "name":  "Open or update pull request",
+                           "mutates_github":  true,
+                           "writes_repository_files":  false,
+                           "connector_action":  "github.pull_request.open_or_update",
+                           "required_evidence":  [
+                                                     "branch pushed",
+                                                     "execution contract",
+                                                     "scope manifest",
+                                                     "final report draft",
+                                                     "audit packet draft",
+                                                     "ChatGPT/Codex audit draft"
+                                                 ],
+                           "preconditions":  [
+                                                 "local branch exists",
+                                                 "working tree is clean",
+                                                 "scope validation passes",
+                                                 "security gate passes"
+                                             ],
+                           "stop_if_missing_evidence":  true
+                       },
+                       {
+                           "id":  "ci_wait",
+                           "name":  "Wait for GitHub CI and review checks",
+                           "mutates_github":  false,
+                           "writes_repository_files":  false,
+                           "connector_action":  "github.checks.wait_required",
+                           "required_evidence":  [
+                                                     "pull request URL",
+                                                     "Foundation Validation",
+                                                     "SpecBridge Review Gate",
+                                                     "SpecBridge PR Review Report",
+                                                     "Claude Review Non Blocking"
+                                                 ],
+                           "preconditions":  [
+                                                 "pull request exists",
+                                                 "required GitHub checks are declared"
+                                             ],
+                           "stop_if_missing_evidence":  true
+                       },
+                       {
+                           "id":  "merge",
+                           "name":  "Policy-gated merge",
+                           "mutates_github":  true,
+                           "writes_repository_files":  false,
+                           "connector_action":  "github.pull_request.merge",
+                           "required_evidence":  [
+                                                     "CI passed",
+                                                     "tests passed",
+                                                     "security gate passed",
+                                                     "review gate passed",
+                                                     "ChatGPT/Codex audit approved",
+                                                     "no protected files changed",
+                                                     "branch mergeable"
+                                                 ],
+                           "preconditions":  [
+                                                 "autonomous merge enabled",
+                                                 "deployment not requested",
+                                                 "merge method declared",
+                                                 "expected head SHA matches"
+                                             ],
+                           "stop_if_missing_evidence":  true
+                       },
+                       {
+                           "id":  "issue_close",
+                           "name":  "Close completed issue",
+                           "mutates_github":  true,
+                           "writes_repository_files":  false,
+                           "connector_action":  "github.issue.close_completed",
+                           "required_evidence":  [
+                                                     "merged pull request",
+                                                     "completion status complete",
+                                                     "final report recorded"
+                                                 ],
+                           "preconditions":  [
+                                                 "related issue exists",
+                                                 "merge completed"
+                                             ],
+                           "stop_if_missing_evidence":  true
+                       },
+                       {
+                           "id":  "post_merge_memory",
+                           "name":  "Post-merge repository memory closure",
+                           "mutates_github":  false,
+                           "writes_repository_files":  true,
+                           "connector_action":  "repository.memory.update_after_merge",
+                           "required_evidence":  [
+                                                     "merged pull request",
+                                                     "closed issue",
+                                                     ".specbridge/context/CURRENT_GOAL.md next task"
+                                                 ],
+                           "preconditions":  [
+                                                 "main is updated",
+                                                 "next recommended task is recorded"
+                                             ],
+                           "stop_if_missing_evidence":  true
+                       }
+                   ],
+    "apply_requested":  false,
+    "apply_allowed":  false,
+    "apply_blockers":  [
+
+                       ],
+    "github_calls_performed":  false,
+    "mutation_execution":  "dry_run_no_github_calls",
+    "connector_action_envelope":  {
+                                      "connector":  "github",
+                                      "execution_owner":  "SpecBridge coordinator with GitHub connector",
+                                      "performs_local_secret_access":  false,
+                                      "actions":  [
+                                                      "github.issue.create_or_verify",
+                                                      "github.pull_request.open_or_update",
+                                                      "github.checks.wait_required",
+                                                      "github.pull_request.merge",
+                                                      "github.issue.close_completed",
+                                                      "repository.memory.update_after_merge"
+                                                  ]
+                                  },
+    "evidence_paths":  {
+                           "contract":  ".specbridge/contracts/issue-113-bounded-github-mutation-operator.execution.md",
+                           "scope":  ".specbridge/scopes/issue-113-bounded-github-mutation-operator.scope.json",
+                           "final_report":  ".specbridge/reports/issue-113-bounded-github-mutation-operator.final-report.json",
+                           "audit_packet":  ".specbridge/audit-packets/issue-113-bounded-github-mutation-operator.audit-packet.json",
+                           "chatgpt_audit":  ".specbridge/audits/issue-113-bounded-github-mutation-operator.chatgpt-audit.json",
+                           "github_mutation_run":  ".specbridge/issue-to-merge-runs/issue-113-bounded-github-mutation-operator.github-mutation-run.json",
+                           "apply_evidence":  null
+                       },
+    "required_local_gates":  [
+                                 "validate-contracts",
+                                 "validate-contract-scopes",
+                                 "validate-final-reports",
+                                 "validate-audit-packets",
+                                 "validate-chatgpt-audits",
+                                 "validate-security-gates",
+                                 "validate-review-gate",
+                                 "test-specbridge-cli",
+                                 "specbridge-smoke",
+                                 "git diff --check"
+                             ],
+    "required_github_gates":  [
+                                  "Foundation Validation",
+                                  "SpecBridge Review Gate",
+                                  "SpecBridge PR Review Report",
+                                  "Claude Review Non Blocking"
+                              ],
+    "merge_conditions":  [
+                             "ci_passed",
+                             "tests_passed",
+                             "no_policy_violation",
+                             "no_protected_files_changed",
+                             "chatgpt_codex_audit_approved",
+                             "branch_mergeable",
+                             "expected_head_sha_matches",
+                             "deployment_not_requested"
+                         ],
+    "policy_boundaries":  [
+                              "no-secrets",
+                              "no-production",
+                              "no-billing",
+                              "no-auth-security-change",
+                              "no-authorization-security-change",
+                              "no-database-change",
+                              "no-dependency-installation",
+                              "no-ci-cd-security-change",
+                              "no-deployment"
+                          ],
+    "stop_conditions":  [
+                            "missing_required_evidence",
+                            "failed_local_gate",
+                            "failed_github_ci",
+                            "blocking_review",
+                            "protected_file_changed",
+                            "head_sha_mismatch",
+                            "deployment_requested",
+                            "policy_boundary_reached"
+                        ],
+    "command_boundary":  "dry-run-by-default apply-requires-force-confirmation-and-evidence emits-connector-action-envelope does-not-store-secrets does-not-launch-claude-code does-not-launch-antigravity does-not-install-dependencies does-not-deploy",
+    "output_path":  ".specbridge/issue-to-merge-runs/issue-113-bounded-github-mutation-operator.github-mutation-run.json"
+}
