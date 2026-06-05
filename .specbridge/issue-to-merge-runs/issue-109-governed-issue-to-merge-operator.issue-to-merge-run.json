@@ -1,0 +1,179 @@
+{
+    "schema_version":  "1",
+    "command":  "issue-to-merge-plan",
+    "ok":  true,
+    "mode":  "plan_only",
+    "task_id":  "issue-109-governed-issue-to-merge-operator",
+    "title":  "Add governed issue-to-merge operator",
+    "goal":  "Add a deterministic plan-only SpecBridge issue-to-merge operator surface with tests, docs, and evidence.",
+    "issue_reference":  "https://github.com/yagooyarzabaldev-ops/specbridge/issues/109",
+    "repository_url":  "https://github.com/yagooyarzabaldev-ops/specbridge",
+    "base_branch":  "main",
+    "recommended_branch":  "codex/issue-109-governed-issue-to-merge-operator",
+    "current_branch":  "codex/issue109-governed-issue-to-merge-operator",
+    "head":  "7933c46",
+    "evidence_paths":  {
+                           "contract":  ".specbridge/contracts/issue-109-governed-issue-to-merge-operator.execution.md",
+                           "scope":  ".specbridge/scopes/issue-109-governed-issue-to-merge-operator.scope.json",
+                           "final_report":  ".specbridge/reports/issue-109-governed-issue-to-merge-operator.final-report.json",
+                           "audit_packet":  ".specbridge/audit-packets/issue-109-governed-issue-to-merge-operator.audit-packet.json",
+                           "chatgpt_audit":  ".specbridge/audits/issue-109-governed-issue-to-merge-operator.chatgpt-audit.json",
+                           "issue_to_merge_run":  ".specbridge/issue-to-merge-runs/issue-109-governed-issue-to-merge-operator.issue-to-merge-run.json",
+                           "standard_loop_run":  ".specbridge/standard-loop-runs/issue-109-governed-issue-to-merge-operator.standard-loop-run.json"
+                       },
+    "phases":  [
+                   {
+                       "order":  1,
+                       "id":  "issue_intake",
+                       "name":  "GitHub issue intake",
+                       "required_evidence":  [
+                                                 "GitHub issue",
+                                                 ".specbridge/context/CURRENT_GOAL.md"
+                                             ],
+                       "operator_action":  "verify_issue_exists_or_create_outside_plan_only_command",
+                       "gate":  "issue_has_goal_scope_acceptance_policy",
+                       "writes_repository_files":  false,
+                       "calls_github_from_command":  false
+                   },
+                   {
+                       "order":  2,
+                       "id":  "contract_package",
+                       "name":  "Execution contract, scope, report, and audit package",
+                       "required_evidence":  [
+                                                 ".specbridge/contracts/issue-109-governed-issue-to-merge-operator.execution.md",
+                                                 ".specbridge/scopes/issue-109-governed-issue-to-merge-operator.scope.json",
+                                                 ".specbridge/reports/issue-109-governed-issue-to-merge-operator.final-report.json",
+                                                 ".specbridge/audit-packets/issue-109-governed-issue-to-merge-operator.audit-packet.json",
+                                                 ".specbridge/audits/issue-109-governed-issue-to-merge-operator.chatgpt-audit.json"
+                                             ],
+                       "operator_action":  "create_or_update_declared_repository_evidence",
+                       "gate":  "contract_scope_report_audit_validate",
+                       "writes_repository_files":  true,
+                       "calls_github_from_command":  false
+                   },
+                   {
+                       "order":  3,
+                       "id":  "local_validation",
+                       "name":  "Local validation gates",
+                       "required_evidence":  [
+                                                 "standard validation",
+                                                 "CLI tests",
+                                                 "smoke validation",
+                                                 "security gate",
+                                                 "review gate",
+                                                 "git diff --check"
+                                             ],
+                       "operator_action":  "run_declared_local_gates",
+                       "gate":  "local_gates_pass",
+                       "writes_repository_files":  false,
+                       "calls_github_from_command":  false
+                   },
+                   {
+                       "order":  4,
+                       "id":  "pull_request",
+                       "name":  "Pull request creation or update",
+                       "required_evidence":  [
+                                                 "GitHub pull request URL",
+                                                 "PR body with validations and policy result"
+                                             ],
+                       "operator_action":  "open_or_update_pr_outside_plan_only_command",
+                       "gate":  "pr_exists_and_targets_default_branch",
+                       "writes_repository_files":  false,
+                       "calls_github_from_command":  false
+                   },
+                   {
+                       "order":  5,
+                       "id":  "ci_review",
+                       "name":  "GitHub CI and review gates",
+                       "required_evidence":  [
+                                                 "Foundation Validation",
+                                                 "SpecBridge Review Gate",
+                                                 "SpecBridge PR Review Report",
+                                                 "Claude Review Non Blocking"
+                                             ],
+                       "operator_action":  "wait_for_ci_outside_plan_only_command",
+                       "gate":  "ci_review_security_policy_pass",
+                       "writes_repository_files":  false,
+                       "calls_github_from_command":  false
+                   },
+                   {
+                       "order":  6,
+                       "id":  "policy_merge",
+                       "name":  "Policy-gated merge",
+                       "required_evidence":  [
+                                                 "passed CI",
+                                                 "passed tests",
+                                                 "no policy violation",
+                                                 "no protected files changed",
+                                                 "ChatGPT/Codex audit approved"
+                                             ],
+                       "operator_action":  "merge_outside_plan_only_command_only_when_gates_pass",
+                       "gate":  "merge_allowed_by_policy",
+                       "writes_repository_files":  false,
+                       "calls_github_from_command":  false
+                   },
+                   {
+                       "order":  7,
+                       "id":  "post_merge_memory",
+                       "name":  "Post-merge repository memory closure",
+                       "required_evidence":  [
+                                                 ".specbridge/context/CURRENT_GOAL.md",
+                                                 "merged pull request",
+                                                 "closed issue"
+                                             ],
+                       "operator_action":  "record_next_goal_or_closure_after_merge",
+                       "gate":  "repository_memory_matches_merged_state",
+                       "writes_repository_files":  true,
+                       "calls_github_from_command":  false
+                   }
+               ],
+    "required_gates":  {
+                           "local":  [
+                                         "validate-contracts",
+                                         "validate-contract-scopes",
+                                         "validate-final-reports",
+                                         "validate-audit-packets",
+                                         "validate-chatgpt-audits",
+                                         "validate-security-gates",
+                                         "validate-review-gate",
+                                         "test-specbridge-cli",
+                                         "specbridge-smoke",
+                                         "git diff --check"
+                                     ],
+                           "github":  [
+                                          "Foundation Validation",
+                                          "SpecBridge Review Gate",
+                                          "SpecBridge PR Review Report",
+                                          "Claude Review Non Blocking"
+                                      ]
+                       },
+    "merge_conditions":  [
+                             "ci_passed",
+                             "tests_passed",
+                             "no_policy_violation",
+                             "no_protected_files_changed",
+                             "chatgpt_codex_audit_approved",
+                             "branch_mergeable",
+                             "deployment_not_requested"
+                         ],
+    "post_merge_memory_closure":  {
+                                      "required":  true,
+                                      "current_goal_update":  ".specbridge/context/CURRENT_GOAL.md",
+                                      "issue_closure_required":  true,
+                                      "pr_merge_evidence_required":  true,
+                                      "next_recommended_task_required":  true
+                                  },
+    "policy_boundaries":  [
+                              "no-secrets",
+                              "no-production",
+                              "no-billing",
+                              "no-auth-security-change",
+                              "no-authorization-security-change",
+                              "no-database-change",
+                              "no-dependency-installation",
+                              "no-ci-cd-security-change",
+                              "no-deployment"
+                          ],
+    "command_boundary":  "plan-only does-not-create-issues does-not-open-prs does-not-wait-for-ci does-not-merge does-not-launch-claude-code does-not-launch-antigravity does-not-install-dependencies does-not-deploy",
+    "output_path":  ".specbridge/issue-to-merge-runs/issue-109-governed-issue-to-merge-operator.issue-to-merge-run.json"
+}

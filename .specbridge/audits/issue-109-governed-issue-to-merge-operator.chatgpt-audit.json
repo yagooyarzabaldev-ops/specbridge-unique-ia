@@ -1,0 +1,86 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-109-governed-issue-to-merge-operator",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-109-governed-issue-to-merge-operator.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-109-governed-issue-to-merge-operator.execution.md",
+  "final_report_path": ".specbridge/reports/issue-109-governed-issue-to-merge-operator.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue 109 implements the next standardization target recorded by issue 107: a governed issue-to-merge operator surface.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "`issue-to-merge-plan` emits deterministic JSON, writes `.specbridge/issue-to-merge-runs/*.issue-to-merge-run.json`, records phases, gates, evidence paths, merge conditions, policy boundaries, and fails when `TaskId` is omitted.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The new command boundary is plan-only and records that it does not create issues, open PRs, wait for CI, merge, launch Claude Code, launch Antigravity, install dependencies, or deploy.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "Changed files are limited to allowed CLI, test, documentation, memory, operator-run, contract, scope, report, audit, and audit-packet paths. No protected files, workflow security controls, dependency manifests, production configuration, secrets, keys, auth security, authorization security, billing, database, or deployment paths were changed.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed files are declared in `.specbridge/scopes/issue-109-governed-issue-to-merge-operator.scope.json`.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "`scripts/test-specbridge-cli.ps1`, `scripts/specbridge-smoke.ps1`, standard validation, contract validation, scope validation, final report validation, audit packet validation, ChatGPT audit validation, security gate, review gate, and git diff whitespace validation passed locally.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub CI for issue 109 is not collected yet and remains an external merge gate. The final report marks CI as not_collected rather than passed.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records local completion pending PR CI, no deployment, and GitHub-mutating operator behavior as intentionally unimplemented future work.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "external_ci_pending",
+      "file": ".specbridge/reports/issue-109-governed-issue-to-merge-operator.final-report.json",
+      "line": null,
+      "evidence": "Issue 109 local operator evidence is prepared, but GitHub CI cannot be recorded as passed until the branch is pushed and checks run.",
+      "recommendation": "Push the branch, open a pull request, wait for GitHub checks, and merge only if required gates pass.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending.",
+    "GitHub-mutating operator behavior remains intentionally unimplemented and requires a future dedicated contract."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-109-governed-issue-to-merge-operator.audit-packet.json",
+    ".specbridge/audits/issue-109-governed-issue-to-merge-operator.chatgpt-audit.json",
+    ".specbridge/contracts/issue-109-governed-issue-to-merge-operator.execution.md",
+    ".specbridge/issue-to-merge-runs/issue-109-governed-issue-to-merge-operator.issue-to-merge-run.json",
+    ".specbridge/reports/issue-109-governed-issue-to-merge-operator.final-report.json",
+    ".specbridge/scopes/issue-109-governed-issue-to-merge-operator.scope.json",
+    "docs/specbridge-issue-to-merge-operator.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ]
+}

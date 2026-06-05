@@ -1,0 +1,32 @@
+{
+  "contract_id": "issue-109-governed-issue-to-merge-operator",
+  "status": "completed",
+  "exclusive_write": [
+    "README.md",
+    "docs/specbridge-local-cli.md",
+    "docs/specbridge-issue-to-merge-operator.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/audit-packets/issue-109-governed-issue-to-merge-operator.audit-packet.json",
+    ".specbridge/audits/issue-109-governed-issue-to-merge-operator.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-109-governed-issue-to-merge-operator.execution.md",
+    ".specbridge/issue-to-merge-runs/issue-109-governed-issue-to-merge-operator.issue-to-merge-run.json",
+    ".specbridge/reports/issue-109-governed-issue-to-merge-operator.final-report.json",
+    ".specbridge/scopes/issue-109-governed-issue-to-merge-operator.scope.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/pilot-closures/issue-107-post-preflight-live-pilot-closure.pilot-closure.json",
+    ".specbridge/reports/issue-107-post-preflight-live-pilot-closure.final-report.json",
+    "docs/specbridge-standard-loop-orchestrator.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-107-post-preflight-live-pilot-closure"
+  ],
+  "final_report": ".specbridge/reports/issue-109-governed-issue-to-merge-operator.final-report.json"
+}

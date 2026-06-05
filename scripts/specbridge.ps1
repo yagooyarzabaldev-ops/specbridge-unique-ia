@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "issue-to-merge-plan", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -960,6 +960,203 @@ function Invoke-StandardLoopOrchestrateCommand {
     exit 1
   }
 
+  exit 0
+}
+
+function Invoke-IssueToMergePlanCommand {
+  if ([string]::IsNullOrWhiteSpace($TaskId)) {
+    Fail "TaskId is required for issue-to-merge-plan"
+  }
+
+  $safeTaskId = Convert-ToSafeName -Value $TaskId -FieldName "task_id"
+  $contractSeed = New-StandardLoopContractSeed -TaskIdentifier $safeTaskId
+
+  $issueReference = $RelatedIssue
+  if ([string]::IsNullOrWhiteSpace($issueReference)) {
+    $issueReference = $contractSeed.issue_reference
+  }
+
+  if ([string]::IsNullOrWhiteSpace($issueReference) -or $issueReference -eq "not_declared") {
+    $issueReference = "not_declared"
+  }
+
+  $resolvedTitle = $Title
+  if ([string]::IsNullOrWhiteSpace($resolvedTitle)) {
+    $resolvedTitle = $safeTaskId
+  }
+
+  $resolvedGoal = $Goal
+  if ([string]::IsNullOrWhiteSpace($resolvedGoal)) {
+    $resolvedGoal = "Run the governed SpecBridge issue-to-merge loop for $safeTaskId."
+  }
+
+  $runPath = ".specbridge/issue-to-merge-runs/$safeTaskId.issue-to-merge-run.json"
+
+  $phases = @(
+    [ordered]@{
+      order = 1
+      id = "issue_intake"
+      name = "GitHub issue intake"
+      required_evidence = @("GitHub issue", ".specbridge/context/CURRENT_GOAL.md")
+      operator_action = "verify_issue_exists_or_create_outside_plan_only_command"
+      gate = "issue_has_goal_scope_acceptance_policy"
+      writes_repository_files = $false
+      calls_github_from_command = $false
+    },
+    [ordered]@{
+      order = 2
+      id = "contract_package"
+      name = "Execution contract, scope, report, and audit package"
+      required_evidence = @(
+        $contractSeed.contract_path,
+        $contractSeed.scope_path,
+        $contractSeed.final_report_path,
+        $contractSeed.audit_packet_path,
+        $contractSeed.chatgpt_audit_path
+      )
+      operator_action = "create_or_update_declared_repository_evidence"
+      gate = "contract_scope_report_audit_validate"
+      writes_repository_files = $true
+      calls_github_from_command = $false
+    },
+    [ordered]@{
+      order = 3
+      id = "local_validation"
+      name = "Local validation gates"
+      required_evidence = @("standard validation", "CLI tests", "smoke validation", "security gate", "review gate", "git diff --check")
+      operator_action = "run_declared_local_gates"
+      gate = "local_gates_pass"
+      writes_repository_files = $false
+      calls_github_from_command = $false
+    },
+    [ordered]@{
+      order = 4
+      id = "pull_request"
+      name = "Pull request creation or update"
+      required_evidence = @("GitHub pull request URL", "PR body with validations and policy result")
+      operator_action = "open_or_update_pr_outside_plan_only_command"
+      gate = "pr_exists_and_targets_default_branch"
+      writes_repository_files = $false
+      calls_github_from_command = $false
+    },
+    [ordered]@{
+      order = 5
+      id = "ci_review"
+      name = "GitHub CI and review gates"
+      required_evidence = @("Foundation Validation", "SpecBridge Review Gate", "SpecBridge PR Review Report", "Claude Review Non Blocking")
+      operator_action = "wait_for_ci_outside_plan_only_command"
+      gate = "ci_review_security_policy_pass"
+      writes_repository_files = $false
+      calls_github_from_command = $false
+    },
+    [ordered]@{
+      order = 6
+      id = "policy_merge"
+      name = "Policy-gated merge"
+      required_evidence = @("passed CI", "passed tests", "no policy violation", "no protected files changed", "ChatGPT/Codex audit approved")
+      operator_action = "merge_outside_plan_only_command_only_when_gates_pass"
+      gate = "merge_allowed_by_policy"
+      writes_repository_files = $false
+      calls_github_from_command = $false
+    },
+    [ordered]@{
+      order = 7
+      id = "post_merge_memory"
+      name = "Post-merge repository memory closure"
+      required_evidence = @(".specbridge/context/CURRENT_GOAL.md", "merged pull request", "closed issue")
+      operator_action = "record_next_goal_or_closure_after_merge"
+      gate = "repository_memory_matches_merged_state"
+      writes_repository_files = $true
+      calls_github_from_command = $false
+    }
+  )
+
+  $operator = [ordered]@{
+    schema_version = "1"
+    command = "issue-to-merge-plan"
+    ok = $true
+    mode = "plan_only"
+    task_id = $safeTaskId
+    title = $resolvedTitle
+    goal = $resolvedGoal
+    issue_reference = $issueReference
+    repository_url = $RepositoryUrl
+    base_branch = $BaseBranch
+    recommended_branch = $contractSeed.recommended_branch
+    current_branch = Get-GitValue -Arguments @("branch", "--show-current") -Fallback "unknown"
+    head = Get-GitValue -Arguments @("rev-parse", "--short", "HEAD") -Fallback "unknown"
+    evidence_paths = [ordered]@{
+      contract = $contractSeed.contract_path
+      scope = $contractSeed.scope_path
+      final_report = $contractSeed.final_report_path
+      audit_packet = $contractSeed.audit_packet_path
+      chatgpt_audit = $contractSeed.chatgpt_audit_path
+      issue_to_merge_run = $runPath
+      standard_loop_run = $contractSeed.standard_loop_run_path
+    }
+    phases = @($phases)
+    required_gates = [ordered]@{
+      local = @(
+        "validate-contracts",
+        "validate-contract-scopes",
+        "validate-final-reports",
+        "validate-audit-packets",
+        "validate-chatgpt-audits",
+        "validate-security-gates",
+        "validate-review-gate",
+        "test-specbridge-cli",
+        "specbridge-smoke",
+        "git diff --check"
+      )
+      github = @(
+        "Foundation Validation",
+        "SpecBridge Review Gate",
+        "SpecBridge PR Review Report",
+        "Claude Review Non Blocking"
+      )
+    }
+    merge_conditions = @(
+      "ci_passed",
+      "tests_passed",
+      "no_policy_violation",
+      "no_protected_files_changed",
+      "chatgpt_codex_audit_approved",
+      "branch_mergeable",
+      "deployment_not_requested"
+    )
+    post_merge_memory_closure = [ordered]@{
+      required = $true
+      current_goal_update = ".specbridge/context/CURRENT_GOAL.md"
+      issue_closure_required = $true
+      pr_merge_evidence_required = $true
+      next_recommended_task_required = $true
+    }
+    policy_boundaries = @(
+      "no-secrets",
+      "no-production",
+      "no-billing",
+      "no-auth-security-change",
+      "no-authorization-security-change",
+      "no-database-change",
+      "no-dependency-installation",
+      "no-ci-cd-security-change",
+      "no-deployment"
+    )
+    command_boundary = "plan-only does-not-create-issues does-not-open-prs does-not-wait-for-ci does-not-merge does-not-launch-claude-code does-not-launch-antigravity does-not-install-dependencies does-not-deploy"
+    output_path = $null
+  }
+
+  if (-not [string]::IsNullOrWhiteSpace($OutputPath)) {
+    $output = Assert-OutputPath `
+      -Path $OutputPath `
+      -Pattern "^\.specbridge/issue-to-merge-runs/.+\.issue-to-merge-run\.json$" `
+      -Description "a .specbridge/issue-to-merge-runs/*.issue-to-merge-run.json operator artifact"
+
+    $operator["output_path"] = $output
+    Write-Utf8JsonFile -Path $output -Value $operator -Depth 12
+  }
+
+  Write-CliJson $operator -Depth 12
   exit 0
 }
 
@@ -4313,6 +4510,7 @@ switch ($Command) {
   "summarize-autonomy-metrics" { Invoke-SummarizeAutonomyMetricsCommand }
   "standard-loop-status" { Invoke-StandardLoopStatusCommand }
   "standard-loop-orchestrate" { Invoke-StandardLoopOrchestrateCommand }
+  "issue-to-merge-plan" { Invoke-IssueToMergePlanCommand }
   "v5-pilot-status" { Invoke-V5PilotStatusCommand }
   "v5-live-status" { Invoke-V5LiveStatusCommand }
   "v5-autonomy-status" { Invoke-V5AutonomyStatusCommand }

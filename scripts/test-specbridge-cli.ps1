@@ -333,6 +333,93 @@ try {
       }
     }
 
+    $issueToMergePlanResult = Invoke-Cli -Arguments @(
+      "issue-to-merge-plan",
+      "-TaskId",
+      "issue-109-governed-issue-to-merge-operator",
+      "-RelatedIssue",
+      "https://github.com/yagooyarzabaldev-ops/specbridge/issues/109"
+    )
+
+    Assert-Success `
+      -Name "issue-to-merge-plan" `
+      -Result $issueToMergePlanResult `
+      -ExpectedPattern '"command"\s*:\s*"issue-to-merge-plan"'
+
+    if ($issueToMergePlanResult.ExitCode -eq 0) {
+      $issueToMergePlanJson = $null
+      try { $issueToMergePlanJson = $issueToMergePlanResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      if ($null -eq $issueToMergePlanJson) {
+        Write-Output "FAIL issue-to-merge-plan output was not valid JSON."
+        $script:failed = $true
+      }
+      elseif ($issueToMergePlanJson.mode -ne "plan_only") {
+        Write-Output "FAIL issue-to-merge-plan expected plan_only mode."
+        $script:failed = $true
+      }
+      elseif (@($issueToMergePlanJson.phases).Count -lt 7) {
+        Write-Output "FAIL issue-to-merge-plan expected at least 7 phases."
+        $script:failed = $true
+      }
+      elseif ($issueToMergePlanJson.evidence_paths.issue_to_merge_run -ne ".specbridge/issue-to-merge-runs/issue-109-governed-issue-to-merge-operator.issue-to-merge-run.json") {
+        Write-Output "FAIL issue-to-merge-plan has unexpected issue-to-merge run path."
+        $script:failed = $true
+      }
+      elseif ($issueToMergePlanJson.command_boundary -notmatch "does-not-open-prs") {
+        Write-Output "FAIL issue-to-merge-plan command boundary did not record no PR mutation."
+        $script:failed = $true
+      }
+      else {
+        Write-Output "PASS issue-to-merge-plan includes plan-only gates, paths, and boundaries."
+      }
+    }
+
+    Assert-Success `
+      -Name "issue-to-merge-plan-output-path" `
+      -Result (Invoke-Cli -Arguments @(
+        "issue-to-merge-plan",
+        "-TaskId",
+        "cli-fixture",
+        "-RelatedIssue",
+        "https://github.com/yagooyarzabaldev-ops/specbridge/issues/999",
+        "-OutputPath",
+        ".specbridge/issue-to-merge-runs/cli-fixture.issue-to-merge-run.json",
+        "-Force"
+      )) `
+      -ExpectedPattern '"output_path"\s*:\s*"\.specbridge/issue-to-merge-runs/cli-fixture\.issue-to-merge-run\.json"'
+
+    if (-not (Test-Path -LiteralPath ".specbridge/issue-to-merge-runs/cli-fixture.issue-to-merge-run.json" -PathType Leaf)) {
+      Write-Output "FAIL issue-to-merge-plan did not write the requested output path."
+      $script:failed = $true
+    }
+    else {
+      try {
+        $issueToMergeRun = Get-Content -LiteralPath ".specbridge/issue-to-merge-runs/cli-fixture.issue-to-merge-run.json" -Raw | ConvertFrom-Json
+
+        if ($issueToMergeRun.command -ne "issue-to-merge-plan" -or $issueToMergeRun.task_id -ne "cli-fixture") {
+          Write-Output "FAIL issue-to-merge-plan output artifact has unexpected content."
+          $script:failed = $true
+        }
+        elseif ($issueToMergeRun.recommended_branch -ne "codex/cli-fixture") {
+          Write-Output "FAIL issue-to-merge-plan output artifact has unexpected branch."
+          $script:failed = $true
+        }
+        elseif (-not $issueToMergeRun.post_merge_memory_closure.required) {
+          Write-Output "FAIL issue-to-merge-plan output artifact does not require post-merge memory closure."
+          $script:failed = $true
+        }
+        else {
+          Write-Output "PASS issue-to-merge-plan output artifact validates by inspection."
+        }
+      }
+      catch {
+        Write-Output "FAIL issue-to-merge-plan output artifact is not valid JSON."
+        Write-Output $_.Exception.Message
+        $script:failed = $true
+      }
+    }
+
     Assert-Success `
       -Name "v5-pilot-status" `
       -Result (Invoke-Cli -Arguments @("v5-pilot-status")) `
@@ -1005,6 +1092,11 @@ try {
       -Name "review-gate" `
       -Result (Invoke-Cli -Arguments @("review-gate")) `
       -ExpectedPattern '"command"\s*:\s*"review-gate"'
+
+    Assert-Failure `
+      -Name "issue-to-merge-plan-missing-task" `
+      -Result (Invoke-Cli -Arguments @("issue-to-merge-plan")) `
+      -ExpectedPattern "TaskId is required for issue-to-merge-plan"
 
     Assert-Failure `
       -Name "create-contract-missing-output" `

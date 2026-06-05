@@ -40,6 +40,7 @@ specbridge status
 | `record-github-evidence` | Hydrates a branch plan with declared real GitHub child PR, CI, and ChatGPT/Codex audit evidence. | Yes |
 | `coordinate-executors` | Aggregates executor branch evidence into a coordinator orchestration artifact. | Yes |
 | `review-gate` | Runs security gate validation and PR review gate validation. | No |
+| `issue-to-merge-plan` | Creates a governed plan-only issue-to-merge operator artifact with phases, gates, merge conditions, evidence paths, and post-merge memory closure requirements. | Optional |
 
 ## Validation Profiles
 
@@ -95,6 +96,35 @@ The selection is deterministic: artifact names that begin with `issue-<number>` 
 - `ReportPath`
 
 The command delegates to `scripts/generate-audit-packet.ps1` and writes under `.specbridge/audit-packets/` by default.
+
+## Issue-to-Merge Operator
+
+`issue-to-merge-plan` requires:
+
+- `TaskId`
+
+Optional inputs:
+
+- `Title`
+- `Goal`
+- `RelatedIssue`
+- `OutputPath`
+
+When `RelatedIssue` is omitted, the command infers the issue URL from task ids that begin with `issue-<number>`.
+
+When `OutputPath` is provided, it must be under `.specbridge/issue-to-merge-runs/` and end with `.issue-to-merge-run.json`.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 issue-to-merge-plan `
+  -TaskId issue-109-governed-issue-to-merge-operator `
+  -RelatedIssue https://github.com/yagooyarzabaldev-ops/specbridge/issues/109 `
+  -OutputPath .specbridge/issue-to-merge-runs/issue-109-governed-issue-to-merge-operator.issue-to-merge-run.json `
+  -Force
+```
+
+The command is plan-only. It records the governed issue-to-merge phases, local gates, GitHub gates, merge conditions, policy boundaries, and post-merge memory requirements.
+
+It does not create issues, open PRs, wait for CI, merge, launch Claude Code, launch Antigravity, install dependencies, change workflow security controls, or deploy.
 
 ## Decomposition Input
 
@@ -233,7 +263,9 @@ Simulation mode writes explicit simulated PR, CI, and audit evidence and cannot 
 - `coordinate-executors`
 - `detect-conflicts`
 - `review-gate`
+- `issue-to-merge-plan`
 - deterministic failure when a required output path is missing
+- deterministic failure when `issue-to-merge-plan` is missing `TaskId`
 - deterministic failure when runtime launch and runtime result artifacts do not match
 
 `scripts/specbridge-smoke.ps1` runs the CLI suite in CI.

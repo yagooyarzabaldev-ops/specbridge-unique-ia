@@ -102,6 +102,7 @@ SpecBridge currently has these governed status layers:
 - Serious autonomous multi-executor test loop: implemented as a two-slice Claude Code runtime proof from one governed goal, with non-overlapping executor write scopes, runtime launch plans, runtime-run artifacts, runtime results, runtime summaries, autonomy metrics, hardened ChatGPT/Codex audit validation, and policy-gated completion evidence.
 - Standard Loop v1: implemented as the canonical path from ChatGPT/Codex goal to contract, scope, executor packet, runtime launch, controlled runner dry-run, evidence, audit, GitHub CI authority, review gate, security gate, and policy-gated merge.
 - Standard Loop orchestrator: implemented as a deterministic `standard-loop-orchestrate` CLI command that reports the governed issue-to-merge phases, required gates, current repository phase, next recommended action, next contract seed, latest artifacts, policy boundaries, and optional file-backed orchestration artifact without launching Claude Code, Antigravity, GitHub calls, dependency installation, or deployment.
+- Governed issue-to-merge operator: implemented as a deterministic plan-only `issue-to-merge-plan` CLI command that records issue intake, contract package, local gates, PR, GitHub CI, policy merge, and post-merge memory closure phases with merge conditions, evidence paths, policy boundaries, and optional file-backed run artifacts without creating issues, opening PRs, waiting for CI, merging, launching runtime, installing dependencies, or deploying.
 - Multi-slice live pilot contract preparation: implemented as a governed three-slice handoff from the Standard Loop `next_contract_seed`, with non-overlapping `status`, `tests`, and `docs` executor scopes, executor packets, plan-only runtime launch artifacts, documentation, final report, audit packet, and ChatGPT/Codex audit evidence before any future live operator launch.
 - Runtime launch preflight: implemented as a deterministic `preflight-runtime-launches` CLI command and validator that read prepared launch plans, confirm required slices, non-overlapping write scopes, budget ceiling, tool allow-list, and plan-only execution policy before any future live operator launch.
 - Bounded live docs slice: implemented as the first post-preflight live execution from the prepared issue 097 launch plans, with one docs-slice Claude Code run, bounded diagnostics, executor evidence, runtime-run/result/summary artifacts, final report, audit packet, and ChatGPT/Codex audit evidence.
@@ -138,6 +139,7 @@ See:
 - `docs/specbridge-autonomy-metrics.md`
 - `docs/specbridge-standard-loop-v1.md`
 - `docs/specbridge-standard-loop-orchestrator.md`
+- `docs/specbridge-issue-to-merge-operator.md`
 - `docs/specbridge-multi-slice-live-pilot-contract.md`
 - `docs/specbridge-runtime-launch-preflight.md`
 - `docs/specbridge-standard-loop-feature-pilot.md`

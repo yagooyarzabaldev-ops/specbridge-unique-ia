@@ -1,0 +1,41 @@
+{
+  "summary": "Completed issue 109 locally. SpecBridge now has a deterministic plan-only `issue-to-merge-plan` CLI operator command that records the governed path from issue intake to contract package, local gates, pull request, GitHub CI/review, policy-gated merge, and post-merge memory closure. The command writes optional file-backed artifacts under `.specbridge/issue-to-merge-runs/` and does not create GitHub issues, open PRs, wait for CI, merge, launch Claude Code, launch Antigravity, install dependencies, change CI/CD security, touch secrets, touch production, or deploy.",
+  "changed_files": [
+    "README.md",
+    "docs/specbridge-issue-to-merge-operator.md",
+    "docs/specbridge-local-cli.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/audit-packets/issue-109-governed-issue-to-merge-operator.audit-packet.json",
+    ".specbridge/audits/issue-109-governed-issue-to-merge-operator.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-109-governed-issue-to-merge-operator.execution.md",
+    ".specbridge/issue-to-merge-runs/issue-109-governed-issue-to-merge-operator.issue-to-merge-run.json",
+    ".specbridge/reports/issue-109-governed-issue-to-merge-operator.final-report.json",
+    ".specbridge/scopes/issue-109-governed-issue-to-merge-operator.scope.json"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 issue-to-merge-plan -TaskId issue-109-governed-issue-to-merge-operator -RelatedIssue https://github.com/yagooyarzabaldev-ops/specbridge/issues/109 -OutputPath .specbridge/issue-to-merge-runs/issue-109-governed-issue-to-merge-operator.issue-to-merge-run.json -Force: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "git diff --check: passed",
+    "GitHub CI: not_collected"
+  ],
+  "policy_result": "Passed locally. The new operator is plan-only and does not mutate GitHub, launch runtime, install dependencies, change CI/CD security, touch secrets, touch production, touch billing, change auth or authorization security, change databases, or deploy.",
+  "risk_result": "Medium risk because the local CLI product surface changed. Risk is bounded by deterministic JSON output, explicit output path restrictions, CLI coverage, documentation, audit evidence, and a plan-only command boundary.",
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending until the branch is pushed and checks run.",
+    "GitHub-mutating operator behavior remains intentionally unimplemented and requires a future dedicated contract."
+  ],
+  "merge_status": "Pending pull request, GitHub CI, review gate, security gate, and policy-gated merge.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_pr_ci"
+}
