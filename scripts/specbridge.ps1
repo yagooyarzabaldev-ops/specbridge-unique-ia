@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -389,6 +389,8 @@ function Invoke-StatusCommand {
       runtime_preflights = Get-FileCount -Path ".specbridge/preflights" -Filter "*.runtime-preflight.json"
       runtime_results = Get-FileCount -Path ".specbridge/runtime-results" -Filter "*.runtime-result.json"
       runtime_summaries = Get-FileCount -Path ".specbridge/runtime-summaries" -Filter "*.runtime-summary.json"
+      runtime_runs = Get-FileCount -Path ".specbridge/runtime-runs" -Filter "*.runtime-run.json"
+      runtime_executions = Get-FileCount -Path ".specbridge/runtime-executions" -Filter "*.runtime-execution.json"
     }
     current_goal_path = ".specbridge/context/CURRENT_GOAL.md"
   }
@@ -404,6 +406,8 @@ function Invoke-StatusCommand {
       runtime_preflight = Get-LatestArtifactPath -Path ".specbridge/preflights" -Filter "*.runtime-preflight.json"
       runtime_result = Get-LatestArtifactPath -Path ".specbridge/runtime-results" -Filter "*.runtime-result.json"
       runtime_summary = Get-LatestArtifactPath -Path ".specbridge/runtime-summaries" -Filter "*.runtime-summary.json"
+      runtime_run = Get-LatestArtifactPath -Path ".specbridge/runtime-runs" -Filter "*.runtime-run.json"
+      runtime_execution = Get-LatestArtifactPath -Path ".specbridge/runtime-executions" -Filter "*.runtime-execution.json"
     }
   }
 
@@ -4252,6 +4256,45 @@ function Invoke-V5SeriousPilotStatusCommand {
   exit 0
 }
 
+function Invoke-BoundedLivePilotStatusCommand {
+  $pilotSlices = @("docs", "status", "tests")
+  $launchPlans = [ordered]@{}
+  $executorEvidence = [ordered]@{}
+
+  foreach ($slice in $pilotSlices) {
+    $launchPath = ".specbridge/runtime-launches/issue-097-$slice.runtime-launch.json"
+    $evidencePath = ".specbridge/runtime-evidence/issue-097-$slice.executor-output.md"
+
+    $launchPlans[$slice] = [ordered]@{
+      path = $launchPath
+      exists = (Test-Path -LiteralPath $launchPath)
+    }
+
+    $executorEvidence[$slice] = [ordered]@{
+      path = $evidencePath
+      exists = (Test-Path -LiteralPath $evidencePath)
+    }
+  }
+
+  $allPlansExist = (@($launchPlans.Values | Where-Object { -not $_.exists }).Count -eq 0)
+  $evidenceCount = @($executorEvidence.Values | Where-Object { $_.exists }).Count
+
+  Write-CliJson ([ordered]@{
+    command = "bounded-live-pilot-status"
+    ok = $allPlansExist
+    branch = Get-GitValue -Arguments @("branch", "--show-current") -Fallback "unknown"
+    head = Get-GitValue -Arguments @("rev-parse", "--short", "HEAD") -Fallback "unknown"
+    pilot_id = "issue-097-multi-slice-live-pilot"
+    pilot_slices = @($pilotSlices)
+    prepared_launch_plans = $launchPlans
+    executor_evidence = $executorEvidence
+    executor_evidence_count = $evidenceCount
+    policy_boundary = "no-production no-secrets no-billing no-auth no-authorization no-database no-dependency-installation no-ci-cd-security no-deployment"
+  })
+
+  exit 0
+}
+
 switch ($Command) {
   "status" { Invoke-StatusCommand }
   "validate" { Invoke-ValidateCommand }
@@ -4275,6 +4318,7 @@ switch ($Command) {
   "v5-autonomy-status" { Invoke-V5AutonomyStatusCommand }
   "v5-serious-pilot-status" { Invoke-V5SeriousPilotStatusCommand }
   "runtime-capability-status" { Invoke-RuntimeCapabilityStatusCommand }
+  "bounded-live-pilot-status" { Invoke-BoundedLivePilotStatusCommand }
   "plan-executor-branches" { Invoke-PlanExecutorBranchesCommand }
   "record-github-evidence" { Invoke-RecordGithubEvidenceCommand }
   "coordinate-executors" { Invoke-CoordinateExecutorsCommand }

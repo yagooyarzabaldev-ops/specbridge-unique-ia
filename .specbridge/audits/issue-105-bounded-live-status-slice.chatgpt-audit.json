@@ -1,0 +1,106 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-105-bounded-live-status-slice",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-105-bounded-live-status-slice.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-105-bounded-live-status-slice.execution.md",
+  "final_report_path": ".specbridge/reports/issue-105-bounded-live-status-slice.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue 105 ran exactly one bounded live status slice using `.specbridge/runtime-launches/issue-097-status.runtime-launch.json` after runtime capability and runtime preflight passed.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "Runtime execution succeeded, executor evidence exists, runtime-run/result/summary artifacts validate, and the summary reports `ready_for_policy_gates` with zero blockers.",
+      "blocking": false
+    },
+    {
+      "name": "live_execution_boundary",
+      "result": "pass",
+      "evidence": "Only the status slice was launched. The issue 097 docs and tests slices were completed by issue 101 and issue 103, and were not launched by this contract.",
+      "blocking": false
+    },
+    {
+      "name": "executor_scope",
+      "result": "pass",
+      "evidence": "Executor-written files are limited to `scripts/specbridge.ps1` and `.specbridge/runtime-evidence/issue-097-status.executor-output.md`; coordinator evidence is declared in the issue 105 scope manifest.",
+      "blocking": false
+    },
+    {
+      "name": "runtime_diagnostics",
+      "result": "pass",
+      "evidence": "The runtime execution artifact records bounded redacted diagnostics and stores stdout/stderr length, line count, and SHA-256 metadata instead of raw unbounded streams.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "No secrets, production, billing, auth or authorization security, database, dependency installation, CI/CD security, deployment automation, or production deployment paths were touched.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "Changed files do not include .env files, private keys, production configuration, billing configuration, authentication security, authorization security, CI/CD security controls, dependency manifests, database paths, or deployment automation.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed files are declared in `.specbridge/scopes/issue-105-bounded-live-status-slice.scope.json`; executor-written files stayed inside the status launch exclusive write paths.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "Runtime execution, runtime-run, runtime result, runtime summary, runtime preflight, contract, scope, standard profile, CLI tests, and runtime launch validators passed before this audit.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub CI for issue 105 is not collected yet and remains an external merge gate. The audit packet marks CI as not_collected rather than passed.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records local completion pending PR CI, GitHub CI as not_collected, pending pull request and merge gates, no deployment, and follow-up evaluation of the full issue 097 live slice chain as residual work.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "external_ci_pending",
+      "file": ".specbridge/reports/issue-105-bounded-live-status-slice.final-report.json",
+      "line": null,
+      "evidence": "Issue 105 local evidence is prepared, but GitHub CI cannot be recorded as passed until the branch is pushed and checks run.",
+      "recommendation": "Push the branch, open a pull request, wait for GitHub checks, and merge only if required gates pass.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub PR CI evidence is pending.",
+    "The full issue 097 live slice chain should be evaluated after issue 105 merges."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-105-bounded-live-status-slice.audit-packet.json",
+    ".specbridge/audits/issue-105-bounded-live-status-slice.chatgpt-audit.json",
+    ".specbridge/contracts/issue-105-bounded-live-status-slice.execution.md",
+    ".specbridge/preflights/issue-105-bounded-live-status-slice.runtime-preflight.json",
+    ".specbridge/reports/issue-105-bounded-live-status-slice.final-report.json",
+    ".specbridge/runtime-executions/issue-105-status.runtime-execution.json",
+    ".specbridge/runtime-results/issue-105-status.runtime-result.json",
+    ".specbridge/runtime-runs/issue-105-status.runtime-run.json",
+    ".specbridge/runtime-summaries/issue-105-status.runtime-summary.json",
+    ".specbridge/scopes/issue-105-bounded-live-status-slice.scope.json",
+    ".specbridge/standard-loop-runs/issue-105-bounded-live-status-slice.standard-loop-run.json"
+  ]
+}

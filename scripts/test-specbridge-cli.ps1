@@ -173,7 +173,7 @@ try {
           Write-Output "PASS status includes default_mode field."
         }
 
-        $countsFields = @("contracts", "scopes", "reports", "audit_packets", "chatgpt_audits", "runtime_launches", "runtime_preflights", "runtime_results", "runtime_summaries")
+        $countsFields = @("contracts", "scopes", "reports", "audit_packets", "chatgpt_audits", "runtime_launches", "runtime_preflights", "runtime_results", "runtime_summaries", "runtime_runs", "runtime_executions")
         $missingCountFields = $countsFields | Where-Object { -not $statusJson.counts.PSObject.Properties.Name.Contains($_) }
         if ($missingCountFields.Count -gt 0) {
           Write-Output "FAIL status counts missing fields: $($missingCountFields -join ', ')."
@@ -201,7 +201,7 @@ try {
         $script:failed = $true
       }
       else {
-        $artifactFields = @("contract", "scope", "final_report", "audit_packet", "chatgpt_audit", "runtime_launch", "runtime_preflight", "runtime_result", "runtime_summary")
+        $artifactFields = @("contract", "scope", "final_report", "audit_packet", "chatgpt_audit", "runtime_launch", "runtime_preflight", "runtime_result", "runtime_summary", "runtime_run", "runtime_execution")
         $missingArtifactFields = $artifactFields | Where-Object { -not $statusLatestJson.latest_artifacts.PSObject.Properties.Name.Contains($_) }
         if ($missingArtifactFields.Count -gt 0) {
           Write-Output "FAIL status latest_artifacts missing fields: $($missingArtifactFields -join ', ')."
@@ -209,6 +209,42 @@ try {
         }
         else {
           Write-Output "PASS status latest_artifacts includes all expected fields."
+        }
+      }
+    }
+
+    $boundedLivePilotStatusResult = Invoke-Cli -Arguments @("bounded-live-pilot-status")
+
+    Assert-Success `
+      -Name "bounded-live-pilot-status" `
+      -Result $boundedLivePilotStatusResult `
+      -ExpectedPattern '"pilot_id"\s*:\s*"issue-097-multi-slice-live-pilot"'
+
+    if ($boundedLivePilotStatusResult.ExitCode -eq 0) {
+      $boundedLivePilotStatusJson = $null
+      try { $boundedLivePilotStatusJson = $boundedLivePilotStatusResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      if ($null -eq $boundedLivePilotStatusJson) {
+        Write-Output "FAIL bounded-live-pilot-status output was not valid JSON for detail inspection."
+        $script:failed = $true
+      }
+      else {
+        foreach ($slice in @("docs", "status", "tests")) {
+          if (-not $boundedLivePilotStatusJson.prepared_launch_plans.$slice.exists) {
+            Write-Output "FAIL bounded-live-pilot-status missing prepared launch plan for slice: $slice."
+            $script:failed = $true
+          }
+          else {
+            Write-Output "PASS bounded-live-pilot-status prepared launch plan exists for slice: $slice."
+          }
+        }
+
+        if ($boundedLivePilotStatusJson.executor_evidence_count -lt 1) {
+          Write-Output "FAIL bounded-live-pilot-status executor_evidence_count expected at least 1."
+          $script:failed = $true
+        }
+        else {
+          Write-Output "PASS bounded-live-pilot-status executor_evidence_count is populated."
         }
       }
     }
