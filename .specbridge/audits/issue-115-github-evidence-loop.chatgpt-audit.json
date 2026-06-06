@@ -1,0 +1,86 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-115-github-evidence-loop",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-115-github-evidence-loop.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-115-github-evidence-loop.execution.md",
+  "final_report_path": ".specbridge/reports/issue-115-github-evidence-loop.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue 115 implements the next recommended task after issue 113: using the dry-run GitHub mutation envelope as the declared connector action plan for a governed evidence loop.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "`issue-to-merge-github` wrote the issue 115 dry-run artifact, and the GitHub evidence artifact records issue intake plus opened PR 116, pending CI, pending merge, and pending closure evidence without claiming post-merge facts.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The repository-local command remained dry-run and performed no GitHub calls. Real GitHub actions are limited to governed connector lifecycle actions and do not involve secrets, production, billing, auth, authorization, database, dependency installation, CI/CD security, or deployment.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "Changed files are limited to docs, memory, contract, scope, dry-run artifact, GitHub evidence, final report, audit packet, and ChatGPT audit paths.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed files are declared in `.specbridge/scopes/issue-115-github-evidence-loop.scope.json`.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "The dry-run command, standard validation, smoke validation, CLI tests, contract validation, scope validation, final report validation, audit packet validation, ChatGPT audit validation, and whitespace validation passed locally.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub CI is not collected yet and remains an external merge gate. The final report and audit packet mark CI as not_collected rather than passed.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records local completion pending PR CI and explicitly states that PR, CI, merge, and issue closure evidence remain external gates until the lifecycle occurs.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "external_lifecycle_pending",
+      "file": ".specbridge/github-evidence/issue-115-github-evidence-loop.github-mutation-evidence.json",
+      "line": null,
+      "evidence": "The evidence artifact intentionally records PR, CI, merge, and issue closure as pending before the PR lifecycle exists.",
+      "recommendation": "Open the pull request, wait for required checks, and merge only if policy gates pass.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "PR, CI, merge, and issue closure evidence are pending until the pull request lifecycle occurs.",
+    "Pre-merge repository artifacts must not claim post-merge facts."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-115-github-evidence-loop.audit-packet.json",
+    ".specbridge/audits/issue-115-github-evidence-loop.chatgpt-audit.json",
+    ".specbridge/contracts/issue-115-github-evidence-loop.execution.md",
+    ".specbridge/github-evidence/issue-115-github-evidence-loop.github-mutation-evidence.json",
+    ".specbridge/issue-to-merge-runs/issue-115-github-evidence-loop.github-mutation-run.json",
+    ".specbridge/reports/issue-115-github-evidence-loop.final-report.json",
+    ".specbridge/scopes/issue-115-github-evidence-loop.scope.json",
+    "docs/specbridge-issue-to-merge-operator.md",
+    "README.md"
+  ]
+}

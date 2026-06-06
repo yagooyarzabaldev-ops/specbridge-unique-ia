@@ -1,0 +1,121 @@
+{
+  "schema_version": "1",
+  "evidence_id": "issue-115-github-evidence-loop",
+  "generated_by": "ChatGPT/Codex",
+  "task_id": "issue-115-github-evidence-loop",
+  "github_issue": {
+    "url": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/115",
+    "number": 115,
+    "title": "Pilot issue-to-merge GitHub evidence loop",
+    "state_at_recording": "open",
+    "evidence_status": "observed"
+  },
+  "dry_run_envelope": {
+    "path": ".specbridge/issue-to-merge-runs/issue-115-github-evidence-loop.github-mutation-run.json",
+    "command": "issue-to-merge-github",
+    "mutation_mode": "dry_run",
+    "github_calls_performed": false,
+    "selected_operations": [
+      "issue_create",
+      "pr_open",
+      "ci_wait",
+      "merge",
+      "issue_close",
+      "post_merge_memory"
+    ],
+    "connector_actions": [
+      "github.issue.create_or_verify",
+      "github.pull_request.open_or_update",
+      "github.checks.wait_required",
+      "github.pull_request.merge",
+      "github.issue.close_completed",
+      "repository.memory.update_after_merge"
+    ]
+  },
+  "real_lifecycle_evidence": {
+    "branch": {
+      "name": "codex/issue115-github-evidence-loop",
+      "state_at_recording": "local",
+      "evidence_status": "observed"
+    },
+    "pull_request": {
+      "url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/116",
+      "number": 116,
+      "head_sha": "4a33b6fe48f95b436f8c011730bd73aac7439124",
+      "state_at_recording": "open",
+      "evidence_status": "observed"
+    },
+    "github_checks": {
+      "required": [
+        "Foundation Validation",
+        "SpecBridge Review Gate",
+        "SpecBridge PR Review Report",
+        "Claude Review Non Blocking"
+      ],
+      "state_at_recording": "pending_ci_after_pr_creation",
+      "evidence_status": "pending"
+    },
+    "merge": {
+      "state_at_recording": "not_merged",
+      "evidence_status": "pending_policy_gates"
+    },
+    "issue_closure": {
+      "expected_mechanism": "pull request body closes issue 115 after policy-gated merge",
+      "state_at_recording": "open",
+      "evidence_status": "pending_merge"
+    },
+    "post_merge_memory": {
+      "path": ".specbridge/context/CURRENT_GOAL.md",
+      "state_at_recording": "issue_115_active",
+      "evidence_status": "recorded_pre_merge_memory"
+    }
+  },
+  "comparison": [
+    {
+      "operation": "issue_create",
+      "connector_action": "github.issue.create_or_verify",
+      "real_evidence": "Issue 115 exists and is open.",
+      "result": "matched"
+    },
+    {
+      "operation": "pr_open",
+      "connector_action": "github.pull_request.open_or_update",
+      "real_evidence": "PR 116 exists, is open, and has head SHA 4a33b6fe48f95b436f8c011730bd73aac7439124.",
+      "result": "matched"
+    },
+    {
+      "operation": "ci_wait",
+      "connector_action": "github.checks.wait_required",
+      "real_evidence": "CI evidence is pending after PR 116 creation and remains a required merge gate.",
+      "result": "pending"
+    },
+    {
+      "operation": "merge",
+      "connector_action": "github.pull_request.merge",
+      "real_evidence": "Merge evidence is pending and must not be claimed before required gates pass.",
+      "result": "pending"
+    },
+    {
+      "operation": "issue_close",
+      "connector_action": "github.issue.close_completed",
+      "real_evidence": "Issue closure is pending merge.",
+      "result": "pending"
+    },
+    {
+      "operation": "post_merge_memory",
+      "connector_action": "repository.memory.update_after_merge",
+      "real_evidence": "Pre-merge memory records issue 115 as active and the next recommended task.",
+      "result": "matched_pre_merge"
+    }
+  ],
+  "policy_result": "Passed for pre-merge evidence. The repository-local command remains dry-run and performed no GitHub calls. Real GitHub actions are limited to governed issue intake, future PR creation, CI observation, policy-gated merge, and issue closure. No secrets, production, billing, auth, authorization, database, dependency installation, CI/CD security, or deployment actions are authorized.",
+  "unresolved_risks": [
+    "PR, CI, merge, and issue closure evidence are pending until the PR lifecycle occurs.",
+    "Pre-merge repository artifacts must not claim post-merge facts."
+  ],
+  "source_files": [
+    ".specbridge/contracts/issue-115-github-evidence-loop.execution.md",
+    ".specbridge/issue-to-merge-runs/issue-115-github-evidence-loop.github-mutation-run.json",
+    ".specbridge/context/CURRENT_GOAL.md"
+  ]
+}

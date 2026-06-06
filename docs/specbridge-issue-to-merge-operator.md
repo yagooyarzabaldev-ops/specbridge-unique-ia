@@ -132,6 +132,24 @@ Apply mode is not implicit. It requires `-MutationMode apply`, `-Force`, `-Confi
 
 This keeps GitHub mutation as a governed connector action envelope instead of an unrestricted local shell action.
 
+## GitHub Evidence Loop Pilot
+
+Issue 115 is the first governed evidence loop after bounded GitHub mutation mode.
+
+The pilot runs `issue-to-merge-github` in dry-run mode for issue 115 and writes:
+
+```text
+.specbridge/issue-to-merge-runs/issue-115-github-evidence-loop.github-mutation-run.json
+```
+
+The pilot then records a bounded comparison artifact:
+
+```text
+.specbridge/github-evidence/issue-115-github-evidence-loop.github-mutation-evidence.json
+```
+
+That artifact compares the dry-run connector envelope with the real GitHub lifecycle evidence that can exist at each phase: issue intake, branch and PR, required CI checks, policy-gated merge, issue closure, and repository memory. Pre-merge repository files must not claim merge or closure facts before GitHub records them.
+
 ## Merge Conditions
 
 The plan records these merge conditions:

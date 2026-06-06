@@ -1,0 +1,38 @@
+{
+  "summary": "Completed issue 115 locally. SpecBridge created a governed GitHub evidence-loop pilot using `issue-to-merge-github` dry-run output as the connector action envelope, recorded issue 115 intake evidence, documented pre-merge comparison against real GitHub lifecycle evidence, and preserved the dry-run local command boundary. PR, CI, merge, and issue closure evidence remain external gates until the pull request lifecycle completes.",
+  "changed_files": [
+    "README.md",
+    "docs/specbridge-issue-to-merge-operator.md",
+    ".specbridge/audit-packets/issue-115-github-evidence-loop.audit-packet.json",
+    ".specbridge/audits/issue-115-github-evidence-loop.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-115-github-evidence-loop.execution.md",
+    ".specbridge/github-evidence/issue-115-github-evidence-loop.github-mutation-evidence.json",
+    ".specbridge/issue-to-merge-runs/issue-115-github-evidence-loop.github-mutation-run.json",
+    ".specbridge/reports/issue-115-github-evidence-loop.final-report.json",
+    ".specbridge/scopes/issue-115-github-evidence-loop.scope.json"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 issue-to-merge-github -TaskId issue-115-github-evidence-loop -Title \"Pilot issue-to-merge GitHub evidence loop\" -Goal \"Run a small end-to-end issue-to-merge task using the dry-run GitHub mutation envelope and compare it with governed real GitHub lifecycle evidence.\" -RelatedIssue https://github.com/yagooyarzabaldev-ops/specbridge/issues/115 -OutputPath .specbridge/issue-to-merge-runs/issue-115-github-evidence-loop.github-mutation-run.json -Force: passed",
+    "GitHub issue 115 creation: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "git diff --check: passed",
+    "GitHub CI: not_collected"
+  ],
+  "policy_result": "Passed locally. The repository-local `issue-to-merge-github` command remained dry-run and performed no GitHub calls. Real GitHub actions are limited to governed issue intake, future PR creation, CI observation, policy-gated merge, issue closure, and repository memory evidence. No secrets, production, billing, auth or authorization security, database, dependency installation, CI/CD security, deployment automation, or production deployment paths were touched.",
+  "risk_result": "Medium risk because the task compares a GitHub connector mutation envelope with real GitHub lifecycle evidence. Risk is bounded by dry-run local command behavior, explicit connector actions, repository-local evidence, security gate, review gate, ChatGPT/Codex audit, and GitHub CI as external authority.",
+  "unresolved_risks": [
+    "PR, CI, merge, and issue closure evidence are pending until the pull request lifecycle occurs.",
+    "Pre-merge repository artifacts must not claim post-merge facts."
+  ],
+  "merge_status": "PR 116 opened at https://github.com/yagooyarzabaldev-ops/specbridge/pull/116. Merge remains pending GitHub CI, review gate, security gate, and policy-gated merge.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_pr_ci"
+}

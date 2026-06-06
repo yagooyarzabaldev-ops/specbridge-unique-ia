@@ -1,0 +1,153 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-115-github-evidence-loop",
+  "generated_by": "specbridge-audit-packet-generator",
+  "execution_contract_path": ".specbridge/contracts/issue-115-github-evidence-loop.execution.md",
+  "changed_files": [
+    "README.md",
+    "docs/specbridge-issue-to-merge-operator.md",
+    ".specbridge/audit-packets/issue-115-github-evidence-loop.audit-packet.json",
+    ".specbridge/audits/issue-115-github-evidence-loop.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-115-github-evidence-loop.execution.md",
+    ".specbridge/github-evidence/issue-115-github-evidence-loop.github-mutation-evidence.json",
+    ".specbridge/issue-to-merge-runs/issue-115-github-evidence-loop.github-mutation-run.json",
+    ".specbridge/reports/issue-115-github-evidence-loop.final-report.json",
+    ".specbridge/scopes/issue-115-github-evidence-loop.scope.json"
+  ],
+  "diff_summary": [
+    {
+      "file": "README.md",
+      "added_lines": 1,
+      "deleted_lines": 0
+    },
+    {
+      "file": "docs/specbridge-issue-to-merge-operator.md",
+      "added_lines": 18,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/context/CURRENT_GOAL.md",
+      "added_lines": 51,
+      "deleted_lines": 55
+    },
+    {
+      "file": ".specbridge/contracts/issue-115-github-evidence-loop.execution.md",
+      "added_lines": 157,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-115-github-evidence-loop.github-mutation-evidence.json",
+      "added_lines": 137,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/issue-to-merge-runs/issue-115-github-evidence-loop.github-mutation-run.json",
+      "added_lines": 222,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/scopes/issue-115-github-evidence-loop.scope.json",
+      "added_lines": 31,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/reports/issue-115-github-evidence-loop.final-report.json",
+      "added_lines": 27,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/audits/issue-115-github-evidence-loop.chatgpt-audit.json",
+      "added_lines": 92,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/audit-packets/issue-115-github-evidence-loop.audit-packet.json",
+      "added_lines": 115,
+      "deleted_lines": 0
+    }
+  ],
+  "validation_commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 issue-to-merge-github -TaskId issue-115-github-evidence-loop -Title \"Pilot issue-to-merge GitHub evidence loop\" -Goal \"Run a small end-to-end issue-to-merge task using the dry-run GitHub mutation envelope and compare it with governed real GitHub lifecycle evidence.\" -RelatedIssue https://github.com/yagooyarzabaldev-ops/specbridge/issues/115 -OutputPath .specbridge/issue-to-merge-runs/issue-115-github-evidence-loop.github-mutation-run.json -Force",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+    "git diff --check",
+    "GitHub CI"
+  ],
+  "validation_results": [
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 issue-to-merge-github -TaskId issue-115-github-evidence-loop -OutputPath .specbridge/issue-to-merge-runs/issue-115-github-evidence-loop.github-mutation-run.json -Force",
+      "result": "passed"
+    },
+    {
+      "command": "GitHub issue 115 creation",
+      "result": "passed"
+    },
+    {
+      "command": "GitHub PR 116 creation",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    },
+    {
+      "command": "GitHub CI",
+      "result": "not_collected"
+    }
+  ],
+  "final_report_path": ".specbridge/reports/issue-115-github-evidence-loop.final-report.json",
+  "ci_status": "not_collected",
+  "pr_review_report_path": null,
+  "policy_result": "Passed locally. The repository-local `issue-to-merge-github` command remained dry-run and performed no GitHub calls. Real GitHub actions are limited to governed issue intake, future PR creation, CI observation, policy-gated merge, issue closure, and repository memory evidence. No secrets, production, billing, auth or authorization security, database, dependency installation, CI/CD security, deployment automation, or production deployment paths were touched.",
+  "unresolved_risks": [
+    "PR, CI, merge, and issue closure evidence are pending until the pull request lifecycle occurs.",
+    "Pre-merge repository artifacts must not claim post-merge facts."
+  ],
+  "completion_status": "complete_pending_pr_ci",
+  "source_files": [
+    ".specbridge/contracts/issue-115-github-evidence-loop.execution.md",
+    ".specbridge/reports/issue-115-github-evidence-loop.final-report.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}
