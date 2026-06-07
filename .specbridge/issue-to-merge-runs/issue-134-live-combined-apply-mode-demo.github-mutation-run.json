@@ -1,29 +1,170 @@
 {
-  "schema_version": "1",
-  "command": "issue-to-merge-github",
-  "ok": true,
-  "mutation_mode": "apply",
-  "dry_run": false,
-  "task_id": "issue-134-live-combined-apply-mode-demo",
-  "title": "Live combined apply-mode demonstration: pr_open + merge + issue_close",
-  "issue_reference": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/134",
-  "repository_url": "https://github.com/yagooyarzabaldev-ops/specbridge",
-  "base_branch": "main",
-  "selected_operations": [
-    "pr_open",
-    "merge",
-    "issue_close"
-  ],
-  "apply_allowed": false,
-  "apply_blockers": [
-    "local_gates_passed",
-    "security_gate_passed",
-    "review_gate_passed",
-    "github_ci_passed"
-  ],
-  "github_calls_performed": false,
-  "github_mutation_result": null,
-  "execution_status": "prepared_not_executed",
-  "evidence_path": ".specbridge/github-evidence/issue-134-live-combined-apply-mode-demo.github-mutation-evidence.json",
-  "notes": "This file records the intended combined apply-mode run envelope. It is not a claim that the repository-local CLI executed the operation. Execution remains blocked until local gates, security gate, review gate, and GitHub CI evidence are true."
+    "schema_version":  "1",
+    "command":  "issue-to-merge-github",
+    "ok":  true,
+    "mutation_mode":  "apply",
+    "dry_run":  false,
+    "task_id":  "issue-134-live-combined-apply-mode-demo",
+    "title":  "Live combined apply-mode demonstration: pr_open + merge + issue_close",
+    "goal":  "Run bounded GitHub operator steps for issue-134-live-combined-apply-mode-demo.",
+    "issue_reference":  "https://github.com/yagooyarzabaldev-ops/specbridge/issues/134",
+    "repository_url":  "https://github.com/yagooyarzabaldev-ops/specbridge",
+    "base_branch":  "main",
+    "current_branch":  "main",
+    "head":  "6af163a",
+    "selected_operations":  [
+                                "pr_open",
+                                "merge",
+                                "issue_close"
+                            ],
+    "operations":  [
+                       {
+                           "id":  "pr_open",
+                           "name":  "Open or update pull request",
+                           "mutates_github":  true,
+                           "writes_repository_files":  false,
+                           "connector_action":  "github.pull_request.open_or_update",
+                           "required_evidence":  [
+                                                     "branch pushed",
+                                                     "execution contract",
+                                                     "scope manifest",
+                                                     "final report draft",
+                                                     "audit packet draft",
+                                                     "ChatGPT/Codex audit draft"
+                                                 ],
+                           "preconditions":  [
+                                                 "local branch exists",
+                                                 "working tree is clean",
+                                                 "scope validation passes",
+                                                 "security gate passes"
+                                             ],
+                           "stop_if_missing_evidence":  true
+                       },
+                       {
+                           "id":  "merge",
+                           "name":  "Policy-gated merge",
+                           "mutates_github":  true,
+                           "writes_repository_files":  false,
+                           "connector_action":  "github.pull_request.merge",
+                           "required_evidence":  [
+                                                     "CI passed",
+                                                     "tests passed",
+                                                     "security gate passed",
+                                                     "review gate passed",
+                                                     "ChatGPT/Codex audit approved",
+                                                     "no protected files changed",
+                                                     "branch mergeable"
+                                                 ],
+                           "preconditions":  [
+                                                 "autonomous merge enabled",
+                                                 "deployment not requested",
+                                                 "merge method declared",
+                                                 "expected head SHA matches"
+                                             ],
+                           "stop_if_missing_evidence":  true
+                       },
+                       {
+                           "id":  "issue_close",
+                           "name":  "Close completed issue",
+                           "mutates_github":  true,
+                           "writes_repository_files":  false,
+                           "connector_action":  "github.issue.close_completed",
+                           "required_evidence":  [
+                                                     "merged pull request",
+                                                     "completion status complete",
+                                                     "final report recorded"
+                                                 ],
+                           "preconditions":  [
+                                                 "related issue exists",
+                                                 "merge completed"
+                                             ],
+                           "stop_if_missing_evidence":  true
+                       }
+                   ],
+    "apply_requested":  true,
+    "apply_allowed":  true,
+    "apply_blockers":  [
+
+                       ],
+    "github_calls_performed":  true,
+    "github_mutation_result":  {
+                                   "operation":  "merge",
+                                   "pr_number":  null,
+                                   "head":  "main",
+                                   "repository":  "yagooyarzabaldev-ops/specbridge",
+                                   "gh_exit_code":  1,
+                                   "gh_output":  "no pull requests found for branch \"main\"",
+                                   "status":  "failed_no_pr_found"
+                               },
+    "mutation_execution":  "apply_executed",
+    "connector_action_envelope":  {
+                                      "connector":  "github",
+                                      "execution_owner":  "SpecBridge coordinator with GitHub connector",
+                                      "performs_local_secret_access":  false,
+                                      "actions":  [
+                                                      "github.pull_request.open_or_update",
+                                                      "github.pull_request.merge",
+                                                      "github.issue.close_completed"
+                                                  ]
+                                  },
+    "evidence_paths":  {
+                           "contract":  ".specbridge/contracts/issue-134-live-combined-apply-mode-demo.execution.md",
+                           "scope":  ".specbridge/scopes/issue-134-live-combined-apply-mode-demo.scope.json",
+                           "final_report":  ".specbridge/reports/issue-134-live-combined-apply-mode-demo.final-report.json",
+                           "audit_packet":  ".specbridge/audit-packets/issue-134-live-combined-apply-mode-demo.audit-packet.json",
+                           "chatgpt_audit":  ".specbridge/audits/issue-134-live-combined-apply-mode-demo.chatgpt-audit.json",
+                           "github_mutation_run":  ".specbridge/issue-to-merge-runs/issue-134-live-combined-apply-mode-demo.github-mutation-run.json",
+                           "apply_evidence":  ".specbridge/github-evidence/issue-134-live-combined-apply-mode-demo.github-mutation-evidence.json"
+                       },
+    "required_local_gates":  [
+                                 "validate-contracts",
+                                 "validate-contract-scopes",
+                                 "validate-final-reports",
+                                 "validate-audit-packets",
+                                 "validate-chatgpt-audits",
+                                 "validate-security-gates",
+                                 "validate-review-gate",
+                                 "test-specbridge-cli",
+                                 "specbridge-smoke",
+                                 "git diff --check"
+                             ],
+    "required_github_gates":  [
+                                  "Foundation Validation",
+                                  "SpecBridge Review Gate",
+                                  "SpecBridge PR Review Report",
+                                  "Claude Review Non Blocking"
+                              ],
+    "merge_conditions":  [
+                             "ci_passed",
+                             "tests_passed",
+                             "no_policy_violation",
+                             "no_protected_files_changed",
+                             "chatgpt_codex_audit_approved",
+                             "branch_mergeable",
+                             "expected_head_sha_matches",
+                             "deployment_not_requested"
+                         ],
+    "policy_boundaries":  [
+                              "no-secrets",
+                              "no-production",
+                              "no-billing",
+                              "no-auth-security-change",
+                              "no-authorization-security-change",
+                              "no-database-change",
+                              "no-dependency-installation",
+                              "no-ci-cd-security-change",
+                              "no-deployment"
+                          ],
+    "stop_conditions":  [
+                            "missing_required_evidence",
+                            "failed_local_gate",
+                            "failed_github_ci",
+                            "blocking_review",
+                            "protected_file_changed",
+                            "head_sha_mismatch",
+                            "deployment_requested",
+                            "policy_boundary_reached"
+                        ],
+    "command_boundary":  "dry-run-by-default apply-requires-force-confirmation-and-evidence apply-pilot-supports-issue_close-pr_open-and-merge emits-connector-action-envelope does-not-store-secrets does-not-launch-claude-code does-not-launch-antigravity does-not-install-dependencies does-not-deploy",
+    "output_path":  ".specbridge/issue-to-merge-runs/issue-134-live-combined-apply-mode-demo.github-mutation-run.json"
 }
