@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-126-apply-mode-merge",
+  "evidence_type": "github_mutation_evidence",
+  "collected_by": "Claude Code / SpecBridge executor",
+  "collected_at": "2026-06-07",
+  "local_validations_passed": true,
+  "github_ci_passed": false,
+  "tests_passed": true,
+  "security_gate_passed": true,
+  "review_gate_passed": true,
+  "chatgpt_audit_approved": true,
+  "no_protected_files_changed": true,
+  "notes": "Local validators all pass. GitHub CI pending for PR on codex/issue126-apply-mode-merge. github_ci_passed will be updated to true after CI passes."
+}

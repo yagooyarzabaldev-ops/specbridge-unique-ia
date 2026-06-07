@@ -277,3 +277,42 @@ The command is covered by:
 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1
 ```
+
+## Apply-Mode merge Expansion (Issue 126)
+
+When `-GithubOperation merge` is passed in apply mode with all evidence gates true, `issue-to-merge-github` auto-detects the current branch's PR number via `gh pr view`, then executes `gh pr merge --squash --auto`.
+
+### When to use
+
+Use the `merge` operation to enable auto-merge on an existing PR after all evidence gates pass. The `--auto` flag queues the merge to execute once GitHub CI passes; it does not force-merge immediately.
+
+### Command
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 issue-to-merge-github `
+  -TaskId issue-126-apply-mode-merge `
+  -MutationMode apply `
+  -GithubOperation merge `
+  -RepositoryUrl https://github.com/yagooyarzabaldev-ops/specbridge `
+  -Force `
+  -ConfirmGithubMutation `
+  -EvidencePath .specbridge/github-evidence/issue-126-apply-mode-merge.github-mutation-evidence.json
+```
+
+### Output
+
+```json
+{
+  "github_calls_performed": true,
+  "github_mutation_result": {
+    "operation": "merge",
+    "pr_number": 129,
+    "head": "codex/issue126-apply-mode-merge",
+    "repository": "yagooyarzabaldev-ops/specbridge",
+    "gh_exit_code": 0,
+    "gh_output": "Auto-merge enabled on pull request #129",
+    "status": "success"
+  },
+  "mutation_execution": "apply_executed"
+}
+```

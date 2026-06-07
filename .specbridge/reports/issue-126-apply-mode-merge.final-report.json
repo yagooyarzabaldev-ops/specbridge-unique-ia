@@ -1,0 +1,37 @@
+{
+  "summary": "Completed issue 126 apply-mode merge expansion. Added `merge` operation to `issue-to-merge-github` apply mode: detects current branch PR via `gh pr view`, then executes `gh pr merge --squash --auto`. Updated pilot scope guard to allow issue_close, pr_open, and merge. Updated command_boundary to apply-pilot-supports-issue_close-pr_open-and-merge. Updated apply-unsupported-op test to use ci_wait and check for new boundary string. All local validators pass.",
+  "changed_files": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-126-apply-mode-merge.execution.md",
+    ".specbridge/scopes/issue-126-apply-mode-merge.scope.json",
+    ".specbridge/scopes/issue-123-apply-mode-pr-open.scope.json",
+    ".specbridge/reports/issue-126-apply-mode-merge.final-report.json",
+    ".specbridge/audit-packets/issue-126-apply-mode-merge.audit-packet.json",
+    ".specbridge/audits/issue-126-apply-mode-merge.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-126-apply-mode-merge.github-mutation-evidence.json",
+    "docs/specbridge-issue-to-merge-operator.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "git diff --check: passed",
+    "GitHub CI: not_collected"
+  ],
+  "policy_result": "Compliant. merge operation expansion bounded by evidence gates and explicit apply-mode flags. No secrets, production, billing, auth, database, CI/CD security, or deployment files changed.",
+  "risk_result": "Medium risk due to live gh pr merge via apply-mode. Bounded by all 7 evidence gates and --auto flag (actual merge still requires CI to pass).",
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending for issue 126 branch."
+  ],
+  "merge_status": "PR pending CI. Branch pushed; auto-merge will be enabled after PR creation.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_pr_ci"
+}

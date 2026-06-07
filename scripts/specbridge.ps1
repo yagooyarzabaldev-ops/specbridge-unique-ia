@@ -1331,9 +1331,9 @@ function Invoke-IssueToMergeGithubCommand {
     $applyAllowed = ($applyBlockers.Count -eq 0)
 
     if ($applyAllowed) {
-      $unsupportedOps = $selectedOperations | Where-Object { $_ -ne "issue_close" -and $_ -ne "pr_open" }
+      $unsupportedOps = $selectedOperations | Where-Object { $_ -ne "issue_close" -and $_ -ne "pr_open" -and $_ -ne "merge" }
       if ($unsupportedOps.Count -gt 0) {
-        $applyBlockers += "apply_mode_pilot_supports_issue_close_and_pr_open_only"
+        $applyBlockers += "apply_mode_pilot_supports_issue_close_pr_open_and_merge_only"
         $applyAllowed = $false
       }
     }
@@ -1389,6 +1389,47 @@ function Invoke-IssueToMergeGithubCommand {
         gh_exit_code = $ghExitCode
         gh_output = ($ghOutput -join " ").Trim()
         status = if ($ghExitCode -eq 0) { "success" } elseif (($ghOutput -join " ") -match "already exists") { "success" } else { "failed" }
+      }
+    }
+
+    if ($applyAllowed -and $selectedOperations -contains "merge") {
+      $repoSlug = ($RepositoryUrl -replace "https://github\.com/", "")
+      $previousEap = $ErrorActionPreference
+      $ErrorActionPreference = "Continue"
+      $prViewOutput = & gh pr view $currentBranch --repo $repoSlug --json number 2>&1
+      $prViewExitCode = $LASTEXITCODE
+      $ErrorActionPreference = $previousEap
+
+      if ($prViewExitCode -ne 0) {
+        $githubCallsPerformed = $true
+        $githubMutationResult = [ordered]@{
+          operation = "merge"
+          pr_number = $null
+          head = $currentBranch
+          repository = $repoSlug
+          gh_exit_code = $prViewExitCode
+          gh_output = ($prViewOutput -join " ").Trim()
+          status = "failed_no_pr_found"
+        }
+      } else {
+        $prViewData = $prViewOutput | ConvertFrom-Json
+        $prNumber = [int]$prViewData.number
+        $ghArgs = @("pr", "merge", $prNumber, "--squash", "--repo", $repoSlug, "--auto")
+        $previousEap = $ErrorActionPreference
+        $ErrorActionPreference = "Continue"
+        $ghOutput = & gh @ghArgs 2>&1
+        $ghExitCode = $LASTEXITCODE
+        $ErrorActionPreference = $previousEap
+        $githubCallsPerformed = $true
+        $githubMutationResult = [ordered]@{
+          operation = "merge"
+          pr_number = $prNumber
+          head = $currentBranch
+          repository = $repoSlug
+          gh_exit_code = $ghExitCode
+          gh_output = ($ghOutput -join " ").Trim()
+          status = if ($ghExitCode -eq 0) { "success" } elseif (($ghOutput -join " ") -match "already merged") { "success" } else { "failed" }
+        }
       }
     }
   }
@@ -1479,7 +1520,7 @@ function Invoke-IssueToMergeGithubCommand {
       "deployment_requested",
       "policy_boundary_reached"
     )
-    command_boundary = "dry-run-by-default apply-requires-force-confirmation-and-evidence apply-pilot-supports-issue_close-and-pr_open emits-connector-action-envelope does-not-store-secrets does-not-launch-claude-code does-not-launch-antigravity does-not-install-dependencies does-not-deploy"
+    command_boundary = "dry-run-by-default apply-requires-force-confirmation-and-evidence apply-pilot-supports-issue_close-pr_open-and-merge emits-connector-action-envelope does-not-store-secrets does-not-launch-claude-code does-not-launch-antigravity does-not-install-dependencies does-not-deploy"
     output_path = $null
   }
 
