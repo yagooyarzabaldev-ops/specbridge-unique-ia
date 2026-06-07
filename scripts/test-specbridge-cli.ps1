@@ -509,6 +509,48 @@ try {
       }
     }
 
+    $fullLoopDryRunResult = Invoke-Cli -Arguments @(
+      "issue-to-merge-github",
+      "-TaskId",
+      "issue-127-full-loop-test",
+      "-Title",
+      "Full End-to-End Apply-Mode Loop Test",
+      "-RelatedIssue",
+      "https://github.com/yagooyarzabaldev-ops/specbridge/issues/127",
+      "-OutputPath",
+      ".specbridge/issue-to-merge-runs/issue-127-full-loop-test.github-mutation-run.json",
+      "-Force"
+    )
+
+    Assert-Success `
+      -Name "issue-to-merge-github-full-loop-dry-run" `
+      -Result $fullLoopDryRunResult `
+      -ExpectedPattern '"command"\s*:\s*"issue-to-merge-github"'
+
+    if ($fullLoopDryRunResult.ExitCode -eq 0) {
+      try {
+        $fullLoopRun = Get-Content -LiteralPath ".specbridge/issue-to-merge-runs/issue-127-full-loop-test.github-mutation-run.json" -Raw | ConvertFrom-Json
+        if ($fullLoopRun.dry_run -ne $true) {
+          Write-Output "FAIL issue-to-merge-github-full-loop-dry-run: expected dry_run=true"
+          $script:failed = $true
+        } elseif ($fullLoopRun.github_calls_performed -ne $false) {
+          Write-Output "FAIL issue-to-merge-github-full-loop-dry-run: expected github_calls_performed=false"
+          $script:failed = $true
+        } elseif (@($fullLoopRun.operations).Count -ne 6) {
+          Write-Output "FAIL issue-to-merge-github-full-loop-dry-run: expected 6 default operations, got $(@($fullLoopRun.operations).Count)"
+          $script:failed = $true
+        } elseif (@($fullLoopRun.connector_action_envelope.actions).Count -ne 6) {
+          Write-Output "FAIL issue-to-merge-github-full-loop-dry-run: expected 6 connector actions in envelope"
+          $script:failed = $true
+        } else {
+          Write-Output "PASS issue-to-merge-github-full-loop-dry-run: full loop dry-run produces 6 operations and connector envelope"
+        }
+      } catch {
+        Write-Output "FAIL issue-to-merge-github-full-loop-dry-run: output artifact is not valid JSON"
+        $script:failed = $true
+      }
+    }
+
     Assert-Success `
       -Name "v5-pilot-status" `
       -Result (Invoke-Cli -Arguments @("v5-pilot-status")) `

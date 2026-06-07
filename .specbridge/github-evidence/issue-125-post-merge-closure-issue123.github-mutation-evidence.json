@@ -5,10 +5,10 @@
   "local_gates_passed": true,
   "security_gate_passed": true,
   "review_gate_passed": true,
-  "github_ci_passed": false,
+  "github_ci_passed": true,
   "chatgpt_audit_approved": true,
   "no_protected_files_changed": true,
   "deployment_not_requested": true,
-  "notes": "github_ci_passed is false because PR 125 has not yet passed CI. Update to true after CI passes before running apply-mode.",
+  "notes": "PR 128 merged 2026-06-07. github_ci_passed updated to true as part of issue 127 full-loop closure.",
   "boundary": "local-evidence-only apply-mode-execution-requires-github_ci_passed-true"
 }

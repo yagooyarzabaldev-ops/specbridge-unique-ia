@@ -1,0 +1,37 @@
+{
+  "summary": "Completed issue 127 full end-to-end apply-mode loop test. Added issue-to-merge-github-full-loop-dry-run CLI test that verifies all 6 default operations produce the correct connector action envelope and output artifact in dry-run mode. Updated issue-125 evidence with github_ci_passed true after PR 128 merged. Marked issue-125 scope as completed. Updated CURRENT_GOAL.md and README.md. All local validators pass.",
+  "changed_files": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-127-full-loop-test.execution.md",
+    ".specbridge/scopes/issue-127-full-loop-test.scope.json",
+    ".specbridge/scopes/issue-125-post-merge-closure-issue123.scope.json",
+    ".specbridge/reports/issue-127-full-loop-test.final-report.json",
+    ".specbridge/audit-packets/issue-127-full-loop-test.audit-packet.json",
+    ".specbridge/audits/issue-127-full-loop-test.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-127-full-loop-test.github-mutation-evidence.json",
+    ".specbridge/github-evidence/issue-125-post-merge-closure-issue123.github-mutation-evidence.json",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "git diff --check: passed",
+    "GitHub CI: not_collected"
+  ],
+  "policy_result": "Compliant. Full-loop test is dry-run only (no GitHub mutations). Evidence and memory closure for issue 125. No secrets, production, billing, auth, database, CI/CD security, or deployment files changed.",
+  "risk_result": "Low risk. No GitHub apply-mode mutations executed. Only test code, evidence, and governance artifacts changed.",
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending for issue 127 branch.",
+    "Issue 126 PR (129) pending CI — merge expansion not yet on main at time of issue 127 branching."
+  ],
+  "merge_status": "PR pending CI. Branch pushed; auto-merge will be enabled after PR creation.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_pr_ci"
+}

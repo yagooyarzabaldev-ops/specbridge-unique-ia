@@ -1,0 +1,34 @@
+{
+  "contract_id": "issue-127-full-loop-test",
+  "status": "active",
+  "exclusive_write": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-127-full-loop-test.execution.md",
+    ".specbridge/scopes/issue-127-full-loop-test.scope.json",
+    ".specbridge/scopes/issue-125-post-merge-closure-issue123.scope.json",
+    ".specbridge/reports/issue-127-full-loop-test.final-report.json",
+    ".specbridge/audit-packets/issue-127-full-loop-test.audit-packet.json",
+    ".specbridge/audits/issue-127-full-loop-test.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-127-full-loop-test.github-mutation-evidence.json",
+    ".specbridge/github-evidence/issue-125-post-merge-closure-issue123.github-mutation-evidence.json",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/contracts/issue-125-post-merge-closure-issue123.execution.md",
+    ".specbridge/reports/issue-125-post-merge-closure-issue123.final-report.json",
+    "scripts/specbridge.ps1"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-119-apply-mode-github-operator-pilot",
+    "issue-121-post-merge-closure-issue119",
+    "issue-123-apply-mode-pr-open",
+    "issue-125-post-merge-closure-issue123"
+  ],
+  "final_report": ".specbridge/reports/issue-127-full-loop-test.final-report.json"
+}
