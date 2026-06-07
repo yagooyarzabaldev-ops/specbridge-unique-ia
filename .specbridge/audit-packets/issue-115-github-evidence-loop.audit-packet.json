@@ -132,19 +132,24 @@
       "result": "passed"
     },
     {
-      "command": "GitHub CI",
-      "result": "not_collected"
+      "command": "GitHub CI (PR 116)",
+      "result": "passed"
+    },
+    {
+      "command": "GitHub PR 116 merge",
+      "result": "passed"
+    },
+    {
+      "command": "GitHub issue 115 closure",
+      "result": "passed"
     }
   ],
   "final_report_path": ".specbridge/reports/issue-115-github-evidence-loop.final-report.json",
-  "ci_status": "not_collected",
+  "ci_status": "passed",
   "pr_review_report_path": null,
   "policy_result": "Passed locally. The repository-local `issue-to-merge-github` command remained dry-run and performed no GitHub calls. Real GitHub actions are limited to governed issue intake, future PR creation, CI observation, policy-gated merge, issue closure, and repository memory evidence. No secrets, production, billing, auth or authorization security, database, dependency installation, CI/CD security, deployment automation, or production deployment paths were touched.",
-  "unresolved_risks": [
-    "PR, CI, merge, and issue closure evidence are pending until the pull request lifecycle occurs.",
-    "Pre-merge repository artifacts must not claim post-merge facts."
-  ],
-  "completion_status": "complete_pending_pr_ci",
+  "unresolved_risks": [],
+  "completion_status": "complete",
   "source_files": [
     ".specbridge/contracts/issue-115-github-evidence-loop.execution.md",
     ".specbridge/reports/issue-115-github-evidence-loop.final-report.json"

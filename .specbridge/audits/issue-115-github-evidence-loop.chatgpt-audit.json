@@ -45,13 +45,13 @@
     {
       "name": "ci_evidence",
       "result": "pass",
-      "evidence": "GitHub CI is not collected yet and remains an external merge gate. The final report and audit packet mark CI as not_collected rather than passed.",
+      "evidence": "GitHub CI passed for PR 116. PR 116 merged on 2026-06-06. Issue 115 closed as completed. Post-merge memory closure handled by issue 117.",
       "blocking": false
     },
     {
       "name": "final_report_honesty",
       "result": "pass",
-      "evidence": "The final report records local completion pending PR CI and explicitly states that PR, CI, merge, and issue closure evidence remain external gates until the lifecycle occurs.",
+      "evidence": "Final report updated by issue 117 closure to record PR 116 merge and issue 115 closure. No pre-merge claims remain.",
       "blocking": false
     }
   ],
@@ -68,10 +68,7 @@
   ],
   "outcome": "approved",
   "merge_allowed": true,
-  "unresolved_risks": [
-    "PR, CI, merge, and issue closure evidence are pending until the pull request lifecycle occurs.",
-    "Pre-merge repository artifacts must not claim post-merge facts."
-  ],
+  "unresolved_risks": [],
   "source_files": [
     ".specbridge/audit-packets/issue-115-github-evidence-loop.audit-packet.json",
     ".specbridge/audits/issue-115-github-evidence-loop.chatgpt-audit.json",

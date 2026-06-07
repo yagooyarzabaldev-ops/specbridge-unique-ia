@@ -1,0 +1,31 @@
+{
+  "contract_id": "issue-117-post-merge-memory-closure",
+  "status": "active",
+  "exclusive_write": [
+    "README.md",
+    ".specbridge/audit-packets/issue-115-github-evidence-loop.audit-packet.json",
+    ".specbridge/audit-packets/issue-117-post-merge-memory-closure.audit-packet.json",
+    ".specbridge/audits/issue-115-github-evidence-loop.chatgpt-audit.json",
+    ".specbridge/audits/issue-117-post-merge-memory-closure.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-117-post-merge-memory-closure.execution.md",
+    ".specbridge/github-evidence/issue-117-post-merge-memory-closure.closure.json",
+    ".specbridge/reports/issue-115-github-evidence-loop.final-report.json",
+    ".specbridge/reports/issue-117-post-merge-memory-closure.final-report.json",
+    ".specbridge/scopes/issue-117-post-merge-memory-closure.scope.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/contracts/issue-115-github-evidence-loop.execution.md",
+    ".specbridge/github-evidence/issue-115-github-evidence-loop.github-mutation-evidence.json",
+    ".specbridge/issue-to-merge-runs/issue-115-github-evidence-loop.github-mutation-run.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-115-github-evidence-loop"
+  ],
+  "final_report": ".specbridge/reports/issue-117-post-merge-memory-closure.final-report.json"
+}

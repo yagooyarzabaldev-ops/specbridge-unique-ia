@@ -1,0 +1,138 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-117-post-merge-memory-closure",
+  "generated_by": "specbridge-audit-packet-generator",
+  "execution_contract_path": ".specbridge/contracts/issue-117-post-merge-memory-closure.execution.md",
+  "changed_files": [
+    "README.md",
+    ".specbridge/audit-packets/issue-115-github-evidence-loop.audit-packet.json",
+    ".specbridge/audit-packets/issue-117-post-merge-memory-closure.audit-packet.json",
+    ".specbridge/audits/issue-115-github-evidence-loop.chatgpt-audit.json",
+    ".specbridge/audits/issue-117-post-merge-memory-closure.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-117-post-merge-memory-closure.execution.md",
+    ".specbridge/github-evidence/issue-117-post-merge-memory-closure.closure.json",
+    ".specbridge/reports/issue-115-github-evidence-loop.final-report.json",
+    ".specbridge/reports/issue-117-post-merge-memory-closure.final-report.json",
+    ".specbridge/scopes/issue-117-post-merge-memory-closure.scope.json"
+  ],
+  "diff_summary": [
+    {
+      "file": "README.md",
+      "added_lines": 2,
+      "deleted_lines": 1
+    },
+    {
+      "file": ".specbridge/context/CURRENT_GOAL.md",
+      "added_lines": 45,
+      "deleted_lines": 47
+    },
+    {
+      "file": ".specbridge/reports/issue-115-github-evidence-loop.final-report.json",
+      "added_lines": 2,
+      "deleted_lines": 4
+    },
+    {
+      "file": ".specbridge/audit-packets/issue-115-github-evidence-loop.audit-packet.json",
+      "added_lines": 6,
+      "deleted_lines": 4
+    },
+    {
+      "file": ".specbridge/audits/issue-115-github-evidence-loop.chatgpt-audit.json",
+      "added_lines": 4,
+      "deleted_lines": 6
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-117-post-merge-memory-closure.closure.json",
+      "added_lines": 20,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/contracts/issue-117-post-merge-memory-closure.execution.md",
+      "added_lines": 110,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/scopes/issue-117-post-merge-memory-closure.scope.json",
+      "added_lines": 28,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/reports/issue-117-post-merge-memory-closure.final-report.json",
+      "added_lines": 22,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/audits/issue-117-post-merge-memory-closure.chatgpt-audit.json",
+      "added_lines": 70,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/audit-packets/issue-117-post-merge-memory-closure.audit-packet.json",
+      "added_lines": 90,
+      "deleted_lines": 0
+    }
+  ],
+  "validation_commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+    "git diff --check",
+    "GitHub CI"
+  ],
+  "validation_results": [
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    },
+    {
+      "command": "GitHub CI",
+      "result": "not_collected"
+    }
+  ],
+  "final_report_path": ".specbridge/reports/issue-117-post-merge-memory-closure.final-report.json",
+  "ci_status": "not_collected",
+  "pr_review_report_path": null,
+  "policy_result": "Passed. Memory and evidence updates only. No product code, scripts, workflows, secrets, production, billing, auth, authorization, database, dependency installation, CI/CD security, or deployment files changed.",
+  "unresolved_risks": [
+    "GitHub CI and PR merge are pending for issue 117 branch."
+  ],
+  "completion_status": "complete_pending_pr_ci",
+  "source_files": [
+    ".specbridge/contracts/issue-117-post-merge-memory-closure.execution.md",
+    ".specbridge/reports/issue-117-post-merge-memory-closure.final-report.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

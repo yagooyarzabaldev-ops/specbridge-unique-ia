@@ -1,0 +1,20 @@
+{
+  "schema_version": "1",
+  "closure_id": "issue-117-post-merge-memory-closure",
+  "closed_issue_id": "issue-115-github-evidence-loop",
+  "related_pr": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/116",
+  "pr_merged": true,
+  "pr_merge_date": "2026-06-06",
+  "github_ci_status": "passed",
+  "issue_115_github_state": "CLOSED",
+  "next_recommended_task": "issue-119-apply-mode-github-operator-pilot",
+  "next_task_goal": "Pilot issue-to-merge-github in apply-mode for a single low-risk GitHub operation (issue closure after all local gates pass), establishing real GitHub mutation under governed conditions.",
+  "corrected_artifacts": [
+    ".specbridge/reports/issue-115-github-evidence-loop.final-report.json",
+    ".specbridge/audit-packets/issue-115-github-evidence-loop.audit-packet.json",
+    ".specbridge/audits/issue-115-github-evidence-loop.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    "README.md"
+  ],
+  "boundary": "memory-and-evidence-only no-product-code no-scripts no-workflows no-secrets no-production no-billing no-auth no-database no-deployment"
+}
