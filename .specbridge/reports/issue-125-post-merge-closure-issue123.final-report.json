@@ -1,0 +1,35 @@
+{
+  "summary": "Completed issue 125 post-merge closure. PR 124 merged issue 123 apply-mode pr_open expansion on 2026-06-07. Updated issue-123 evidence with github_ci_passed true. Executed apply-mode pr_open to create PR for this branch (live demonstration of gh pr create). Marked issue-123 scope as completed. Created all issue 125 artifacts. Updated CURRENT_GOAL.md for issue 127 and README.md.",
+  "changed_files": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-125-post-merge-closure-issue123.execution.md",
+    ".specbridge/scopes/issue-125-post-merge-closure-issue123.scope.json",
+    ".specbridge/scopes/issue-123-apply-mode-pr-open.scope.json",
+    ".specbridge/reports/issue-125-post-merge-closure-issue123.final-report.json",
+    ".specbridge/audit-packets/issue-125-post-merge-closure-issue123.audit-packet.json",
+    ".specbridge/audits/issue-125-post-merge-closure-issue123.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-123-apply-mode-pr-open.github-mutation-evidence.json",
+    ".specbridge/github-evidence/issue-125-post-merge-closure-issue123.closure.json",
+    ".specbridge/github-evidence/issue-125-post-merge-closure-issue123.github-mutation-evidence.json"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "git diff --check: passed",
+    "GitHub CI: not_collected"
+  ],
+  "policy_result": "Compliant. Memory and evidence closure only. apply-mode pr_open used to create the PR for this branch (live demonstration). No secrets, production, billing, auth, database, CI/CD security, or deployment files changed.",
+  "risk_result": "Medium risk due to live gh pr create via apply-mode. Bounded by all 7 evidence gates.",
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending for issue 125 branch."
+  ],
+  "merge_status": "PR created via apply-mode pr_open. Issue 125 branch pushed; PR pending CI.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_pr_ci"
+}

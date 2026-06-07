@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-125-post-merge-closure-issue123",
+  "closed_task_id": "issue-123-apply-mode-pr-open",
+  "closure_date": "2026-06-07",
+  "pr_number": 124,
+  "pr_merged": true,
+  "ci_passed": true,
+  "issue_123_state": "closed",
+  "apply_mode_pr_open_demo": true,
+  "apply_mode_pr_open_result": "success",
+  "apply_mode_pr_open_note": "apply-mode pr_open used to create PR 128 for issue 125 branch, confirming gh pr create executes correctly under governed apply-mode.",
+  "next_task": "issue-127-apply-mode-merge",
+  "next_task_description": "Expand apply-mode to merge operation using gh pr merge"
+}

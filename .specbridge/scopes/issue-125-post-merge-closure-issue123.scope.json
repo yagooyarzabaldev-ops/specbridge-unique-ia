@@ -1,0 +1,30 @@
+{
+  "contract_id": "issue-125-post-merge-closure-issue123",
+  "status": "active",
+  "exclusive_write": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-125-post-merge-closure-issue123.execution.md",
+    ".specbridge/scopes/issue-125-post-merge-closure-issue123.scope.json",
+    ".specbridge/scopes/issue-123-apply-mode-pr-open.scope.json",
+    ".specbridge/reports/issue-125-post-merge-closure-issue123.final-report.json",
+    ".specbridge/audit-packets/issue-125-post-merge-closure-issue123.audit-packet.json",
+    ".specbridge/audits/issue-125-post-merge-closure-issue123.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-123-apply-mode-pr-open.github-mutation-evidence.json",
+    ".specbridge/github-evidence/issue-125-post-merge-closure-issue123.closure.json",
+    ".specbridge/github-evidence/issue-125-post-merge-closure-issue123.github-mutation-evidence.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/contracts/issue-123-apply-mode-pr-open.execution.md",
+    ".specbridge/reports/issue-123-apply-mode-pr-open.final-report.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-123-apply-mode-pr-open"
+  ],
+  "final_report": ".specbridge/reports/issue-125-post-merge-closure-issue123.final-report.json"
+}

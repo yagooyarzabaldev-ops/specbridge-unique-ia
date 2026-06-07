@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-125-post-merge-closure-issue123",
+  "description": "Evidence file for issue 125 post-merge closure. All local gates passed. GitHub CI and merge remain external gates.",
+  "local_gates_passed": true,
+  "security_gate_passed": true,
+  "review_gate_passed": true,
+  "github_ci_passed": false,
+  "chatgpt_audit_approved": true,
+  "no_protected_files_changed": true,
+  "deployment_not_requested": true,
+  "notes": "github_ci_passed is false because PR 125 has not yet passed CI. Update to true after CI passes before running apply-mode.",
+  "boundary": "local-evidence-only apply-mode-execution-requires-github_ci_passed-true"
+}

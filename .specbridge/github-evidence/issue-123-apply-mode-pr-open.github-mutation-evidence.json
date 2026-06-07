@@ -1,14 +1,14 @@
 {
   "schema_version": "1",
   "task_id": "issue-123-apply-mode-pr-open",
-  "description": "Evidence file for issue 123 apply-mode pr_open expansion. All local gates passed. GitHub CI, merge, and issue closure remain external gates.",
+  "description": "Evidence file for issue 123 apply-mode pr_open expansion. PR 124 merged on 2026-06-07 after CI passed. Issue 123 is closed.",
   "local_gates_passed": true,
   "security_gate_passed": true,
   "review_gate_passed": true,
-  "github_ci_passed": false,
+  "github_ci_passed": true,
   "chatgpt_audit_approved": true,
   "no_protected_files_changed": true,
   "deployment_not_requested": true,
-  "notes": "github_ci_passed is false because PR 123 has not yet passed CI. This file records pre-merge local evidence only. It must be updated after CI passes before apply mode is used for pr_open.",
-  "boundary": "local-evidence-only apply-mode-execution-requires-github_ci_passed-true"
+  "notes": "PR 124 merged 2026-06-07. CI passed. Issue 123 closed. github_ci_passed updated to true for post-merge closure evidence.",
+  "boundary": "post-merge-evidence apply-mode-pr-open-confirmed"
 }

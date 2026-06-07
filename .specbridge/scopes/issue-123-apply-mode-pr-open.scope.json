@@ -1,6 +1,6 @@
 {
   "contract_id": "issue-123-apply-mode-pr-open",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     "README.md",
     "docs/specbridge-issue-to-merge-operator.md",

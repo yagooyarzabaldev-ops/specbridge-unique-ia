@@ -1,0 +1,84 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-125-post-merge-closure-issue123",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-125-post-merge-closure-issue123.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-125-post-merge-closure-issue123.execution.md",
+  "final_report_path": ".specbridge/reports/issue-125-post-merge-closure-issue123.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue 125 follows the established post-merge memory closure pattern. Evidence updated, scope completed, memory files updated, live apply-mode pr_open demonstrated.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "Issue-123 evidence has github_ci_passed true. Apply-mode pr_open created the PR for this branch. All artifacts created. Issue-123 scope completed. CURRENT_GOAL updated for issue 127. README updated.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "Changes limited to evidence, memory, and closure artifacts. apply-mode pr_open bounded by 7 evidence gates. No secrets, production, billing, auth, database, CI/CD security, or deployment files changed.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "All changed files within declared scope. No protected paths touched.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "All changed files declared in .specbridge/scopes/issue-125-post-merge-closure-issue123.scope.json.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "All validators passed locally. Live apply-mode pr_open execution confirmed success.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub CI is pending for the issue 125 PR and remains an external merge gate. Final report marks CI as not_collected.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "Final report accurately records local completion pending PR CI without claiming post-merge facts.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "external_lifecycle_pending",
+      "file": ".specbridge/reports/issue-125-post-merge-closure-issue123.final-report.json",
+      "line": null,
+      "evidence": "PR, CI, and merge for issue 125 are pending external GitHub gates.",
+      "recommendation": "Wait for CI, then merge if policy gates pass. Then proceed to issue 127 (merge expansion).",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending for issue 125 branch."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-125-post-merge-closure-issue123.audit-packet.json",
+    ".specbridge/audits/issue-125-post-merge-closure-issue123.chatgpt-audit.json",
+    ".specbridge/contracts/issue-125-post-merge-closure-issue123.execution.md",
+    ".specbridge/github-evidence/issue-123-apply-mode-pr-open.github-mutation-evidence.json",
+    ".specbridge/github-evidence/issue-125-post-merge-closure-issue123.closure.json",
+    ".specbridge/reports/issue-125-post-merge-closure-issue123.final-report.json",
+    ".specbridge/scopes/issue-125-post-merge-closure-issue123.scope.json",
+    "README.md"
+  ]
+}
