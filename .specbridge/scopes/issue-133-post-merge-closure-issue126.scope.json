@@ -1,0 +1,35 @@
+{
+  "contract_id": "issue-133-post-merge-closure-issue126",
+  "status": "active",
+  "exclusive_write": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-133-post-merge-closure-issue126.execution.md",
+    ".specbridge/scopes/issue-133-post-merge-closure-issue126.scope.json",
+    ".specbridge/scopes/issue-126-apply-mode-merge.scope.json",
+    ".specbridge/reports/issue-133-post-merge-closure-issue126.final-report.json",
+    ".specbridge/audit-packets/issue-133-post-merge-closure-issue126.audit-packet.json",
+    ".specbridge/audits/issue-133-post-merge-closure-issue126.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-126-apply-mode-merge.github-mutation-evidence.json",
+    ".specbridge/github-evidence/issue-126-apply-mode-merge.closure.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/contracts/issue-126-apply-mode-merge.execution.md",
+    ".specbridge/reports/issue-126-apply-mode-merge.final-report.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-119-apply-mode-github-operator-pilot",
+    "issue-121-post-merge-closure-issue119",
+    "issue-123-apply-mode-pr-open",
+    "issue-125-post-merge-closure-issue123",
+    "issue-126-apply-mode-merge",
+    "issue-127-full-loop-test",
+    "issue-131-post-merge-closure-126-127"
+  ],
+  "final_report": ".specbridge/reports/issue-133-post-merge-closure-issue126.final-report.json"
+}

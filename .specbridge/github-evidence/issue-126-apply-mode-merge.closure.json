@@ -6,8 +6,8 @@
   "closed_at": "2026-06-07",
   "pr_number": 129,
   "pr_url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/129",
-  "pr_merged": false,
-  "github_ci_passed": false,
-  "notes": "PR 129 pending CI at time of issue 131 closure. github_ci_passed and pr_merged will be updated to true after CI passes and PR 129 auto-merges.",
-  "next_task": "issue-131-post-merge-closure-126-127"
+  "pr_merged": true,
+  "github_ci_passed": true,
+  "notes": "PR 129 merged on 2026-06-07 after scope conflict resolution. GitHub CI passed. Apply-mode three-operation pilot (issue_close + pr_open + merge) is now complete.",
+  "next_task": "issue-133-post-merge-closure-issue126"
 }

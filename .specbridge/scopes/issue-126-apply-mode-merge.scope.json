@@ -1,6 +1,6 @@
 {
   "contract_id": "issue-126-apply-mode-merge",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     "README.md",
     "docs/specbridge-issue-to-merge-operator.md",
