@@ -1,0 +1,34 @@
+{
+  "contract_id": "issue-119-apply-mode-github-operator-pilot",
+  "status": "active",
+  "exclusive_write": [
+    "README.md",
+    "docs/specbridge-issue-to-merge-operator.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/audit-packets/issue-119-apply-mode-github-operator-pilot.audit-packet.json",
+    ".specbridge/audits/issue-119-apply-mode-github-operator-pilot.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-119-apply-mode-github-operator-pilot.execution.md",
+    ".specbridge/github-evidence/issue-119-apply-mode-github-operator-pilot.github-mutation-evidence.json",
+    ".specbridge/issue-to-merge-runs/issue-119-apply-mode-github-operator-pilot.github-mutation-run.json",
+    ".specbridge/reports/issue-119-apply-mode-github-operator-pilot.final-report.json",
+    ".specbridge/scopes/issue-119-apply-mode-github-operator-pilot.scope.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/contracts/issue-115-github-evidence-loop.execution.md",
+    ".specbridge/github-evidence/issue-115-github-evidence-loop.github-mutation-evidence.json",
+    ".specbridge/issue-to-merge-runs/issue-115-github-evidence-loop.github-mutation-run.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-113-bounded-github-mutation-operator",
+    "issue-115-github-evidence-loop",
+    "issue-117-post-merge-memory-closure"
+  ],
+  "final_report": ".specbridge/reports/issue-119-apply-mode-github-operator-pilot.final-report.json"
+}

@@ -1,0 +1,78 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-119-apply-mode-github-operator-pilot",
+  "generated_by": "specbridge-audit-packet-generator",
+  "execution_contract_path": ".specbridge/contracts/issue-119-apply-mode-github-operator-pilot.execution.md",
+  "changed_files": [
+    "README.md",
+    "docs/specbridge-issue-to-merge-operator.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/audit-packets/issue-119-apply-mode-github-operator-pilot.audit-packet.json",
+    ".specbridge/audits/issue-119-apply-mode-github-operator-pilot.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-119-apply-mode-github-operator-pilot.execution.md",
+    ".specbridge/github-evidence/cli-fixture-blocked-gates.github-mutation-evidence.json",
+    ".specbridge/github-evidence/issue-119-apply-mode-github-operator-pilot.github-mutation-evidence.json",
+    ".specbridge/issue-to-merge-runs/issue-119-apply-mode-github-operator-pilot.github-mutation-run.json",
+    ".specbridge/reports/issue-119-apply-mode-github-operator-pilot.final-report.json",
+    ".specbridge/scopes/issue-119-apply-mode-github-operator-pilot.scope.json"
+  ],
+  "diff_summary": [
+    { "file": "README.md", "added_lines": 3, "deleted_lines": 1 },
+    { "file": "docs/specbridge-issue-to-merge-operator.md", "added_lines": 58, "deleted_lines": 0 },
+    { "file": "scripts/specbridge.ps1", "added_lines": 37, "deleted_lines": 2 },
+    { "file": "scripts/test-specbridge-cli.ps1", "added_lines": 50, "deleted_lines": 0 },
+    { "file": ".specbridge/context/CURRENT_GOAL.md", "added_lines": 42, "deleted_lines": 47 },
+    { "file": ".specbridge/contracts/issue-119-apply-mode-github-operator-pilot.execution.md", "added_lines": 115, "deleted_lines": 0 },
+    { "file": ".specbridge/scopes/issue-119-apply-mode-github-operator-pilot.scope.json", "added_lines": 30, "deleted_lines": 0 },
+    { "file": ".specbridge/github-evidence/cli-fixture-blocked-gates.github-mutation-evidence.json", "added_lines": 12, "deleted_lines": 0 },
+    { "file": ".specbridge/github-evidence/issue-119-apply-mode-github-operator-pilot.github-mutation-evidence.json", "added_lines": 14, "deleted_lines": 0 },
+    { "file": ".specbridge/issue-to-merge-runs/issue-119-apply-mode-github-operator-pilot.github-mutation-run.json", "added_lines": 90, "deleted_lines": 0 },
+    { "file": ".specbridge/reports/issue-119-apply-mode-github-operator-pilot.final-report.json", "added_lines": 28, "deleted_lines": 0 },
+    { "file": ".specbridge/audits/issue-119-apply-mode-github-operator-pilot.chatgpt-audit.json", "added_lines": 75, "deleted_lines": 0 },
+    { "file": ".specbridge/audit-packets/issue-119-apply-mode-github-operator-pilot.audit-packet.json", "added_lines": 100, "deleted_lines": 0 }
+  ],
+  "validation_commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+    "git diff --check",
+    "GitHub CI"
+  ],
+  "validation_results": [
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1", "result": "passed" },
+    { "command": "git diff --check", "result": "passed" },
+    { "command": "GitHub CI", "result": "not_collected" }
+  ],
+  "final_report_path": ".specbridge/reports/issue-119-apply-mode-github-operator-pilot.final-report.json",
+  "ci_status": "not_collected",
+  "pr_review_report_path": null,
+  "policy_result": "Passed. Apply mode gated by seven boolean evidence fields, three explicit flags, operation whitelist, and URL validation. No secrets, production, billing, auth, CI/CD security, database, dependency installation, or deployment changes.",
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending.",
+    "Apply-mode issue_close against issue 119 requires evidence file update after CI passes."
+  ],
+  "completion_status": "complete_pending_pr_ci",
+  "source_files": [
+    ".specbridge/contracts/issue-119-apply-mode-github-operator-pilot.execution.md",
+    ".specbridge/reports/issue-119-apply-mode-github-operator-pilot.final-report.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

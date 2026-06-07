@@ -1,0 +1,41 @@
+{
+  "summary": "Completed issue 119 apply-mode GitHub operator pilot. Added real `gh issue close` execution to `issue-to-merge-github` apply mode in scripts/specbridge.ps1. Apply mode executes only when all evidence gates pass, only for issue_close operation, and requires explicit -Force -ConfirmGithubMutation -EvidencePath flags. Added CLI tests for apply-mode blocked gates and unsupported operations. Updated documentation and all required evidence artifacts.",
+  "changed_files": [
+    "README.md",
+    "docs/specbridge-issue-to-merge-operator.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/audit-packets/issue-119-apply-mode-github-operator-pilot.audit-packet.json",
+    ".specbridge/audits/issue-119-apply-mode-github-operator-pilot.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-119-apply-mode-github-operator-pilot.execution.md",
+    ".specbridge/github-evidence/cli-fixture-blocked-gates.github-mutation-evidence.json",
+    ".specbridge/github-evidence/issue-119-apply-mode-github-operator-pilot.github-mutation-evidence.json",
+    ".specbridge/issue-to-merge-runs/issue-119-apply-mode-github-operator-pilot.github-mutation-run.json",
+    ".specbridge/reports/issue-119-apply-mode-github-operator-pilot.final-report.json",
+    ".specbridge/scopes/issue-119-apply-mode-github-operator-pilot.scope.json"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 validate -Profile standard: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "git diff --check: passed",
+    "GitHub CI: not_collected"
+  ],
+  "policy_result": "Passed. The apply-mode executes gh issue close only when all evidence gates pass and explicit confirmation flags are provided. No secrets, production, billing, auth, authorization, CI/CD security, database, dependency installation, or deployment paths changed. apply_mode_pilot_supports_issue_close_only guard prevents unauthorized operation expansion.",
+  "risk_result": "Medium risk. The first real GitHub mutation is gated by seven boolean evidence fields, three explicit flags, operation whitelist, and URL validation. Issue closure is reversible (can be reopened). Risk is bounded by the apply-mode evidence validation chain.",
+  "unresolved_risks": [
+    "GitHub CI and PR merge are pending for issue 119 branch.",
+    "Apply-mode issue_close execution against issue 119 requires updating the evidence file with github_ci_passed=true after CI passes."
+  ],
+  "merge_status": "PR pending. Issue 119 branch to be pushed; PR 120 to be opened.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_pr_ci"
+}

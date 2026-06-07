@@ -1284,6 +1284,8 @@ function Invoke-IssueToMergeGithubCommand {
   $applyEvidencePath = $null
   $applyAllowed = $false
   $applyBlockers = @()
+  $githubCallsPerformed = $false
+  $githubMutationResult = $null
 
   if ($MutationMode -eq "apply") {
     if (-not $Force) {
@@ -1327,6 +1329,35 @@ function Invoke-IssueToMergeGithubCommand {
     }
 
     $applyAllowed = ($applyBlockers.Count -eq 0)
+
+    if ($applyAllowed) {
+      $unsupportedOps = $selectedOperations | Where-Object { $_ -ne "issue_close" }
+      if ($unsupportedOps.Count -gt 0) {
+        $applyBlockers += "apply_mode_pilot_supports_issue_close_only"
+        $applyAllowed = $false
+      }
+    }
+
+    if ($applyAllowed -and $selectedOperations -contains "issue_close") {
+      if ($issueReference -notmatch "github\.com/.+/issues/(\d+)") {
+        Fail "RelatedIssue must be a GitHub issue URL to execute issue_close: $issueReference"
+      }
+      $issueNumber = $Matches[1]
+      $repoSlug = ($RepositoryUrl -replace "https://github\.com/", "")
+
+      $ghArgs = @("issue", "close", $issueNumber, "--repo", $repoSlug, "--comment", "Closed by SpecBridge issue-to-merge-github apply mode after all policy gates passed.")
+      $ghOutput = & gh @ghArgs 2>&1
+      $ghExitCode = $LASTEXITCODE
+      $githubCallsPerformed = $true
+      $githubMutationResult = [ordered]@{
+        operation = "issue_close"
+        issue_number = [int]$issueNumber
+        repository = $repoSlug
+        gh_exit_code = $ghExitCode
+        gh_output = ($ghOutput -join " ").Trim()
+        status = if ($ghExitCode -eq 0) { "success" } else { "failed" }
+      }
+    }
   }
 
   $operator = [ordered]@{
@@ -1348,8 +1379,9 @@ function Invoke-IssueToMergeGithubCommand {
     apply_requested = ($MutationMode -eq "apply")
     apply_allowed = $applyAllowed
     apply_blockers = @($applyBlockers)
-    github_calls_performed = $false
-    mutation_execution = if ($MutationMode -eq "dry_run") { "dry_run_no_github_calls" } else { "external_connector_action_envelope_ready" }
+    github_calls_performed = $githubCallsPerformed
+    github_mutation_result = $githubMutationResult
+    mutation_execution = if ($MutationMode -eq "dry_run") { "dry_run_no_github_calls" } elseif ($githubCallsPerformed) { "apply_executed" } else { "external_connector_action_envelope_ready" }
     connector_action_envelope = [ordered]@{
       connector = "github"
       execution_owner = "SpecBridge coordinator with GitHub connector"
@@ -1414,7 +1446,7 @@ function Invoke-IssueToMergeGithubCommand {
       "deployment_requested",
       "policy_boundary_reached"
     )
-    command_boundary = "dry-run-by-default apply-requires-force-confirmation-and-evidence emits-connector-action-envelope does-not-store-secrets does-not-launch-claude-code does-not-launch-antigravity does-not-install-dependencies does-not-deploy"
+    command_boundary = "dry-run-by-default apply-requires-force-confirmation-and-evidence apply-pilot-supports-issue_close-only emits-connector-action-envelope does-not-store-secrets does-not-launch-claude-code does-not-launch-antigravity does-not-install-dependencies does-not-deploy"
     output_path = $null
   }
 

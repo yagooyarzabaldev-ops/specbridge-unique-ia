@@ -1,0 +1,88 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-119-apply-mode-github-operator-pilot",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-119-apply-mode-github-operator-pilot.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-119-apply-mode-github-operator-pilot.execution.md",
+  "final_report_path": ".specbridge/reports/issue-119-apply-mode-github-operator-pilot.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue 119 implements the next logical step after the dry-run evidence loop: real `gh issue close` execution gated by the existing evidence validation chain. The implementation is scoped exactly to the CURRENT_GOAL recommendation.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "apply mode executes gh issue close when all gates pass; blocked gates return apply_allowed=false with no gh call; unsupported ops return apply_mode_pilot_supports_issue_close_only blocker; github_mutation_result is recorded; CLI tests cover blocked and unsupported scenarios.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "No secrets, production, billing, auth, authorization, CI/CD security, database, dependency installation, or deployment paths changed. apply_mode_pilot_supports_issue_close_only prevents unauthorized operation expansion. All mutations require seven evidence gates plus three explicit flags.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The gh command is invoked with explicit bounded arguments only: issue number extracted from URL, repository slug from RepositoryUrl param, fixed comment string. No secret access, no env var expansion, no shell injection surface.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "All changed files are declared in .specbridge/scopes/issue-119-apply-mode-github-operator-pilot.scope.json.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "All validators passed: standard validation, smoke, CLI tests, contract validation, scope validation, final report validation, audit packet validation, ChatGPT audit validation, security gate, review gate, and whitespace check.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub CI is pending for the issue 119 PR and remains an external merge gate. Final report marks CI as not_collected.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "Final report accurately records local completion pending PR CI. apply-mode issue_close against issue 119 requires evidence file update after CI passes.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "external_lifecycle_pending",
+      "file": ".specbridge/github-evidence/issue-119-apply-mode-github-operator-pilot.github-mutation-evidence.json",
+      "line": null,
+      "evidence": "github_ci_passed is false in the pre-merge evidence file. It must be updated to true before apply mode is used to close issue 119.",
+      "recommendation": "After PR 120 CI passes, update github_ci_passed to true in the evidence file, then run apply mode with issue_close.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending.",
+    "Evidence file requires github_ci_passed=true update after CI passes."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-119-apply-mode-github-operator-pilot.audit-packet.json",
+    ".specbridge/audits/issue-119-apply-mode-github-operator-pilot.chatgpt-audit.json",
+    ".specbridge/contracts/issue-119-apply-mode-github-operator-pilot.execution.md",
+    ".specbridge/github-evidence/issue-119-apply-mode-github-operator-pilot.github-mutation-evidence.json",
+    ".specbridge/issue-to-merge-runs/issue-119-apply-mode-github-operator-pilot.github-mutation-run.json",
+    ".specbridge/reports/issue-119-apply-mode-github-operator-pilot.final-report.json",
+    ".specbridge/scopes/issue-119-apply-mode-github-operator-pilot.scope.json",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "docs/specbridge-issue-to-merge-operator.md",
+    "README.md"
+  ]
+}

@@ -1217,6 +1217,58 @@ try {
       )) `
       -ExpectedPattern "EvidencePath is required for issue-to-merge-github apply mode"
 
+    $applyBlockedResult = Invoke-Cli -Arguments @(
+      "issue-to-merge-github",
+      "-TaskId",
+      "cli-fixture",
+      "-MutationMode",
+      "apply",
+      "-GithubOperation",
+      "issue_close",
+      "-Force",
+      "-ConfirmGithubMutation",
+      "-EvidencePath",
+      ".specbridge/github-evidence/cli-fixture-blocked-gates.github-mutation-evidence.json"
+    )
+    $applyBlockedJson = $null
+    try { $applyBlockedJson = $applyBlockedResult.Text | ConvertFrom-Json } catch {}
+    if ($applyBlockedResult.ExitCode -ne 0) {
+      Write-Output "FAIL issue-to-merge-github-apply-blocked: command should succeed with apply_allowed=false, not fail with exit 1"
+    } elseif ($null -eq $applyBlockedJson) {
+      Write-Output "FAIL issue-to-merge-github-apply-blocked: output was not valid JSON"
+    } elseif ($applyBlockedJson.apply_allowed -ne $false) {
+      Write-Output "FAIL issue-to-merge-github-apply-blocked: expected apply_allowed=false"
+    } elseif ($applyBlockedJson.github_calls_performed -ne $false) {
+      Write-Output "FAIL issue-to-merge-github-apply-blocked: github_calls_performed must be false when gates blocked"
+    } elseif ($applyBlockedJson.apply_blockers.Count -eq 0) {
+      Write-Output "FAIL issue-to-merge-github-apply-blocked: apply_blockers must be non-empty"
+    } else {
+      Write-Output "PASS issue-to-merge-github-apply-blocked: apply_allowed=false with blockers, no GitHub call made"
+    }
+
+    $applyUnsupportedResult = Invoke-Cli -Arguments @(
+      "issue-to-merge-github",
+      "-TaskId",
+      "cli-fixture",
+      "-MutationMode",
+      "apply",
+      "-GithubOperation",
+      "pr_open",
+      "-Force",
+      "-ConfirmGithubMutation",
+      "-EvidencePath",
+      ".specbridge/github-evidence/cli-fixture-blocked-gates.github-mutation-evidence.json"
+    )
+    $applyUnsupportedJson = $null
+    try { $applyUnsupportedJson = $applyUnsupportedResult.Text | ConvertFrom-Json } catch {}
+    if ($null -eq $applyUnsupportedJson) {
+      Write-Output "FAIL issue-to-merge-github-apply-unsupported-op: output was not valid JSON"
+    } elseif ($applyUnsupportedJson.command_boundary -notmatch "apply-pilot-supports-issue_close-only") {
+      Write-Output "FAIL issue-to-merge-github-apply-unsupported-op: command_boundary must declare pilot scope"
+    } else {
+      Write-Output "PASS issue-to-merge-github-apply-unsupported-op: command_boundary records apply pilot scope"
+    }
+
     Assert-Failure `
       -Name "create-contract-missing-output" `
       -Result (Invoke-Cli -Arguments @(

@@ -150,6 +150,60 @@ The pilot then records a bounded comparison artifact:
 
 That artifact compares the dry-run connector envelope with the real GitHub lifecycle evidence that can exist at each phase: issue intake, branch and PR, required CI checks, policy-gated merge, issue closure, and repository memory. Pre-merge repository files must not claim merge or closure facts before GitHub records them.
 
+## Apply-Mode Pilot (Issue 119)
+
+Issue 119 adds real GitHub mutation execution to `issue-to-merge-github` apply mode for a single low-risk operation: `issue_close`.
+
+### When apply mode executes
+
+Apply mode executes `gh issue close` only when all of the following are true:
+
+- `-MutationMode apply` is passed
+- `-Force` is passed
+- `-ConfirmGithubMutation` is passed
+- `-EvidencePath` points to a valid `.specbridge/github-evidence/*.github-mutation-evidence.json` file
+- All evidence gates are `true`: `local_gates_passed`, `security_gate_passed`, `review_gate_passed`, `github_ci_passed`, `chatgpt_audit_approved`, `no_protected_files_changed`, `deployment_not_requested`
+- `-GithubOperation issue_close` is selected (pilot supports only `issue_close`)
+- `RelatedIssue` is a valid GitHub issue URL
+
+### Pilot scope
+
+The apply-mode pilot supports `issue_close` only. Attempting to use apply mode with any other operation (such as `pr_open` or `merge`) sets `apply_allowed = false` with the blocker `apply_mode_pilot_supports_issue_close_only`.
+
+### Command example
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 issue-to-merge-github `
+  -TaskId issue-119-apply-mode-github-operator-pilot `
+  -RelatedIssue https://github.com/yagooyarzabaldev-ops/specbridge/issues/119 `
+  -MutationMode apply `
+  -GithubOperation issue_close `
+  -Force `
+  -ConfirmGithubMutation `
+  -EvidencePath .specbridge/github-evidence/issue-119-apply-mode-github-operator-pilot.github-mutation-evidence.json
+```
+
+### Output
+
+Apply mode adds `github_mutation_result` to the output:
+
+```json
+{
+  "github_calls_performed": true,
+  "github_mutation_result": {
+    "operation": "issue_close",
+    "issue_number": 119,
+    "repository": "yagooyarzabaldev-ops/specbridge",
+    "gh_exit_code": 0,
+    "gh_output": "",
+    "status": "success"
+  },
+  "mutation_execution": "apply_executed"
+}
+```
+
+When evidence gates are blocked, the output records `apply_allowed = false`, `apply_blockers`, and `github_calls_performed = false`. No `gh` call is made.
+
 ## Merge Conditions
 
 The plan records these merge conditions:

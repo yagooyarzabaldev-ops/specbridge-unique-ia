@@ -1,6 +1,6 @@
 {
   "contract_id": "issue-117-post-merge-memory-closure",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     "README.md",
     ".specbridge/audit-packets/issue-115-github-evidence-loop.audit-packet.json",
