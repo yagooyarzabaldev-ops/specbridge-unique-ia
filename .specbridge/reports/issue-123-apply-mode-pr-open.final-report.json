@@ -1,0 +1,37 @@
+{
+  "summary": "Implemented apply-mode pr_open expansion in issue-to-merge-github. scripts/specbridge.ps1 now calls gh pr create when pr_open is selected and all evidence gates pass, with ErrorActionPreference guard for gh stderr. Pilot scope guard updated to allow issue_close and pr_open (blocker: apply_mode_pilot_supports_issue_close_and_pr_open_only for unsupported ops). apply-unsupported-op test updated to use merge operation. Documentation updated with pr_open section. All issue 123 artifacts created.",
+  "changed_files": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "docs/specbridge-issue-to-merge-operator.md",
+    ".specbridge/contracts/issue-123-apply-mode-pr-open.execution.md",
+    ".specbridge/scopes/issue-123-apply-mode-pr-open.scope.json",
+    ".specbridge/reports/issue-123-apply-mode-pr-open.final-report.json",
+    ".specbridge/audit-packets/issue-123-apply-mode-pr-open.audit-packet.json",
+    ".specbridge/audits/issue-123-apply-mode-pr-open.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-123-apply-mode-pr-open.github-mutation-evidence.json"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "git diff --check: passed",
+    "GitHub CI: not_collected"
+  ],
+  "policy_result": "Compliant. pr_open uses same evidence-gate pattern as issue_close. ErrorActionPreference guard applied. No secrets, production, billing, auth, database, CI/CD security, or deployment files changed.",
+  "risk_result": "Medium risk. gh pr create opens a real PR on GitHub but is bounded by all 7 evidence gates and explicit confirmation flags.",
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending for issue 123 branch.",
+    "apply-mode pr_open execution will be tested in issue 123 post-merge closure after evidence file is updated with github_ci_passed: true."
+  ],
+  "merge_status": "PR pending. Issue 123 branch pushed; PR to be opened at https://github.com/yagooyarzabaldev-ops/specbridge.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_pr_ci"
+}

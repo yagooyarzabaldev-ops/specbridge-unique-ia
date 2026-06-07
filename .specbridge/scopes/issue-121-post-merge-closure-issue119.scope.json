@@ -1,6 +1,6 @@
 {
   "contract_id": "issue-121-post-merge-closure-issue119",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     "README.md",
     ".specbridge/context/CURRENT_GOAL.md",

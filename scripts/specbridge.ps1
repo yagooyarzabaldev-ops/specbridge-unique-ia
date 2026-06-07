@@ -1331,9 +1331,9 @@ function Invoke-IssueToMergeGithubCommand {
     $applyAllowed = ($applyBlockers.Count -eq 0)
 
     if ($applyAllowed) {
-      $unsupportedOps = $selectedOperations | Where-Object { $_ -ne "issue_close" }
+      $unsupportedOps = $selectedOperations | Where-Object { $_ -ne "issue_close" -and $_ -ne "pr_open" }
       if ($unsupportedOps.Count -gt 0) {
-        $applyBlockers += "apply_mode_pilot_supports_issue_close_only"
+        $applyBlockers += "apply_mode_pilot_supports_issue_close_and_pr_open_only"
         $applyAllowed = $false
       }
     }
@@ -1359,6 +1359,36 @@ function Invoke-IssueToMergeGithubCommand {
         gh_exit_code = $ghExitCode
         gh_output = ($ghOutput -join " ").Trim()
         status = if ($ghExitCode -eq 0 -or ($ghOutput -join " ") -match "already closed") { "success" } else { "failed" }
+      }
+    }
+
+    if ($applyAllowed -and $selectedOperations -contains "pr_open") {
+      $repoSlug = ($RepositoryUrl -replace "https://github\.com/", "")
+      $prTitle = if (-not [string]::IsNullOrWhiteSpace($resolvedTitle)) { $resolvedTitle } else { $safeTaskId }
+      $prBody = "Created by SpecBridge issue-to-merge-github apply mode for task: $safeTaskId"
+      if (-not [string]::IsNullOrWhiteSpace($issueReference)) {
+        $prBody += "`n`nRelated: $issueReference"
+      }
+
+      $ghArgs = @("pr", "create", "--title", $prTitle, "--body", $prBody, "--base", $BaseBranch, "--head", $currentBranch, "--repo", $repoSlug)
+      $previousEap = $ErrorActionPreference
+      $ErrorActionPreference = "Continue"
+      $ghOutput = & gh @ghArgs 2>&1
+      $ghExitCode = $LASTEXITCODE
+      $ErrorActionPreference = $previousEap
+      $prUrl = ($ghOutput | Where-Object { $_ -match "^https://" } | Select-Object -First 1)
+      $prNumber = if ($prUrl -match "/pull/(\d+)") { [int]$Matches[1] } else { $null }
+      $githubCallsPerformed = $true
+      $githubMutationResult = [ordered]@{
+        operation = "pr_open"
+        pr_url = $prUrl
+        pr_number = $prNumber
+        head = $currentBranch
+        base = $BaseBranch
+        repository = $repoSlug
+        gh_exit_code = $ghExitCode
+        gh_output = ($ghOutput -join " ").Trim()
+        status = if ($ghExitCode -eq 0) { "success" } elseif (($ghOutput -join " ") -match "already exists") { "success" } else { "failed" }
       }
     }
   }
@@ -1449,7 +1479,7 @@ function Invoke-IssueToMergeGithubCommand {
       "deployment_requested",
       "policy_boundary_reached"
     )
-    command_boundary = "dry-run-by-default apply-requires-force-confirmation-and-evidence apply-pilot-supports-issue_close-only emits-connector-action-envelope does-not-store-secrets does-not-launch-claude-code does-not-launch-antigravity does-not-install-dependencies does-not-deploy"
+    command_boundary = "dry-run-by-default apply-requires-force-confirmation-and-evidence apply-pilot-supports-issue_close-and-pr_open emits-connector-action-envelope does-not-store-secrets does-not-launch-claude-code does-not-launch-antigravity does-not-install-dependencies does-not-deploy"
     output_path = $null
   }
 

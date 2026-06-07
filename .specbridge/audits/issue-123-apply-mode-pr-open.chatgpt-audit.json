@@ -1,0 +1,87 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-123-apply-mode-pr-open",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-123-apply-mode-pr-open.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-123-apply-mode-pr-open.execution.md",
+  "final_report_path": ".specbridge/reports/issue-123-apply-mode-pr-open.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue 123 correctly expands the apply-mode pilot following the pattern from issue 119. pr_open uses the same evidence gate check, ErrorActionPreference guard, and github_mutation_result recording pattern.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "specbridge.ps1 calls gh pr create for pr_open with all gates. Scope guard updated to issue_close and pr_open. apply-unsupported-op test updated to use merge operation. Documentation updated with pr_open section. All artifacts created.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "pr_open is bounded by 7 evidence gates and explicit confirmation flags. No secrets, production, billing, auth, database, CI/CD security, or deployment files changed.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "Changed files limited to declared scope paths. The gh pr create call uses the same ErrorActionPreference guard pattern as issue_close. No credentials stored.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "All changed files declared in .specbridge/scopes/issue-123-apply-mode-pr-open.scope.json.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "apply-unsupported-op test updated to use merge and check for apply-pilot-supports-issue_close-and-pr_open boundary. All CLI tests pass (0 failures).",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub CI is pending for the issue 123 PR and remains an external merge gate. Final report marks CI as not_collected.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "Final report accurately records local completion pending PR CI. Notes that live pr_open execution is pending post-merge closure with github_ci_passed: true evidence.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "external_lifecycle_pending",
+      "file": ".specbridge/reports/issue-123-apply-mode-pr-open.final-report.json",
+      "line": null,
+      "evidence": "PR, CI, and merge for issue 123 are pending external GitHub gates.",
+      "recommendation": "Open the PR, wait for required checks, and merge only if policy gates pass. Then create issue 125 (post-merge closure + live pr_open execution).",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending for issue 123 branch.",
+    "apply-mode pr_open live execution pending post-merge closure."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-123-apply-mode-pr-open.audit-packet.json",
+    ".specbridge/audits/issue-123-apply-mode-pr-open.chatgpt-audit.json",
+    ".specbridge/contracts/issue-123-apply-mode-pr-open.execution.md",
+    ".specbridge/github-evidence/issue-123-apply-mode-pr-open.github-mutation-evidence.json",
+    ".specbridge/reports/issue-123-apply-mode-pr-open.final-report.json",
+    ".specbridge/scopes/issue-123-apply-mode-pr-open.scope.json",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "docs/specbridge-issue-to-merge-operator.md",
+    "README.md"
+  ]
+}

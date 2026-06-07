@@ -166,9 +166,9 @@ Apply mode executes `gh issue close` only when all of the following are true:
 - `-GithubOperation issue_close` is selected (pilot supports only `issue_close`)
 - `RelatedIssue` is a valid GitHub issue URL
 
-### Pilot scope
+### Pilot scope (Issue 119)
 
-The apply-mode pilot supports `issue_close` only. Attempting to use apply mode with any other operation (such as `pr_open` or `merge`) sets `apply_allowed = false` with the blocker `apply_mode_pilot_supports_issue_close_only`.
+The initial apply-mode pilot supports `issue_close` only. Attempting to use apply mode with any other operation sets `apply_allowed = false` with the blocker `apply_mode_pilot_supports_issue_close_only`.
 
 ### Command example
 
@@ -203,6 +203,53 @@ Apply mode adds `github_mutation_result` to the output:
 ```
 
 When evidence gates are blocked, the output records `apply_allowed = false`, `apply_blockers`, and `github_calls_performed = false`. No `gh` call is made.
+
+## Apply-Mode pr_open Expansion (Issue 123)
+
+Issue 123 expands the apply-mode pilot to support `pr_open` in addition to `issue_close`.
+
+### When pr_open executes
+
+Apply mode calls `gh pr create` when:
+
+- `-MutationMode apply` and all confirmation flags are passed
+- All evidence gates are `true`
+- `-GithubOperation pr_open` is selected
+- The pilot scope guard allows `issue_close` and `pr_open` (blocker: `apply_mode_pilot_supports_issue_close_and_pr_open_only` for other operations)
+
+### Command example
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 issue-to-merge-github `
+  -TaskId issue-123-apply-mode-pr-open `
+  -Title "Apply-mode pr_open expansion" `
+  -RelatedIssue https://github.com/yagooyarzabaldev-ops/specbridge/issues/123 `
+  -MutationMode apply `
+  -GithubOperation pr_open `
+  -Force `
+  -ConfirmGithubMutation `
+  -EvidencePath .specbridge/github-evidence/issue-123-apply-mode-pr-open.github-mutation-evidence.json
+```
+
+### Output
+
+```json
+{
+  "github_calls_performed": true,
+  "github_mutation_result": {
+    "operation": "pr_open",
+    "pr_url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/124",
+    "pr_number": 124,
+    "head": "codex/issue123-apply-mode-pr-open",
+    "base": "main",
+    "repository": "yagooyarzabaldev-ops/specbridge",
+    "gh_exit_code": 0,
+    "gh_output": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/124",
+    "status": "success"
+  },
+  "mutation_execution": "apply_executed"
+}
+```
 
 ## Merge Conditions
 
