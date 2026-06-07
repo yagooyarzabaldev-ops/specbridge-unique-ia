@@ -1346,8 +1346,11 @@ function Invoke-IssueToMergeGithubCommand {
       $repoSlug = ($RepositoryUrl -replace "https://github\.com/", "")
 
       $ghArgs = @("issue", "close", $issueNumber, "--repo", $repoSlug, "--comment", "Closed by SpecBridge issue-to-merge-github apply mode after all policy gates passed.")
+      $previousEap = $ErrorActionPreference
+      $ErrorActionPreference = "Continue"
       $ghOutput = & gh @ghArgs 2>&1
       $ghExitCode = $LASTEXITCODE
+      $ErrorActionPreference = $previousEap
       $githubCallsPerformed = $true
       $githubMutationResult = [ordered]@{
         operation = "issue_close"
@@ -1355,7 +1358,7 @@ function Invoke-IssueToMergeGithubCommand {
         repository = $repoSlug
         gh_exit_code = $ghExitCode
         gh_output = ($ghOutput -join " ").Trim()
-        status = if ($ghExitCode -eq 0) { "success" } else { "failed" }
+        status = if ($ghExitCode -eq 0 -or ($ghOutput -join " ") -match "already closed") { "success" } else { "failed" }
       }
     }
   }

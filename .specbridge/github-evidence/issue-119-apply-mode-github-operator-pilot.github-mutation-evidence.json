@@ -1,14 +1,14 @@
 {
   "schema_version": "1",
   "task_id": "issue-119-apply-mode-github-operator-pilot",
-  "description": "Evidence file for issue 119 apply-mode pilot. All local gates passed. GitHub CI, merge, and issue closure remain external gates.",
+  "description": "Evidence file for issue 119 apply-mode pilot. All local gates passed. PR 120 merged on 2026-06-06 after CI passed. Issue 119 is closed.",
   "local_gates_passed": true,
   "security_gate_passed": true,
   "review_gate_passed": true,
-  "github_ci_passed": false,
+  "github_ci_passed": true,
   "chatgpt_audit_approved": true,
   "no_protected_files_changed": true,
   "deployment_not_requested": true,
-  "notes": "github_ci_passed is false because PR 120 has not yet passed CI. This file records pre-merge local evidence only. It must be updated after CI passes before apply mode is used for issue_close.",
-  "boundary": "local-evidence-only apply-mode-execution-requires-github_ci_passed-true"
+  "notes": "PR 120 merged 2026-06-06. CI passed. Issue 119 closed. github_ci_passed updated to true for apply-mode closure evidence.",
+  "boundary": "post-merge-evidence apply-mode-issue-close-executed"
 }

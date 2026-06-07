@@ -1,0 +1,17 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-121-post-merge-closure-issue119",
+  "closed_task_id": "issue-119-apply-mode-github-operator-pilot",
+  "closure_date": "2026-06-06",
+  "pr_number": 120,
+  "pr_merged": true,
+  "ci_passed": true,
+  "issue_119_state": "closed",
+  "apply_mode_executed": true,
+  "apply_mode_result": "success",
+  "gh_output": "! Issue yagooyarzabaldev-ops/specbridge#119 is already closed",
+  "apply_mode_note": "Issue 119 was already closed by GitHub auto-merge when PR 120 merged. apply-mode issue_close confirmed goal state achieved.",
+  "specbridge_ps1_fix": "Fixed ErrorActionPreference Stop causing NativeCommandError on gh stderr output; also treat already-closed as success.",
+  "next_task": "issue-123-apply-mode-pr-open",
+  "next_task_description": "Expand apply-mode to pr_open operation using gh pr create"
+}
