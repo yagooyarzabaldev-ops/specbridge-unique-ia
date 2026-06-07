@@ -1,0 +1,13 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-127-full-loop-test",
+  "closure_type": "post_merge_closure",
+  "closed_by": "issue-131-post-merge-closure-126-127",
+  "closed_at": "2026-06-07",
+  "pr_number": 130,
+  "pr_url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/130",
+  "pr_merged": true,
+  "github_ci_passed": true,
+  "notes": "PR 130 merged 2026-06-07. Issue 127 full end-to-end apply-mode loop test complete.",
+  "next_task": "issue-131-post-merge-closure-126-127"
+}

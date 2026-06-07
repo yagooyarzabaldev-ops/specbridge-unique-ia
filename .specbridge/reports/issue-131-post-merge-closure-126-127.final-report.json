@@ -1,0 +1,36 @@
+{
+  "summary": "Post-merge closure for issues 126 and 127. PR 130 (issue 127 full-loop test) merged 2026-06-07. Updated issue-127 evidence with github_ci_passed true. Marked issue-127 scope as completed. Created closure artifacts for both issues 126 (pending CI) and 127 (merged). Updated CURRENT_GOAL.md and README.md. All local validators pass.",
+  "changed_files": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-131-post-merge-closure-126-127.execution.md",
+    ".specbridge/scopes/issue-131-post-merge-closure-126-127.scope.json",
+    ".specbridge/scopes/issue-127-full-loop-test.scope.json",
+    ".specbridge/reports/issue-131-post-merge-closure-126-127.final-report.json",
+    ".specbridge/audit-packets/issue-131-post-merge-closure-126-127.audit-packet.json",
+    ".specbridge/audits/issue-131-post-merge-closure-126-127.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-127-full-loop-test.github-mutation-evidence.json",
+    ".specbridge/github-evidence/issue-127-full-loop-test.closure.json",
+    ".specbridge/github-evidence/issue-126-apply-mode-merge.closure.json"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "git diff --check: passed",
+    "GitHub CI: not_collected"
+  ],
+  "policy_result": "Compliant. Evidence and memory closure only. No code changes, no GitHub apply-mode mutations. No secrets, production, billing, auth, database, CI/CD security, or deployment files changed.",
+  "risk_result": "Low risk. Evidence and governance files only.",
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending for issue 131 branch.",
+    "Issue 126 PR (129) pending CI — issue-126 closure marked as pending in closure artifact."
+  ],
+  "merge_status": "PR pending CI. Branch pushed; auto-merge will be enabled after PR creation.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_pr_ci"
+}

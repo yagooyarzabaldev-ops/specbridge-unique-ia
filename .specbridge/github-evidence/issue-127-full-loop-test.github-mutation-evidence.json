@@ -5,11 +5,11 @@
   "collected_by": "Claude Code / SpecBridge executor",
   "collected_at": "2026-06-07",
   "local_validations_passed": true,
-  "github_ci_passed": false,
+  "github_ci_passed": true,
   "tests_passed": true,
   "security_gate_passed": true,
   "review_gate_passed": true,
   "chatgpt_audit_approved": true,
   "no_protected_files_changed": true,
-  "notes": "Local validators all pass including new full-loop-dry-run CLI test. GitHub CI pending for PR on codex/issue127-full-loop-test. github_ci_passed will be updated to true after CI passes."
+  "notes": "PR 130 merged 2026-06-07. github_ci_passed updated to true as part of issue 131 post-merge closure."
 }

@@ -1,0 +1,59 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-131-post-merge-closure-126-127",
+  "generated_by": "specbridge-audit-packet-generator",
+  "execution_contract_path": ".specbridge/contracts/issue-131-post-merge-closure-126-127.execution.md",
+  "changed_files": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-131-post-merge-closure-126-127.execution.md",
+    ".specbridge/scopes/issue-131-post-merge-closure-126-127.scope.json",
+    ".specbridge/scopes/issue-127-full-loop-test.scope.json",
+    ".specbridge/reports/issue-131-post-merge-closure-126-127.final-report.json",
+    ".specbridge/audit-packets/issue-131-post-merge-closure-126-127.audit-packet.json",
+    ".specbridge/audits/issue-131-post-merge-closure-126-127.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-127-full-loop-test.github-mutation-evidence.json",
+    ".specbridge/github-evidence/issue-127-full-loop-test.closure.json",
+    ".specbridge/github-evidence/issue-126-apply-mode-merge.closure.json"
+  ],
+  "diff_summary": [
+    { "file": ".specbridge/github-evidence/issue-127-full-loop-test.github-mutation-evidence.json", "added_lines": 1, "deleted_lines": 1 },
+    { "file": ".specbridge/scopes/issue-127-full-loop-test.scope.json", "added_lines": 1, "deleted_lines": 1 }
+  ],
+  "validation_commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+    "git diff --check",
+    "GitHub CI"
+  ],
+  "validation_results": [
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1", "result": "passed" },
+    { "command": "git diff --check", "result": "passed" },
+    { "command": "GitHub CI", "result": "not_collected" }
+  ],
+  "final_report_path": ".specbridge/reports/issue-131-post-merge-closure-126-127.final-report.json",
+  "ci_status": "not_collected",
+  "pr_review_report_path": null,
+  "policy_result": "Compliant. Evidence and memory closure only. No code changes, no GitHub apply-mode mutations. No secrets, production, billing, auth, database, CI/CD security, or deployment files changed.",
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending for issue 131 branch.",
+    "Issue 126 PR (129) pending CI."
+  ],
+  "completion_status": "complete_pending_pr_ci",
+  "source_files": [
+    ".specbridge/contracts/issue-131-post-merge-closure-126-127.execution.md",
+    ".specbridge/reports/issue-131-post-merge-closure-126-127.final-report.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}
