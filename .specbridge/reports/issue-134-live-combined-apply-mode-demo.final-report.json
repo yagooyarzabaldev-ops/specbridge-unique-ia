@@ -1,0 +1,31 @@
+{
+  "summary": "Prepared the governed package for issue 134, a live combined apply-mode demonstration limited to pr_open, merge, and issue_close. Created execution contract, scope manifest, GitHub mutation evidence, and issue-to-merge run envelope. The combined local CLI apply execution was not performed in this connector session and remains blocked until local gates, security gate, review gate, and GitHub CI evidence are true.",
+  "changed_files": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-134-live-combined-apply-mode-demo.execution.md",
+    ".specbridge/scopes/issue-134-live-combined-apply-mode-demo.scope.json",
+    ".specbridge/scopes/issue-133-post-merge-closure-issue126.scope.json",
+    ".specbridge/reports/issue-134-live-combined-apply-mode-demo.final-report.json",
+    ".specbridge/audit-packets/issue-134-live-combined-apply-mode-demo.audit-packet.json",
+    ".specbridge/audits/issue-134-live-combined-apply-mode-demo.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-134-live-combined-apply-mode-demo.github-mutation-evidence.json",
+    ".specbridge/issue-to-merge-runs/issue-134-live-combined-apply-mode-demo.github-mutation-run.json"
+  ],
+  "validations": [
+    "GitHub connector file creation: passed",
+    "GitHub PR creation: passed",
+    "local validators: not_run_in_connector_session",
+    "GitHub CI: pending"
+  ],
+  "policy_result": "Compliant. Scope is limited to governance artifacts, memory update, and prepared GitHub operation evidence. No production, secrets, billing, auth, database, CI/CD security, deployment, or unsupported apply-mode operation expansion.",
+  "risk_result": "Medium risk because the issue prepares live GitHub mutation behavior, but current PR only records bounded preparation and does not execute repository-local apply mode.",
+  "unresolved_risks": [
+    "Repository-local issue-to-merge-github apply command has not been executed for the combined operation.",
+    "GitHub CI for PR 135 is pending.",
+    "Local validator evidence is not available from this connector session."
+  ],
+  "merge_status": "PR opened. Merge blocked until CI and policy gates pass.",
+  "deployment_status": "Not applicable. Deployment is blocked.",
+  "completion_status": "prepared_pending_ci_and_local_runner_evidence"
+}

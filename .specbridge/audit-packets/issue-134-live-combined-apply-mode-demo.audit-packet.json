@@ -1,0 +1,59 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-134-live-combined-apply-mode-demo",
+  "generated_by": "specbridge-audit-packet-generator",
+  "execution_contract_path": ".specbridge/contracts/issue-134-live-combined-apply-mode-demo.execution.md",
+  "changed_files": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-134-live-combined-apply-mode-demo.execution.md",
+    ".specbridge/scopes/issue-134-live-combined-apply-mode-demo.scope.json",
+    ".specbridge/scopes/issue-133-post-merge-closure-issue126.scope.json",
+    ".specbridge/reports/issue-134-live-combined-apply-mode-demo.final-report.json",
+    ".specbridge/audit-packets/issue-134-live-combined-apply-mode-demo.audit-packet.json",
+    ".specbridge/audits/issue-134-live-combined-apply-mode-demo.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-134-live-combined-apply-mode-demo.github-mutation-evidence.json",
+    ".specbridge/issue-to-merge-runs/issue-134-live-combined-apply-mode-demo.github-mutation-run.json"
+  ],
+  "diff_summary": [
+    { "file": ".specbridge/contracts/issue-134-live-combined-apply-mode-demo.execution.md", "added_lines": 1, "deleted_lines": 0 },
+    { "file": ".specbridge/scopes/issue-134-live-combined-apply-mode-demo.scope.json", "added_lines": 1, "deleted_lines": 0 },
+    { "file": ".specbridge/github-evidence/issue-134-live-combined-apply-mode-demo.github-mutation-evidence.json", "added_lines": 1, "deleted_lines": 0 },
+    { "file": ".specbridge/issue-to-merge-runs/issue-134-live-combined-apply-mode-demo.github-mutation-run.json", "added_lines": 1, "deleted_lines": 0 }
+  ],
+  "validation_commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+    "GitHub CI"
+  ],
+  "validation_results": [
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1", "result": "not_collected" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1", "result": "not_collected" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1", "result": "not_collected" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1", "result": "not_collected" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1", "result": "not_collected" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1", "result": "not_collected" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1", "result": "not_collected" },
+    { "command": "GitHub CI", "result": "not_collected" }
+  ],
+  "final_report_path": ".specbridge/reports/issue-134-live-combined-apply-mode-demo.final-report.json",
+  "ci_status": "not_collected",
+  "pr_review_report_path": null,
+  "policy_result": "Compliant. Scope is limited to governance artifacts, memory update, and prepared GitHub operation evidence. No production, secrets, billing, auth, database, CI/CD security, deployment, or unsupported apply-mode operation expansion.",
+  "unresolved_risks": [
+    "Repository-local issue-to-merge-github apply command has not been executed for the combined operation.",
+    "GitHub CI for PR 135 is pending.",
+    "Local validator evidence is not available from the connector session that created this package."
+  ],
+  "completion_status": "prepared_pending_ci_and_local_runner_evidence",
+  "source_files": [
+    ".specbridge/contracts/issue-134-live-combined-apply-mode-demo.execution.md",
+    ".specbridge/reports/issue-134-live-combined-apply-mode-demo.final-report.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

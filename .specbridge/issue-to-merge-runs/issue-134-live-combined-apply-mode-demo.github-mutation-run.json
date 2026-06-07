@@ -1,0 +1,29 @@
+{
+  "schema_version": "1",
+  "command": "issue-to-merge-github",
+  "ok": true,
+  "mutation_mode": "apply",
+  "dry_run": false,
+  "task_id": "issue-134-live-combined-apply-mode-demo",
+  "title": "Live combined apply-mode demonstration: pr_open + merge + issue_close",
+  "issue_reference": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/134",
+  "repository_url": "https://github.com/yagooyarzabaldev-ops/specbridge",
+  "base_branch": "main",
+  "selected_operations": [
+    "pr_open",
+    "merge",
+    "issue_close"
+  ],
+  "apply_allowed": false,
+  "apply_blockers": [
+    "local_gates_passed",
+    "security_gate_passed",
+    "review_gate_passed",
+    "github_ci_passed"
+  ],
+  "github_calls_performed": false,
+  "github_mutation_result": null,
+  "execution_status": "prepared_not_executed",
+  "evidence_path": ".specbridge/github-evidence/issue-134-live-combined-apply-mode-demo.github-mutation-evidence.json",
+  "notes": "This file records the intended combined apply-mode run envelope. It is not a claim that the repository-local CLI executed the operation. Execution remains blocked until local gates, security gate, review gate, and GitHub CI evidence are true."
+}

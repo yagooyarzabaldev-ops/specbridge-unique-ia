@@ -1,0 +1,85 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-134-live-combined-apply-mode-demo",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-134-live-combined-apply-mode-demo.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-134-live-combined-apply-mode-demo.execution.md",
+  "final_report_path": ".specbridge/reports/issue-134-live-combined-apply-mode-demo.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue 134 follows the established governance pattern. Execution contract, scope manifest, evidence, and run envelope created. Combined apply-mode operation limited to issue_close, pr_open, and merge — all supported by the current pilot scope guard.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "Governance package prepared. This PR records preparation artifacts. Local apply-mode execution will be performed in a separate governed session with full gate evidence.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "Changes limited to governance artifacts and memory files. No code changes. No unsupported apply-mode operations. No secrets, production, billing, auth, database, CI/CD security, or deployment files changed.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "All changed files within declared scope. No protected paths touched.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "All changed files declared in .specbridge/scopes/issue-134-live-combined-apply-mode-demo.scope.json.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "This PR is a governance preparation only. Local validators will be run by the executor that performs the combined apply-mode command.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub CI is the external merge gate for this branch. Final report marks CI as not_collected from the connector session.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "Final report accurately describes this as a preparation package. It explicitly states local apply-mode execution was not performed in this connector session.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "external_lifecycle_pending",
+      "file": ".specbridge/reports/issue-134-live-combined-apply-mode-demo.final-report.json",
+      "line": null,
+      "evidence": "Combined apply-mode execution not yet performed. GitHub CI and PR merge pending. Local validators not run from connector session.",
+      "recommendation": "After this PR merges, run the combined issue-to-merge-github apply command locally with full gate evidence to complete the live demonstration.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "Repository-local combined apply-mode execution pending.",
+    "GitHub CI for PR 135 pending.",
+    "Local validator evidence not collected from connector session."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-134-live-combined-apply-mode-demo.audit-packet.json",
+    ".specbridge/audits/issue-134-live-combined-apply-mode-demo.chatgpt-audit.json",
+    ".specbridge/contracts/issue-134-live-combined-apply-mode-demo.execution.md",
+    ".specbridge/github-evidence/issue-134-live-combined-apply-mode-demo.github-mutation-evidence.json",
+    ".specbridge/reports/issue-134-live-combined-apply-mode-demo.final-report.json",
+    ".specbridge/scopes/issue-134-live-combined-apply-mode-demo.scope.json",
+    "README.md"
+  ]
+}

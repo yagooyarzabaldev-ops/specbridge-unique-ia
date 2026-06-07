@@ -1,0 +1,22 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-134-live-combined-apply-mode-demo",
+  "collected_by": "ChatGPT SpecBridge connector session",
+  "collected_at": "2026-06-07",
+  "local_gates_passed": false,
+  "security_gate_passed": false,
+  "review_gate_passed": false,
+  "github_ci_passed": false,
+  "chatgpt_audit_approved": true,
+  "no_protected_files_changed": true,
+  "deployment_not_requested": true,
+  "supported_apply_operations": ["pr_open", "merge", "issue_close"],
+  "requested_apply_operations": ["pr_open", "merge", "issue_close"],
+  "repository": "yagooyarzabaldev-ops/specbridge",
+  "related_issue": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/134",
+  "prepared_branch": "codex/issue134-live-combined-apply-mode-demo",
+  "prepared_pull_request": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/135",
+  "evidence_status": "prepared",
+  "apply_mode_execution_status": "not_run_by_local_cli",
+  "notes": "Governance package and PR were prepared through the GitHub connector. Local runner evidence and GitHub CI are still required before merge."
+}
