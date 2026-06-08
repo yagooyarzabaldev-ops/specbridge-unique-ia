@@ -18,10 +18,12 @@ Foundation complete. Repository-first MVP complete. Full Autopilot enabled. V5 l
 | 153 | Lifecycle guard for apply-mode ordering | 155 | Merged 2026-06-08 |
 | 156 | Intake bridge end-to-end test (setup + fixes) | 156, 163 | Merged 2026-06-08 |
 | 157 | Intake bridge end-to-end test (execution) | 158-162 | Merged 2026-06-08 |
+| 159/166 | specbridge quickstart command | 167-169 | Merged 2026-06-08 |
+| — | doctor --fix-plan + lifecycle debt dashboard fix | 170 | Merged 2026-06-08 |
 
 ## Next Recommended Task
 
 The full autonomous loop is proven. Candidate next tasks:
-1. Improve intake bridge error handling (e.g. what if issue already exists with different title)
-2. Implement a real product feature via the intake bridge to stress-test the loop end-to-end
-3. Add intake bridge observability (emit structured events per operation)
+1. `specbridge trace` — unique run_id per loop connecting issue → contract → branch → PR → CI → merge → closure → dashboard
+2. Improve intake bridge error handling (e.g. what if issue already exists with different title)
+3. Add structured observability per operation (emit events with trace context)
