@@ -83,6 +83,30 @@ The first MVP must prove this flow:
 6. Merge only if policy allows it.
 7. Produce a final report.
 
+## Quickstart
+
+Run the `quickstart` command to see the shortest safe path:
+
+```powershell
+powershell -ExecutionPolicy Bypass -Command "& '.\scripts\specbridge.ps1' -Command quickstart -RepositoryUrl 'https://github.com/your-org/your-repo'"
+```
+
+The recommended flow is:
+
+1. **specbridge-intake** — generate governance files and push a ready-to-execute branch
+2. **issue-to-merge-github** — run all 6 operations autonomously (from the intake branch)
+3. **specbridge-doctor** — verify health after merge
+4. **generate-dashboard** — regenerate the HTML status dashboard
+
+To trigger intake from outside the repo:
+
+```bash
+gh workflow run specbridge-intake.yml \
+  -f task_id="my-feature" \
+  -f title="My feature title" \
+  -f goal="What should be done and why."
+```
+
 ## Current Status
 
 SpecBridge currently has these governed status layers:

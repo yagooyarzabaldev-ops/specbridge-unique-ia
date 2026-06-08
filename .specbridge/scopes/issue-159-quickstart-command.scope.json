@@ -1,0 +1,23 @@
+{
+  "contract_id": "issue-159-quickstart-command",
+  "status": "active",
+  "exclusive_write": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-159-quickstart-command.execution.md",
+    ".specbridge/scopes/issue-159-quickstart-command.scope.json",
+    ".specbridge/reports/issue-159-quickstart-command.final-report.json",
+    ".specbridge/audit-packets/issue-159-quickstart-command.audit-packet.json",
+    ".specbridge/audits/issue-159-quickstart-command.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-159-quickstart-command.github-mutation-evidence.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-159-quickstart-command.final-report.json"
+}

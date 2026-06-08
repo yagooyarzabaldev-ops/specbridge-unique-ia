@@ -618,6 +618,32 @@ try {
       }
     }
 
+    # quickstart: verify output structure
+    $qsResult = Invoke-Cli -Arguments @("quickstart")
+    if ($qsResult.ExitCode -ne 0) {
+      Write-Output "FAIL quickstart: command exited with code $($qsResult.ExitCode)."
+      $script:failed = $true
+    } else {
+      try {
+        $qsJson = $qsResult.Text | ConvertFrom-Json
+        $flowCommands = $qsJson.recommended_flow | ForEach-Object { $_.command }
+        $expectedCommands = @("specbridge-intake", "issue-to-merge-github", "specbridge-doctor", "generate-dashboard")
+        $missing = $expectedCommands | Where-Object { $flowCommands -notcontains $_ }
+        if ($missing) {
+          Write-Output "FAIL quickstart: recommended_flow missing commands: $($missing -join ', ')."
+          $script:failed = $true
+        } elseif (-not $qsJson.next_command_example) {
+          Write-Output "FAIL quickstart: missing next_command_example field."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS quickstart: all 4 flow steps and next_command_example present."
+        }
+      } catch {
+        Write-Output "FAIL quickstart: output was not valid JSON."
+        $script:failed = $true
+      }
+    }
+
     # specbridge-intake: verify generated contract passes validate-contracts
     $intakeTaskId = "cli-test-intake-$(Get-Date -Format 'yyyyMMddHHmmss')"
     $intakeTempDir = Join-Path (Get-Location).Path "specbridge-intake-test-$intakeTaskId"
