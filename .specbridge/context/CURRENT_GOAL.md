@@ -2,11 +2,11 @@
 
 ## Goal
 
-Issue 156 (intake bridge end-to-end test): fire `gh workflow run specbridge-intake.yml` with a real product feature task and validate the full autonomous loop runs from intake to merge.
+Foundation complete. All issue-to-merge apply-mode operations proven end-to-end via external trigger. Next: intake bridge improvements or new product feature work.
 
 ## Current Phase
 
-Foundation complete. Repository-first MVP complete. Full Autopilot enabled. V5 live parallel pilot complete and merged. Full apply-mode loop operational. Intake bridge live on main. Operator hardening + lifecycle guard merged via PR #155. Current phase: end-to-end intake bridge test.
+Foundation complete. Repository-first MVP complete. Full Autopilot enabled. V5 live parallel pilot complete and merged. Full apply-mode loop operational. Intake bridge proven end-to-end via gh workflow run (issue-157). All 6 operations run autonomously: issue_create → pr_open → ci_wait → merge → issue_close → post_merge_memory. Operator hardening + lifecycle guard + intake contract quality fixes all on main. Current phase: ready for next governed task.
 
 ## Completion History
 
@@ -16,8 +16,12 @@ Foundation complete. Repository-first MVP complete. Full Autopilot enabled. V5 l
 | 143 | SpecBridge intake bridge (ChatGPT entry point) | 155 | Merged 2026-06-08 |
 | 149 | SpecBridge operator hardening (10 improvements) | 155 | Merged 2026-06-08 |
 | 153 | Lifecycle guard for apply-mode ordering | 155 | Merged 2026-06-08 |
-| 156 | Intake bridge end-to-end test | TBD | In Progress |
+| 156 | Intake bridge end-to-end test (setup + fixes) | 156, 163 | Merged 2026-06-08 |
+| 157 | Intake bridge end-to-end test (execution) | 158-162 | Merged 2026-06-08 |
 
 ## Next Recommended Task
 
-Run `gh workflow run specbridge-intake.yml -f task_id=issue-156-intake-bridge-test -f title="Test intake bridge end-to-end" -f goal="Validate the full specbridge-intake to apply-mode loop runs autonomously from ChatGPT trigger."` then execute the generated contract with the apply-mode operator.
+The full autonomous loop is proven. Candidate next tasks:
+1. Improve intake bridge error handling (e.g. what if issue already exists with different title)
+2. Implement a real product feature via the intake bridge to stress-test the loop end-to-end
+3. Add intake bridge observability (emit structured events per operation)
