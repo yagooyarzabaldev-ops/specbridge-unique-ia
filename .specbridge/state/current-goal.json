@@ -1,9 +1,10 @@
 {
-  "current_task_id": "issue-157-intake-bridge-end-to-end-test",
-  "title": "Test intake bridge end-to-end via gh workflow run",
-  "status": "active",
+  "current_task_id": "ready_for_next_task",
+  "title": "No active task — intake bridge end-to-end test complete",
+  "status": "ready_for_next_task",
   "primary_pr": null,
   "closure_pr": null,
-  "last_updated": "2026-06-08T06:55:27.7099800+00:00",
-  "updated_by": "specbridge-intake"
+  "last_updated": "2026-06-08T15:40:00.000Z",
+  "updated_by": "specbridge-cleanup",
+  "note": "issue-157 complete: all 6 apply-mode ops ran end-to-end via gh workflow run"
 }
