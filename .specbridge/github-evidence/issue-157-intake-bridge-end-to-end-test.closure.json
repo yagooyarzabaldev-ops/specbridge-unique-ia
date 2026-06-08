@@ -1,0 +1,11 @@
+{
+    "schema_version":  "1",
+    "task_id":  "issue-157-intake-bridge-end-to-end-test",
+    "closure_type":  "post_merge_closure",
+    "closed_at":  "2026-06-08",
+    "pr_merged":  true,
+    "pr_number":  159,
+    "github_ci_passed":  true,
+    "scope_completed":  true,
+    "closed_by":  "specbridge-post-merge-memory-operator"
+}

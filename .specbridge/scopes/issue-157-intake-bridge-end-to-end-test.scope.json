@@ -1,6 +1,6 @@
 {
   "contract_id": "issue-157-intake-bridge-end-to-end-test",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     "README.md",
     ".specbridge/context/CURRENT_GOAL.md",
