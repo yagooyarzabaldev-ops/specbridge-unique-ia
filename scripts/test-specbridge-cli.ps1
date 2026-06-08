@@ -618,6 +618,36 @@ try {
       }
     }
 
+    # specbridge-intake: verify generated contract passes validate-contracts
+    $intakeTaskId = "cli-test-intake-$(Get-Date -Format 'yyyyMMddHHmmss')"
+    $intakeTempDir = Join-Path (Get-Location).Path "specbridge-intake-test-$intakeTaskId"
+    New-Item -ItemType Directory -Path $intakeTempDir -Force | Out-Null
+    try {
+      $intakeResult = Invoke-Cli -Arguments @("specbridge-intake", "-TaskId", $intakeTaskId, "-Title", "CLI test intake", "-Goal", "Validate intake contract structure.", "-RepositoryUrl", "https://github.com/test/test")
+      $contractFile = ".specbridge/contracts/$intakeTaskId.execution.md"
+      if (Test-Path $contractFile) {
+        $contractText = Get-Content $contractFile -Raw
+        $missingCount = 0
+        @("Context","Source References","Risk Level","Acceptance Criteria","Required Validations","Final Report Requirements","Completion Rule","related_issue") | ForEach-Object {
+          if ($contractText -notmatch [regex]::Escape($_)) { $missingCount++ }
+        }
+        if ($missingCount -eq 0) {
+          Write-Output "PASS specbridge-intake generates contract with all required sections."
+        } else {
+          Write-Output "FAIL specbridge-intake contract missing $missingCount required sections/fields."
+          $script:failed = $true
+        }
+        Remove-Item $contractFile -Force -ErrorAction SilentlyContinue
+        Remove-Item ".specbridge/scopes/$intakeTaskId.scope.json" -Force -ErrorAction SilentlyContinue
+        Remove-Item ".specbridge/github-evidence/$intakeTaskId.github-mutation-evidence.json" -Force -ErrorAction SilentlyContinue
+      } else {
+        Write-Output "FAIL specbridge-intake did not create contract file."
+        $script:failed = $true
+      }
+    } finally {
+      Remove-Item $intakeTempDir -Recurse -Force -ErrorAction SilentlyContinue
+    }
+
     Assert-Success `
       -Name "v5-pilot-status" `
       -Result (Invoke-Cli -Arguments @("v5-pilot-status")) `

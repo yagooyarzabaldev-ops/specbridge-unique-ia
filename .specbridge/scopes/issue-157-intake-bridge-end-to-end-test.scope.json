@@ -1,0 +1,23 @@
+{
+  "contract_id": "issue-157-intake-bridge-end-to-end-test",
+  "status": "active",
+  "exclusive_write": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-157-intake-bridge-end-to-end-test.execution.md",
+    ".specbridge/scopes/issue-157-intake-bridge-end-to-end-test.scope.json",
+    ".specbridge/reports/issue-157-intake-bridge-end-to-end-test.final-report.json",
+    ".specbridge/audit-packets/issue-157-intake-bridge-end-to-end-test.audit-packet.json",
+    ".specbridge/audits/issue-157-intake-bridge-end-to-end-test.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-157-intake-bridge-end-to-end-test.github-mutation-evidence.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-157-intake-bridge-end-to-end-test.final-report.json"
+}
