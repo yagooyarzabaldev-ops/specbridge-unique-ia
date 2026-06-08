@@ -11,5 +11,6 @@
   "chatgpt_audit_approved": true,
   "no_protected_files_changed": true,
   "deployment_not_requested": true,
-  "notes": "All local validators pass. GitHub CI passed for PR 135 (merged 2026-06-07). All evidence gates satisfied. Ready for apply-mode execution."
+  "pr_merged": true,
+  "notes": "All local validators pass. GitHub CI passed for PR 135 (merged 2026-06-07). Combined apply-mode executed from codex/issue134-combined-demo-execution: PR 137 opened and merged in a single call on 2026-06-07. issue_close confirmed (issue 134 already closed). Demonstration complete."
 }

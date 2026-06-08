@@ -1,6 +1,6 @@
 {
   "contract_id": "issue-134-live-combined-apply-mode-demo",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     "README.md",
     ".specbridge/context/CURRENT_GOAL.md",

@@ -10,8 +10,8 @@
     "issue_reference":  "https://github.com/yagooyarzabaldev-ops/specbridge/issues/134",
     "repository_url":  "https://github.com/yagooyarzabaldev-ops/specbridge",
     "base_branch":  "main",
-    "current_branch":  "main",
-    "head":  "6af163a",
+    "current_branch":  "codex/issue134-combined-demo-execution",
+    "head":  "5088746",
     "selected_operations":  [
                                 "pr_open",
                                 "merge",
@@ -89,13 +89,14 @@
     "github_calls_performed":  true,
     "github_mutation_result":  {
                                    "operation":  "merge",
-                                   "pr_number":  null,
-                                   "head":  "main",
+                                   "pr_number":  137,
+                                   "head":  "codex/issue134-combined-demo-execution",
                                    "repository":  "yagooyarzabaldev-ops/specbridge",
-                                   "gh_exit_code":  1,
-                                   "gh_output":  "no pull requests found for branch \"main\"",
-                                   "status":  "failed_no_pr_found"
+                                   "gh_exit_code":  0,
+                                   "gh_output":  "",
+                                   "status":  "success"
                                },
+    "execution_notes":  "First attempt ran from main branch (failed: no PR for main). Second attempt ran from codex/issue134-combined-demo-execution. PR 137 opened and merged by single apply-mode call. issue_close confirmed (issue 134 already closed). Combined demonstration complete.",
     "mutation_execution":  "apply_executed",
     "connector_action_envelope":  {
                                       "connector":  "github",

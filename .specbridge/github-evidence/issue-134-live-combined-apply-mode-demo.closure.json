@@ -1,0 +1,36 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-134-live-combined-apply-mode-demo",
+  "closure_type": "post_merge_closure",
+  "closed_by": "issue-138-post-merge-closure-issue134",
+  "closed_at": "2026-06-07",
+  "pr_135": {
+    "url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/135",
+    "title": "Issue 134: live combined apply-mode demonstration",
+    "status": "merged",
+    "merged_at": "2026-06-07T21:17:36Z",
+    "contents": "governance package: contract, scope, final report, audit packet, ChatGPT audit, evidence file, run artifact (first attempt)"
+  },
+  "pr_137": {
+    "url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/137",
+    "title": "Live combined apply-mode demonstration: pr_open + merge + issue_close",
+    "status": "merged",
+    "merged_at": "2026-06-07",
+    "contents": "updated evidence file (correct schema, all gates true), execution branch with successful apply-mode run"
+  },
+  "combined_apply_mode_result": {
+    "executed_from_branch": "codex/issue134-combined-demo-execution",
+    "apply_allowed": true,
+    "github_calls_performed": true,
+    "mutation_execution": "apply_executed",
+    "operations": ["pr_open", "merge", "issue_close"],
+    "pr_opened": 137,
+    "pr_merged": 137,
+    "issue_closed": 134,
+    "status": "success"
+  },
+  "github_ci_passed": true,
+  "pr_merged": true,
+  "scope_completed": true,
+  "next_task": "none — apply-mode pilot series complete. All three operations (issue_close, pr_open, merge) demonstrated individually and combined."
+}

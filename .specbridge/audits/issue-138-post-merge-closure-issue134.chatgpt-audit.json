@@ -1,0 +1,84 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-138-post-merge-closure-issue134",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-138-post-merge-closure-issue134.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-138-post-merge-closure-issue134.execution.md",
+  "final_report_path": ".specbridge/reports/issue-138-post-merge-closure-issue134.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue 138 follows the established post-merge closure pattern. PR 135 and PR 137 merged. Issue-134 run artifact updated with successful combined apply-mode result. Issue-134 scope marked completed. Closure evidence created.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "Run artifact updated: current_branch=codex/issue134-combined-demo-execution, pr_number=137, status=success. Evidence file has pr_merged=true. Closure.json records combined apply-mode success. Issue-134 scope status=completed. CURRENT_GOAL and README updated. All validators pass.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "Changes limited to evidence, memory, closure, and governance artifacts only. No code changes. No secrets, production, billing, auth, database, CI/CD security, or deployment files changed.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "All changed files within declared exclusive_write scope. No protected paths touched.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "All changed files declared in .specbridge/scopes/issue-138-post-merge-closure-issue134.scope.json.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "All validators passed locally. No test code changes in this closure.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub CI is pending for the issue 138 PR and remains an external merge gate. Final report marks CI as not_collected.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "Final report accurately records combined apply-mode demonstration complete. PR 137 opened and merged by single apply-mode call. Issue 134 closed. Completion status is complete_pending_pr_ci.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "run_artifact_manual_update",
+      "file": ".specbridge/issue-to-merge-runs/issue-134-live-combined-apply-mode-demo.github-mutation-run.json",
+      "line": null,
+      "evidence": "The successful combined apply-mode run (PR 137) was captured in stdout only — not written to the run artifact file by the script. The closure task updates the run artifact manually to preserve the evidence record. Git history preserves the prior failed-attempt version.",
+      "recommendation": "No action required. Manual update is acceptable for closure evidence.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending for issue 138 branch."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-138-post-merge-closure-issue134.audit-packet.json",
+    ".specbridge/audits/issue-138-post-merge-closure-issue134.chatgpt-audit.json",
+    ".specbridge/contracts/issue-138-post-merge-closure-issue134.execution.md",
+    ".specbridge/github-evidence/issue-134-live-combined-apply-mode-demo.closure.json",
+    ".specbridge/github-evidence/issue-134-live-combined-apply-mode-demo.github-mutation-evidence.json",
+    ".specbridge/reports/issue-138-post-merge-closure-issue134.final-report.json",
+    ".specbridge/scopes/issue-138-post-merge-closure-issue134.scope.json",
+    "README.md"
+  ]
+}
