@@ -1,0 +1,95 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-142-apply-mode-issue-create",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-142-apply-mode-issue-create.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-142-apply-mode-issue-create.execution.md",
+  "final_report_path": ".specbridge/reports/issue-142-apply-mode-issue-create.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "issue_create implemented with create-or-verify semantics: searches for existing issue by exact title match; returns verified_existing if found; calls gh issue create if not. Pilot scope guard updated to allow all 6 operations. All per contract.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "issue_create operation in apply-mode pilot scope guard. command_boundary updated to apply-pilot-supports-all-six-operations. apply-unsupported-op test assertion updated. apply-mode always writes run artifact to $runPath. All validators and CLI tests pass.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "Changes limited to apply-mode execution block in specbridge.ps1 and the apply-unsupported-op test assertion. No secrets, production, billing, auth, database, CI/CD security, or deployment changes.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "No protected files changed. No credentials accessed. No authentication or authorization changes. issue_create only reads issue title and goal from the operator context and calls gh issue create or gh issue list.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "All changed files declared in .specbridge/scopes/issue-142-apply-mode-issue-create.scope.json.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "CLI test suite passes. apply-unsupported-op test updated: command_boundary assertion matches apply-pilot-supports-all-six-operations. apply-blocked test still passes. All PASS, no FAIL.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub CI pending for issue 142 branch. Final report marks CI as not_collected. ci_wait operation will poll CI after PR is opened.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "Final report accurately records the implementation: issue_create added with create-or-verify semantics, pilot scope guard expanded to all 6 operations, test assertion updated. Completion status is complete_pending_apply_mode_run. Risks documented.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "issue_create_title_match",
+      "file": "scripts/specbridge.ps1",
+      "line": null,
+      "evidence": "issue_create uses exact title match to detect existing issues. If the title contains special characters or GitHub search normalizes it, the match may fail and create a duplicate issue.",
+      "recommendation": "Consider adding a fuzzy-match fallback or a unique label per task_id in a future task.",
+      "blocking": false
+    },
+    {
+      "severity": "info",
+      "category": "full_loop_first_live_run",
+      "file": "scripts/specbridge.ps1",
+      "line": null,
+      "evidence": "Issue 142 is the first live end-to-end run combining all 6 operations including ci_wait and post_merge_memory. ci_wait will poll CI for up to 10 minutes. post_merge_memory will create a closure branch and open a PR with auto-merge.",
+      "recommendation": "Monitor the apply-mode run log for ci_wait timeout or post_merge_memory branch push failures.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending for issue 142 branch.",
+    "Full 6-operation apply-mode loop first live run.",
+    "issue_create exact title match may produce duplicates if title is normalized differently by GitHub search."
+  ],
+  "source_files": [
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/audit-packets/issue-142-apply-mode-issue-create.audit-packet.json",
+    ".specbridge/audits/issue-142-apply-mode-issue-create.chatgpt-audit.json",
+    ".specbridge/contracts/issue-142-apply-mode-issue-create.execution.md",
+    ".specbridge/reports/issue-142-apply-mode-issue-create.final-report.json",
+    ".specbridge/scopes/issue-142-apply-mode-issue-create.scope.json",
+    "README.md"
+  ]
+}

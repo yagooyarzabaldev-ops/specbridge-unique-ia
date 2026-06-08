@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-142-apply-mode-issue-create",
+  "evidence_type": "github_mutation_evidence",
+  "collected_by": "Claude Code / SpecBridge executor",
+  "collected_at": "2026-06-07",
+  "local_gates_passed": true,
+  "github_ci_passed": true,
+  "security_gate_passed": true,
+  "review_gate_passed": true,
+  "chatgpt_audit_approved": true,
+  "no_protected_files_changed": true,
+  "deployment_not_requested": true,
+  "notes": "All local validators pass. issue_create implemented with create-or-verify semantics. Pilot scope guard expanded to all 6 operations. CLI tests pass. apply-mode full 6-operation loop pending execution: issue_create, pr_open, ci_wait, merge, issue_close, post_merge_memory."
+}

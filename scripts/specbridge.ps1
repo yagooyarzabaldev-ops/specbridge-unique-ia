@@ -1331,15 +1331,67 @@ function Invoke-IssueToMergeGithubCommand {
     $applyAllowed = ($applyBlockers.Count -eq 0)
 
     if ($applyAllowed) {
-      $pilotSupportedOps = @("issue_close", "pr_open", "ci_wait", "merge", "post_merge_memory")
+      $pilotSupportedOps = @("issue_create", "issue_close", "pr_open", "ci_wait", "merge", "post_merge_memory")
       $unsupportedOps = $selectedOperations | Where-Object { $pilotSupportedOps -notcontains $_ }
       if ($unsupportedOps.Count -gt 0) {
-        $applyBlockers += "apply_mode_pilot_supports_issue_close_pr_open_ci_wait_merge_and_post_merge_memory_only"
+        $applyBlockers += "apply_mode_pilot_supports_all_six_operations_only"
         $applyAllowed = $false
       }
     }
 
     $mergedPrNumber = $null
+
+    if ($applyAllowed -and $selectedOperations -contains "issue_create") {
+      $repoSlug = ($RepositoryUrl -replace "https://github\.com/", "")
+      $issueTitle = if (-not [string]::IsNullOrWhiteSpace($resolvedTitle)) { $resolvedTitle } else { $safeTaskId }
+      $issueBody = if (-not [string]::IsNullOrWhiteSpace($resolvedGoal)) { $resolvedGoal } else { "Created by SpecBridge issue-to-merge-github apply mode for task: $safeTaskId" }
+
+      $previousEap = $ErrorActionPreference
+      $ErrorActionPreference = "Continue"
+      $searchOutput = & gh issue list --repo $repoSlug --search "in:title $issueTitle" --state open --json number,title,url 2>&1
+      $searchExitCode = $LASTEXITCODE
+      $ErrorActionPreference = $previousEap
+
+      $existingIssue = $null
+      if ($searchExitCode -eq 0) {
+        try {
+          $issues = $searchOutput | ConvertFrom-Json
+          $existingIssue = $issues | Where-Object { $_.title -eq $issueTitle } | Select-Object -First 1
+        } catch {}
+      }
+
+      if ($existingIssue) {
+        $githubCallsPerformed = $true
+        $githubMutationResult = [ordered]@{
+          operation    = "issue_create"
+          issue_number = [int]$existingIssue.number
+          issue_url    = $existingIssue.url
+          repository   = $repoSlug
+          gh_exit_code = 0
+          gh_output    = "issue already exists: $($existingIssue.url)"
+          status       = "verified_existing"
+        }
+      } else {
+        $ghArgs = @("issue", "create", "--title", $issueTitle, "--body", $issueBody, "--repo", $repoSlug)
+        $previousEap = $ErrorActionPreference
+        $ErrorActionPreference = "Continue"
+        $ghOutput = & gh @ghArgs 2>&1
+        $ghExitCode = $LASTEXITCODE
+        $ErrorActionPreference = $previousEap
+        $issueUrl = ($ghOutput | Where-Object { $_ -match "^https://" } | Select-Object -First 1)
+        $issueNumber = if ($issueUrl -match "/issues/(\d+)") { [int]$Matches[1] } else { $null }
+        $githubCallsPerformed = $true
+        $githubMutationResult = [ordered]@{
+          operation    = "issue_create"
+          issue_number = $issueNumber
+          issue_url    = $issueUrl
+          repository   = $repoSlug
+          gh_exit_code = $ghExitCode
+          gh_output    = ($ghOutput -join " ").Trim()
+          status       = if ($ghExitCode -eq 0) { "success" } else { "failed" }
+        }
+      }
+    }
 
     if ($applyAllowed -and $selectedOperations -contains "issue_close") {
       if ($issueReference -notmatch "github\.com/.+/issues/(\d+)") {
@@ -1694,7 +1746,7 @@ function Invoke-IssueToMergeGithubCommand {
       "deployment_requested",
       "policy_boundary_reached"
     )
-    command_boundary = "dry-run-by-default apply-requires-force-confirmation-and-evidence apply-pilot-supports-issue_close-pr_open-ci_wait-merge-and-post_merge_memory emits-connector-action-envelope does-not-store-secrets does-not-launch-claude-code does-not-launch-antigravity does-not-install-dependencies does-not-deploy"
+    command_boundary = "dry-run-by-default apply-requires-force-confirmation-and-evidence apply-pilot-supports-all-six-operations emits-connector-action-envelope does-not-store-secrets does-not-launch-claude-code does-not-launch-antigravity does-not-install-dependencies does-not-deploy"
     output_path = $null
   }
 

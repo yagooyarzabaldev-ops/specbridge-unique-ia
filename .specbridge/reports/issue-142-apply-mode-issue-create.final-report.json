@@ -1,0 +1,38 @@
+{
+  "summary": "Implements issue_create as the 6th apply-mode operation, completing the full autonomous 6-operation loop: issue_create → pr_open → ci_wait → merge → issue_close → post_merge_memory. issue_create uses create-or-verify semantics: searches for an existing GitHub issue by title; if found returns verified_existing; if not calls gh issue create. Pilot scope guard expanded to include all 6 operations. command_boundary updated. apply-unsupported-op test assertion updated to match the new boundary string. apply-mode run artifact persistence fix carried from issue-140 merge. All local validators and CLI tests pass. Full 6-operation apply-mode loop will execute on issue 142.",
+  "changed_files": [
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-142-apply-mode-issue-create.execution.md",
+    ".specbridge/scopes/issue-142-apply-mode-issue-create.scope.json",
+    ".specbridge/scopes/issue-140-ci-wait-post-merge-memory.scope.json",
+    ".specbridge/reports/issue-142-apply-mode-issue-create.final-report.json",
+    ".specbridge/audit-packets/issue-142-apply-mode-issue-create.audit-packet.json",
+    ".specbridge/audits/issue-142-apply-mode-issue-create.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-142-apply-mode-issue-create.github-mutation-evidence.json"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "git diff --check: passed",
+    "GitHub CI: not_collected"
+  ],
+  "policy_result": "Compliant. Script changes limited to the apply-mode execution block and the apply-unsupported-op test assertion. No secrets, production, billing, auth, database, CI/CD security, or deployment changes.",
+  "risk_result": "Medium risk (script behavior change). issue_create calls gh issue create when no matching issue exists. create-or-verify semantics prevent duplicate issues. All operations gated behind apply_allowed and pilot scope guard.",
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending for issue 142 branch.",
+    "issue_create searches by exact title match. If issue title contains special characters, gh search may return partial results.",
+    "Full 6-operation apply-mode loop is first live end-to-end run with ci_wait and post_merge_memory combined."
+  ],
+  "merge_status": "apply-mode run pending: will open PR, wait for CI via ci_wait, merge, close issue, and create closure branch via post_merge_memory.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_apply_mode_run"
+}

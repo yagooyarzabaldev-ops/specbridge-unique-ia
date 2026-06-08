@@ -1,6 +1,6 @@
 {
   "contract_id": "issue-140-ci-wait-post-merge-memory",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     "scripts/specbridge.ps1",
     "scripts/test-specbridge-cli.ps1",

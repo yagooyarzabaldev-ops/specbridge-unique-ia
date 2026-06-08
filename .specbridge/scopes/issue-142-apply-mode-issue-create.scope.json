@@ -1,0 +1,33 @@
+{
+  "contract_id": "issue-142-apply-mode-issue-create",
+  "status": "active",
+  "exclusive_write": [
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-142-apply-mode-issue-create.execution.md",
+    ".specbridge/scopes/issue-142-apply-mode-issue-create.scope.json",
+    ".specbridge/scopes/issue-140-ci-wait-post-merge-memory.scope.json",
+    ".specbridge/reports/issue-142-apply-mode-issue-create.final-report.json",
+    ".specbridge/audit-packets/issue-142-apply-mode-issue-create.audit-packet.json",
+    ".specbridge/audits/issue-142-apply-mode-issue-create.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-142-apply-mode-issue-create.github-mutation-evidence.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-119-apply-mode-github-operator-pilot",
+    "issue-123-apply-mode-pr-open",
+    "issue-126-apply-mode-merge",
+    "issue-134-live-combined-apply-mode-demo",
+    "issue-138-post-merge-closure-issue134",
+    "issue-140-ci-wait-post-merge-memory"
+  ],
+  "final_report": ".specbridge/reports/issue-142-apply-mode-issue-create.final-report.json"
+}
