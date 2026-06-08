@@ -11,5 +11,6 @@
   "chatgpt_audit_approved": true,
   "no_protected_files_changed": true,
   "deployment_not_requested": true,
-  "notes": "All local validators pass. issue_create implemented with create-or-verify semantics. Pilot scope guard expanded to all 6 operations. CLI tests pass. apply-mode full 6-operation loop pending execution: issue_create, pr_open, ci_wait, merge, issue_close, post_merge_memory."
+  "pr_merged": true,
+  "notes": "All local validators pass. Full 6-operation apply-mode loop executed on 2026-06-08. issue_create: verified_existing (issue 142 already existed). pr_open: PR 143 opened. ci_wait: failed_ci (checks not yet queued when first polled; auto-merge on GitHub enforced CI). merge: auto-merge enabled; PR 143 merged 2026-06-08T03:08:02Z after all 4 CI checks passed. issue_close: issue 142 closed. post_merge_memory: closure branch pushed, PR 144 opened. Script exited with NativeCommandError on git checkout cleanup (non-fatal bug, fixed in follow-up commit)."
 }

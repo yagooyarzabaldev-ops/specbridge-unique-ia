@@ -1600,7 +1600,9 @@ function Invoke-IssueToMergeGithubCommand {
         $ErrorActionPreference = $previousEap
 
         if ($commitExitCode -ne 0) {
+          $previousEap = $ErrorActionPreference; $ErrorActionPreference = "Continue"
           & git checkout $currentBranch 2>&1 | Out-Null
+          $ErrorActionPreference = $previousEap
           $githubCallsPerformed = $true
           $githubMutationResult = [ordered]@{
             operation      = "post_merge_memory"
@@ -1616,7 +1618,9 @@ function Invoke-IssueToMergeGithubCommand {
           $ErrorActionPreference = $previousEap
 
           if ($pushExitCode -ne 0) {
+            $previousEap = $ErrorActionPreference; $ErrorActionPreference = "Continue"
             & git checkout $currentBranch 2>&1 | Out-Null
+            $ErrorActionPreference = $previousEap
             $githubCallsPerformed = $true
             $githubMutationResult = [ordered]@{
               operation      = "post_merge_memory"
@@ -1643,7 +1647,9 @@ function Invoke-IssueToMergeGithubCommand {
               $ErrorActionPreference = $previousEap
             }
 
+            $previousEap = $ErrorActionPreference; $ErrorActionPreference = "Continue"
             & git checkout $currentBranch 2>&1 | Out-Null
+            $ErrorActionPreference = $previousEap
             $githubCallsPerformed = $true
             $githubMutationResult = [ordered]@{
               operation         = "post_merge_memory"

@@ -32,7 +32,7 @@
     "issue_create searches by exact title match. If issue title contains special characters, gh search may return partial results.",
     "Full 6-operation apply-mode loop is first live end-to-end run with ci_wait and post_merge_memory combined."
   ],
-  "merge_status": "apply-mode run pending: will open PR, wait for CI via ci_wait, merge, close issue, and create closure branch via post_merge_memory.",
+  "merge_status": "PR 143 merged 2026-06-08T03:08:02Z via auto-merge after all CI checks passed. Closure PR 144 open (post_merge_memory).",
   "deployment_status": "Not applicable.",
-  "completion_status": "complete_pending_apply_mode_run"
+  "completion_status": "complete"
 }
