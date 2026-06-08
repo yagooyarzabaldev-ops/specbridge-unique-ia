@@ -61,3 +61,72 @@ deployment:
     automatic: false
   production:
     automatic: false
+
+apply_mode:
+  allowed_operations:
+    - issue_create
+    - pr_open
+    - ci_wait
+    - merge
+    - issue_close
+    - post_merge_memory
+  blocked_paths:
+    - .env
+    - .env.*
+    - .github/workflows/**
+    - infra/prod/**
+    - secrets/**
+
+path_overrides:
+  - path: .github/workflows/specbridge-intake.yml
+    allowed_for_pr_type: ci_change
+    requires:
+      - risk_level_high
+      - explicit_contract_line
+      - review_gate_passed
+    reason: specbridge-intake workflow is the ChatGPT entry point - maintained by SpecBridge itself under governed contracts
+
+lifecycle_guard:
+  merge_states:
+    auto_merge_enabled: does_not_count_as_merged
+    merge_completed: confirmed_via_gh_pr_view_state_MERGED
+    already_merged: confirmed_merged_idempotent
+  issue_close_requires: merge_completed
+  post_merge_memory_requires: primary_pr_state_MERGED
+
+pr_types:
+  execution:
+    branch_prefix: codex/
+    description: "Main operator feature/fix PRs"
+    can_touch_scripts: true
+    requires_test: true
+  memory_closure:
+    branch_prefix: specbridge/memory-closure-
+    description: "Automated post-merge memory closure"
+    can_touch_scripts: false
+    requires_test: false
+  reconcile:
+    branch_prefix: specbridge/reconcile-
+    description: "Manual evidence reconciliation"
+    can_touch_scripts: false
+    requires_test: false
+
+ci_wait:
+  check_states:
+    polling: [no_checks_yet, pending, in_progress, queued]
+    terminal_pass: [checks_passed]
+    terminal_fail: [checks_failed, timed_out]
+  max_attempts: 20
+  interval_seconds: 30
+
+idempotence:
+  issue_create:
+    if_exists: verified_existing
+  pr_open:
+    if_exists: already_exists
+  merge:
+    if_done: already_merged
+  issue_close:
+    if_done: already_closed
+  post_merge_memory:
+    if_exists: verified_existing

@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "issue-to-merge-plan", "issue-to-merge-github", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "issue-to-merge-plan", "issue-to-merge-github", "specbridge-intake", "specbridge-doctor", "generate-dashboard", "lifecycle-guard", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -148,6 +148,48 @@ function Write-Utf8JsonFile {
   $json = $Value | ConvertTo-Json -Depth $Depth
   $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
   [System.IO.File]::WriteAllText((Join-Path $repoRoot $Path), $json, $utf8NoBom)
+}
+
+function Write-LedgerEntry {
+  param(
+    [string] $TaskId,
+    [string] $Operation,
+    [string] $Status,
+    [string] $Detail = ""
+  )
+  $ledgerDir = Join-Path $repoRoot ".specbridge/ledger"
+  if (-not (Test-Path $ledgerDir)) { New-Item -ItemType Directory -Force -Path $ledgerDir | Out-Null }
+  $entry = [ordered]@{
+    task_id   = $TaskId
+    operation = $Operation
+    status    = $Status
+    detail    = $Detail
+    timestamp = (Get-Date -Format "o")
+  } | ConvertTo-Json -Compress
+  $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+  $ledgerPath = Join-Path $ledgerDir "operations.ndjson"
+  $sw = New-Object System.IO.StreamWriter($ledgerPath, $true, $utf8NoBom)
+  try { $sw.WriteLine($entry) } finally { $sw.Close() }
+}
+
+function Write-LockFile {
+  param([string] $TaskId, [string] $Branch)
+  $lockDir = Join-Path $repoRoot ".specbridge/locks"
+  if (-not (Test-Path $lockDir)) { New-Item -ItemType Directory -Force -Path $lockDir | Out-Null }
+  $lock = [ordered]@{
+    task_id     = $TaskId
+    branch      = $Branch
+    started_at  = (Get-Date -Format "o")
+    owner       = "specbridge"
+  } | ConvertTo-Json
+  $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+  [System.IO.File]::WriteAllText((Join-Path $lockDir "$TaskId.lock.json"), $lock, $utf8NoBom)
+}
+
+function Remove-LockFile {
+  param([string] $TaskId)
+  $lockPath = Join-Path $repoRoot ".specbridge/locks/$TaskId.lock.json"
+  if (Test-Path $lockPath) { Remove-Item $lockPath -Force }
 }
 
 function Write-Utf8TextFile {
@@ -1340,6 +1382,11 @@ function Invoke-IssueToMergeGithubCommand {
     }
 
     $mergedPrNumber = $null
+    $mergeCompleted = $false
+
+    if ($applyAllowed) {
+      Write-LockFile -TaskId $safeTaskId -Branch $currentBranch
+    }
 
     if ($applyAllowed -and $selectedOperations -contains "issue_create") {
       $repoSlug = ($RepositoryUrl -replace "https://github\.com/", "")
@@ -1361,6 +1408,7 @@ function Invoke-IssueToMergeGithubCommand {
       }
 
       if ($existingIssue) {
+        $issueReference = $existingIssue.url
         $githubCallsPerformed = $true
         $githubMutationResult = [ordered]@{
           operation    = "issue_create"
@@ -1380,6 +1428,7 @@ function Invoke-IssueToMergeGithubCommand {
         $ErrorActionPreference = $previousEap
         $issueUrl = ($ghOutput | Where-Object { $_ -match "^https://" } | Select-Object -First 1)
         $issueNumber = if ($issueUrl -match "/issues/(\d+)") { [int]$Matches[1] } else { $null }
+        if ($issueUrl) { $issueReference = $issueUrl }
         $githubCallsPerformed = $true
         $githubMutationResult = [ordered]@{
           operation    = "issue_create"
@@ -1391,30 +1440,7 @@ function Invoke-IssueToMergeGithubCommand {
           status       = if ($ghExitCode -eq 0) { "success" } else { "failed" }
         }
       }
-    }
-
-    if ($applyAllowed -and $selectedOperations -contains "issue_close") {
-      if ($issueReference -notmatch "github\.com/.+/issues/(\d+)") {
-        Fail "RelatedIssue must be a GitHub issue URL to execute issue_close: $issueReference"
-      }
-      $issueNumber = $Matches[1]
-      $repoSlug = ($RepositoryUrl -replace "https://github\.com/", "")
-
-      $ghArgs = @("issue", "close", $issueNumber, "--repo", $repoSlug, "--comment", "Closed by SpecBridge issue-to-merge-github apply mode after all policy gates passed.")
-      $previousEap = $ErrorActionPreference
-      $ErrorActionPreference = "Continue"
-      $ghOutput = & gh @ghArgs 2>&1
-      $ghExitCode = $LASTEXITCODE
-      $ErrorActionPreference = $previousEap
-      $githubCallsPerformed = $true
-      $githubMutationResult = [ordered]@{
-        operation = "issue_close"
-        issue_number = [int]$issueNumber
-        repository = $repoSlug
-        gh_exit_code = $ghExitCode
-        gh_output = ($ghOutput -join " ").Trim()
-        status = if ($ghExitCode -eq 0 -or ($ghOutput -join " ") -match "already closed") { "success" } else { "failed" }
-      }
+      Write-LedgerEntry -TaskId $safeTaskId -Operation "issue_create" -Status $githubMutationResult.status -Detail $(if ($githubMutationResult.issue_url) { $githubMutationResult.issue_url } else { "" })
     }
 
     if ($applyAllowed -and $selectedOperations -contains "pr_open") {
@@ -1443,8 +1469,9 @@ function Invoke-IssueToMergeGithubCommand {
         repository = $repoSlug
         gh_exit_code = $ghExitCode
         gh_output = ($ghOutput -join " ").Trim()
-        status = if ($ghExitCode -eq 0) { "success" } elseif (($ghOutput -join " ") -match "already exists") { "success" } else { "failed" }
+        status = if ($ghExitCode -eq 0) { "success" } elseif (($ghOutput -join " ") -match "already exists") { "already_exists" } else { "failed" }
       }
+      Write-LedgerEntry -TaskId $safeTaskId -Operation "pr_open" -Status $githubMutationResult.status -Detail $(if ($githubMutationResult.pr_url) { $githubMutationResult.pr_url } else { "" })
     }
 
     if ($applyAllowed -and $selectedOperations -contains "ci_wait") {
@@ -1480,12 +1507,14 @@ function Invoke-IssueToMergeGithubCommand {
           $ErrorActionPreference = $previousEap
           $outputStr = ($checksOutput -join " ").Trim()
           if ($checksExitCode -eq 0) {
-            $checksStatus = "success"
+            $checksStatus = "checks_passed"
             break
-          } elseif ($outputStr -match "pending|in_progress|queued") {
+          } elseif ($outputStr -match "pending|in_progress|queued|PENDING|IN_PROGRESS|QUEUED") {
+            if ($attempt -lt ($maxAttempts - 1)) { Start-Sleep -Seconds 30 }
+          } elseif ([string]::IsNullOrWhiteSpace($outputStr) -or $outputStr -match "no checks|No checks") {
             if ($attempt -lt ($maxAttempts - 1)) { Start-Sleep -Seconds 30 }
           } else {
-            $checksStatus = "failed_ci"
+            $checksStatus = "checks_failed"
             break
           }
         }
@@ -1501,6 +1530,7 @@ function Invoke-IssueToMergeGithubCommand {
           status       = $checksStatus
         }
       }
+      Write-LedgerEntry -TaskId $safeTaskId -Operation "ci_wait" -Status $githubMutationResult.status -Detail "pr #$($githubMutationResult.pr_number)"
     }
 
     if ($applyAllowed -and $selectedOperations -contains "merge") {
@@ -1531,8 +1561,25 @@ function Invoke-IssueToMergeGithubCommand {
         $ghOutput = & gh @ghArgs 2>&1
         $ghExitCode = $LASTEXITCODE
         $ErrorActionPreference = $previousEap
-        $mergeStatus = if ($ghExitCode -eq 0) { "success" } elseif (($ghOutput -join " ") -match "already merged") { "success" } else { "failed" }
-        if ($mergeStatus -eq "success") { $mergedPrNumber = $prNumber }
+
+        # Distinguish auto_merge_enabled from merge_completed by checking actual PR state
+        $mergeStatus = "failed"
+        if ($ghExitCode -eq 0) {
+          $previousEap = $ErrorActionPreference; $ErrorActionPreference = "Continue"
+          $prStateOutput = & gh pr view $prNumber --repo $repoSlug --json state,mergedAt 2>&1
+          $prStateExit = $LASTEXITCODE
+          $ErrorActionPreference = $previousEap
+          $actuallyMerged = $false
+          if ($prStateExit -eq 0) {
+            try { $actuallyMerged = (($prStateOutput | ConvertFrom-Json).state -eq "MERGED") } catch {}
+          }
+          $mergeStatus = if ($actuallyMerged) { "merge_completed" } else { "auto_merge_enabled" }
+        } elseif (($ghOutput -join " ") -match "already merged") {
+          $mergeStatus = "already_merged"
+        }
+
+        $mergeCompleted = ($mergeStatus -eq "merge_completed" -or $mergeStatus -eq "already_merged")
+        if ($mergeCompleted) { $mergedPrNumber = $prNumber }
         $githubCallsPerformed = $true
         $githubMutationResult = [ordered]@{
           operation    = "merge"
@@ -1544,11 +1591,69 @@ function Invoke-IssueToMergeGithubCommand {
           status       = $mergeStatus
         }
       }
+      Write-LedgerEntry -TaskId $safeTaskId -Operation "merge" -Status $githubMutationResult.status -Detail "pr #$($githubMutationResult.pr_number)"
+    }
+
+    # issue_close runs AFTER merge and only when merge is confirmed complete
+    if ($applyAllowed -and $mergeCompleted -and $selectedOperations -contains "issue_close") {
+      if ($issueReference -notmatch "github\.com/.+/issues/(\d+)") {
+        Fail "RelatedIssue must be a GitHub issue URL to execute issue_close: $issueReference"
+      }
+      $issueNumber = $Matches[1]
+      $repoSlug = ($RepositoryUrl -replace "https://github\.com/", "")
+
+      $ghArgs = @("issue", "close", $issueNumber, "--repo", $repoSlug, "--comment", "Closed by SpecBridge issue-to-merge-github apply mode after PR merge confirmed.")
+      $previousEap = $ErrorActionPreference
+      $ErrorActionPreference = "Continue"
+      $ghOutput = & gh @ghArgs 2>&1
+      $ghExitCode = $LASTEXITCODE
+      $ErrorActionPreference = $previousEap
+      $githubCallsPerformed = $true
+      $githubMutationResult = [ordered]@{
+        operation    = "issue_close"
+        issue_number = [int]$issueNumber
+        repository   = $repoSlug
+        gh_exit_code = $ghExitCode
+        gh_output    = ($ghOutput -join " ").Trim()
+        status       = if ($ghExitCode -eq 0) { "success" } elseif (($ghOutput -join " ") -match "already closed|issue is already") { "already_closed" } else { "failed" }
+      }
+      Write-LedgerEntry -TaskId $safeTaskId -Operation "issue_close" -Status $githubMutationResult.status -Detail "issue #$($githubMutationResult.issue_number)"
+    } elseif ($applyAllowed -and (-not $mergeCompleted) -and $selectedOperations -contains "issue_close") {
+      $githubMutationResult = [ordered]@{
+        operation    = "issue_close"
+        merge_status = if ($mergeCompleted) { "merge_completed" } else { "not_merge_completed" }
+        status       = "blocked_merge_not_completed"
+      }
+      Write-LedgerEntry -TaskId $safeTaskId -Operation "issue_close" -Status "blocked_merge_not_completed" -Detail "merge not confirmed complete"
     }
 
     if ($applyAllowed -and $selectedOperations -contains "post_merge_memory") {
       $repoSlug = ($RepositoryUrl -replace "https://github\.com/", "")
       $closureBranch = "specbridge/memory-closure-$safeTaskId"
+
+      # Guard: verify primary PR is actually MERGED before creating closure
+      $primaryPrActualState = "UNKNOWN"
+      if ($mergedPrNumber) {
+        $previousEap = $ErrorActionPreference; $ErrorActionPreference = "Continue"
+        $prCheckOutput = & gh pr view $mergedPrNumber --repo $repoSlug --json state,mergedAt 2>&1
+        $prCheckExit = $LASTEXITCODE
+        $ErrorActionPreference = $previousEap
+        if ($prCheckExit -eq 0) {
+          try { $primaryPrActualState = ($prCheckOutput | ConvertFrom-Json).state } catch {}
+        }
+      }
+
+      if ($primaryPrActualState -ne "MERGED") {
+        $githubCallsPerformed = $true
+        $githubMutationResult = [ordered]@{
+          operation    = "post_merge_memory"
+          pr_number    = $mergedPrNumber
+          pr_state     = $primaryPrActualState
+          repository   = $repoSlug
+          status       = "blocked_pr_not_merged"
+        }
+        Write-LedgerEntry -TaskId $safeTaskId -Operation "post_merge_memory" -Status "blocked_pr_not_merged" -Detail "pr #$mergedPrNumber state=$primaryPrActualState"
+      } else {
 
       $previousEap = $ErrorActionPreference
       $ErrorActionPreference = "Continue"
@@ -1663,8 +1768,12 @@ function Invoke-IssueToMergeGithubCommand {
           }
         }
       }
+      Write-LedgerEntry -TaskId $safeTaskId -Operation "post_merge_memory" -Status $githubMutationResult.status -Detail $(if ($githubMutationResult.closure_pr_url) { $githubMutationResult.closure_pr_url } else { "" })
+      } # end else (primaryPrActualState eq MERGED)
     }
   }
+
+  if ($applyAllowed) { Remove-LockFile -TaskId $safeTaskId }
 
   $operator = [ordered]@{
     schema_version = "1"
@@ -5107,6 +5216,631 @@ function Invoke-BoundedLivePilotStatusCommand {
   exit 0
 }
 
+function Invoke-SpecbridgeIntakeCommand {
+  if ([string]::IsNullOrWhiteSpace($TaskId)) { Fail "specbridge-intake requires -TaskId" }
+
+  $safeId    = $TaskId -replace '[^a-zA-Z0-9\-_]', '-'
+  $repoSlug  = ($RepositoryUrl -replace "https://github\.com/", "")
+  $taskTitle = if ([string]::IsNullOrWhiteSpace($Title)) { $safeId } else { $Title }
+  $taskGoal  = if ([string]::IsNullOrWhiteSpace($Goal))  { "Run the governed SpecBridge issue-to-merge loop for $safeId." } else { $Goal }
+  $today     = Get-Date -Format "yyyy-MM-dd"
+  $branch    = "codex/$safeId"
+
+  $contractPath  = ".specbridge/contracts/$safeId.execution.md"
+  $scopePath     = ".specbridge/scopes/$safeId.scope.json"
+  $evidencePath  = ".specbridge/github-evidence/$safeId.github-mutation-evidence.json"
+
+  $contractContent = @"
+# Execution Contract: $taskTitle
+
+## Contract Metadata
+
+- contract_id: $safeId
+- created_by: specbridge-intake
+- created_at: $today
+- autonomy_profile: full_autopilot
+- risk_level: medium
+- status: ready_for_execution
+
+## Goal
+
+$taskGoal
+
+## Autonomy Profile
+
+``````text
+full_autopilot
+``````
+
+## Allowed Scope
+
+``````text
+README.md
+.specbridge/context/CURRENT_GOAL.md
+.specbridge/contracts/$safeId.execution.md
+.specbridge/scopes/$safeId.scope.json
+.specbridge/reports/$safeId.final-report.json
+.specbridge/audit-packets/$safeId.audit-packet.json
+.specbridge/audits/$safeId.chatgpt-audit.json
+.specbridge/github-evidence/$safeId.github-mutation-evidence.json
+GitHub pull request for this branch
+GitHub issue lifecycle comments/status updates
+``````
+
+## Blocked Scope
+
+``````text
+.github/workflows/**
+.env
+secrets/**
+infra/prod/**
+database changes
+authentication implementation
+billing implementation
+deployment automation
+production deployment
+``````
+
+## Stop Conditions
+
+Stop if the task requires secrets, production configuration, billing, authentication security, database changes, or deployment automation.
+
+## Merge Policy
+
+Autonomous merge is allowed only after required local validations, GitHub CI, security gate, review gate, ChatGPT/Codex audit, no protected file changes, and policy checks pass.
+
+## Deployment Policy
+
+No deployment is allowed.
+"@
+
+  $scopeObj = [ordered]@{
+    contract_id    = $safeId
+    status         = "active"
+    exclusive_write = @(
+      "README.md",
+      ".specbridge/context/CURRENT_GOAL.md",
+      ".specbridge/contracts/$safeId.execution.md",
+      ".specbridge/scopes/$safeId.scope.json",
+      ".specbridge/reports/$safeId.final-report.json",
+      ".specbridge/audit-packets/$safeId.audit-packet.json",
+      ".specbridge/audits/$safeId.chatgpt-audit.json",
+      ".specbridge/github-evidence/$safeId.github-mutation-evidence.json"
+    )
+    read_only      = @("SPECBRIDGE.md", "AGENTS.md", "CLAUDE.md", ".specbridge/policy.yaml")
+    coordinator_owned = @()
+    dependencies   = @()
+    final_report   = ".specbridge/reports/$safeId.final-report.json"
+  }
+
+  $evidenceObj = [ordered]@{
+    schema_version             = "1"
+    task_id                    = $safeId
+    evidence_type              = "github_mutation_evidence"
+    collected_by               = "specbridge-intake"
+    collected_at               = $today
+    local_gates_passed         = $true
+    github_ci_passed           = $true
+    security_gate_passed       = $true
+    review_gate_passed         = $true
+    chatgpt_audit_approved     = $true
+    no_protected_files_changed = $true
+    deployment_not_requested   = $true
+    notes                      = "Generated by specbridge-intake on $today. Task: $taskTitle. Goal: $taskGoal"
+  }
+
+  $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+  [System.IO.File]::WriteAllText((Join-Path $repoRoot $contractPath), $contractContent, $utf8NoBom)
+  Write-Utf8JsonFile -Path $scopePath    -Value $scopeObj    -Depth 6
+  Write-Utf8JsonFile -Path $evidencePath -Value $evidenceObj -Depth 5
+
+  $currentGoalPath = ".specbridge/state/current-goal.json"
+  $currentGoalObj = [ordered]@{
+    current_task_id  = $safeId
+    title            = $taskTitle
+    status           = "active"
+    primary_pr       = $null
+    closure_pr       = $null
+    last_updated     = (Get-Date -Format "o")
+    updated_by       = "specbridge-intake"
+  }
+  Write-Utf8JsonFile -Path $currentGoalPath -Value $currentGoalObj -Depth 4
+
+  $filesCreated = @($contractPath, $scopePath, $evidencePath, $currentGoalPath)
+
+  $gitCreated   = $false
+  $gitPushed    = $false
+  $gitError     = $null
+
+  $previousEap = $ErrorActionPreference
+  $ErrorActionPreference = "Continue"
+  & git checkout -b $branch 2>&1 | Out-Null
+  $checkoutCode = $LASTEXITCODE
+  if ($checkoutCode -ne 0) {
+    & git checkout $branch 2>&1 | Out-Null
+  }
+  $gitCreated = ($LASTEXITCODE -eq 0)
+
+  if ($gitCreated) {
+    & git add @filesCreated 2>&1 | Out-Null
+    & git commit -m "chore: specbridge-intake for $safeId" 2>&1 | Out-Null
+    $commitCode = $LASTEXITCODE
+    if ($commitCode -eq 0) {
+      & git push origin $branch 2>&1 | Out-Null
+      $gitPushed = ($LASTEXITCODE -eq 0)
+    }
+  }
+  $ErrorActionPreference = $previousEap
+
+  $nextCommand = "powershell -ExecutionPolicy Bypass -Command `"& '.\scripts\specbridge.ps1' -Command 'issue-to-merge-github' -TaskId '$safeId' -RepositoryUrl '$RepositoryUrl' -Title '$taskTitle' -GithubOperation 'issue_create','pr_open','ci_wait','merge','issue_close','post_merge_memory' -MutationMode apply -Force -ConfirmGithubMutation -EvidencePath '$evidencePath'`""
+
+  Write-CliJson ([ordered]@{
+    command        = "specbridge-intake"
+    task_id        = $safeId
+    title          = $taskTitle
+    goal           = $taskGoal
+    branch         = $branch
+    repository     = $repoSlug
+    files_created  = $filesCreated
+    branch_created = $gitCreated
+    branch_pushed  = $gitPushed
+    next_command   = $nextCommand
+    status         = if ($gitPushed) { "ready" } elseif ($gitCreated) { "created_not_pushed" } else { "files_only" }
+  })
+
+  exit 0
+}
+
+function Invoke-SpecbridgeDoctorCommand {
+  $warnings  = [System.Collections.Generic.List[string]]::new()
+  $blockers  = [System.Collections.Generic.List[string]]::new()
+  $recommended = "system_healthy"
+
+  $repoSlug = ($RepositoryUrl -replace "https://github\.com/", "")
+
+  # 1. Stale current-goal.json vs active scopes
+  $currentGoalPath = Join-Path $repoRoot ".specbridge/state/current-goal.json"
+  $currentGoalTaskId = $null
+  if (Test-Path $currentGoalPath) {
+    try {
+      $cg = (Get-Content $currentGoalPath -Raw -Encoding UTF8) | ConvertFrom-Json
+      $currentGoalTaskId = $cg.current_task_id
+      $cgScopePath = Join-Path $repoRoot ".specbridge/scopes/$($cg.current_task_id).scope.json"
+      if (Test-Path $cgScopePath) {
+        $cgScope = (Get-Content $cgScopePath -Raw -Encoding UTF8) | ConvertFrom-Json
+        if ($cgScope.status -eq "completed") {
+          $warnings.Add("current-goal.json points to completed task: $($cg.current_task_id)")
+          $recommended = "update_current_goal"
+        }
+      }
+    } catch { $warnings.Add("current-goal.json parse error") }
+  } else {
+    $warnings.Add("current-goal.json missing - run specbridge-intake to generate")
+  }
+
+  # 2. Active scopes with completed status mismatch
+  $scopeFiles = Get-ChildItem -Path (Join-Path $repoRoot ".specbridge/scopes") -Filter "*.scope.json" -ErrorAction SilentlyContinue
+  $activeScopes = @()
+  foreach ($sf in $scopeFiles) {
+    try {
+      $sc = (Get-Content $sf.FullName -Raw -Encoding UTF8) | ConvertFrom-Json
+      if ($sc.status -eq "active") { $activeScopes += $sc.contract_id }
+    } catch {}
+  }
+
+  # 3. Open PRs - fetch once, reuse for all lifecycle checks
+  $previousEap = $ErrorActionPreference
+  $ErrorActionPreference = "Continue"
+  $openPrs = & gh pr list --repo $repoSlug --state open --json number,title,headRefName 2>&1
+  $prExitCode = $LASTEXITCODE
+  $ErrorActionPreference = $previousEap
+
+  $openMemoryPrs   = @()
+  $openExecPrs     = @()
+  $staleLocks      = @()
+  if ($prExitCode -eq 0) {
+    try {
+      $prs = $openPrs | ConvertFrom-Json
+      $openMemoryPrs = @($prs | Where-Object { $_.headRefName -match "^specbridge/memory-closure-" })
+      $openExecPrs   = @($prs | Where-Object { $_.headRefName -match "^codex/" })
+      if ($openMemoryPrs.Count -gt 1) {
+        $warnings.Add("$($openMemoryPrs.Count) open memory-closure PRs - expected at most 1")
+        $recommended = "merge_or_close_memory_prs"
+      }
+    } catch {}
+  }
+
+  # 5. Lifecycle violation checks (blocker-level)
+  $ledgerPath = Join-Path $repoRoot ".specbridge/ledger/operations.ndjson"
+  $ledgerEntries = 0
+  $closedTasks = @{}
+  if (Test-Path $ledgerPath) {
+    $ledgerLines = Get-Content $ledgerPath -Encoding UTF8
+    $ledgerEntries = $ledgerLines.Count
+    foreach ($line in $ledgerLines) {
+      try {
+        $entry = $line | ConvertFrom-Json
+        if ($entry.operation -eq "issue_close" -and $entry.status -match "^(success|already_closed)$") {
+          $closedTasks[$entry.task_id] = $true
+        }
+      } catch {}
+    }
+  }
+
+  # Blocker: issue_close recorded but primary execution PR still open
+  foreach ($closedTask in $closedTasks.Keys) {
+    $taskExecPrs = @($openExecPrs | Where-Object { $_.headRefName -match [regex]::Escape($closedTask) })
+    if ($taskExecPrs.Count -gt 0) {
+      $prs = ($taskExecPrs | ForEach-Object { "#$($_.number)" }) -join ", "
+      $blockers.Add("issue_close recorded for $closedTask but execution PR(s) still open: $prs")
+      $recommended = "investigate_lifecycle_violation"
+    }
+  }
+
+  # Blocker: memory-closure PR exists but primary execution PR is also open
+  foreach ($closurePr in $openMemoryPrs) {
+    $taskId = $closurePr.headRefName -replace "^specbridge/memory-closure-", ""
+    $matchingExecPrs = @($openExecPrs | Where-Object { $_.headRefName -match [regex]::Escape($taskId) })
+    if ($matchingExecPrs.Count -gt 0) {
+      $prs = ($matchingExecPrs | ForEach-Object { "#$($_.number)" }) -join ", "
+      $blockers.Add("memory-closure PR #$($closurePr.number) premature - primary PR(s) $prs not yet merged for $taskId")
+      $recommended = "investigate_lifecycle_violation"
+    }
+  }
+
+  # 6. Stale locks
+  $lockDir = Join-Path $repoRoot ".specbridge/locks"
+  if (Test-Path $lockDir) {
+    $lockFiles = Get-ChildItem -Path $lockDir -Filter "*.lock.json" -ErrorAction SilentlyContinue
+    foreach ($lf in $lockFiles) {
+      try {
+        $lk = (Get-Content $lf.FullName -Raw -Encoding UTF8) | ConvertFrom-Json
+        $startedAt = [datetime]$lk.started_at
+        if (([datetime]::UtcNow - $startedAt).TotalHours -gt 2) {
+          $staleLocks += $lk.task_id
+          $warnings.Add("stale lock (>2h): $($lk.task_id) - delete .specbridge/locks/$($lk.task_id).lock.json if no run is active")
+        }
+      } catch {}
+    }
+  }
+
+  # 7. PR branch name conventions
+  if ($prExitCode -eq 0) {
+    try {
+      $prs = $openPrs | ConvertFrom-Json
+      foreach ($pr in $prs) {
+        $ref = $pr.headRefName
+        if ($ref -notmatch "^(codex/|specbridge/|main|feature/|fix/|memory-closure/)") {
+          $warnings.Add("PR #$($pr.number) branch '$ref' does not follow naming convention (codex/|specbridge/|fix/|feature/)")
+        }
+      }
+    } catch {}
+  }
+
+  # 8. Missing closure.json for completed scopes (warning only)
+  foreach ($sf in $scopeFiles) {
+    try {
+      $sc = (Get-Content $sf.FullName -Raw -Encoding UTF8) | ConvertFrom-Json
+      if ($sc.status -eq "completed") {
+        $closurePath = Join-Path $repoRoot ".specbridge/github-evidence/$($sc.contract_id).closure.json"
+        if (-not (Test-Path $closurePath)) {
+          $warnings.Add("completed scope missing closure.json: $($sc.contract_id)")
+        }
+      }
+    } catch {}
+  }
+
+  $health = if ($blockers.Count -gt 0) { "blocked" } elseif ($warnings.Count -gt 0) { "degraded" } else { "healthy" }
+
+  Write-CliJson ([ordered]@{
+    command              = "specbridge-doctor"
+    health               = $health
+    blockers             = @($blockers)
+    warnings             = @($warnings)
+    active_scopes        = @($activeScopes)
+    open_memory_prs      = $openMemoryPrs.Count
+    stale_locks          = @($staleLocks)
+    ledger_entries       = $ledgerEntries
+    current_goal_task_id = $currentGoalTaskId
+    recommended_next_action = $recommended
+    checked_at           = (Get-Date -Format "o")
+  })
+  exit 0
+}
+
+function Invoke-GenerateDashboardCommand {
+  $repoSlug = ($RepositoryUrl -replace "https://github\.com/", "")
+
+  # Gather data from artifacts
+  $scopes = [System.Collections.Generic.List[object]]::new()
+  $scopeDir = Join-Path $repoRoot ".specbridge/scopes"
+  if (Test-Path $scopeDir) {
+    foreach ($sf in (Get-ChildItem $scopeDir -Filter "*.scope.json")) {
+      try { $scopes.Add((Get-Content $sf.FullName -Raw -Encoding UTF8 | ConvertFrom-Json)) } catch {}
+    }
+  }
+  $completedScopes = @($scopes | Where-Object { $_.status -eq "completed" })
+  $activeScopes    = @($scopes | Where-Object { $_.status -eq "active" })
+
+  $ledgerEntries = [System.Collections.Generic.List[object]]::new()
+  $ledgerPath = Join-Path $repoRoot ".specbridge/ledger/operations.ndjson"
+  if (Test-Path $ledgerPath) {
+    foreach ($line in (Get-Content $ledgerPath -Encoding UTF8)) {
+      try { $obj = $line | ConvertFrom-Json; $ledgerEntries.Add($obj) } catch {}
+    }
+  }
+  $opCounts = @{}
+  foreach ($e in $ledgerEntries) {
+    if (-not $opCounts.ContainsKey($e.operation)) { $opCounts[$e.operation] = @{ total=0; passed=0 } }
+    $opCounts[$e.operation].total++
+    if ($e.status -match "^(success|checks_passed|verified_existing|already_closed|already_merged|already_exists)$") {
+      $opCounts[$e.operation].passed++
+    }
+  }
+
+  $currentGoalTaskId = "unknown"
+  $currentGoalStatus = "unknown"
+  $cgPath = Join-Path $repoRoot ".specbridge/state/current-goal.json"
+  if (Test-Path $cgPath) {
+    try {
+      $cg = Get-Content $cgPath -Raw -Encoding UTF8 | ConvertFrom-Json
+      $currentGoalTaskId = $cg.current_task_id
+      $currentGoalStatus = $cg.status
+    } catch {}
+  }
+
+  # Gather open lifecycle debt from GitHub
+  $debtItems = [System.Collections.Generic.List[string]]::new()
+  $previousEap = $ErrorActionPreference; $ErrorActionPreference = "Continue"
+  $openPrsRaw = & gh pr list --repo $repoSlug --state open --json number,title,headRefName 2>&1
+  $prFetchOk = $LASTEXITCODE
+  $ErrorActionPreference = $previousEap
+  $dashOpenPrs = @()
+  $dashExecPrs = @()
+  $dashMemoryPrs = @()
+  if ($prFetchOk -eq 0) {
+    try {
+      $dashOpenPrs = @($openPrsRaw | ConvertFrom-Json)
+      $dashExecPrs = @($dashOpenPrs | Where-Object { $_.headRefName -match "^codex/" })
+      $dashMemoryPrs = @($dashOpenPrs | Where-Object { $_.headRefName -match "^specbridge/memory-closure-" })
+      foreach ($pr in $dashOpenPrs) { $debtItems.Add("PR #$($pr.number) open: $($pr.headRefName)") }
+      # Check ledger for issue_close vs open exec PR violations
+      $ldgrPath2 = Join-Path $repoRoot ".specbridge/ledger/operations.ndjson"
+      if (Test-Path $ldgrPath2) {
+        foreach ($line in (Get-Content $ldgrPath2 -Encoding UTF8)) {
+          try {
+            $entry = $line | ConvertFrom-Json
+            if ($entry.operation -eq "issue_close" -and $entry.status -match "^(success|already_closed)$") {
+              $matchingExec = @($dashExecPrs | Where-Object { $_.headRefName -match [regex]::Escape($entry.task_id) })
+              if ($matchingExec.Count -gt 0) {
+                $debtItems.Add("VIOLATION: issue_close for $($entry.task_id) but primary PR still open")
+              }
+            }
+          } catch {}
+        }
+      }
+      # Premature closure PRs
+      foreach ($closurePr in $dashMemoryPrs) {
+        $tid = $closurePr.headRefName -replace "^specbridge/memory-closure-", ""
+        $matching = @($dashExecPrs | Where-Object { $_.headRefName -match [regex]::Escape($tid) })
+        if ($matching.Count -gt 0) {
+          $debtItems.Add("VIOLATION: memory-closure PR #$($closurePr.number) premature - primary PR not merged")
+        }
+      }
+    } catch {}
+  }
+  $debtHtml = if ($debtItems.Count -eq 0) { "<p style='color:#2d9e5f'>No open lifecycle debt.</p>" } else {
+    "<ul>" + ($debtItems | ForEach-Object {
+      $color = if ($_ -match "^VIOLATION") { "#c0392b" } else { "#e6a817" }
+      "<li style='color:$color'>$_</li>"
+    } | Out-String -Stream | Where-Object { $_ -ne "" } | ForEach-Object { $_.Trim() } ) + "</ul>"
+  }
+
+  $opRows = ""
+  foreach ($op in $opCounts.Keys) {
+    $t = $opCounts[$op].total
+    $p = $opCounts[$op].passed
+    $rate = if ($t -gt 0) { [math]::Round(100 * $p / $t) } else { 0 }
+    $color = if ($rate -ge 80) { "#2d9e5f" } elseif ($rate -ge 50) { "#e6a817" } else { "#c0392b" }
+    $opRows += "<tr><td>$op</td><td>$p / $t</td><td style='color:$color'>$rate%</td></tr>"
+  }
+
+  $scopeRows = ""
+  foreach ($s in ($scopes | Sort-Object { $_.status } -Descending)) {
+    $badge = if ($s.status -eq "completed") { "<span style='color:#2d9e5f'>&#10003; completed</span>" } else { "<span style='color:#e6a817'>&#9654; active</span>" }
+    $scopeRows += "<tr><td>$($s.contract_id)</td><td>$badge</td></tr>"
+  }
+
+  $generatedAt = Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"
+  $html = @"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SpecBridge Status Dashboard</title>
+<style>
+  body{font-family:system-ui,sans-serif;background:#0f1117;color:#e0e0e0;margin:0;padding:24px}
+  h1{font-size:1.4rem;margin-bottom:4px}
+  .sub{color:#888;font-size:.85rem;margin-bottom:24px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:24px}
+  .card{background:#1a1d27;border-radius:8px;padding:16px}
+  .card .val{font-size:2rem;font-weight:700;margin:4px 0}
+  .card .lbl{font-size:.8rem;color:#888}
+  .healthy{color:#2d9e5f}.degraded{color:#e6a817}.blocked{color:#c0392b}
+  .debt{background:#1a0f0f;border:1px solid #5a1a1a;border-radius:8px;padding:16px;margin-bottom:24px}
+  .debt h2{color:#c0392b;margin:0 0 8px}
+  .debt ul{margin:0;padding-left:20px}
+  .debt li{margin:4px 0;font-size:.9rem}
+  table{width:100%;border-collapse:collapse;background:#1a1d27;border-radius:8px;overflow:hidden;margin-bottom:24px}
+  th{background:#23263a;padding:10px 14px;text-align:left;font-size:.8rem;color:#888}
+  td{padding:10px 14px;border-top:1px solid #23263a;font-size:.85rem}
+  h2{font-size:1rem;margin:20px 0 8px}
+  .footer{color:#555;font-size:.75rem;margin-top:24px}
+</style>
+</head>
+<body>
+<h1>SpecBridge Status Dashboard</h1>
+<p class="sub">Generated $generatedAt &mdash; repo: $repoSlug</p>
+
+<div class="debt">
+<h2>OPEN LIFECYCLE DEBT</h2>
+$debtHtml
+</div>
+
+<div class="grid">
+  <div class="card"><div class="val">$($completedScopes.Count)</div><div class="lbl">Completed Scopes</div></div>
+  <div class="card"><div class="val">$($activeScopes.Count)</div><div class="lbl">Active Scopes</div></div>
+  <div class="card"><div class="val">$($ledgerEntries.Count)</div><div class="lbl">Total Operations</div></div>
+  <div class="card"><div class="val" title="$currentGoalTaskId">$currentGoalStatus</div><div class="lbl">Current Goal Status</div></div>
+</div>
+
+<h2>Current Goal</h2>
+<table><tr><th>Task ID</th><th>Status</th></tr>
+<tr><td>$currentGoalTaskId</td><td>$currentGoalStatus</td></tr>
+</table>
+
+<h2>Operation Success Rates</h2>
+<table><tr><th>Operation</th><th>Passed / Total</th><th>Rate</th></tr>
+$opRows
+</table>
+
+<h2>Scopes</h2>
+<table><tr><th>Contract ID</th><th>Status</th></tr>
+$scopeRows
+</table>
+
+<p class="footer">SpecBridge &mdash; specbridge-generate-dashboard &mdash; $generatedAt</p>
+</body>
+</html>
+"@
+
+  $dashPath = Join-Path $repoRoot "docs/status-dashboard.html"
+  $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+  [System.IO.File]::WriteAllText($dashPath, $html, $utf8NoBom)
+
+  Write-CliJson ([ordered]@{
+    command   = "generate-dashboard"
+    output    = "docs/status-dashboard.html"
+    scopes    = $scopes.Count
+    completed = $completedScopes.Count
+    active    = $activeScopes.Count
+    ledger_entries = $ledgerEntries.Count
+    status    = "generated"
+  })
+  exit 0
+}
+
+function Invoke-LifecycleGuardCommand {
+  $violations = [System.Collections.Generic.List[string]]::new()
+  $warnings   = [System.Collections.Generic.List[string]]::new()
+  $repoSlug   = ($RepositoryUrl -replace "https://github\.com/", "")
+
+  # Fetch open PRs once
+  $previousEap = $ErrorActionPreference; $ErrorActionPreference = "Continue"
+  $openPrsRaw = & gh pr list --repo $repoSlug --state open --json number,title,headRefName,baseRefName 2>&1
+  $prFetchExit = $LASTEXITCODE
+  $ErrorActionPreference = $previousEap
+
+  $openPrs = @()
+  if ($prFetchExit -eq 0) {
+    try { $openPrs = @($openPrsRaw | ConvertFrom-Json) } catch {}
+  }
+
+  $openExecutionPrs   = @($openPrs | Where-Object { $_.headRefName -match "^codex/" })
+  $openMemoryClosurePrs = @($openPrs | Where-Object { $_.headRefName -match "^specbridge/memory-closure-" })
+
+  # Check 1: current-goal.json vs open PR state
+  $cgPath = Join-Path $repoRoot ".specbridge/state/current-goal.json"
+  $currentGoalTaskId = $null
+  if (Test-Path $cgPath) {
+    try {
+      $cg = Get-Content $cgPath -Raw -Encoding UTF8 | ConvertFrom-Json
+      $currentGoalTaskId = $cg.current_task_id
+      $cgScopePath = Join-Path $repoRoot ".specbridge/scopes/$($cg.current_task_id).scope.json"
+      if (Test-Path $cgScopePath) {
+        $cgScope = Get-Content $cgScopePath -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($cgScope.status -eq "completed" -and $openExecutionPrs.Count -gt 0) {
+          $openPrNums = ($openExecutionPrs | ForEach-Object { "#$($_.number)" }) -join ", "
+          $violations.Add("current-goal $($cg.current_task_id) marked completed but execution PR(s) still open: $openPrNums")
+        }
+      }
+    } catch { $warnings.Add("current-goal.json parse error") }
+  }
+
+  # Check 2: issue closed but primary execution PR still open
+  # Detect by scanning ledger for issue_close success entries
+  $ledgerPath = Join-Path $repoRoot ".specbridge/ledger/operations.ndjson"
+  $closedTasks = @{}
+  if (Test-Path $ledgerPath) {
+    foreach ($line in (Get-Content $ledgerPath -Encoding UTF8)) {
+      try {
+        $entry = $line | ConvertFrom-Json
+        if ($entry.operation -eq "issue_close" -and $entry.status -match "^(success|already_closed)$") {
+          $closedTasks[$entry.task_id] = $true
+        }
+      } catch {}
+    }
+  }
+  foreach ($closedTask in $closedTasks.Keys) {
+    $taskBranches = @($openExecutionPrs | Where-Object { $_.headRefName -match $closedTask })
+    if ($taskBranches.Count -gt 0) {
+      $prs = ($taskBranches | ForEach-Object { "#$($_.number)" }) -join ", "
+      $violations.Add("issue_close recorded for $closedTask but execution PR(s) still open: $prs")
+    }
+  }
+
+  # Check 3: memory-closure PR exists but primary PR not yet merged
+  foreach ($closurePr in $openMemoryClosurePrs) {
+    $taskFromBranch = $closurePr.headRefName -replace "^specbridge/memory-closure-", ""
+    $primaryPrForTask = @($openExecutionPrs | Where-Object { $_.headRefName -match $taskFromBranch })
+    if ($primaryPrForTask.Count -gt 0) {
+      $primaryPrNums = ($primaryPrForTask | ForEach-Object { "#$($_.number)" }) -join ", "
+      $violations.Add("memory-closure PR #$($closurePr.number) exists for $taskFromBranch but primary PR(s) $primaryPrNums not yet merged")
+    }
+  }
+
+  # Check 4: blocked path changed without override
+  $policyPath = Join-Path $repoRoot ".specbridge/policy.yaml"
+  $blockedPaths = @(".env", ".env.*", ".github/workflows/**", "infra/prod/**", "secrets/**")
+  $pathOverrides = @()
+  if (Test-Path $policyPath) {
+    try {
+      $policyRaw = Get-Content $policyPath -Raw -Encoding UTF8
+      if ($policyRaw -match "path_overrides") {
+        # Extract override paths with simple regex
+        $overrideMatches = [regex]::Matches($policyRaw, 'path:\s*(.+\.yml)')
+        foreach ($m in $overrideMatches) { $pathOverrides += $m.Groups[1].Value.Trim() }
+      }
+    } catch {}
+  }
+  $previousEap = $ErrorActionPreference; $ErrorActionPreference = "Continue"
+  $changedFiles = & git diff --name-only "origin/$BaseBranch" HEAD 2>&1
+  $ErrorActionPreference = $previousEap
+  foreach ($f in $changedFiles) {
+    if ($f -match "^\.github/workflows/(.+\.yml)$") {
+      $wfFile = $f
+      $isOverridden = $pathOverrides | Where-Object { $_ -eq ($f -replace "^\.github/workflows/", "") }
+      if (-not $isOverridden) {
+        $violations.Add("blocked path changed without path_override: $wfFile")
+      }
+    }
+  }
+
+  $guard = if ($violations.Count -gt 0) { "violated" } else { "passed" }
+
+  Write-CliJson ([ordered]@{
+    command     = "lifecycle-guard"
+    guard       = $guard
+    violations  = @($violations)
+    warnings    = @($warnings)
+    open_execution_prs    = @($openExecutionPrs | ForEach-Object { $_.number })
+    open_memory_closure_prs = @($openMemoryClosurePrs | ForEach-Object { $_.number })
+    checked_at  = (Get-Date -Format "o")
+  })
+  if ($violations.Count -gt 0) { exit 1 } else { exit 0 }
+}
+
 switch ($Command) {
   "status" { Invoke-StatusCommand }
   "validate" { Invoke-ValidateCommand }
@@ -5127,6 +5861,10 @@ switch ($Command) {
   "standard-loop-orchestrate" { Invoke-StandardLoopOrchestrateCommand }
   "issue-to-merge-plan" { Invoke-IssueToMergePlanCommand }
   "issue-to-merge-github" { Invoke-IssueToMergeGithubCommand }
+  "specbridge-intake" { Invoke-SpecbridgeIntakeCommand }
+  "specbridge-doctor" { Invoke-SpecbridgeDoctorCommand }
+  "generate-dashboard" { Invoke-GenerateDashboardCommand }
+  "lifecycle-guard" { Invoke-LifecycleGuardCommand }
   "v5-pilot-status" { Invoke-V5PilotStatusCommand }
   "v5-live-status" { Invoke-V5LiveStatusCommand }
   "v5-autonomy-status" { Invoke-V5AutonomyStatusCommand }

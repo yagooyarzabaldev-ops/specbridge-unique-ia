@@ -1,0 +1,28 @@
+{
+  "contract_id": "issue-143-specbridge-intake-bridge",
+  "status": "completed",
+  "exclusive_write": [
+    "scripts/specbridge.ps1",
+    ".github/workflows/specbridge-intake.yml",
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-143-specbridge-intake-bridge.execution.md",
+    ".specbridge/scopes/issue-143-specbridge-intake-bridge.scope.json",
+    ".specbridge/scopes/issue-142-apply-mode-issue-create.scope.json",
+    ".specbridge/reports/issue-143-specbridge-intake-bridge.final-report.json",
+    ".specbridge/audit-packets/issue-143-specbridge-intake-bridge.audit-packet.json",
+    ".specbridge/audits/issue-143-specbridge-intake-bridge.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-143-specbridge-intake-bridge.github-mutation-evidence.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-142-apply-mode-issue-create"
+  ],
+  "final_report": ".specbridge/reports/issue-143-specbridge-intake-bridge.final-report.json"
+}

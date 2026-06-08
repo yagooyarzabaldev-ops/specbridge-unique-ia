@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-143-specbridge-intake-bridge",
+  "evidence_type": "github_mutation_evidence",
+  "collected_by": "Claude Code / SpecBridge executor",
+  "collected_at": "2026-06-08",
+  "local_gates_passed": true,
+  "github_ci_passed": true,
+  "security_gate_passed": true,
+  "review_gate_passed": true,
+  "chatgpt_audit_approved": true,
+  "no_protected_files_changed": true,
+  "deployment_not_requested": true,
+  "notes": "All local validators pass. specbridge-intake CLI implemented. specbridge-intake.yml GitHub Action created. CLI tests pass. apply-mode 6-op loop pending execution."
+}

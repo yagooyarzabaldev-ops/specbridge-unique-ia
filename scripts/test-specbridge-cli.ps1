@@ -551,6 +551,73 @@ try {
       }
     }
 
+    # specbridge-doctor
+    $doctorResult = Invoke-Cli -Arguments @("specbridge-doctor")
+    Assert-Success `
+      -Name "specbridge-doctor" `
+      -Result $doctorResult `
+      -ExpectedPattern '"command"\s*:\s*"specbridge-doctor"'
+    if ($doctorResult.ExitCode -eq 0) {
+      $doctorJson = $null
+      try { $doctorJson = $doctorResult.Text.Trim() | ConvertFrom-Json } catch {}
+      if ($null -eq $doctorJson) {
+        Write-Output "FAIL specbridge-doctor output was not valid JSON."
+        $script:failed = $true
+      } elseif (-not ($doctorJson.PSObject.Properties.Name -contains "health")) {
+        Write-Output "FAIL specbridge-doctor missing 'health' field."
+        $script:failed = $true
+      } elseif (-not ($doctorJson.PSObject.Properties.Name -contains "blockers")) {
+        Write-Output "FAIL specbridge-doctor missing 'blockers' field."
+        $script:failed = $true
+      } else {
+        Write-Output "PASS specbridge-doctor returns health and blockers fields."
+      }
+    }
+
+    # generate-dashboard
+    $dashResult = Invoke-Cli -Arguments @("generate-dashboard")
+    Assert-Success `
+      -Name "generate-dashboard" `
+      -Result $dashResult `
+      -ExpectedPattern '"command"\s*:\s*"generate-dashboard"'
+    if ($dashResult.ExitCode -eq 0) {
+      $dashHtmlPath = Join-Path (Get-Location).Path "docs/status-dashboard.html"
+      if (-not (Test-Path $dashHtmlPath)) {
+        Write-Output "FAIL generate-dashboard: docs/status-dashboard.html not written."
+        $script:failed = $true
+      } else {
+        $dashHtml = Get-Content $dashHtmlPath -Raw
+        if ($dashHtml -notmatch "OPEN LIFECYCLE DEBT") {
+          Write-Output "FAIL generate-dashboard: HTML missing 'OPEN LIFECYCLE DEBT' section."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS generate-dashboard: HTML includes OPEN LIFECYCLE DEBT section."
+        }
+      }
+    }
+
+    # lifecycle-guard: verify output structure regardless of exit code (violations may exist in repo state)
+    $lgResult = Invoke-Cli -Arguments @("lifecycle-guard")
+    if ($lgResult.Text -notmatch '"command"\s*:\s*"lifecycle-guard"') {
+      Write-Output "FAIL lifecycle-guard: output missing expected command field."
+      $script:failed = $true
+    } else {
+      $lgJson = $null
+      try { $lgJson = $lgResult.Text.Trim() | ConvertFrom-Json } catch {}
+      if ($null -eq $lgJson) {
+        Write-Output "FAIL lifecycle-guard output was not valid JSON."
+        $script:failed = $true
+      } elseif (-not ($lgJson.PSObject.Properties.Name -contains "violations")) {
+        Write-Output "FAIL lifecycle-guard missing 'violations' field."
+        $script:failed = $true
+      } elseif (-not ($lgJson.PSObject.Properties.Name -contains "guard")) {
+        Write-Output "FAIL lifecycle-guard missing 'guard' field."
+        $script:failed = $true
+      } else {
+        Write-Output "PASS lifecycle-guard returns guard and violations fields (guard=$($lgJson.guard))."
+      }
+    }
+
     Assert-Success `
       -Name "v5-pilot-status" `
       -Result (Invoke-Cli -Arguments @("v5-pilot-status")) `

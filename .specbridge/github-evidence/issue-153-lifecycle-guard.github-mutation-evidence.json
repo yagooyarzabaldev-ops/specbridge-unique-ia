@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-153-lifecycle-guard",
+  "evidence_type": "apply_mode_evidence",
+  "recorded_at": "2026-06-08",
+  "local_gates_passed": true,
+  "security_gate_passed": true,
+  "review_gate_passed": true,
+  "github_ci_passed": true,
+  "chatgpt_audit_approved": true,
+  "no_protected_files_changed": true,
+  "deployment_not_requested": true,
+  "apply_allowed": true,
+  "notes": "All 7 gates true. Lifecycle guard implementation for issue-153. Fixes ordering bugs proven by PR #150 open + issue #149 closed."
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-149-specbridge-operator-hardening",
+  "evidence_type": "github_mutation_evidence",
+  "collected_by": "specbridge",
+  "collected_at": "2026-06-08",
+  "local_gates_passed": true,
+  "github_ci_passed": true,
+  "security_gate_passed": true,
+  "review_gate_passed": true,
+  "chatgpt_audit_approved": true,
+  "no_protected_files_changed": true,
+  "deployment_not_requested": true,
+  "notes": "Hardening batch: ci_wait fix, ledger, locks, doctor, dashboard, current-goal.json, idempotence, policy.yaml. All validations passed locally."
+}

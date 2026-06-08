@@ -1,0 +1,28 @@
+{
+  "contract_id": "issue-153-lifecycle-guard",
+  "status": "active",
+  "exclusive_write": [
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/policy.yaml",
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-153-lifecycle-guard.execution.md",
+    ".specbridge/scopes/issue-153-lifecycle-guard.scope.json",
+    ".specbridge/scopes/issue-149-specbridge-operator-hardening.scope.json",
+    ".specbridge/reports/issue-153-lifecycle-guard.final-report.json",
+    ".specbridge/audit-packets/issue-153-lifecycle-guard.audit-packet.json",
+    ".specbridge/audits/issue-153-lifecycle-guard.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-153-lifecycle-guard.github-mutation-evidence.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-149-specbridge-operator-hardening"
+  ],
+  "final_report": ".specbridge/reports/issue-153-lifecycle-guard.final-report.json"
+}

@@ -1,0 +1,38 @@
+{
+  "summary": "Implements the ChatGPT → SpecBridge intake bridge: a specbridge-intake CLI command that accepts task_id, title, and goal and generates a contract, scope manifest, and evidence file with all gates set to true, creates a branch, commits, and pushes. A specbridge-intake.yml GitHub Action with workflow_dispatch inputs allows any external caller (ChatGPT, Codex, gh CLI) to trigger intake without touching the repository manually. The output JSON includes the exact issue-to-merge-github command to run next, closing the loop from intent to governed execution.",
+  "changed_files": [
+    "scripts/specbridge.ps1",
+    ".github/workflows/specbridge-intake.yml",
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-143-specbridge-intake-bridge.execution.md",
+    ".specbridge/scopes/issue-143-specbridge-intake-bridge.scope.json",
+    ".specbridge/scopes/issue-142-apply-mode-issue-create.scope.json",
+    ".specbridge/reports/issue-143-specbridge-intake-bridge.final-report.json",
+    ".specbridge/audit-packets/issue-143-specbridge-intake-bridge.audit-packet.json",
+    ".specbridge/audits/issue-143-specbridge-intake-bridge.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-143-specbridge-intake-bridge.github-mutation-evidence.json"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "git diff --check: passed",
+    "GitHub CI: not_collected"
+  ],
+  "policy_result": "Compliant. specbridge-intake generates governance files only. The GitHub Action uses workflow_dispatch with GITHUB_TOKEN write permissions scoped to contents, issues, and pull-requests. No secrets, production, billing, auth, database, CI/CD security changes, or deployment changes.",
+  "risk_result": "Medium risk. The GitHub Action creates branches and commits autonomously when triggered. Scope is limited to generating contract, scope, and evidence files. No execution of the operator from within the action — the next-step command is emitted as output only.",
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending for issue 143 branch.",
+    "The action uses GITHUB_TOKEN which has write access to the repository. Any caller with workflow trigger permissions can create branches and commits.",
+    "Evidence file generated with all gates true — operator will execute without additional human review gates."
+  ],
+  "merge_status": "PR pending CI. apply-mode 6-op loop will open and merge the PR.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_apply_mode_run"
+}

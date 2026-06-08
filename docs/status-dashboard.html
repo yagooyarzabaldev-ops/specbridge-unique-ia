@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SpecBridge Status Dashboard</title>
+<style>
+  body{font-family:system-ui,sans-serif;background:#0f1117;color:#e0e0e0;margin:0;padding:24px}
+  h1{font-size:1.4rem;margin-bottom:4px}
+  .sub{color:#888;font-size:.85rem;margin-bottom:24px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:24px}
+  .card{background:#1a1d27;border-radius:8px;padding:16px}
+  .card .val{font-size:2rem;font-weight:700;margin:4px 0}
+  .card .lbl{font-size:.8rem;color:#888}
+  .healthy{color:#2d9e5f}.degraded{color:#e6a817}.blocked{color:#c0392b}
+  table{width:100%;border-collapse:collapse;background:#1a1d27;border-radius:8px;overflow:hidden;margin-bottom:24px}
+  th{background:#23263a;padding:10px 14px;text-align:left;font-size:.8rem;color:#888}
+  td{padding:10px 14px;border-top:1px solid #23263a;font-size:.85rem}
+  h2{font-size:1rem;margin:20px 0 8px}
+  .footer{color:#555;font-size:.75rem;margin-top:24px}
+</style>
+</head>
+<body>
+<h1>SpecBridge Status Dashboard</h1>
+<p class="sub">Generated 2026-06-08T01:51:07Z &mdash; repo: yagooyarzabaldev-ops/specbridge</p>
+
+<div class="grid">
+  <div class="card"><div class="val">55</div><div class="lbl">Completed Scopes</div></div>
+  <div class="card"><div class="val">1</div><div class="lbl">Active Scopes</div></div>
+  <div class="card"><div class="val">0</div><div class="lbl">Total Operations</div></div>
+  <div class="card"><div class="val" title="unknown">unknown</div><div class="lbl">Current Goal Status</div></div>
+</div>
+
+<h2>Current Goal</h2>
+<table><tr><th>Task ID</th><th>Status</th></tr>
+<tr><td>unknown</td><td>unknown</td></tr>
+</table>
+
+<h2>Operation Success Rates</h2>
+<table><tr><th>Operation</th><th>Passed / Total</th><th>Rate</th></tr>
+
+</table>
+
+<h2>Scopes</h2>
+<table><tr><th>Contract ID</th><th>Status</th></tr>
+<tr><td>issue-109-governed-issue-to-merge-operator</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-107-post-preflight-live-pilot-closure</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-105-bounded-live-status-slice</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-115-github-evidence-loop</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-113-bounded-github-mutation-operator</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-111-issue-to-merge-operator-pilot</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-103-bounded-live-tests-slice</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-095-standard-loop-contract-seed</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-093-standard-loop-orchestrator</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-091-align-agent-stage-policy</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-101-bounded-live-docs-slice</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-099-runtime-launch-preflight</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-097-multi-slice-live-pilot-contract</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-117-post-merge-memory-closure</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-138-post-merge-closure-issue134</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-134-live-combined-apply-mode-demo</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-133-post-merge-closure-issue126</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>v5-pilot-readiness</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-142-apply-mode-issue-create</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-140-ci-wait-post-merge-memory</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-131-post-merge-closure-126-127</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-123-apply-mode-pr-open</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-121-post-merge-closure-issue119</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-119-apply-mode-github-operator-pilot</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-127-full-loop-test</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-126-apply-mode-merge</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-125-post-merge-closure-issue123</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-089-post-merge-memory-closure</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-056-agent-c-documentation-slice</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-055-agent-b-test-slice</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-054-agent-a-implementation-slice</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-059-branch-per-executor-orchestration</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-058-live-antigravity-executor-handoff</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-057-multi-agent-coordinator</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-053-controlled-implementation-pilot</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-049-audit-packet-generator</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-048-contract-scope-validator</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-042-operational-autonomy-policy-closure</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-052-local-specbridge-cli</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-051-security-review-gate-expansion</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-050-chatgpt-audit-standard</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-060-controlled-github-evidence-run</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-080-second-v5-live-autonomy-pilot</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-078-v5-live-status-diagnostics</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-076-v5-live-parallel-pilot</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-087-budget-aware-v5-status</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-084-post-merge-closure</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-082-v5-runner-hardening</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-073-standard-loop-v1</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-065-record-runtime-results</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-063-prepare-runtime-launch-plans</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-061-controlled-antigravity-runtime-launch</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-071-serious-autonomous-test-loop</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-069-fresh-executor-source-run</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-067-source-backed-runtime-slice</td><td><span style='color:#2d9e5f'>&#10003; completed</span></td></tr><tr><td>issue-143-specbridge-intake-bridge</td><td><span style='color:#e6a817'>&#9654; active</span></td></tr>
+</table>
+
+<p class="footer">SpecBridge &mdash; specbridge-generate-dashboard &mdash; 2026-06-08T01:51:07Z</p>
+</body>
+</html>

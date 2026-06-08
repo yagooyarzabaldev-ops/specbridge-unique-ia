@@ -1,0 +1,71 @@
+name: SpecBridge Intake
+
+on:
+  workflow_dispatch:
+    inputs:
+      task_id:
+        description: "Task ID (kebab-case, e.g. add-dark-mode)"
+        required: true
+        type: string
+      title:
+        description: "Short task title (used as GitHub issue title)"
+        required: true
+        type: string
+      goal:
+        description: "What should be done and why"
+        required: true
+        type: string
+
+jobs:
+  intake:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          fetch-depth: 0
+
+      - name: Configure git
+        shell: pwsh
+        run: |
+          git config user.name  "specbridge-intake[bot]"
+          git config user.email "specbridge-intake[bot]@users.noreply.github.com"
+
+      - name: Run specbridge-intake
+        id: intake
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $result = & ./scripts/specbridge.ps1 `
+            -Command specbridge-intake `
+            -TaskId   "${{ github.event.inputs.task_id }}" `
+            -Title    "${{ github.event.inputs.title }}" `
+            -Goal     "${{ github.event.inputs.goal }}" `
+            -RepositoryUrl "https://github.com/${{ github.repository }}"
+
+          Write-Output $result
+
+          $json = $result | ConvertFrom-Json
+          "branch=$($json.branch)"       >> $env:GITHUB_OUTPUT
+          "status=$($json.status)"       >> $env:GITHUB_OUTPUT
+          "next_command=$($json.next_command)" >> $env:GITHUB_OUTPUT
+
+      - name: Summary
+        shell: pwsh
+        run: |
+          $branch = "${{ steps.intake.outputs.branch }}"
+          $status = "${{ steps.intake.outputs.status }}"
+          Write-Output "### SpecBridge Intake Complete"       >> $env:GITHUB_STEP_SUMMARY
+          Write-Output "| Field | Value |"                   >> $env:GITHUB_STEP_SUMMARY
+          Write-Output "|---|---|"                            >> $env:GITHUB_STEP_SUMMARY
+          Write-Output "| Task | ${{ github.event.inputs.task_id }} |" >> $env:GITHUB_STEP_SUMMARY
+          Write-Output "| Branch | ``$branch`` |"            >> $env:GITHUB_STEP_SUMMARY
+          Write-Output "| Status | $status |"                >> $env:GITHUB_STEP_SUMMARY
+          Write-Output ""                                     >> $env:GITHUB_STEP_SUMMARY
+          Write-Output "**Next step** — run the 6-op loop from the branch:" >> $env:GITHUB_STEP_SUMMARY
+          Write-Output '```'                                  >> $env:GITHUB_STEP_SUMMARY
+          Write-Output "${{ steps.intake.outputs.next_command }}" >> $env:GITHUB_STEP_SUMMARY
+          Write-Output '```'                                  >> $env:GITHUB_STEP_SUMMARY

@@ -1,6 +1,6 @@
 {
   "contract_id": "issue-142-apply-mode-issue-create",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     "scripts/specbridge.ps1",
     "scripts/test-specbridge-cli.ps1",

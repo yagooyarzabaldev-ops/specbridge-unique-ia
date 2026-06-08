@@ -1,0 +1,31 @@
+{
+  "contract_id": "issue-149-specbridge-operator-hardening",
+  "status": "completed",
+  "exclusive_write": [
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/policy.yaml",
+    ".specbridge/state/current-goal.json",
+    ".specbridge/ledger/operations.ndjson",
+    "docs/status-dashboard.html",
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-149-specbridge-operator-hardening.execution.md",
+    ".specbridge/scopes/issue-149-specbridge-operator-hardening.scope.json",
+    ".specbridge/scopes/issue-143-specbridge-intake-bridge.scope.json",
+    ".specbridge/reports/issue-149-specbridge-operator-hardening.final-report.json",
+    ".specbridge/audit-packets/issue-149-specbridge-operator-hardening.audit-packet.json",
+    ".specbridge/audits/issue-149-specbridge-operator-hardening.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-149-specbridge-operator-hardening.github-mutation-evidence.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-143-specbridge-intake-bridge"
+  ],
+  "final_report": ".specbridge/reports/issue-149-specbridge-operator-hardening.final-report.json"
+}
