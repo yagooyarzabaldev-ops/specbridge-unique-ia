@@ -1457,9 +1457,27 @@ function Invoke-IssueToMergeGithubCommand {
       $ghOutput = & gh @ghArgs 2>&1
       $ghExitCode = $LASTEXITCODE
       $ErrorActionPreference = $previousEap
-      $prUrl = ($ghOutput | Where-Object { $_ -match "^https://" } | Select-Object -First 1)
+      # stdout contains URL on success; on "already exists" the URL may be in stderr (ErrorRecord in PS5.1)
+      $prUrl = ($ghOutput | Where-Object { "$_" -match "^https://" } | Select-Object -First 1)
+      if (-not $prUrl) {
+        # Scan combined text for a pull URL (handles stderr ErrorRecord coercion)
+        $allOutputText = ($ghOutput | ForEach-Object { "$_" }) -join " "
+        $urlMatch = [regex]::Match($allOutputText, 'https://github\.com/[^/]+/[^/]+/pull/\d+')
+        if ($urlMatch.Success) { $prUrl = $urlMatch.Value }
+      }
+      if (-not $prUrl -and (($ghOutput | ForEach-Object { "$_" }) -join " ") -match "already exists") {
+        # Fallback: fetch PR info via gh pr view
+        $previousEap2 = $ErrorActionPreference; $ErrorActionPreference = "Continue"
+        $viewOut2 = & gh pr view $currentBranch --repo $repoSlug --json number,url 2>&1
+        $viewExit2 = $LASTEXITCODE
+        $ErrorActionPreference = $previousEap2
+        if ($viewExit2 -eq 0) {
+          try { $viewData2 = ($viewOut2 -join "") | ConvertFrom-Json; $prUrl = $viewData2.url } catch {}
+        }
+      }
       $prNumber = if ($prUrl -match "/pull/(\d+)") { [int]$Matches[1] } else { $null }
       $githubCallsPerformed = $true
+      $allOutputStr = ($ghOutput | ForEach-Object { "$_" }) -join " "
       $githubMutationResult = [ordered]@{
         operation = "pr_open"
         pr_url = $prUrl
@@ -1468,8 +1486,8 @@ function Invoke-IssueToMergeGithubCommand {
         base = $BaseBranch
         repository = $repoSlug
         gh_exit_code = $ghExitCode
-        gh_output = ($ghOutput -join " ").Trim()
-        status = if ($ghExitCode -eq 0) { "success" } elseif (($ghOutput -join " ") -match "already exists") { "already_exists" } else { "failed" }
+        gh_output = $allOutputStr.Trim()
+        status = if ($ghExitCode -eq 0) { "success" } elseif ($allOutputStr -match "already exists") { "already_exists" } else { "failed" }
       }
       Write-LedgerEntry -TaskId $safeTaskId -Operation "pr_open" -Status $githubMutationResult.status -Detail $(if ($githubMutationResult.pr_url) { $githubMutationResult.pr_url } else { "" })
     }
@@ -1700,7 +1718,7 @@ function Invoke-IssueToMergeGithubCommand {
         $previousEap = $ErrorActionPreference
         $ErrorActionPreference = "Continue"
         & git add @filesToAdd 2>&1 | Out-Null
-        $commitOutput = & git commit -m "chore: post-merge memory closure for $safeTaskId [skip ci]" 2>&1
+        $commitOutput = & git commit -m "chore: post-merge memory closure for $safeTaskId" 2>&1
         $commitExitCode = $LASTEXITCODE
         $ErrorActionPreference = $previousEap
 
