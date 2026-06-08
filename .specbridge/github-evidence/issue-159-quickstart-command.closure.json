@@ -1,0 +1,11 @@
+{
+    "schema_version":  "1",
+    "task_id":  "issue-159-quickstart-command",
+    "closure_type":  "post_merge_closure",
+    "closed_at":  "2026-06-08",
+    "pr_merged":  true,
+    "pr_number":  167,
+    "github_ci_passed":  true,
+    "scope_completed":  true,
+    "closed_by":  "specbridge-post-merge-memory-operator"
+}

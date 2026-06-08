@@ -1,6 +1,6 @@
 {
   "contract_id": "issue-159-quickstart-command",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     "README.md",
     ".specbridge/context/CURRENT_GOAL.md",
