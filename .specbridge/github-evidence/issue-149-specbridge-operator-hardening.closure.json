@@ -1,0 +1,12 @@
+{
+    "schema_version":  "1",
+    "task_id":  "issue-149-specbridge-operator-hardening",
+    "closure_type":  "post_merge_closure",
+    "closed_at":  "2026-06-08",
+    "pr_merged":  true,
+    "pr_number":  155,
+    "github_ci_passed":  true,
+    "scope_completed":  true,
+    "closed_by":  "specbridge-retrospective-reconciliation",
+    "note":  "Merged via consolidated PR 155 on 2026-06-08."
+}

@@ -58,6 +58,21 @@ function Get-ChangedFiles {
 $changedFiles = Get-ChangedFiles
 $failed = $false
 
+# Load path_overrides from policy.yaml so governed workflow files can use contents: write
+$policyOverridePaths = @()
+$policyYamlPath = ".specbridge/policy.yaml"
+if (Test-Path $policyYamlPath) {
+  $policyContent = Get-Content $policyYamlPath -Raw
+  $pathOverridesSection = [regex]::Match($policyContent, "(?s)path_overrides:(.+?)(?=\n[a-z]|\z)")
+  if ($pathOverridesSection.Success) {
+    $pathMatches = [regex]::Matches($pathOverridesSection.Value, "(?m)^\s+-\s+path:\s+(.+)$")
+    foreach ($pm in $pathMatches) {
+      $policyOverridePaths += $pm.Groups[1].Value.Trim()
+    }
+  }
+  Write-Output "Policy path_overrides loaded: $($policyOverridePaths -join ', ')"
+}
+
 if ($changedFiles.Count -eq 0) {
   Write-Output "No changed files detected. Review gate passes."
   exit 0
@@ -105,8 +120,12 @@ foreach ($changedFile in $changedFiles) {
     }
 
     if ($workflowContent -match "contents:\s+write") {
-      Write-Output "FAIL workflow requests contents write permission during review-gated phase: $normalizedPath"
-      $failed = $true
+      if ($policyOverridePaths -contains $normalizedPath) {
+        Write-Output "PASS path_override allows contents write permission for: $normalizedPath"
+      } else {
+        Write-Output "FAIL workflow requests contents write permission during review-gated phase: $normalizedPath"
+        $failed = $true
+      }
     }
   }
 }

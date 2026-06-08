@@ -16,6 +16,11 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
 jobs:
   intake:
     runs-on: windows-latest
@@ -55,17 +60,20 @@ jobs:
 
       - name: Summary
         shell: pwsh
+        env:
+          INTAKE_BRANCH: ${{ steps.intake.outputs.branch }}
+          INTAKE_STATUS: ${{ steps.intake.outputs.status }}
+          INTAKE_TASK:   ${{ github.event.inputs.task_id }}
         run: |
-          $branch = "${{ steps.intake.outputs.branch }}"
-          $status = "${{ steps.intake.outputs.status }}"
-          Write-Output "### SpecBridge Intake Complete"       >> $env:GITHUB_STEP_SUMMARY
-          Write-Output "| Field | Value |"                   >> $env:GITHUB_STEP_SUMMARY
-          Write-Output "|---|---|"                            >> $env:GITHUB_STEP_SUMMARY
-          Write-Output "| Task | ${{ github.event.inputs.task_id }} |" >> $env:GITHUB_STEP_SUMMARY
-          Write-Output "| Branch | ``$branch`` |"            >> $env:GITHUB_STEP_SUMMARY
-          Write-Output "| Status | $status |"                >> $env:GITHUB_STEP_SUMMARY
-          Write-Output ""                                     >> $env:GITHUB_STEP_SUMMARY
-          Write-Output "**Next step** — run the 6-op loop from the branch:" >> $env:GITHUB_STEP_SUMMARY
-          Write-Output '```'                                  >> $env:GITHUB_STEP_SUMMARY
-          Write-Output "${{ steps.intake.outputs.next_command }}" >> $env:GITHUB_STEP_SUMMARY
-          Write-Output '```'                                  >> $env:GITHUB_STEP_SUMMARY
+          @(
+            "### SpecBridge Intake"
+            "| Field | Value |"
+            "|---|---|"
+            "| Task | $env:INTAKE_TASK |"
+            "| Branch | ``$env:INTAKE_BRANCH`` |"
+            "| Status | $env:INTAKE_STATUS |"
+          ) | Add-Content -Path $env:GITHUB_STEP_SUMMARY
+          if ($env:INTAKE_STATUS -eq "created_not_pushed") {
+            Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value ""
+            Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "**Push failed** — check Contents: write permission."
+          }

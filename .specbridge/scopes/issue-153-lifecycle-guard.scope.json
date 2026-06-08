@@ -1,6 +1,6 @@
 {
   "contract_id": "issue-153-lifecycle-guard",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     "scripts/specbridge.ps1",
     "scripts/test-specbridge-cli.ps1",

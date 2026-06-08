@@ -1,0 +1,9 @@
+{
+    "current_task_id":  "issue-156-intake-bridge-end-to-end-test",
+    "title":  "Test intake bridge end-to-end via gh workflow run",
+    "status":  "active",
+    "primary_pr":  null,
+    "closure_pr":  null,
+    "last_updated":  "2026-06-08T06:30:00Z",
+    "updated_by":  "specbridge-reconciliation"
+}
