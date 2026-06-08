@@ -1,9 +1,10 @@
 {
-  "current_task_id": "issue-159-quickstart-command",
-  "title": "Add specbridge quickstart command",
-  "status": "active",
+  "current_task_id": "ready_for_next_task",
+  "title": "No active task — quickstart command complete",
+  "status": "ready_for_next_task",
   "primary_pr": null,
   "closure_pr": null,
-  "last_updated": "2026-06-08T16:57:00.4379700+00:00",
-  "updated_by": "specbridge-intake"
+  "last_updated": "2026-06-08T17:30:00.000Z",
+  "updated_by": "specbridge-cleanup",
+  "note": "issue-159/issue-166 quickstart complete: all 6 apply-mode ops + closure merged"
 }
