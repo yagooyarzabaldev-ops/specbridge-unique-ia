@@ -1636,6 +1636,196 @@ try {
         "-Force"
       )) `
       -ExpectedPattern "No runtime summaries found for TaskId"
+
+    # ── specbridge-doctor --fix-plan tests ───────────────────────────────────
+
+    # 1. Structural output: valid JSON, required fields, actions is array
+    $fpResult = Invoke-Cli -Arguments @("specbridge-doctor", "-FixPlan", "-Offline")
+    if ($fpResult.ExitCode -ne 0) {
+      Write-Output "FAIL fix-plan-healthy: command exited with code $($fpResult.ExitCode)."
+      Write-Output $fpResult.Text
+      $script:failed = $true
+    } else {
+      try {
+        $fpJson = $fpResult.Text | ConvertFrom-Json
+        $missingFields = @("fix_plan_generated","health","mode","online_checks","blockers","warnings","actions","action_count") |
+          Where-Object { -not ($fpJson.PSObject.Properties.Name -contains $_) }
+        if ($missingFields.Count -gt 0) {
+          Write-Output "FAIL fix-plan-healthy: missing fields: $($missingFields -join ', ')."
+          $script:failed = $true
+        } elseif ($fpJson.fix_plan_generated -ne $true) {
+          Write-Output "FAIL fix-plan-healthy: fix_plan_generated is not true."
+          $script:failed = $true
+        } elseif ($fpJson.online_checks.enabled -ne $false) {
+          Write-Output "FAIL fix-plan-healthy: online_checks.enabled should be false in -Offline mode."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS fix-plan-healthy: valid JSON with all required fields."
+        }
+      } catch {
+        Write-Output "FAIL fix-plan-healthy: output was not valid JSON."
+        $script:failed = $true
+      }
+    }
+
+    # 2. Offline mode flag sets online_checks.enabled=false
+    $fpOfflineResult = Invoke-Cli -Arguments @("specbridge-doctor", "-FixPlan", "-Offline")
+    if ($fpOfflineResult.ExitCode -eq 0) {
+      try {
+        $fpOfflineJson = $fpOfflineResult.Text | ConvertFrom-Json
+        if ($fpOfflineJson.online_checks.enabled -eq $false -and $fpOfflineJson.online_checks.reason -eq "offline_mode") {
+          Write-Output "PASS fix-plan-offline-mode: online_checks.enabled=false, reason=offline_mode."
+        } else {
+          Write-Output "FAIL fix-plan-offline-mode: expected enabled=false reason=offline_mode, got enabled=$($fpOfflineJson.online_checks.enabled) reason=$($fpOfflineJson.online_checks.reason)."
+          $script:failed = $true
+        }
+      } catch {
+        Write-Output "FAIL fix-plan-offline-mode: output was not valid JSON."
+        $script:failed = $true
+      }
+    } else {
+      Write-Output "FAIL fix-plan-offline-mode: command failed."
+      $script:failed = $true
+    }
+
+    # 3. current-goal stale: status=active but no active scope → current_goal_active_but_no_active_scope action
+    $cgPath = ".specbridge/state/current-goal.json"
+    $cgOriginal = Get-Content $cgPath -Raw -Encoding UTF8
+    try {
+      Set-Content $cgPath -Encoding UTF8 -Value '{"current_task_id":"fp-test-stale","title":"test","status":"active","primary_pr":null,"closure_pr":null,"last_updated":"2026-01-01T00:00:00Z","updated_by":"test","note":"test"}'
+      $fpStaleResult = Invoke-Cli -Arguments @("specbridge-doctor", "-FixPlan", "-Offline")
+      if ($fpStaleResult.ExitCode -eq 0) {
+        try {
+          $fpStaleJson = $fpStaleResult.Text | ConvertFrom-Json
+          $staleAction = @($fpStaleJson.actions | Where-Object { $_.id -eq "current_goal_active_but_no_active_scope" })
+          if ($staleAction.Count -gt 0) {
+            Write-Output "PASS fix-plan-current-goal-stale: current_goal_active_but_no_active_scope action present."
+          } else {
+            Write-Output "FAIL fix-plan-current-goal-stale: expected current_goal_active_but_no_active_scope action not found."
+            $script:failed = $true
+          }
+        } catch {
+          Write-Output "FAIL fix-plan-current-goal-stale: output was not valid JSON."
+          $script:failed = $true
+        }
+      } else {
+        Write-Output "FAIL fix-plan-current-goal-stale: command failed."
+        $script:failed = $true
+      }
+    } finally {
+      Set-Content $cgPath -Encoding UTF8 -Value $cgOriginal
+    }
+
+    # 4. Completed scope missing closure.json → completed_scope_missing_closure_json action
+    $fpTestScopeId = "fp-test-missing-closure-$(Get-Date -Format 'HHmmss')"
+    $fpScopePath   = ".specbridge/scopes/$fpTestScopeId.scope.json"
+    try {
+      Set-Content $fpScopePath -Encoding UTF8 -Value "{`"contract_id`":`"$fpTestScopeId`",`"status`":`"completed`"}"
+      $fpMissingResult = Invoke-Cli -Arguments @("specbridge-doctor", "-FixPlan", "-Offline")
+      if ($fpMissingResult.ExitCode -eq 0) {
+        try {
+          $fpMissingJson = $fpMissingResult.Text | ConvertFrom-Json
+          $missingAction = @($fpMissingJson.actions | Where-Object { $_.id -eq "completed_scope_missing_closure_json" -and $_.task_id -eq $fpTestScopeId })
+          if ($missingAction.Count -gt 0) {
+            Write-Output "PASS fix-plan-completed-scope-missing-closure: action present for test scope."
+          } else {
+            Write-Output "FAIL fix-plan-completed-scope-missing-closure: expected action not found for $fpTestScopeId."
+            $script:failed = $true
+          }
+        } catch {
+          Write-Output "FAIL fix-plan-completed-scope-missing-closure: output was not valid JSON."
+          $script:failed = $true
+        }
+      } else {
+        Write-Output "FAIL fix-plan-completed-scope-missing-closure: command failed."
+        $script:failed = $true
+      }
+    } finally {
+      Remove-Item $fpScopePath -Force -ErrorAction SilentlyContinue
+    }
+
+    # 5. Active scope without contract → missing_contract blocker action
+    $fpActiveId    = "fp-test-active-no-contract-$(Get-Date -Format 'HHmmss')"
+    $fpActivePath  = ".specbridge/scopes/$fpActiveId.scope.json"
+    try {
+      Set-Content $fpActivePath -Encoding UTF8 -Value "{`"contract_id`":`"$fpActiveId`",`"status`":`"active`"}"
+      $fpBlockerResult = Invoke-Cli -Arguments @("specbridge-doctor", "-FixPlan", "-Offline")
+      if ($fpBlockerResult.ExitCode -eq 0) {
+        try {
+          $fpBlockerJson = $fpBlockerResult.Text | ConvertFrom-Json
+          $blockerAction = @($fpBlockerJson.actions | Where-Object { $_.id -eq "missing_contract" -and $_.task_id -eq $fpActiveId })
+          if ($blockerAction.Count -gt 0 -and $fpBlockerJson.health -eq "blocked") {
+            Write-Output "PASS fix-plan-missing-contract: blocker action present and health=blocked."
+          } else {
+            Write-Output "FAIL fix-plan-missing-contract: expected blocker missing_contract for $fpActiveId (health=$($fpBlockerJson.health))."
+            $script:failed = $true
+          }
+        } catch {
+          Write-Output "FAIL fix-plan-missing-contract: output was not valid JSON."
+          $script:failed = $true
+        }
+      } else {
+        Write-Output "FAIL fix-plan-missing-contract: command failed."
+        $script:failed = $true
+      }
+    } finally {
+      Remove-Item $fpActivePath -Force -ErrorAction SilentlyContinue
+    }
+
+    # 6. merged_pr_missing_closure detects merge_completed and already_merged ledger states
+    $fpMergedId     = "fp-test-merge-state-$(Get-Date -Format 'HHmmss')"
+    $fpMergedScope  = ".specbridge/scopes/$fpMergedId.scope.json"
+    $fpLedgerDir    = ".specbridge/ledger"
+    $fpLedgerPath   = "$fpLedgerDir/operations.ndjson"
+    $fpLedgerBackup = if (Test-Path $fpLedgerPath) { Get-Content $fpLedgerPath -Raw -Encoding UTF8 } else { $null }
+    try {
+      Set-Content $fpMergedScope -Encoding UTF8 -Value "{`"contract_id`":`"$fpMergedId`",`"status`":`"active`"}"
+      New-Item -ItemType Directory -Force -Path $fpLedgerDir | Out-Null
+      $fpLedgerLine = "{`"task_id`":`"$fpMergedId`",`"operation`":`"merge`",`"status`":`"merge_completed`",`"timestamp`":`"2026-01-01T00:00:00Z`"}"
+      if ($null -ne $fpLedgerBackup) {
+        Set-Content $fpLedgerPath -Encoding UTF8 -Value ($fpLedgerBackup.TrimEnd() + "`n" + $fpLedgerLine)
+      } else {
+        Set-Content $fpLedgerPath -Encoding UTF8 -Value $fpLedgerLine
+      }
+      $fpMergeResult = Invoke-Cli -Arguments @("specbridge-doctor", "-FixPlan", "-Offline")
+      if ($fpMergeResult.ExitCode -eq 0) {
+        try {
+          $fpMergeJson = $fpMergeResult.Text | ConvertFrom-Json
+          $mergeAction = @($fpMergeJson.actions | Where-Object { $_.id -eq "merged_pr_missing_closure" -and $_.task_id -eq $fpMergedId })
+          if ($mergeAction.Count -gt 0) {
+            Write-Output "PASS fix-plan-merge-state: merged_pr_missing_closure detected for merge_completed ledger entry."
+          } else {
+            Write-Output "FAIL fix-plan-merge-state: expected merged_pr_missing_closure for $fpMergedId not found."
+            $script:failed = $true
+          }
+        } catch {
+          Write-Output "FAIL fix-plan-merge-state: output was not valid JSON."
+          $script:failed = $true
+        }
+      } else {
+        Write-Output "FAIL fix-plan-merge-state: command failed."
+        $script:failed = $true
+      }
+    } finally {
+      Remove-Item $fpMergedScope -Force -ErrorAction SilentlyContinue
+      if ($null -ne $fpLedgerBackup) {
+        Set-Content $fpLedgerPath -Encoding UTF8 -Value $fpLedgerBackup
+      } else {
+        Remove-Item $fpLedgerPath -Force -ErrorAction SilentlyContinue
+      }
+    }
+
+    # 7. Human output format: contains "SpecBridge Fix Plan" text
+    $fpHumanResult = Invoke-Cli -Arguments @("specbridge-doctor", "-FixPlan", "-Offline", "-OutputFormat", "human")
+    if ($fpHumanResult.ExitCode -eq 0 -and $fpHumanResult.Text -match "SpecBridge Fix Plan") {
+      Write-Output "PASS fix-plan-human-output: 'SpecBridge Fix Plan' header present."
+    } elseif ($fpHumanResult.ExitCode -ne 0) {
+      Write-Output "FAIL fix-plan-human-output: command failed."
+      $script:failed = $true
+    } else {
+      Write-Output "FAIL fix-plan-human-output: 'SpecBridge Fix Plan' header not found."
+      $script:failed = $true
+    }
   }
   finally {
     Pop-Location

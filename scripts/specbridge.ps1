@@ -42,7 +42,13 @@ param(
   [switch] $IncludeLatestArtifacts,
   [switch] $DryRun,
   [switch] $ConfirmGithubMutation,
-  [switch] $Force
+  [switch] $Force,
+  [switch] $FixPlan,
+  [ValidateSet("json", "human", "both")]
+  [string] $OutputFormat = "json",
+  [switch] $Online,
+  [switch] $Offline,
+  [switch] $RequireOnline
 )
 
 $ErrorActionPreference = "Stop"
@@ -5487,7 +5493,473 @@ Task is complete when all acceptance criteria are met and all required validatio
   exit 0
 }
 
+function Invoke-DoctorFixPlanCommand {
+  $repoSlug = ($RepositoryUrl -replace "https://github\.com/", "")
+
+  # ── Online mode detection ─────────────────────────────────────────────────
+  $onlineEnabled = (-not $Offline)
+  $ghAvailable   = $false
+  $onlineReason  = "not_attempted"
+  if ($onlineEnabled) {
+    $prevEapAuth = $ErrorActionPreference; $ErrorActionPreference = "Continue"
+    & gh auth status 2>&1 | Out-Null
+    $ghAvailable  = ($LASTEXITCODE -eq 0)
+    $ErrorActionPreference = $prevEapAuth
+    $onlineReason = if ($ghAvailable) { "authenticated" } else { "gh_not_authenticated" }
+  } else {
+    $onlineReason = "offline_mode"
+  }
+  if ($RequireOnline -and -not $ghAvailable) {
+    Write-CliJson ([ordered]@{
+      command = "specbridge-doctor"; ok = $false; fix_plan_generated = $false
+      error   = "RequireOnline requested but gh is not authenticated"
+    })
+    exit 1
+  }
+  $mode = if ($ghAvailable) { "online" } else { "local" }
+
+  # ── Repo paths ────────────────────────────────────────────────────────────
+  $scopesDir    = Join-Path $repoRoot ".specbridge/scopes"
+  $contractsDir = Join-Path $repoRoot ".specbridge/contracts"
+  $evidenceDir  = Join-Path $repoRoot ".specbridge/github-evidence"
+  $ledgerPath   = Join-Path $repoRoot ".specbridge/ledger/operations.ndjson"
+  $cgPath       = Join-Path $repoRoot ".specbridge/state/current-goal.json"
+  $dashPath     = Join-Path $repoRoot "docs/status-dashboard.html"
+  $lockDir      = Join-Path $repoRoot ".specbridge/locks"
+
+  # ── Load local data ───────────────────────────────────────────────────────
+  $scopeFiles     = @(Get-ChildItem -Path $scopesDir -Filter "*.scope.json" -ErrorAction SilentlyContinue)
+  $activeScopes   = [System.Collections.Generic.List[object]]::new()
+  $completedScopes= [System.Collections.Generic.List[object]]::new()
+  foreach ($sf in $scopeFiles) {
+    try {
+      $sc = (Get-Content $sf.FullName -Raw -Encoding UTF8) | ConvertFrom-Json
+      if     ($sc.status -eq "active")    { $activeScopes.Add($sc) }
+      elseif ($sc.status -eq "completed") { $completedScopes.Add($sc) }
+    } catch {}
+  }
+
+  $ledgerEntries   = @()
+  $closedTaskIds   = @{}
+  $mergedTaskIds   = @{}
+  $postMergeTaskIds = @{}
+  if (Test-Path $ledgerPath) {
+    foreach ($line in (Get-Content $ledgerPath -Encoding UTF8)) {
+      try {
+        $e = $line | ConvertFrom-Json
+        $ledgerEntries += $e
+        if ($e.operation -eq "issue_close"       -and $e.status -match "^(success|already_closed)$") { $closedTaskIds[$e.task_id]   = $e }
+        if ($e.operation -eq "merge"              -and $e.status -match "^(success|merge_completed|already_merged)$") { $mergedTaskIds[$e.task_id]   = $e }
+        if ($e.operation -eq "post_merge_memory"  -and $e.status -eq "success")                       { $postMergeTaskIds[$e.task_id]= $e }
+      } catch {}
+    }
+  }
+
+  $currentGoal = $null
+  if (Test-Path $cgPath) {
+    try { $currentGoal = (Get-Content $cgPath -Raw -Encoding UTF8) | ConvertFrom-Json } catch {}
+  }
+
+  $dashMtime   = if (Test-Path $dashPath) { (Get-Item $dashPath).LastWriteTimeUtc } else { [datetime]::MinValue }
+  $latestLocal = [datetime]::MinValue
+  foreach ($sf in $scopeFiles) { if ($sf.LastWriteTimeUtc -gt $latestLocal) { $latestLocal = $sf.LastWriteTimeUtc } }
+  if (Test-Path $ledgerPath) { $lm = (Get-Item $ledgerPath).LastWriteTimeUtc; if ($lm -gt $latestLocal) { $latestLocal = $lm } }
+  if (Test-Path $cgPath)     { $cm = (Get-Item $cgPath).LastWriteTimeUtc;     if ($cm -gt $latestLocal) { $latestLocal = $cm } }
+
+  $staleLocks = [System.Collections.Generic.List[object]]::new()
+  if (Test-Path $lockDir) {
+    foreach ($lf in (Get-ChildItem -Path $lockDir -Filter "*.lock.json" -ErrorAction SilentlyContinue)) {
+      try {
+        $lk = (Get-Content $lf.FullName -Raw -Encoding UTF8) | ConvertFrom-Json
+        if (([datetime]::UtcNow - [datetime]$lk.started_at).TotalHours -gt 2) { $staleLocks.Add($lk) }
+      } catch {}
+    }
+  }
+
+  # ── Load online data (if GH available) ───────────────────────────────────
+  $openPrs        = @()
+  $openExecPrs    = @()
+  $openMemoryPrs  = @()
+  $otherOpenPrs   = @()
+  if ($ghAvailable) {
+    $prevEapPrs = $ErrorActionPreference; $ErrorActionPreference = "Continue"
+    $rawPrs     = & gh pr list --repo $repoSlug --state open --json number,headRefName,isDraft,url 2>&1
+    $prExit     = $LASTEXITCODE
+    $ErrorActionPreference = $prevEapPrs
+    if ($prExit -eq 0) {
+      try {
+        $openPrs       = @($rawPrs | ConvertFrom-Json)
+        $openExecPrs   = @($openPrs | Where-Object { $_.headRefName -match "^codex/" })
+        $openMemoryPrs = @($openPrs | Where-Object { $_.headRefName -match "^specbridge/memory-closure-" })
+        $otherOpenPrs  = @($openPrs | Where-Object { $_.headRefName -notmatch "^(codex/|specbridge/|main|feature/|fix/)" })
+      } catch {}
+    }
+  }
+
+  # ── Build actions ─────────────────────────────────────────────────────────
+  $actions    = [System.Collections.Generic.List[object]]::new()
+  $blockerIds = [System.Collections.Generic.List[string]]::new()
+  $warningIds = [System.Collections.Generic.List[string]]::new()
+
+  # A: active scope without open PR (online only)
+  if ($ghAvailable) {
+    foreach ($sc in $activeScopes) {
+      $tid = $sc.contract_id
+      $match = @($openExecPrs | Where-Object { $_.headRefName -match [regex]::Escape($tid) })
+      if ($match.Count -eq 0) {
+        $branchName = "codex/$tid"
+        $actions.Add([ordered]@{
+          id                 = "active_scope_without_open_pr"
+          severity           = "warning"
+          task_id            = $tid
+          diagnosis          = "Scope '$tid' is active but no open execution PR was found for branch '$branchName'."
+          recommended_action = "run_apply_mode_from_branch"
+          command            = "git checkout $branchName && powershell -ExecutionPolicy Bypass -Command `"& '.\scripts\specbridge.ps1' -Command issue-to-merge-github -TaskId '$tid' -MutationMode apply -ConfirmGithubMutation -Force`""
+          safe_to_automate   = $false
+        })
+        $warningIds.Add("active_scope_without_open_pr:$tid")
+      }
+    }
+  }
+
+  # B: active scope with open PR - check draft and merge-ready subcases
+  if ($ghAvailable) {
+    foreach ($execPr in $openExecPrs) {
+      $tid = $execPr.headRefName -replace "^codex/", ""
+      $matchingScope = @($activeScopes | Where-Object { $_.contract_id -eq $tid })
+      if ($matchingScope.Count -eq 0) { continue }
+
+      if ($execPr.isDraft -eq $true) {
+        $actions.Add([ordered]@{
+          id                 = "active_scope_pr_is_draft"
+          severity           = "warning"
+          task_id            = $tid
+          diagnosis          = "PR #$($execPr.number) for '$tid' is a draft. CI may not run and merge is blocked."
+          recommended_action = "mark_pr_ready_for_review"
+          command            = "gh pr ready $($execPr.number) --repo $repoSlug"
+          safe_to_automate   = $true
+        })
+        $warningIds.Add("active_scope_pr_is_draft:$tid")
+      } else {
+        # Check CI state via statusCheckRollup
+        $prevEapView = $ErrorActionPreference; $ErrorActionPreference = "Continue"
+        $viewRaw = & gh pr view $execPr.number --repo $repoSlug --json mergeable,statusCheckRollup 2>&1
+        $viewExit = $LASTEXITCODE
+        $ErrorActionPreference = $prevEapView
+        if ($viewExit -eq 0) {
+          try {
+            $prDetail = ($viewRaw -join "") | ConvertFrom-Json
+            $checks        = if ($prDetail.statusCheckRollup) { @($prDetail.statusCheckRollup) } else { @() }
+            $failedChecks  = @($checks | Where-Object { $_.conclusion -eq "FAILURE" })
+            $pendingChecks = @($checks | Where-Object { $_.status -eq "IN_PROGRESS" -or $_.status -eq "QUEUED" })
+            if ($failedChecks.Count -gt 0) {
+              $failNames = ($failedChecks | ForEach-Object { $_.name }) -join ", "
+              $actions.Add([ordered]@{
+                id                 = "active_scope_pr_ci_failed"
+                severity           = "warning"
+                task_id            = $tid
+                diagnosis          = "PR #$($execPr.number) for '$tid' has failed CI checks: $failNames"
+                recommended_action = "fix_and_repush"
+                command            = "gh pr checks $($execPr.number) --repo $repoSlug"
+                safe_to_automate   = $false
+              })
+              $warningIds.Add("active_scope_pr_ci_failed:$tid")
+            } elseif ($pendingChecks.Count -eq 0 -and $prDetail.mergeable -eq "MERGEABLE") {
+              $actions.Add([ordered]@{
+                id                 = "active_scope_pr_ready_to_merge"
+                severity           = "warning"
+                task_id            = $tid
+                diagnosis          = "PR #$($execPr.number) for '$tid' is mergeable and CI passed - merge may be pending or auto-merge not enabled."
+                recommended_action = "enable_auto_merge_or_run_merge_op"
+                command            = "gh pr merge $($execPr.number) --repo $repoSlug --squash --auto"
+                safe_to_automate   = $false
+              })
+              $warningIds.Add("active_scope_pr_ready_to_merge:$tid")
+            }
+          } catch {}
+        }
+      }
+    }
+  }
+
+  # C: merged PR (ledger) but scope still active, no post_merge_memory, no open closure PR
+  foreach ($tid in $mergedTaskIds.Keys) {
+    $matchingScope = @($activeScopes | Where-Object { $_.contract_id -eq $tid })
+    if ($matchingScope.Count -eq 0) { continue }
+    if ($postMergeTaskIds.ContainsKey($tid)) { continue }
+    $hasClosurePr = $false
+    if ($ghAvailable) {
+      $hasClosurePr = (@($openMemoryPrs | Where-Object { $_.headRefName -match [regex]::Escape($tid) }).Count -gt 0)
+    }
+    if (-not $hasClosurePr) {
+      $actions.Add([ordered]@{
+        id                 = "merged_pr_missing_closure"
+        severity           = "warning"
+        task_id            = $tid
+        diagnosis          = "Primary PR for '$tid' is recorded as merged in the ledger but scope is still active and no memory-closure PR exists."
+        recommended_action = "run_post_merge_memory"
+        command            = "powershell -ExecutionPolicy Bypass -Command `"& '.\scripts\specbridge.ps1' -Command issue-to-merge-github -TaskId '$tid' -GithubOperation @('post_merge_memory') -MutationMode apply -ConfirmGithubMutation -Force`""
+        safe_to_automate   = $false
+      })
+      $warningIds.Add("merged_pr_missing_closure:$tid")
+    }
+  }
+
+  # D: premature closure PR (blocker)
+  if ($ghAvailable) {
+    foreach ($closurePr in $openMemoryPrs) {
+      $tid = $closurePr.headRefName -replace "^specbridge/memory-closure-", ""
+      $matchExec = @($openExecPrs | Where-Object { $_.headRefName -match [regex]::Escape($tid) })
+      if ($matchExec.Count -gt 0) {
+        $prs = ($matchExec | ForEach-Object { "#$($_.number)" }) -join ", "
+        $actions.Add([ordered]@{
+          id                 = "premature_memory_closure_pr"
+          severity           = "blocker"
+          task_id            = $tid
+          diagnosis          = "Memory-closure PR #$($closurePr.number) exists but primary PR(s) $prs for '$tid' are still open. Do not merge the closure PR."
+          recommended_action = "close_premature_closure_pr_and_wait_for_primary_merge"
+          command            = "gh pr close $($closurePr.number) --repo $repoSlug --delete-branch"
+          safe_to_automate   = $false
+        })
+        $blockerIds.Add("premature_memory_closure_pr:$tid")
+      }
+    }
+  }
+
+  # E: issue_close in ledger but exec PR still open (blocker)
+  if ($ghAvailable) {
+    foreach ($tid in $closedTaskIds.Keys) {
+      $taskExecPrs = @($openExecPrs | Where-Object { $_.headRefName -match [regex]::Escape($tid) })
+      if ($taskExecPrs.Count -gt 0) {
+        $prs = ($taskExecPrs | ForEach-Object { "#$($_.number)" }) -join ", "
+        $actions.Add([ordered]@{
+          id                 = "issue_closed_but_primary_pr_open"
+          severity           = "blocker"
+          task_id            = $tid
+          diagnosis          = "issue_close was recorded in the ledger for '$tid' but execution PR(s) $prs are still open. Lifecycle ordering violation."
+          recommended_action = "investigate_lifecycle_violation"
+          command            = "gh pr view $($taskExecPrs[0].number) --repo $repoSlug"
+          safe_to_automate   = $false
+        })
+        $blockerIds.Add("issue_closed_but_primary_pr_open:$tid")
+      }
+    }
+  }
+
+  # F: current-goal.json desync
+  if ($null -ne $currentGoal) {
+    $cgStatus = $currentGoal.status
+    $cgTaskId = $currentGoal.current_task_id
+    if ($cgStatus -eq "active" -and $activeScopes.Count -eq 0) {
+      $actions.Add([ordered]@{
+        id                 = "current_goal_active_but_no_active_scope"
+        severity           = "warning"
+        task_id            = $cgTaskId
+        diagnosis          = "current-goal.json status is 'active' for task '$cgTaskId' but no scope file has status='active'."
+        recommended_action = "regenerate_dashboard"
+        command            = "powershell -ExecutionPolicy Bypass -Command `"& '.\scripts\specbridge.ps1' -Command generate-dashboard`""
+        safe_to_automate   = $true
+      })
+      $warningIds.Add("current_goal_active_but_no_active_scope")
+    }
+    if ($cgStatus -eq "ready_for_next_task" -and $activeScopes.Count -gt 0) {
+      $activeTids = ($activeScopes | ForEach-Object { $_.contract_id }) -join ", "
+      $actions.Add([ordered]@{
+        id                 = "current_goal_ready_but_active_scope_exists"
+        severity           = "warning"
+        task_id            = $cgTaskId
+        diagnosis          = "current-goal.json status is 'ready_for_next_task' but active scope(s) exist: $activeTids"
+        recommended_action = "update_current_goal_and_regenerate_dashboard"
+        command            = "powershell -ExecutionPolicy Bypass -Command `"& '.\scripts\specbridge.ps1' -Command generate-dashboard`""
+        safe_to_automate   = $true
+      })
+      $warningIds.Add("current_goal_ready_but_active_scope_exists")
+    }
+    if ($cgStatus -eq "active" -and -not [string]::IsNullOrWhiteSpace($cgTaskId)) {
+      $cgScopePath = Join-Path $repoRoot ".specbridge/scopes/$cgTaskId.scope.json"
+      if (Test-Path $cgScopePath) {
+        try {
+          $cgScope = (Get-Content $cgScopePath -Raw -Encoding UTF8) | ConvertFrom-Json
+          if ($cgScope.status -eq "completed") {
+            $actions.Add([ordered]@{
+              id                 = "current_goal_task_completed_but_status_active"
+              severity           = "warning"
+              task_id            = $cgTaskId
+              diagnosis          = "current-goal.json status is 'active' for '$cgTaskId' but that scope is marked 'completed'."
+              recommended_action = "reset_current_goal_to_ready"
+              command            = "powershell -ExecutionPolicy Bypass -Command `"& '.\scripts\specbridge.ps1' -Command generate-dashboard`""
+              safe_to_automate   = $true
+            })
+            $warningIds.Add("current_goal_task_completed_but_status_active")
+          }
+        } catch {}
+      }
+    }
+  } else {
+    $actions.Add([ordered]@{
+      id                 = "current_goal_missing"
+      severity           = "warning"
+      task_id            = ""
+      diagnosis          = "current-goal.json is missing. Run specbridge-intake to generate it."
+      recommended_action = "run_specbridge_intake"
+      command            = "powershell -ExecutionPolicy Bypass -Command `"& '.\scripts\specbridge.ps1' -Command specbridge-intake -TaskId 'my-task' -Title 'My task' -Goal 'Goal description.'`""
+      safe_to_automate   = $false
+    })
+    $warningIds.Add("current_goal_missing")
+  }
+
+  # G: dashboard stale
+  if ($latestLocal -gt $dashMtime -and $dashMtime -gt [datetime]::MinValue) {
+    $actions.Add([ordered]@{
+      id                 = "dashboard_stale"
+      severity           = "warning"
+      task_id            = ""
+      diagnosis          = "docs/status-dashboard.html is older than the latest scope/ledger/current-goal file."
+      recommended_action = "regenerate_dashboard"
+      command            = "powershell -ExecutionPolicy Bypass -Command `"& '.\scripts\specbridge.ps1' -Command generate-dashboard`""
+      safe_to_automate   = $true
+    })
+    $warningIds.Add("dashboard_stale")
+  }
+
+  # H: completed scope missing closure.json
+  foreach ($sc in $completedScopes) {
+    $tid = $sc.contract_id
+    $closurePath = Join-Path $evidenceDir "$tid.closure.json"
+    if (-not (Test-Path $closurePath)) {
+      $actions.Add([ordered]@{
+        id                 = "completed_scope_missing_closure_json"
+        severity           = "warning"
+        task_id            = $tid
+        diagnosis          = "Scope '$tid' is completed but no closure evidence file exists (.specbridge/github-evidence/$tid.closure.json)."
+        recommended_action = "run_post_merge_memory_or_reconcile"
+        command            = "powershell -ExecutionPolicy Bypass -Command `"& '.\scripts\specbridge.ps1' -Command issue-to-merge-github -TaskId '$tid' -GithubOperation @('post_merge_memory') -MutationMode apply -ConfirmGithubMutation -Force`""
+        safe_to_automate   = $false
+      })
+      $warningIds.Add("completed_scope_missing_closure_json:$tid")
+    }
+  }
+
+  # I: ledger missing
+  if (-not (Test-Path $ledgerPath)) {
+    $actions.Add([ordered]@{
+      id                 = "ledger_missing"
+      severity           = "warning"
+      task_id            = ""
+      diagnosis          = "Operation ledger (.specbridge/ledger/operations.ndjson) is missing. It is created on first apply-mode run."
+      recommended_action = "run_first_apply_mode_operation"
+      command            = "powershell -ExecutionPolicy Bypass -Command `"& '.\scripts\specbridge.ps1' -Command quickstart`""
+      safe_to_automate   = $false
+    })
+    $warningIds.Add("ledger_missing")
+  }
+
+  # J: stale locks
+  foreach ($lk in $staleLocks) {
+    $actions.Add([ordered]@{
+      id                 = "stale_lock"
+      severity           = "warning"
+      task_id            = $lk.task_id
+      diagnosis          = "Execution lock for '$($lk.task_id)' has been held for more than 2 hours. Verify no active run exists before removing."
+      recommended_action = "verify_no_active_run_then_remove_lock"
+      command            = "Remove-Item '.specbridge/locks/$($lk.task_id).lock.json' -Force"
+      safe_to_automate   = $false
+    })
+    $warningIds.Add("stale_lock:$($lk.task_id)")
+  }
+
+  # L: branch naming convention (online only)
+  if ($ghAvailable) {
+    foreach ($pr in $otherOpenPrs) {
+      $ref = $pr.headRefName
+      $actions.Add([ordered]@{
+        id                 = "branch_convention_violation"
+        severity           = "warning"
+        task_id            = ""
+        diagnosis          = "PR #$($pr.number) uses branch '$ref' which does not follow naming conventions (codex/, specbridge/, fix/, feature/)."
+        recommended_action = "create_replacement_branch_with_valid_prefix"
+        command            = "gh pr view $($pr.number) --repo $repoSlug"
+        safe_to_automate   = $false
+      })
+      $warningIds.Add("branch_convention_violation:#$($pr.number)")
+    }
+  }
+
+  # M: active scope missing contract file
+  foreach ($sc in $activeScopes) {
+    $tid = $sc.contract_id
+    $contractPath = Join-Path $contractsDir "$tid.execution.md"
+    if (-not (Test-Path $contractPath)) {
+      $actions.Add([ordered]@{
+        id                 = "missing_contract"
+        severity           = "blocker"
+        task_id            = $tid
+        diagnosis          = "Active scope '$tid' has no contract file (.specbridge/contracts/$tid.execution.md)."
+        recommended_action = "run_specbridge_intake_to_regenerate"
+        command            = "powershell -ExecutionPolicy Bypass -Command `"& '.\scripts\specbridge.ps1' -Command specbridge-intake -TaskId '$tid'`""
+        safe_to_automate   = $false
+      })
+      $blockerIds.Add("missing_contract:$tid")
+    }
+  }
+
+  # ── Sort: blockers first, then warnings ───────────────────────────────────
+  $sortedActions = @($actions | Sort-Object { if ($_.severity -eq "blocker") { 0 } else { 1 } })
+  $health = if ($blockerIds.Count -gt 0) { "blocked" } elseif ($warningIds.Count -gt 0) { "degraded" } else { "healthy" }
+
+  $result = [ordered]@{
+    command            = "specbridge-doctor"
+    fix_plan_generated = $true
+    health             = $health
+    mode               = $mode
+    online_checks      = [ordered]@{
+      enabled   = $onlineEnabled
+      available = $ghAvailable
+      reason    = $onlineReason
+    }
+    blockers           = @($blockerIds)
+    warnings           = @($warningIds)
+    actions            = @($sortedActions)
+    action_count       = $sortedActions.Count
+    checked_at         = (Get-Date -Format "o")
+  }
+
+  # ── Format output ─────────────────────────────────────────────────────────
+  $fmt = if ($OutputFormat) { $OutputFormat } else { "json" }
+
+  if ($fmt -ne "json") {
+    Write-Output "SpecBridge Fix Plan"
+    Write-Output "Health : $($health.ToUpper())"
+    Write-Output "Mode   : $mode  |  Online checks: enabled=$($onlineEnabled) available=$($ghAvailable)"
+    Write-Output ""
+    if ($sortedActions.Count -eq 0) {
+      Write-Output "No actions needed - system is healthy."
+    } else {
+      Write-Output "ACTIONS ($($sortedActions.Count) total):"
+      foreach ($action in $sortedActions) {
+        Write-Output ""
+        $taskSuffix = if ($action.task_id) { " (task: $($action.task_id))" } else { "" }
+        Write-Output "  [$($action.severity.ToUpper())] $($action.id)$taskSuffix"
+        Write-Output "    Diagnosis : $($action.diagnosis)"
+        Write-Output "    Action    : $($action.recommended_action)"
+        Write-Output "    Command   : $($action.command)"
+        Write-Output "    Auto-safe : $(if ($action.safe_to_automate) { 'YES' } else { 'NO' })"
+      }
+    }
+    if ($fmt -eq "both") {
+      Write-Output ""
+      Write-Output "--- JSON ---"
+      Write-CliJson $result
+    }
+  } else {
+    Write-CliJson $result
+  }
+  exit 0
+}
+
 function Invoke-SpecbridgeDoctorCommand {
+  if ($FixPlan) { Invoke-DoctorFixPlanCommand; return }
+
   $warnings  = [System.Collections.Generic.List[string]]::new()
   $blockers  = [System.Collections.Generic.List[string]]::new()
   $recommended = "system_healthy"
@@ -5699,7 +6171,6 @@ function Invoke-GenerateDashboardCommand {
       $dashOpenPrs = @($openPrsRaw | ConvertFrom-Json)
       $dashExecPrs = @($dashOpenPrs | Where-Object { $_.headRefName -match "^codex/" })
       $dashMemoryPrs = @($dashOpenPrs | Where-Object { $_.headRefName -match "^specbridge/memory-closure-" })
-      foreach ($pr in $dashOpenPrs) { $debtItems.Add("PR #$($pr.number) open: $($pr.headRefName)") }
       # Check ledger for issue_close vs open exec PR violations
       $ldgrPath2 = Join-Path $repoRoot ".specbridge/ledger/operations.ndjson"
       if (Test-Path $ldgrPath2) {
