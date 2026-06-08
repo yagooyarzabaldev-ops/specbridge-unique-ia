@@ -1,0 +1,31 @@
+{
+  "contract_id": "issue-140-ci-wait-post-merge-memory",
+  "status": "active",
+  "exclusive_write": [
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-140-ci-wait-post-merge-memory.execution.md",
+    ".specbridge/scopes/issue-140-ci-wait-post-merge-memory.scope.json",
+    ".specbridge/scopes/issue-138-post-merge-closure-issue134.scope.json",
+    ".specbridge/reports/issue-140-ci-wait-post-merge-memory.final-report.json",
+    ".specbridge/audit-packets/issue-140-ci-wait-post-merge-memory.audit-packet.json",
+    ".specbridge/audits/issue-140-ci-wait-post-merge-memory.chatgpt-audit.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-119-apply-mode-github-operator-pilot",
+    "issue-123-apply-mode-pr-open",
+    "issue-126-apply-mode-merge",
+    "issue-134-live-combined-apply-mode-demo",
+    "issue-138-post-merge-closure-issue134"
+  ],
+  "final_report": ".specbridge/reports/issue-140-ci-wait-post-merge-memory.final-report.json"
+}

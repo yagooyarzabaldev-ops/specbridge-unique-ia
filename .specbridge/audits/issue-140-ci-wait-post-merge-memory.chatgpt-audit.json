@@ -1,0 +1,95 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-140-ci-wait-post-merge-memory",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-140-ci-wait-post-merge-memory.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-140-ci-wait-post-merge-memory.execution.md",
+  "final_report_path": ".specbridge/reports/issue-140-ci-wait-post-merge-memory.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "ci_wait polls gh pr checks with 30s interval, max 20 attempts. post_merge_memory creates closure branch from main, marks scope completed, writes closure.json, commits, pushes, opens PR with auto-merge. apply-mode always writes run artifact to $runPath. All per contract.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "Pilot guard updated to allow ci_wait and post_merge_memory. command_boundary updated. Test updated to use issue_create as unsupported op. All validators and CLI tests pass.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "Changes limited to apply-mode execution block in specbridge.ps1 and the apply-unsupported-op test. No secrets, production, billing, auth, database, CI/CD security, or deployment changes.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "No protected files changed. No credentials accessed. No authentication or authorization changes. post_merge_memory only touches scope files and evidence files it creates.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "All changed files declared in .specbridge/scopes/issue-140-ci-wait-post-merge-memory.scope.json.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "CLI test suite passes. apply-unsupported-op test updated to use issue_create. apply-blocked test still passes. All PASS, no FAIL.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub CI pending for the issue 140 PR. Final report marks CI as not_collected.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "Final report accurately records the implementation: ci_wait and post_merge_memory added, run artifact persistence fixed, test updated. Completion status is complete_pending_pr_ci. Risks documented.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "ci_wait_timeout",
+      "file": "scripts/specbridge.ps1",
+      "line": null,
+      "evidence": "ci_wait polls at 30s intervals for max 20 attempts (10 min). Long CI runs may hit the timeout and report timed_out. This is intentional: the operator must not block indefinitely.",
+      "recommendation": "If CI regularly exceeds 10 minutes, increase maxAttempts or the retry interval in a future task.",
+      "blocking": false
+    },
+    {
+      "severity": "info",
+      "category": "post_merge_memory_branch_naming",
+      "file": "scripts/specbridge.ps1",
+      "line": null,
+      "evidence": "post_merge_memory creates branches named specbridge/memory-closure-{taskId}. These branches persist after their PRs merge. Consider adding a cleanup mechanism in a future task.",
+      "recommendation": "Add branch deletion after the closure PR merges in a future operator expansion.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending for issue 140 branch.",
+    "ci_wait max polling timeout is 10 minutes.",
+    "Closure branches from post_merge_memory accumulate over time."
+  ],
+  "source_files": [
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/audit-packets/issue-140-ci-wait-post-merge-memory.audit-packet.json",
+    ".specbridge/audits/issue-140-ci-wait-post-merge-memory.chatgpt-audit.json",
+    ".specbridge/contracts/issue-140-ci-wait-post-merge-memory.execution.md",
+    ".specbridge/reports/issue-140-ci-wait-post-merge-memory.final-report.json",
+    ".specbridge/scopes/issue-140-ci-wait-post-merge-memory.scope.json",
+    "README.md"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "summary": "Expands the apply-mode pilot scope guard to include ci_wait and post_merge_memory, completing the full autonomous issue-to-merge loop. ci_wait polls gh pr checks until required checks pass, fail, or time out. post_merge_memory creates a closure branch, marks the scope completed, writes closure.json, commits, pushes, opens a PR with auto-merge. Apply-mode now always writes the run artifact to disk. Test updated: apply-unsupported-op uses issue_create (ci_wait is now supported). All validators and CLI tests pass.",
+  "changed_files": [
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-140-ci-wait-post-merge-memory.execution.md",
+    ".specbridge/scopes/issue-140-ci-wait-post-merge-memory.scope.json",
+    ".specbridge/scopes/issue-138-post-merge-closure-issue134.scope.json",
+    ".specbridge/reports/issue-140-ci-wait-post-merge-memory.final-report.json",
+    ".specbridge/audit-packets/issue-140-ci-wait-post-merge-memory.audit-packet.json",
+    ".specbridge/audits/issue-140-ci-wait-post-merge-memory.chatgpt-audit.json"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "git diff --check: passed",
+    "GitHub CI: not_collected"
+  ],
+  "policy_result": "Compliant. Script changes limited to the apply-mode execution block. No secrets, production, billing, auth, database, CI/CD security, or deployment changes.",
+  "risk_result": "Medium risk (script behavior change). post_merge_memory makes git commits and pushes to new branches. ci_wait can block up to 10 minutes polling CI. Both operations are gated behind apply_allowed and the pilot scope guard.",
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending for issue 140 branch.",
+    "ci_wait polls with 30s interval, max 20 attempts (10 min). Long CI runs may time out.",
+    "post_merge_memory creates a new branch per task. Stale branches may accumulate if PRs are not cleaned up."
+  ],
+  "merge_status": "PR pending CI. Branch pushed; auto-merge will be enabled after PR creation.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_pr_ci"
+}

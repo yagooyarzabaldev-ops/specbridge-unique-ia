@@ -1295,7 +1295,7 @@ try {
       "-MutationMode",
       "apply",
       "-GithubOperation",
-      "ci_wait",
+      "issue_create",
       "-Force",
       "-ConfirmGithubMutation",
       "-EvidencePath",
@@ -1305,7 +1305,7 @@ try {
     try { $applyUnsupportedJson = $applyUnsupportedResult.Text | ConvertFrom-Json } catch {}
     if ($null -eq $applyUnsupportedJson) {
       Write-Output "FAIL issue-to-merge-github-apply-unsupported-op: output was not valid JSON"
-    } elseif ($applyUnsupportedJson.command_boundary -notmatch "apply-pilot-supports-issue_close-pr_open-and-merge") {
+    } elseif ($applyUnsupportedJson.command_boundary -notmatch "apply-pilot-supports-issue_close-pr_open-ci_wait-merge-and-post_merge_memory") {
       Write-Output "FAIL issue-to-merge-github-apply-unsupported-op: command_boundary must declare pilot scope"
     } else {
       Write-Output "PASS issue-to-merge-github-apply-unsupported-op: command_boundary records apply pilot scope"

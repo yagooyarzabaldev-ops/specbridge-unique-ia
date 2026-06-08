@@ -1331,12 +1331,15 @@ function Invoke-IssueToMergeGithubCommand {
     $applyAllowed = ($applyBlockers.Count -eq 0)
 
     if ($applyAllowed) {
-      $unsupportedOps = $selectedOperations | Where-Object { $_ -ne "issue_close" -and $_ -ne "pr_open" -and $_ -ne "merge" }
+      $pilotSupportedOps = @("issue_close", "pr_open", "ci_wait", "merge", "post_merge_memory")
+      $unsupportedOps = $selectedOperations | Where-Object { $pilotSupportedOps -notcontains $_ }
       if ($unsupportedOps.Count -gt 0) {
-        $applyBlockers += "apply_mode_pilot_supports_issue_close_pr_open_and_merge_only"
+        $applyBlockers += "apply_mode_pilot_supports_issue_close_pr_open_ci_wait_merge_and_post_merge_memory_only"
         $applyAllowed = $false
       }
     }
+
+    $mergedPrNumber = $null
 
     if ($applyAllowed -and $selectedOperations -contains "issue_close") {
       if ($issueReference -notmatch "github\.com/.+/issues/(\d+)") {
@@ -1392,6 +1395,62 @@ function Invoke-IssueToMergeGithubCommand {
       }
     }
 
+    if ($applyAllowed -and $selectedOperations -contains "ci_wait") {
+      $repoSlug = ($RepositoryUrl -replace "https://github\.com/", "")
+      $previousEap = $ErrorActionPreference
+      $ErrorActionPreference = "Continue"
+      $prViewOutput = & gh pr view $currentBranch --repo $repoSlug --json number,state 2>&1
+      $prViewExitCode = $LASTEXITCODE
+      $ErrorActionPreference = $previousEap
+
+      if ($prViewExitCode -ne 0) {
+        $githubCallsPerformed = $true
+        $githubMutationResult = [ordered]@{
+          operation    = "ci_wait"
+          pr_number    = $null
+          head         = $currentBranch
+          repository   = $repoSlug
+          gh_exit_code = $prViewExitCode
+          gh_output    = ($prViewOutput -join " ").Trim()
+          status       = "failed_no_pr_found"
+        }
+      } else {
+        $ciPrNumber = [int]($prViewOutput | ConvertFrom-Json).number
+        $checksStatus = "pending"
+        $checksExitCode = 1
+        $checksOutput = @()
+        $maxAttempts = 20
+        for ($attempt = 0; $attempt -lt $maxAttempts; $attempt++) {
+          $previousEap = $ErrorActionPreference
+          $ErrorActionPreference = "Continue"
+          $checksOutput = & gh pr checks $ciPrNumber --repo $repoSlug 2>&1
+          $checksExitCode = $LASTEXITCODE
+          $ErrorActionPreference = $previousEap
+          $outputStr = ($checksOutput -join " ").Trim()
+          if ($checksExitCode -eq 0) {
+            $checksStatus = "success"
+            break
+          } elseif ($outputStr -match "pending|in_progress|queued") {
+            if ($attempt -lt ($maxAttempts - 1)) { Start-Sleep -Seconds 30 }
+          } else {
+            $checksStatus = "failed_ci"
+            break
+          }
+        }
+        if ($checksStatus -eq "pending") { $checksStatus = "timed_out" }
+        $githubCallsPerformed = $true
+        $githubMutationResult = [ordered]@{
+          operation    = "ci_wait"
+          pr_number    = $ciPrNumber
+          head         = $currentBranch
+          repository   = $repoSlug
+          gh_exit_code = $checksExitCode
+          gh_output    = ($checksOutput -join " ").Trim()
+          status       = $checksStatus
+        }
+      }
+    }
+
     if ($applyAllowed -and $selectedOperations -contains "merge") {
       $repoSlug = ($RepositoryUrl -replace "https://github\.com/", "")
       $previousEap = $ErrorActionPreference
@@ -1420,15 +1479,130 @@ function Invoke-IssueToMergeGithubCommand {
         $ghOutput = & gh @ghArgs 2>&1
         $ghExitCode = $LASTEXITCODE
         $ErrorActionPreference = $previousEap
+        $mergeStatus = if ($ghExitCode -eq 0) { "success" } elseif (($ghOutput -join " ") -match "already merged") { "success" } else { "failed" }
+        if ($mergeStatus -eq "success") { $mergedPrNumber = $prNumber }
         $githubCallsPerformed = $true
         $githubMutationResult = [ordered]@{
-          operation = "merge"
-          pr_number = $prNumber
-          head = $currentBranch
-          repository = $repoSlug
+          operation    = "merge"
+          pr_number    = $prNumber
+          head         = $currentBranch
+          repository   = $repoSlug
           gh_exit_code = $ghExitCode
-          gh_output = ($ghOutput -join " ").Trim()
-          status = if ($ghExitCode -eq 0) { "success" } elseif (($ghOutput -join " ") -match "already merged") { "success" } else { "failed" }
+          gh_output    = ($ghOutput -join " ").Trim()
+          status       = $mergeStatus
+        }
+      }
+    }
+
+    if ($applyAllowed -and $selectedOperations -contains "post_merge_memory") {
+      $repoSlug = ($RepositoryUrl -replace "https://github\.com/", "")
+      $closureBranch = "specbridge/memory-closure-$safeTaskId"
+
+      $previousEap = $ErrorActionPreference
+      $ErrorActionPreference = "Continue"
+      & git fetch origin $BaseBranch 2>&1 | Out-Null
+      & git checkout -b $closureBranch "origin/$BaseBranch" 2>&1 | Out-Null
+      $checkoutExitCode = $LASTEXITCODE
+      $ErrorActionPreference = $previousEap
+
+      if ($checkoutExitCode -ne 0) {
+        $githubCallsPerformed = $true
+        $githubMutationResult = [ordered]@{
+          operation      = "post_merge_memory"
+          closure_branch = $closureBranch
+          repository     = $repoSlug
+          status         = "failed_branch_creation"
+        }
+      } else {
+        $scopePath = ".specbridge/scopes/$safeTaskId.scope.json"
+        $scopeCompleted = $false
+        if (Test-Path -LiteralPath $scopePath) {
+          $scopeRaw = Get-Content $scopePath -Raw -Encoding UTF8
+          $scopeUpdated = $scopeRaw -replace '"status":\s*"active"', '"status": "completed"'
+          $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+          [System.IO.File]::WriteAllText((Join-Path $repoRoot $scopePath), $scopeUpdated, $utf8NoBom)
+          $scopeCompleted = $true
+        }
+
+        $closureEvidencePath = ".specbridge/github-evidence/$safeTaskId.closure.json"
+        $closureEvidence = [ordered]@{
+          schema_version = "1"
+          task_id        = $safeTaskId
+          closure_type   = "post_merge_closure"
+          closed_at      = (Get-Date -Format "yyyy-MM-dd")
+          pr_merged      = $true
+          pr_number      = $mergedPrNumber
+          github_ci_passed = $true
+          scope_completed  = $scopeCompleted
+          closed_by        = "specbridge-post-merge-memory-operator"
+        }
+        Write-Utf8JsonFile -Path $closureEvidencePath -Value $closureEvidence -Depth 5
+
+        $filesToAdd = @($closureEvidencePath)
+        if ($scopeCompleted) { $filesToAdd += $scopePath }
+        $previousEap = $ErrorActionPreference
+        $ErrorActionPreference = "Continue"
+        & git add @filesToAdd 2>&1 | Out-Null
+        $commitOutput = & git commit -m "chore: post-merge memory closure for $safeTaskId [skip ci]" 2>&1
+        $commitExitCode = $LASTEXITCODE
+        $ErrorActionPreference = $previousEap
+
+        if ($commitExitCode -ne 0) {
+          & git checkout $currentBranch 2>&1 | Out-Null
+          $githubCallsPerformed = $true
+          $githubMutationResult = [ordered]@{
+            operation      = "post_merge_memory"
+            closure_branch = $closureBranch
+            repository     = $repoSlug
+            status         = "failed_commit"
+          }
+        } else {
+          $previousEap = $ErrorActionPreference
+          $ErrorActionPreference = "Continue"
+          $pushOutput = & git push origin $closureBranch 2>&1
+          $pushExitCode = $LASTEXITCODE
+          $ErrorActionPreference = $previousEap
+
+          if ($pushExitCode -ne 0) {
+            & git checkout $currentBranch 2>&1 | Out-Null
+            $githubCallsPerformed = $true
+            $githubMutationResult = [ordered]@{
+              operation      = "post_merge_memory"
+              closure_branch = $closureBranch
+              repository     = $repoSlug
+              status         = "failed_push"
+            }
+          } else {
+            $closurePrTitle = "chore: post-merge memory closure for $safeTaskId"
+            $closurePrBody = "Automated memory closure. Marks $safeTaskId scope completed and records closure evidence after PR $mergedPrNumber merged."
+            $prCreateArgs = @("pr", "create", "--title", $closurePrTitle, "--body", $closurePrBody, "--base", $BaseBranch, "--head", $closureBranch, "--repo", $repoSlug)
+            $previousEap = $ErrorActionPreference
+            $ErrorActionPreference = "Continue"
+            $prCreateOutput = & gh @prCreateArgs 2>&1
+            $prCreateExitCode = $LASTEXITCODE
+            $ErrorActionPreference = $previousEap
+            $closurePrUrl = ($prCreateOutput | Where-Object { $_ -match "^https://" } | Select-Object -First 1)
+            $closurePrNumber = if ($closurePrUrl -match "/pull/(\d+)") { [int]$Matches[1] } else { $null }
+
+            if ($closurePrNumber) {
+              $previousEap = $ErrorActionPreference
+              $ErrorActionPreference = "Continue"
+              & gh pr merge $closurePrNumber --squash --auto --repo $repoSlug 2>&1 | Out-Null
+              $ErrorActionPreference = $previousEap
+            }
+
+            & git checkout $currentBranch 2>&1 | Out-Null
+            $githubCallsPerformed = $true
+            $githubMutationResult = [ordered]@{
+              operation         = "post_merge_memory"
+              closure_branch    = $closureBranch
+              closure_pr_number = $closurePrNumber
+              closure_pr_url    = $closurePrUrl
+              scope_completed   = $scopeCompleted
+              repository        = $repoSlug
+              status            = if ($closurePrNumber) { "success" } else { "failed_pr_not_created" }
+            }
+          }
         }
       }
     }
@@ -1520,8 +1694,13 @@ function Invoke-IssueToMergeGithubCommand {
       "deployment_requested",
       "policy_boundary_reached"
     )
-    command_boundary = "dry-run-by-default apply-requires-force-confirmation-and-evidence apply-pilot-supports-issue_close-pr_open-and-merge emits-connector-action-envelope does-not-store-secrets does-not-launch-claude-code does-not-launch-antigravity does-not-install-dependencies does-not-deploy"
+    command_boundary = "dry-run-by-default apply-requires-force-confirmation-and-evidence apply-pilot-supports-issue_close-pr_open-ci_wait-merge-and-post_merge_memory emits-connector-action-envelope does-not-store-secrets does-not-launch-claude-code does-not-launch-antigravity does-not-install-dependencies does-not-deploy"
     output_path = $null
+  }
+
+  if ($MutationMode -eq "apply") {
+    $operator["output_path"] = $runPath
+    Write-Utf8JsonFile -Path $runPath -Value $operator -Depth 14
   }
 
   if (-not [string]::IsNullOrWhiteSpace($OutputPath)) {

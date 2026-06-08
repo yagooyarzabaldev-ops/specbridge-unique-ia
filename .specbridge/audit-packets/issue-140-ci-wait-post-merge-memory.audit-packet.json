@@ -1,0 +1,65 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-140-ci-wait-post-merge-memory",
+  "generated_by": "specbridge-audit-packet-generator",
+  "execution_contract_path": ".specbridge/contracts/issue-140-ci-wait-post-merge-memory.execution.md",
+  "changed_files": [
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-140-ci-wait-post-merge-memory.execution.md",
+    ".specbridge/scopes/issue-140-ci-wait-post-merge-memory.scope.json",
+    ".specbridge/scopes/issue-138-post-merge-closure-issue134.scope.json",
+    ".specbridge/reports/issue-140-ci-wait-post-merge-memory.final-report.json",
+    ".specbridge/audit-packets/issue-140-ci-wait-post-merge-memory.audit-packet.json",
+    ".specbridge/audits/issue-140-ci-wait-post-merge-memory.chatgpt-audit.json"
+  ],
+  "diff_summary": [
+    { "file": "scripts/specbridge.ps1", "added_lines": 98, "deleted_lines": 8 },
+    { "file": "scripts/test-specbridge-cli.ps1", "added_lines": 2, "deleted_lines": 2 },
+    { "file": ".specbridge/scopes/issue-138-post-merge-closure-issue134.scope.json", "added_lines": 1, "deleted_lines": 1 },
+    { "file": "README.md", "added_lines": 2, "deleted_lines": 1 },
+    { "file": ".specbridge/context/CURRENT_GOAL.md", "added_lines": 4, "deleted_lines": 4 }
+  ],
+  "validation_commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+    "git diff --check",
+    "GitHub CI"
+  ],
+  "validation_results": [
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-review-gate.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1", "result": "passed" },
+    { "command": "git diff --check", "result": "passed" },
+    { "command": "GitHub CI", "result": "not_collected" }
+  ],
+  "final_report_path": ".specbridge/reports/issue-140-ci-wait-post-merge-memory.final-report.json",
+  "ci_status": "not_collected",
+  "pr_review_report_path": null,
+  "policy_result": "Compliant. Script changes limited to the apply-mode execution block. No secrets, production, billing, auth, database, CI/CD security, or deployment changes.",
+  "unresolved_risks": [
+    "GitHub CI and PR merge pending for issue 140 branch.",
+    "ci_wait timeout (max 10 min). post_merge_memory branch accumulation."
+  ],
+  "completion_status": "complete_pending_pr_ci",
+  "source_files": [
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/contracts/issue-140-ci-wait-post-merge-memory.execution.md",
+    ".specbridge/reports/issue-140-ci-wait-post-merge-memory.final-report.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}
