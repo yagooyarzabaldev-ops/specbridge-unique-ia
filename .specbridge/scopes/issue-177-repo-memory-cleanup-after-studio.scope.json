@@ -1,7 +1,7 @@
 {
   "contract_id": "issue-177-repo-memory-cleanup-after-studio",
   "run_id": "sb-20260609-b3bc65dc",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     "README.md",
     ".specbridge/context/CURRENT_GOAL.md",

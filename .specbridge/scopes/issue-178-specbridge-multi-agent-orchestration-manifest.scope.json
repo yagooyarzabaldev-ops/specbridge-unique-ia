@@ -1,0 +1,29 @@
+{
+  "contract_id": "issue-178-specbridge-multi-agent-orchestration-manifest",
+  "run_id": "sb-20260609-06e1b8e9",
+  "status": "active",
+  "exclusive_write": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-178-specbridge-multi-agent-orchestration-manifest.execution.md",
+    ".specbridge/scopes/issue-178-specbridge-multi-agent-orchestration-manifest.scope.json",
+    ".specbridge/reports/issue-178-specbridge-multi-agent-orchestration-manifest.final-report.json",
+    ".specbridge/audit-packets/issue-178-specbridge-multi-agent-orchestration-manifest.audit-packet.json",
+    ".specbridge/audits/issue-178-specbridge-multi-agent-orchestration-manifest.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-178-specbridge-multi-agent-orchestration-manifest.github-mutation-evidence.json",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "scripts/validate-orchestrations.ps1",
+    "scripts/specbridge-smoke.ps1",
+    "docs/specbridge-studio.html"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-178-specbridge-multi-agent-orchestration-manifest.final-report.json"
+}

@@ -643,6 +643,86 @@ try {
       }
     }
 
+    # specbridge-orchestrate
+    $orchTaskId = "orch-test-$(Get-Date -Format 'HHmmss')"
+    $orchResult = Invoke-Cli -Arguments @("specbridge-orchestrate", "-TaskId", $orchTaskId)
+    Assert-Success `
+      -Name "specbridge-orchestrate" `
+      -Result $orchResult `
+      -ExpectedPattern '"command"\s*:\s*"specbridge-orchestrate"'
+    if ($orchResult.ExitCode -eq 0) {
+      $orchArtifactPath = Join-Path (Get-Location).Path ".specbridge/orchestrations/$orchTaskId.orchestration.json"
+      if (-not (Test-Path $orchArtifactPath)) {
+        Write-Output "FAIL specbridge-orchestrate: orchestration artifact not written."
+        $script:failed = $true
+      } else {
+        try {
+          $orchJson = Get-Content $orchArtifactPath -Raw | ConvertFrom-Json
+          # Required fields
+          $orchMissing = @("schema_version","task_id","run_id","coordinator","created_at","status","agents") |
+            Where-Object { $null -eq $orchJson.$_ }
+          if ($orchMissing.Count -gt 0) {
+            Write-Output "FAIL specbridge-orchestrate: artifact missing fields: $($orchMissing -join ', ')."
+            $script:failed = $true
+          } else {
+            Write-Output "PASS specbridge-orchestrate: artifact has all required fields."
+          }
+          # All 7 agents present
+          $expectedAgents = @("planner","implementer","reviewer","tester","security","docs","closure")
+          $actualAgents   = @($orchJson.agents | ForEach-Object { $_.name })
+          $missingAgents  = $expectedAgents | Where-Object { $actualAgents -notcontains $_ }
+          if ($missingAgents.Count -gt 0) {
+            Write-Output "FAIL specbridge-orchestrate: missing agents: $($missingAgents -join ', ')."
+            $script:failed = $true
+          } else {
+            Write-Output "PASS specbridge-orchestrate: all 7 agent roles present."
+          }
+          # run_id format
+          if ($orchJson.run_id -notmatch "^sb-\d{8}-[a-f0-9]{8}$") {
+            Write-Output "FAIL specbridge-orchestrate: run_id '$($orchJson.run_id)' does not match expected format."
+            $script:failed = $true
+          } else {
+            Write-Output "PASS specbridge-orchestrate: run_id format valid."
+          }
+          # status = planned
+          if ($orchJson.status -ne "planned") {
+            Write-Output "FAIL specbridge-orchestrate: expected status=planned, got '$($orchJson.status)'."
+            $script:failed = $true
+          } else {
+            Write-Output "PASS specbridge-orchestrate: status=planned."
+          }
+        } catch {
+          Write-Output "FAIL specbridge-orchestrate: artifact not valid JSON."
+          $script:failed = $true
+        } finally {
+          Remove-Item $orchArtifactPath -Force -ErrorAction SilentlyContinue
+        }
+      }
+    }
+
+    # specbridge-orchestrate: validate-orchestrations passes on a generated artifact
+    $orchValTaskId = "orch-val-$(Get-Date -Format 'HHmmss')"
+    $orchValResult = Invoke-Cli -Arguments @("specbridge-orchestrate", "-TaskId", $orchValTaskId)
+    if ($orchValResult.ExitCode -eq 0) {
+      $valResult2 = powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-orchestrations.ps1 2>&1
+      if ($LASTEXITCODE -eq 0) {
+        Write-Output "PASS specbridge-orchestrate: validate-orchestrations passes on generated artifact."
+      } else {
+        Write-Output "FAIL specbridge-orchestrate: validate-orchestrations failed on generated artifact."
+        $script:failed = $true
+      }
+      Remove-Item ".specbridge/orchestrations/$orchValTaskId.orchestration.json" -Force -ErrorAction SilentlyContinue
+    }
+
+    # specbridge-orchestrate: fails without -TaskId
+    $orchNoTaskResult = Invoke-Cli -Arguments @("specbridge-orchestrate")
+    if ($orchNoTaskResult.ExitCode -ne 0) {
+      Write-Output "PASS CLI failure: specbridge-orchestrate-missing-task-id"
+    } else {
+      Write-Output "FAIL specbridge-orchestrate-missing-task-id: expected failure without -TaskId."
+      $script:failed = $true
+    }
+
     # lifecycle-guard: verify output structure regardless of exit code (violations may exist in repo state)
     $lgResult = Invoke-Cli -Arguments @("lifecycle-guard")
     if ($lgResult.Text -notmatch '"command"\s*:\s*"lifecycle-guard"') {

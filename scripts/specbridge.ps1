@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "issue-to-merge-plan", "issue-to-merge-github", "specbridge-intake", "specbridge-doctor", "generate-dashboard", "generate-studio-dashboard", "lifecycle-guard", "quickstart", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "issue-to-merge-plan", "issue-to-merge-github", "specbridge-intake", "specbridge-doctor", "specbridge-orchestrate", "generate-dashboard", "generate-studio-dashboard", "lifecycle-guard", "quickstart", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -698,7 +698,7 @@ function Get-MarkdownSectionText {
   $capturing = $false
   $lines = @()
 
-  foreach ($line in (Get-Content -LiteralPath $normalizedPath)) {
+  foreach ($line in (Get-Content -LiteralPath $normalizedPath -Encoding UTF8)) {
     if ($line.Trim() -eq $target) {
       $capturing = $true
       continue
@@ -5925,6 +5925,32 @@ function Invoke-DoctorFixPlanCommand {
     }
   }
 
+  # IO: orchestration checks
+  $orchDir2 = Join-Path $repoRoot ".specbridge/orchestrations"
+  if (Test-Path $orchDir2) {
+    foreach ($orchFile in (Get-ChildItem $orchDir2 -Filter "*.orchestration.json" -ErrorAction SilentlyContinue)) {
+      try {
+        $orch = Get-Content $orchFile.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($null -eq $orch) { continue }
+        $orchTid = $orch.task_id
+        $orchRunId = $orch.run_id
+        # Warn if orchestration has run_id but no ledger entries for that run_id
+        if ($orchRunId -and -not $runOpMap.ContainsKey($orchRunId) -and ($orch.status -eq "in_progress")) {
+          $actions.Add([ordered]@{
+            id                 = "orchestration_stale"
+            severity           = "warning"
+            task_id            = $orchTid
+            diagnosis          = "Orchestration '$orchRunId' for '$orchTid' has status='in_progress' but no ledger entries found. Agents may not have started."
+            recommended_action = "run_specbridge_orchestrate_or_check_agents"
+            command            = "powershell -ExecutionPolicy Bypass -Command `"& '.\scripts\specbridge.ps1' -Command specbridge-orchestrate -TaskId '$orchTid'`""
+            safe_to_automate   = $false
+          })
+          $warningIds.Add("orchestration_stale:$orchRunId")
+        }
+      } catch {}
+    }
+  }
+
   # J: stale locks
   foreach ($lk in $staleLocks) {
     $actions.Add([ordered]@{
@@ -6184,6 +6210,88 @@ function Invoke-SpecbridgeDoctorCommand {
     current_goal_task_id = $currentGoalTaskId
     recommended_next_action = $recommended
     checked_at           = (Get-Date -Format "o")
+  })
+  exit 0
+}
+
+function Invoke-SpecbridgeOrchestrateCommand {
+  if ([string]::IsNullOrWhiteSpace($TaskId)) {
+    Fail "specbridge-orchestrate requires -TaskId"
+  }
+  $safeTaskId = $TaskId.Trim()
+
+  # Resolve run_id: prefer scope file, fall back to current-goal.json
+  $resolvedRunId = ""
+  $scopeFile = Join-Path $repoRoot ".specbridge/scopes/$safeTaskId.scope.json"
+  if (Test-Path $scopeFile) {
+    try {
+      $sc = Get-Content $scopeFile -Raw -Encoding UTF8 | ConvertFrom-Json
+      if ($sc.run_id) { $resolvedRunId = $sc.run_id }
+    } catch {}
+  }
+  if (-not $resolvedRunId) {
+    $cgPath = Join-Path $repoRoot ".specbridge/state/current-goal.json"
+    if (Test-Path $cgPath) {
+      try {
+        $cg = Get-Content $cgPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($cg.current_task_id -eq $safeTaskId -and $cg.run_id) {
+          $resolvedRunId = $cg.run_id
+        }
+      } catch {}
+    }
+  }
+  if (-not $resolvedRunId) {
+    $resolvedRunId = "sb-$(Get-Date -Format 'yyyyMMdd')-$([guid]::NewGuid().ToString('N').Substring(0, 8))"
+  }
+
+  # Define agent roster
+  $agentRoster = @(
+    @{ name="planner";     role="Classify complexity, detect critical files, propose scope and acceptance criteria" },
+    @{ name="implementer"; role="Modify code within declared scope, generate implementation artifacts" },
+    @{ name="reviewer";    role="Review diff independently, detect bugs, scope drift, and inconsistencies" },
+    @{ name="tester";      role="Create or update tests, run smoke locally, interpret failures, propose fixes" },
+    @{ name="security";    role="Check secrets, blocked paths, GitHub permissions, destructive commands, risk level" },
+    @{ name="docs";        role="Update README, CURRENT_GOAL.md, dashboard artifacts, release notes" },
+    @{ name="closure";     role="Close issue, mark scope completed, write closure evidence, regenerate dashboards" }
+  )
+  $agents = @()
+  $prevAgent = $null
+  foreach ($a in $agentRoster) {
+    $agents += [ordered]@{
+      name             = $a.name
+      role             = $a.role
+      status           = "pending"
+      input_artifact   = if ($prevAgent) { ".specbridge/orchestrations/$safeTaskId/$($prevAgent)-output.json" } else { $null }
+      output_artifact  = ".specbridge/orchestrations/$safeTaskId/$($a.name)-output.json"
+    }
+    $prevAgent = $a.name
+  }
+
+  $orchestration = [ordered]@{
+    schema_version = "1"
+    task_id        = $safeTaskId
+    run_id         = $resolvedRunId
+    coordinator    = "specbridge"
+    created_at     = (Get-Date -Format "yyyy-MM-dd")
+    status         = "planned"
+    agents         = $agents
+  }
+
+  $orchDir = Join-Path $repoRoot ".specbridge/orchestrations"
+  if (-not (Test-Path $orchDir)) {
+    New-Item -ItemType Directory -Path $orchDir -Force | Out-Null
+  }
+  $outPath = Join-Path $orchDir "$safeTaskId.orchestration.json"
+  $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+  [System.IO.File]::WriteAllText($outPath, ($orchestration | ConvertTo-Json -Depth 5), $utf8NoBom)
+
+  Write-CliJson ([ordered]@{
+    command       = "specbridge-orchestrate"
+    output        = ".specbridge/orchestrations/$safeTaskId.orchestration.json"
+    task_id       = $safeTaskId
+    run_id        = $resolvedRunId
+    agent_count   = $agents.Count
+    status        = "planned"
   })
   exit 0
 }
@@ -6459,6 +6567,15 @@ function Invoke-GenerateStudioDashboardCommand {
     }
   }
 
+  # ── Orchestrations ───────────────────────────────────────────────────────
+  $orchestrations = [System.Collections.Generic.List[object]]::new()
+  $orchDir3 = Join-Path $repoRoot ".specbridge/orchestrations"
+  if (Test-Path $orchDir3) {
+    foreach ($of in (Get-ChildItem $orchDir3 -Filter "*.orchestration.json" -ErrorAction SilentlyContinue)) {
+      try { $orchestrations.Add((Get-Content $of.FullName -Raw -Encoding UTF8 | ConvertFrom-Json)) } catch {}
+    }
+  }
+
   # ── Fix-plan (offline) ───────────────────────────────────────────────────
   $fixPlanActions = @()
   try {
@@ -6560,6 +6677,35 @@ $opTable
     "<p style='color:#e6a817;font-size:.85rem'>&#9888; Ledger not found &ndash; first apply-mode run has not started.</p>"
   } else { "" }
 
+  # Orchestrations section
+  $orchSectionHtml = if ($orchestrations.Count -eq 0) {
+    "<p style='color:#888'>No orchestration manifests found.</p>"
+  } else {
+    $orchBlocks = ""
+    foreach ($orch in $orchestrations) {
+      $oStatus = if ($orch.status) { $orch.status } else { "unknown" }
+      $oColor = switch ($oStatus) {
+        "completed"   { "#2d9e5f" }
+        "in_progress" { "#7ab4f5" }
+        "cancelled"   { "#888" }
+        default       { "#e6a817" }
+      }
+      $agentRows = ""
+      foreach ($ag in $orch.agents) {
+        $aColor = switch ($ag.status) {
+          "completed" { "#2d9e5f" }
+          "active"    { "#7ab4f5" }
+          "failed"    { "#c0392b" }
+          "skipped"   { "#888" }
+          default     { "#555" }
+        }
+        $agentRows += "<tr><td><code>$($ag.name)</code></td><td style='color:$aColor'>$($ag.status)</td><td style='font-size:.8rem;color:#aaa'>$($ag.role)</td></tr>"
+      }
+      $orchBlocks += "<div class='run-card'><div class='run-header'><code class='run-id'>$($orch.run_id)</code> <span style='color:$oColor'>$oStatus</span></div><div class='run-task'>Task: <code>$($orch.task_id)</code> &nbsp; Coordinator: $($orch.coordinator)</div><table style='margin-top:8px'><tr><th>Agent</th><th>Status</th><th>Role</th></tr>$agentRows</table></div>"
+    }
+    $orchBlocks
+  }
+
   $html = @"
 <!DOCTYPE html>
 <html lang="en">
@@ -6586,6 +6732,7 @@ $opTable
   .fp-section{background:#1a1a0f;border:1px solid #4a4a1a;border-radius:8px;padding:16px;margin-bottom:16px}
   .fp-section table{background:#1a1a0f}
   .fp-section th{background:#2e2e18}
+  .orch-section{background:#0f1a2e;border:1px solid #1a3a5a;border-radius:8px;padding:16px;margin-bottom:16px}
   .footer{color:#555;font-size:.75rem;margin-top:28px}
   a{color:#7ab4f5}
 </style>
@@ -6601,6 +6748,9 @@ $opTable
 <div class="fp-section">$fpHtml</div>
 
 $ledgerNote
+<h2>Orchestrations ($($orchestrations.Count))</h2>
+<div class="orch-section">$orchSectionHtml</div>
+
 <h2>Runs ($($runMap.Count))</h2>
 $runsHtml
 
@@ -6625,6 +6775,7 @@ $runsHtml
     completed_scopes = $completedScopes.Count
     ledger_entries = $ledgerEntries.Count
     fix_plan_actions = $fixPlanActions.Count
+    orchestrations = $orchestrations.Count
     status         = "generated"
   })
   exit 0
@@ -6808,6 +6959,7 @@ switch ($Command) {
   "issue-to-merge-github" { Invoke-IssueToMergeGithubCommand }
   "specbridge-intake" { Invoke-SpecbridgeIntakeCommand }
   "specbridge-doctor" { Invoke-SpecbridgeDoctorCommand }
+  "specbridge-orchestrate" { Invoke-SpecbridgeOrchestrateCommand }
   "generate-dashboard" { Invoke-GenerateDashboardCommand }
   "generate-studio-dashboard" { Invoke-GenerateStudioDashboardCommand }
   "lifecycle-guard" { Invoke-LifecycleGuardCommand }
