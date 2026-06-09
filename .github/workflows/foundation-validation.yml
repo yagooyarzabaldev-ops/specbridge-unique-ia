@@ -16,34 +16,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run foundation validation
-        shell: pwsh
-        run: ./scripts/validate-foundation.ps1
-
-      - name: Run contract validation
-        shell: pwsh
-        run: ./scripts/validate-contracts.ps1
-
-      - name: Run schema validation
-        shell: pwsh
-        run: ./scripts/validate-schemas.ps1
-
-      - name: Run final report validation
-        shell: pwsh
-        run: ./scripts/validate-final-reports.ps1
-
-      - name: Run PR review report validation
-        shell: pwsh
-        run: ./scripts/validate-pr-review-reports.ps1
-
-      - name: Run Claude review workflow validation
-        shell: pwsh
-        run: ./scripts/validate-claude-review-workflow.ps1
-
-      - name: Run autonomous execution protocol validation
-        shell: pwsh
-        run: ./scripts/validate-autonomous-execution-protocol.ps1
-
+      # specbridge-smoke.ps1 runs every validate-*.ps1 and test-*.ps1 script,
+      # including all the validators that used to run as individual steps
+      # here. Keeping only the smoke step removes duplicated work without
+      # removing any gate. Change authorized by
+      # .specbridge/policies/workflow-change-authorizations.json
+      # (wf-auth-20260609-foundation-dedup).
       - name: Run SpecBridge smoke validation
         shell: pwsh
         run: ./scripts/specbridge-smoke.ps1
