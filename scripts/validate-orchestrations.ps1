@@ -16,14 +16,14 @@ function Write-Failure {
 }
 
 if (-not (Test-Path $orchPath)) {
-  Write-Output "No orchestrations directory found — skipping (no orchestrations exist yet)."
+  Write-Output "No orchestrations directory found - skipping (no orchestrations exist yet)."
   exit 0
 }
 
 $orchFiles = @(Get-ChildItem $orchPath -Filter "*.orchestration.json" -File -ErrorAction SilentlyContinue)
 
 if ($orchFiles.Count -eq 0) {
-  Write-Output "No orchestration files found — skipping."
+  Write-Output "No orchestration files found - skipping."
   exit 0
 }
 
@@ -80,6 +80,39 @@ foreach ($file in $orchFiles) {
     $dupes = $agentNames | Group-Object | Where-Object { $_.Count -gt 1 }
     foreach ($d in $dupes) {
       Write-Failure "duplicate agent name '$($d.Name)' in $($file.FullName)"
+    }
+
+    # Handoff consistency: completed agents form a sequential prefix and
+    # must have their declared output artifact on disk.
+    $agentList = @($orch.agents | Where-Object { $null -ne $_ })
+    $blockerSeen = $false
+    foreach ($ag in $agentList) {
+      if ($ag.status -eq "completed") {
+        if ($blockerSeen) {
+          Write-Failure "agent '$($ag.name)' is completed after a non-completed agent (sequential handoff violated) in $($file.FullName)"
+        }
+        if ($ag.output_artifact -and -not (Test-Path -LiteralPath $ag.output_artifact -PathType Leaf)) {
+          Write-Failure "completed agent '$($ag.name)' is missing output artifact '$($ag.output_artifact)' in $($file.FullName)"
+        }
+      }
+      elseif ($ag.status -ne "skipped") {
+        $blockerSeen = $true
+      }
+    }
+
+    # Orchestration status must match aggregate agent state.
+    $finishedCount = @($agentList | Where-Object { $_.status -eq "completed" -or $_.status -eq "skipped" }).Count
+    $completedCount = @($agentList | Where-Object { $_.status -eq "completed" }).Count
+    if ($agentList.Count -gt 0) {
+      if ($orch.status -eq "completed" -and $finishedCount -lt $agentList.Count) {
+        Write-Failure "orchestration status is 'completed' but not all agents are completed/skipped in $($file.FullName)"
+      }
+      if ($orch.status -eq "planned" -and $completedCount -gt 0) {
+        Write-Failure "orchestration status is 'planned' but agents have already completed handoffs in $($file.FullName)"
+      }
+      if ($orch.status -eq "in_progress" -and $finishedCount -eq $agentList.Count) {
+        Write-Failure "orchestration status is 'in_progress' but every agent has finished in $($file.FullName)"
+      }
     }
   }
 }

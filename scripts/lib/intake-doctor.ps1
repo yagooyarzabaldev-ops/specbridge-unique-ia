@@ -1043,6 +1043,113 @@ function Invoke-SpecbridgeOrchestrateCommand {
   exit 0
 }
 
+function Invoke-SpecbridgeHandoffCommand {
+  if ([string]::IsNullOrWhiteSpace($TaskId)) {
+    Fail "specbridge-handoff requires -TaskId"
+  }
+  if ([string]::IsNullOrWhiteSpace($Agent)) {
+    Fail "specbridge-handoff requires -Agent (planner, implementer, reviewer, tester, security, docs, closure)"
+  }
+  $safeTaskId = $TaskId.Trim()
+  $safeAgent = $Agent.Trim().ToLowerInvariant()
+
+  $manifestRel = ".specbridge/orchestrations/$safeTaskId.orchestration.json"
+  $manifestPath = Join-Path $repoRoot $manifestRel
+  if (-not (Test-Path -LiteralPath $manifestPath)) {
+    Fail "no orchestration manifest for task '$safeTaskId'. Run specbridge-orchestrate -TaskId $safeTaskId first."
+  }
+
+  $orch = $null
+  try { $orch = Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json } catch {}
+  if ($null -eq $orch) {
+    Fail "orchestration manifest is not valid JSON: $manifestRel"
+  }
+  if ($orch.status -eq "completed") {
+    Fail "orchestration for '$safeTaskId' is already completed"
+  }
+  if ($orch.status -eq "cancelled") {
+    Fail "orchestration for '$safeTaskId' is cancelled"
+  }
+
+  $agents = @($orch.agents)
+  $targetIndex = -1
+  for ($i = 0; $i -lt $agents.Count; $i++) {
+    if ($agents[$i].name -eq $safeAgent) { $targetIndex = $i; break }
+  }
+  if ($targetIndex -lt 0) {
+    $roster = @($agents | ForEach-Object { $_.name }) -join ", "
+    Fail "unknown agent '$safeAgent' for task '$safeTaskId'. Roster: $roster"
+  }
+
+  $target = $agents[$targetIndex]
+  if ($target.status -eq "completed") {
+    Fail "agent '$safeAgent' has already handed off for task '$safeTaskId'"
+  }
+  if ($target.status -eq "skipped") {
+    Fail "agent '$safeAgent' was skipped and cannot hand off"
+  }
+  for ($i = 0; $i -lt $targetIndex; $i++) {
+    if ($agents[$i].status -ne "completed" -and $agents[$i].status -ne "skipped") {
+      Fail "agent '$($agents[$i].name)' must hand off before '$safeAgent' (handoff protocol is sequential)"
+    }
+  }
+
+  $outputRel = $target.output_artifact
+  if ([string]::IsNullOrWhiteSpace($outputRel)) {
+    $outputRel = ".specbridge/orchestrations/$safeTaskId/$safeAgent-output.json"
+  }
+  $outputAbs = Join-Path $repoRoot $outputRel
+  New-ParentDirectory -Path $outputAbs
+
+  $handoffSummary = if ([string]::IsNullOrWhiteSpace($Summary)) { "handoff recorded without summary" } else { $Summary }
+  $artifact = [ordered]@{
+    schema_version = "1"
+    task_id        = $safeTaskId
+    run_id         = $orch.run_id
+    agent          = $safeAgent
+    role           = $target.role
+    status         = "completed"
+    summary        = $handoffSummary
+    input_artifact = $target.input_artifact
+    produced_at    = (Get-Date -Format "o")
+  }
+  $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+  [System.IO.File]::WriteAllText($outputAbs, ($artifact | ConvertTo-Json -Depth 4), $utf8NoBom)
+
+  $target.status = "completed"
+  $nextAgent = $null
+  for ($i = $targetIndex + 1; $i -lt $agents.Count; $i++) {
+    if ($agents[$i].status -eq "pending") {
+      $agents[$i].status = "active"
+      $nextAgent = $agents[$i].name
+      break
+    }
+    if ($agents[$i].status -eq "active") {
+      $nextAgent = $agents[$i].name
+      break
+    }
+  }
+
+  $remaining = @($agents | Where-Object { $_.status -ne "completed" -and $_.status -ne "skipped" })
+  $newStatus = if ($remaining.Count -eq 0) { "completed" } else { "in_progress" }
+  $orch.status = $newStatus
+  $orch | Add-Member -NotePropertyName "updated_at" -NotePropertyValue (Get-Date -Format "o") -Force
+  [System.IO.File]::WriteAllText($manifestPath, ($orch | ConvertTo-Json -Depth 6), $utf8NoBom)
+
+  Write-LedgerEntry -TaskId $safeTaskId -Operation "agent_handoff" -Status "completed" -Detail "agent=$safeAgent next=$(if ($nextAgent) { $nextAgent } else { 'none' })" -RunId $orch.run_id
+
+  Write-CliJson ([ordered]@{
+    command              = "specbridge-handoff"
+    task_id              = $safeTaskId
+    run_id               = $orch.run_id
+    agent                = $safeAgent
+    output_artifact      = $outputRel
+    next_agent           = $nextAgent
+    orchestration_status = $newStatus
+  })
+  exit 0
+}
+
 function Invoke-LifecycleGuardCommand {
   $violations = [System.Collections.Generic.List[string]]::new()
   $warnings   = [System.Collections.Generic.List[string]]::new()

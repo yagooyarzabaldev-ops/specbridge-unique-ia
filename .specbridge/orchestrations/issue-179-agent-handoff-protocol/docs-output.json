@@ -1,0 +1,11 @@
+{
+    "schema_version":  "1",
+    "task_id":  "issue-179-agent-handoff-protocol",
+    "run_id":  "sb-20260609-78e0b3b4",
+    "agent":  "docs",
+    "role":  "Update README, CURRENT_GOAL.md, dashboard artifacts, release notes",
+    "status":  "completed",
+    "summary":  "README capability bullets added for issue-178 orchestration manifest and issue-179 handoff protocol. Execution contract Allowed Scope and scope manifest exclusive_write expanded to implementation files. Dashboards regenerated with live orchestration progress.",
+    "input_artifact":  ".specbridge/orchestrations/issue-179-agent-handoff-protocol/security-output.json",
+    "produced_at":  "2026-06-09T18:25:36.5893075-03:00"
+}

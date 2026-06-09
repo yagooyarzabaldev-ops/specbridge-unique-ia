@@ -723,6 +723,134 @@ try {
       $script:failed = $true
     }
 
+    # specbridge-handoff: full sequential protocol on a fixture orchestration
+    $hoTaskId = "handoff-test-$(Get-Date -Format 'HHmmss')"
+    $hoOrch = Invoke-Cli -Arguments @("specbridge-orchestrate", "-TaskId", $hoTaskId)
+    if ($hoOrch.ExitCode -ne 0) {
+      Write-Output "FAIL specbridge-handoff: setup orchestrate failed."
+      $script:failed = $true
+    } else {
+      $hoPlanner = Invoke-Cli -Arguments @("specbridge-handoff", "-TaskId", $hoTaskId, "-Agent", "planner", "-Summary", "fixture planner summary")
+      Assert-Success `
+        -Name "specbridge-handoff planner" `
+        -Result $hoPlanner `
+        -ExpectedPattern '"orchestration_status"\s*:\s*"in_progress"'
+
+      $hoPlannerOut = ".specbridge/orchestrations/$hoTaskId/planner-output.json"
+      if (-not (Test-Path $hoPlannerOut)) {
+        Write-Output "FAIL specbridge-handoff: planner output artifact not written."
+        $script:failed = $true
+      } else {
+        try {
+          $hoPoJson = Get-Content $hoPlannerOut -Raw -Encoding UTF8 | ConvertFrom-Json
+          if ($hoPoJson.agent -ne "planner" -or $hoPoJson.status -ne "completed" -or $hoPoJson.task_id -ne $hoTaskId -or $hoPoJson.summary -ne "fixture planner summary") {
+            Write-Output "FAIL specbridge-handoff: planner output artifact has unexpected content."
+            $script:failed = $true
+          } else {
+            Write-Output "PASS specbridge-handoff: planner output artifact content valid."
+          }
+        } catch {
+          Write-Output "FAIL specbridge-handoff: planner output artifact not valid JSON."
+          $script:failed = $true
+        }
+      }
+
+      try {
+        $hoManifest = Get-Content ".specbridge/orchestrations/$hoTaskId.orchestration.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+        $hoAgents = @($hoManifest.agents)
+        $hoPlannerEntry = $hoAgents | Where-Object { $_.name -eq "planner" }
+        $hoImplEntry = $hoAgents | Where-Object { $_.name -eq "implementer" }
+        if ($hoPlannerEntry.status -ne "completed" -or $hoImplEntry.status -ne "active" -or $hoManifest.status -ne "in_progress") {
+          Write-Output "FAIL specbridge-handoff: manifest did not advance (planner=$($hoPlannerEntry.status), implementer=$($hoImplEntry.status), status=$($hoManifest.status))."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-handoff: manifest advanced planner->implementer, status=in_progress."
+        }
+      } catch {
+        Write-Output "FAIL specbridge-handoff: manifest not readable after handoff."
+        $script:failed = $true
+      }
+
+      $hoOutOfOrder = Invoke-Cli -Arguments @("specbridge-handoff", "-TaskId", $hoTaskId, "-Agent", "tester")
+      if ($hoOutOfOrder.ExitCode -ne 0) {
+        Write-Output "PASS CLI failure: specbridge-handoff-out-of-order"
+      } else {
+        Write-Output "FAIL specbridge-handoff-out-of-order: expected failure when skipping agents."
+        $script:failed = $true
+      }
+
+      $hoRepeat = Invoke-Cli -Arguments @("specbridge-handoff", "-TaskId", $hoTaskId, "-Agent", "planner")
+      if ($hoRepeat.ExitCode -ne 0) {
+        Write-Output "PASS CLI failure: specbridge-handoff-repeat-agent"
+      } else {
+        Write-Output "FAIL specbridge-handoff-repeat-agent: expected failure on repeated handoff."
+        $script:failed = $true
+      }
+
+      $hoUnknown = Invoke-Cli -Arguments @("specbridge-handoff", "-TaskId", $hoTaskId, "-Agent", "ghostwriter")
+      if ($hoUnknown.ExitCode -ne 0) {
+        Write-Output "PASS CLI failure: specbridge-handoff-unknown-agent"
+      } else {
+        Write-Output "FAIL specbridge-handoff-unknown-agent: expected failure on unknown agent."
+        $script:failed = $true
+      }
+
+      $hoNoAgent = Invoke-Cli -Arguments @("specbridge-handoff", "-TaskId", $hoTaskId)
+      if ($hoNoAgent.ExitCode -ne 0) {
+        Write-Output "PASS CLI failure: specbridge-handoff-missing-agent"
+      } else {
+        Write-Output "FAIL specbridge-handoff-missing-agent: expected failure without -Agent."
+        $script:failed = $true
+      }
+
+      $hoLast = $null
+      foreach ($hoNext in @("implementer", "reviewer", "tester", "security", "docs", "closure")) {
+        $hoLast = Invoke-Cli -Arguments @("specbridge-handoff", "-TaskId", $hoTaskId, "-Agent", $hoNext, "-Summary", "fixture $hoNext summary")
+        if ($hoLast.ExitCode -ne 0) {
+          Write-Output "FAIL specbridge-handoff: chain handoff for '$hoNext' failed."
+          $script:failed = $true
+          break
+        }
+      }
+      if ($null -ne $hoLast -and $hoLast.ExitCode -eq 0) {
+        if ($hoLast.Text -match '"orchestration_status"\s*:\s*"completed"') {
+          Write-Output "PASS specbridge-handoff: full chain completes orchestration."
+        } else {
+          Write-Output "FAIL specbridge-handoff: final handoff did not complete orchestration."
+          $script:failed = $true
+        }
+      }
+
+      $null = powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-orchestrations.ps1 2>&1
+      if ($LASTEXITCODE -eq 0) {
+        Write-Output "PASS specbridge-handoff: validate-orchestrations passes on completed chain."
+      } else {
+        Write-Output "FAIL specbridge-handoff: validate-orchestrations failed on completed chain."
+        $script:failed = $true
+      }
+
+      $hoAfterDone = Invoke-Cli -Arguments @("specbridge-handoff", "-TaskId", $hoTaskId, "-Agent", "planner")
+      if ($hoAfterDone.ExitCode -ne 0) {
+        Write-Output "PASS CLI failure: specbridge-handoff-on-completed-orchestration"
+      } else {
+        Write-Output "FAIL specbridge-handoff-on-completed-orchestration: expected failure."
+        $script:failed = $true
+      }
+
+      # validator negative: completed agent with deleted output artifact must fail
+      Remove-Item $hoPlannerOut -Force -ErrorAction SilentlyContinue
+      $null = powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-orchestrations.ps1 2>&1
+      if ($LASTEXITCODE -ne 0) {
+        Write-Output "PASS validate-orchestrations: detects missing output artifact for completed agent."
+      } else {
+        Write-Output "FAIL validate-orchestrations: missing output artifact not detected."
+        $script:failed = $true
+      }
+
+      Remove-Item ".specbridge/orchestrations/$hoTaskId.orchestration.json" -Force -ErrorAction SilentlyContinue
+      Remove-Item ".specbridge/orchestrations/$hoTaskId" -Recurse -Force -ErrorAction SilentlyContinue
+    }
+
     # lifecycle-guard: verify output structure regardless of exit code (violations may exist in repo state)
     $lgResult = Invoke-Cli -Arguments @("lifecycle-guard")
     if ($lgResult.Text -notmatch '"command"\s*:\s*"lifecycle-guard"') {

@@ -1,0 +1,38 @@
+{
+  "contract_id": "issue-179-agent-handoff-protocol",
+  "run_id": "sb-20260609-78e0b3b4",
+  "status": "active",
+  "exclusive_write": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-179-agent-handoff-protocol.execution.md",
+    ".specbridge/scopes/issue-179-agent-handoff-protocol.scope.json",
+    ".specbridge/reports/issue-179-agent-handoff-protocol.final-report.json",
+    ".specbridge/audit-packets/issue-179-agent-handoff-protocol.audit-packet.json",
+    ".specbridge/audits/issue-179-agent-handoff-protocol.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-179-agent-handoff-protocol.github-mutation-evidence.json",
+    "scripts/specbridge.ps1",
+    "scripts/lib/intake-doctor.ps1",
+    "scripts/validate-orchestrations.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/orchestrations/issue-179-agent-handoff-protocol.orchestration.json",
+    ".specbridge/orchestrations/issue-179-agent-handoff-protocol/planner-output.json",
+    ".specbridge/orchestrations/issue-179-agent-handoff-protocol/implementer-output.json",
+    ".specbridge/orchestrations/issue-179-agent-handoff-protocol/reviewer-output.json",
+    ".specbridge/orchestrations/issue-179-agent-handoff-protocol/tester-output.json",
+    ".specbridge/orchestrations/issue-179-agent-handoff-protocol/security-output.json",
+    ".specbridge/orchestrations/issue-179-agent-handoff-protocol/docs-output.json",
+    ".specbridge/orchestrations/issue-179-agent-handoff-protocol/closure-output.json",
+    ".specbridge/ledger/operations.ndjson",
+    "docs/specbridge-studio.html"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-179-agent-handoff-protocol.final-report.json"
+}

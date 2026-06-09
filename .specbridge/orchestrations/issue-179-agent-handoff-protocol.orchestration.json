@@ -1,0 +1,60 @@
+{
+    "schema_version":  "1",
+    "task_id":  "issue-179-agent-handoff-protocol",
+    "run_id":  "sb-20260609-78e0b3b4",
+    "coordinator":  "specbridge",
+    "created_at":  "2026-06-09",
+    "status":  "in_progress",
+    "agents":  [
+                   {
+                       "name":  "planner",
+                       "role":  "Classify complexity, detect critical files, propose scope and acceptance criteria",
+                       "status":  "completed",
+                       "input_artifact":  null,
+                       "output_artifact":  ".specbridge/orchestrations/issue-179-agent-handoff-protocol/planner-output.json"
+                   },
+                   {
+                       "name":  "implementer",
+                       "role":  "Modify code within declared scope, generate implementation artifacts",
+                       "status":  "completed",
+                       "input_artifact":  ".specbridge/orchestrations/issue-179-agent-handoff-protocol/planner-output.json",
+                       "output_artifact":  ".specbridge/orchestrations/issue-179-agent-handoff-protocol/implementer-output.json"
+                   },
+                   {
+                       "name":  "reviewer",
+                       "role":  "Review diff independently, detect bugs, scope drift, and inconsistencies",
+                       "status":  "completed",
+                       "input_artifact":  ".specbridge/orchestrations/issue-179-agent-handoff-protocol/implementer-output.json",
+                       "output_artifact":  ".specbridge/orchestrations/issue-179-agent-handoff-protocol/reviewer-output.json"
+                   },
+                   {
+                       "name":  "tester",
+                       "role":  "Create or update tests, run smoke locally, interpret failures, propose fixes",
+                       "status":  "completed",
+                       "input_artifact":  ".specbridge/orchestrations/issue-179-agent-handoff-protocol/reviewer-output.json",
+                       "output_artifact":  ".specbridge/orchestrations/issue-179-agent-handoff-protocol/tester-output.json"
+                   },
+                   {
+                       "name":  "security",
+                       "role":  "Check secrets, blocked paths, GitHub permissions, destructive commands, risk level",
+                       "status":  "completed",
+                       "input_artifact":  ".specbridge/orchestrations/issue-179-agent-handoff-protocol/tester-output.json",
+                       "output_artifact":  ".specbridge/orchestrations/issue-179-agent-handoff-protocol/security-output.json"
+                   },
+                   {
+                       "name":  "docs",
+                       "role":  "Update README, CURRENT_GOAL.md, dashboard artifacts, release notes",
+                       "status":  "completed",
+                       "input_artifact":  ".specbridge/orchestrations/issue-179-agent-handoff-protocol/security-output.json",
+                       "output_artifact":  ".specbridge/orchestrations/issue-179-agent-handoff-protocol/docs-output.json"
+                   },
+                   {
+                       "name":  "closure",
+                       "role":  "Close issue, mark scope completed, write closure evidence, regenerate dashboards",
+                       "status":  "active",
+                       "input_artifact":  ".specbridge/orchestrations/issue-179-agent-handoff-protocol/docs-output.json",
+                       "output_artifact":  ".specbridge/orchestrations/issue-179-agent-handoff-protocol/closure-output.json"
+                   }
+               ],
+    "updated_at":  "2026-06-09T18:25:36.6051059-03:00"
+}

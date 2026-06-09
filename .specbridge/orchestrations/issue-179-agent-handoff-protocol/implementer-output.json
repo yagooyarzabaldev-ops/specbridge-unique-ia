@@ -1,0 +1,11 @@
+{
+    "schema_version":  "1",
+    "task_id":  "issue-179-agent-handoff-protocol",
+    "run_id":  "sb-20260609-78e0b3b4",
+    "agent":  "implementer",
+    "role":  "Modify code within declared scope, generate implementation artifacts",
+    "status":  "completed",
+    "summary":  "Added Invoke-SpecbridgeHandoffCommand to scripts/lib/intake-doctor.ps1 (sequential enforcement, output artifact write, manifest advance, ledger entry). Added -Agent param and specbridge-handoff wiring to scripts/specbridge.ps1. Extended validate-orchestrations.ps1 with prefix rule, artifact-on-disk rule and status-consistency rules.",
+    "input_artifact":  ".specbridge/orchestrations/issue-179-agent-handoff-protocol/planner-output.json",
+    "produced_at":  "2026-06-09T18:09:41.2625005-03:00"
+}
