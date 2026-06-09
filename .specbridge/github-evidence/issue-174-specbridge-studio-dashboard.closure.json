@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-174-specbridge-studio-dashboard",
+  "run_id": "sb-20260609-cc04eda9",
+  "evidence_type": "closure_evidence",
+  "collected_by": "specbridge-post-merge-closure",
+  "collected_at": "2026-06-09",
+  "merge_commit": "5eb4daedabd6ab4b81807fea13ff8a0a37f8f803",
+  "primary_pr": 175,
+  "issue_closed": true,
+  "scope_status": "completed",
+  "all_validations_passed": true,
+  "notes": "PR #175 merged. generate-studio-dashboard command implemented. Issue #174 closed."
+}

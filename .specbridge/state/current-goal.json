@@ -2,9 +2,9 @@
   "current_task_id": "issue-174-specbridge-studio-dashboard",
   "run_id": "sb-20260609-cc04eda9",
   "title": "Build SpecBridge Studio dashboard MVP",
-  "status": "active",
-  "primary_pr": null,
+  "status": "ready_for_next_task",
+  "primary_pr": 175,
   "closure_pr": null,
-  "last_updated": "2026-06-09T02:06:06.3476868+00:00",
-  "updated_by": "specbridge-intake"
+  "last_updated": "2026-06-09T02:41:25Z",
+  "updated_by": "specbridge-post-merge-closure"
 }

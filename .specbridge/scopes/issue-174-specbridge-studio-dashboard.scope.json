@@ -1,7 +1,7 @@
 {
   "contract_id": "issue-174-specbridge-studio-dashboard",
   "run_id": "sb-20260609-cc04eda9",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     "README.md",
     ".specbridge/context/CURRENT_GOAL.md",
