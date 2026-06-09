@@ -72,8 +72,34 @@ if (Test-Path -LiteralPath ".github/workflows" -PathType Container) {
   }
 
   if ($changedWorkflowFiles.Count -gt 0) {
+    # Default: workflow changes are blocked. A change passes only when an
+    # unexpired entry in the workflow-change authorization registry covers
+    # that exact file. The registry records who authorized it and why.
+    $authorizedFiles = @()
+    $registryPath = ".specbridge/policies/workflow-change-authorizations.json"
+    if (Test-Path -LiteralPath $registryPath -PathType Leaf) {
+      try {
+        $registry = Get-Content -LiteralPath $registryPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        $today = (Get-Date).Date
+        foreach ($auth in @($registry.authorizations)) {
+          if ($null -eq $auth) { continue }
+          if ([string]::IsNullOrWhiteSpace($auth.authorized_by) -or [string]::IsNullOrWhiteSpace($auth.reason)) { continue }
+          $expires = $null
+          try { $expires = [datetime]::ParseExact($auth.expires_at, "yyyy-MM-dd", $null) } catch { continue }
+          if ($expires.Date -lt $today) { continue }
+          $authorizedFiles += @($auth.files)
+        }
+      } catch {
+        Write-Failure "workflow-change authorization registry is not valid JSON: $registryPath"
+      }
+    }
+
     foreach ($workflow in $changedWorkflowFiles) {
-      Write-Failure "standardization package must not modify workflow security controls: $workflow"
+      if ($authorizedFiles -contains $workflow) {
+        Write-Output "Workflow change authorized by registry entry: $workflow"
+      } else {
+        Write-Failure "standardization package must not modify workflow security controls: $workflow (no unexpired authorization in $registryPath)"
+      }
     }
   }
 }

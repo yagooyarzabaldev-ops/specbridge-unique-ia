@@ -1,0 +1,16 @@
+{
+  "schema_version": "1",
+  "description": "Explicit, auditable authorizations for changes under .github/workflows/. The default remains: any workflow change fails validate-standard-ci-authority.ps1. Each entry authorizes specific workflow files for a bounded time window with a recorded human authorizer and reason. Expired or unlisted changes still fail.",
+  "authorizations": [
+    {
+      "id": "wf-auth-20260609-foundation-dedup",
+      "files": [
+        ".github/workflows/foundation-validation.yml"
+      ],
+      "reason": "Remove the seven individual validator steps that specbridge-smoke.ps1 already runs; the smoke step remains the single required gate, so no validation is removed from CI, only duplication.",
+      "authorized_by": "repository owner (operator chat session, 2026-06-09)",
+      "granted_at": "2026-06-09",
+      "expires_at": "2026-06-16"
+    }
+  ]
+}
