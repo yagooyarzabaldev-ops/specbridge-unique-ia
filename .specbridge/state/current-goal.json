@@ -1,10 +1,10 @@
 {
-  "current_task_id": "issue-172-specbridge-trace-run-id",
-  "title": "Add specbridge trace run_id propagation",
-  "run_id": "sb-20260608-abcd0172",
+  "current_task_id": "issue-174-specbridge-studio-dashboard",
+  "run_id": "sb-20260609-cc04eda9",
+  "title": "Build SpecBridge Studio dashboard MVP",
   "status": "active",
-  "primary_pr": 173,
+  "primary_pr": null,
   "closure_pr": null,
-  "last_updated": "2026-06-08T18:47:16.7248362+00:00",
+  "last_updated": "2026-06-09T02:06:06.3476868+00:00",
   "updated_by": "specbridge-intake"
 }

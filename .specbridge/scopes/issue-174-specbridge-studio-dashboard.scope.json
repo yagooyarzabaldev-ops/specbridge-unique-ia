@@ -1,0 +1,29 @@
+{
+  "contract_id": "issue-174-specbridge-studio-dashboard",
+  "run_id": "sb-20260609-cc04eda9",
+  "status": "active",
+  "exclusive_write": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-174-specbridge-studio-dashboard.execution.md",
+    ".specbridge/scopes/issue-174-specbridge-studio-dashboard.scope.json",
+    ".specbridge/reports/issue-174-specbridge-studio-dashboard.final-report.json",
+    ".specbridge/audit-packets/issue-174-specbridge-studio-dashboard.audit-packet.json",
+    ".specbridge/audits/issue-174-specbridge-studio-dashboard.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-174-specbridge-studio-dashboard.github-mutation-evidence.json",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "docs/specbridge-studio.html",
+    ".specbridge/state/current-goal.json",
+    ".specbridge/scopes/issue-172-specbridge-trace-run-id.scope.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-174-specbridge-studio-dashboard.final-report.json"
+}

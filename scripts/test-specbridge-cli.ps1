@@ -596,6 +596,53 @@ try {
       }
     }
 
+    # generate-studio-dashboard
+    $studioResult = Invoke-Cli -Arguments @("generate-studio-dashboard")
+    Assert-Success `
+      -Name "generate-studio-dashboard" `
+      -Result $studioResult `
+      -ExpectedPattern '"command"\s*:\s*"generate-studio-dashboard"'
+    if ($studioResult.ExitCode -eq 0) {
+      $studioHtmlPath = Join-Path (Get-Location).Path "docs/specbridge-studio.html"
+      if (-not (Test-Path $studioHtmlPath)) {
+        Write-Output "FAIL generate-studio-dashboard: docs/specbridge-studio.html not written."
+        $script:failed = $true
+      } else {
+        $studioHtml = Get-Content $studioHtmlPath -Raw
+        $studioChecks = @(
+          @{ pattern = "SpecBridge Studio";                 label = "title present" },
+          @{ pattern = "Current Goal";                      label = "current-goal section present" },
+          @{ pattern = "Fix-Plan Alerts";                   label = "fix-plan section present" },
+          @{ pattern = "Runs \(";                           label = "runs section present" },
+          @{ pattern = "Scopes \(";                         label = "scopes section present" },
+          @{ pattern = "generate-studio-dashboard";         label = "footer command label present" }
+        )
+        foreach ($chk in $studioChecks) {
+          if ($studioHtml -notmatch $chk.pattern) {
+            Write-Output "FAIL generate-studio-dashboard: HTML missing $($chk.label)."
+            $script:failed = $true
+          } else {
+            Write-Output "PASS generate-studio-dashboard: $($chk.label)."
+          }
+        }
+        # JSON output must include key fields
+        try {
+          $studioJson = $studioResult.Text | ConvertFrom-Json
+          $missingFields = @("command","output","current_goal","runs","active_scopes","completed_scopes","fix_plan_actions") |
+            Where-Object { $null -eq $studioJson.$_ -and $studioJson.$_ -ne 0 }
+          if ($missingFields.Count -gt 0) {
+            Write-Output "FAIL generate-studio-dashboard: JSON missing fields: $($missingFields -join ', ')."
+            $script:failed = $true
+          } else {
+            Write-Output "PASS generate-studio-dashboard: JSON output has all required fields."
+          }
+        } catch {
+          Write-Output "FAIL generate-studio-dashboard: JSON output not parseable."
+          $script:failed = $true
+        }
+      }
+    }
+
     # lifecycle-guard: verify output structure regardless of exit code (violations may exist in repo state)
     $lgResult = Invoke-Cli -Arguments @("lifecycle-guard")
     if ($lgResult.Text -notmatch '"command"\s*:\s*"lifecycle-guard"') {

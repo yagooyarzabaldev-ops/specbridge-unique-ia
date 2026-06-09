@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "issue-to-merge-plan", "issue-to-merge-github", "specbridge-intake", "specbridge-doctor", "generate-dashboard", "lifecycle-guard", "quickstart", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "issue-to-merge-plan", "issue-to-merge-github", "specbridge-intake", "specbridge-doctor", "generate-dashboard", "generate-studio-dashboard", "lifecycle-guard", "quickstart", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -6394,6 +6394,242 @@ $scopeRows
   exit 0
 }
 
+function Invoke-GenerateStudioDashboardCommand {
+  # ── Load current-goal ────────────────────────────────────────────────────
+  $cgPath = Join-Path $repoRoot ".specbridge/state/current-goal.json"
+  $cg = $null
+  if (Test-Path $cgPath) {
+    try { $cg = Get-Content $cgPath -Raw -Encoding UTF8 | ConvertFrom-Json } catch {}
+  }
+  $cgTaskId  = if ($cg) { $cg.current_task_id } else { "unknown" }
+  $cgTitle   = if ($cg -and $cg.title)    { $cg.title }    else { "" }
+  $cgStatus  = if ($cg -and $cg.status)   { $cg.status }   else { "unknown" }
+  $cgRunId   = if ($cg -and $cg.run_id)   { $cg.run_id }   else { "" }
+  $cgPr      = if ($cg -and $cg.primary_pr) { $cg.primary_pr } else { "" }
+
+  # ── Load scopes ──────────────────────────────────────────────────────────
+  $scopes = [System.Collections.Generic.List[object]]::new()
+  $scopeDir = Join-Path $repoRoot ".specbridge/scopes"
+  if (Test-Path $scopeDir) {
+    foreach ($sf in (Get-ChildItem $scopeDir -Filter "*.scope.json")) {
+      try { $scopes.Add((Get-Content $sf.FullName -Raw -Encoding UTF8 | ConvertFrom-Json)) } catch {}
+    }
+  }
+  $activeScopes    = @($scopes | Where-Object { $_.status -eq "active" })
+  $completedScopes = @($scopes | Where-Object { $_.status -eq "completed" })
+
+  # ── Load ledger ──────────────────────────────────────────────────────────
+  $ledgerPath = Join-Path $repoRoot ".specbridge/ledger/operations.ndjson"
+  $ledgerEntries = [System.Collections.Generic.List[object]]::new()
+  $ledgerPresent = Test-Path $ledgerPath
+  if ($ledgerPresent) {
+    foreach ($line in (Get-Content $ledgerPath -Encoding UTF8)) {
+      try { $obj = $line | ConvertFrom-Json; if ($null -ne $obj) { $ledgerEntries.Add($obj) } } catch {}
+    }
+  }
+
+  # ── Build run map (run_id to {task_id, ops[]}) ──────────────────────────
+  $runMap = @{}
+  foreach ($e in $ledgerEntries) {
+    if ($e.run_id) {
+      if (-not $runMap.ContainsKey($e.run_id)) {
+        $runMap[$e.run_id] = @{ task_id=$e.task_id; ops=[System.Collections.Generic.List[object]]::new() }
+      }
+      $runMap[$e.run_id].ops.Add(@{
+        operation = $e.operation
+        status    = $e.status
+        timestamp = if ($e.timestamp) { $e.timestamp } else { "" }
+      })
+    }
+  }
+  # Augment: scopes with run_id not yet in ledger
+  foreach ($sc in $scopes) {
+    if ($sc.run_id -and -not $runMap.ContainsKey($sc.run_id)) {
+      $runMap[$sc.run_id] = @{ task_id=$sc.contract_id; ops=[System.Collections.Generic.List[object]]::new() }
+    }
+  }
+
+  # ── Closure evidence map ─────────────────────────────────────────────────
+  $closureMap = @{}
+  $evidenceDir = Join-Path $repoRoot ".specbridge/github-evidence"
+  if (Test-Path $evidenceDir) {
+    foreach ($cf in (Get-ChildItem $evidenceDir -Filter "*.closure.json")) {
+      $tid = $cf.BaseName -replace "\.closure$", ""
+      $closureMap[$tid] = $cf.FullName
+    }
+  }
+
+  # ── Fix-plan (offline) ───────────────────────────────────────────────────
+  $fixPlanActions = @()
+  try {
+    $fpRaw = & $PSCommandPath -Command specbridge-doctor -FixPlan -Offline 2>&1
+    if ($LASTEXITCODE -eq 0) {
+      $fpJson = ($fpRaw | Out-String).Trim() | ConvertFrom-Json
+      if ($fpJson.actions) { $fixPlanActions = @($fpJson.actions) }
+    }
+  } catch {}
+
+  # ── Build HTML ───────────────────────────────────────────────────────────
+  $generatedAt = Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"
+  $repoSlug    = ($RepositoryUrl -replace "https://github\.com/", "")
+
+  # Current-goal section
+  $cgPrLink = if ($cgPr) { "<a href='https://github.com/$repoSlug/pull/$cgPr' style='color:#7ab4f5'>#$cgPr</a>" } else { "&mdash;" }
+  $cgRunDisplay = if ($cgRunId) { "<code>$cgRunId</code>" } else { "&mdash;" }
+  $cgStatusColor = switch ($cgStatus) {
+    "active"             { "#e6a817" }
+    "ready_for_next_task"{ "#2d9e5f" }
+    default              { "#888" }
+  }
+  $cgHtml = @"
+<table><tr><th>Field</th><th>Value</th></tr>
+<tr><td>Task ID</td><td><code>$cgTaskId</code></td></tr>
+<tr><td>Title</td><td>$cgTitle</td></tr>
+<tr><td>Status</td><td><span style='color:$cgStatusColor'>$cgStatus</span></td></tr>
+<tr><td>Run ID</td><td>$cgRunDisplay</td></tr>
+<tr><td>Primary PR</td><td>$cgPrLink</td></tr>
+</table>
+"@
+
+  # Fix-plan alerts section
+  $fpHtml = if ($fixPlanActions.Count -eq 0) {
+    "<p style='color:#2d9e5f'>No fix-plan actions &ndash; plan is healthy.</p>"
+  } else {
+    $rows = ""
+    foreach ($a in $fixPlanActions) {
+      $sev = if ($a.severity) { $a.severity } else { "warning" }
+      $sevColor = if ($sev -eq "error") { "#c0392b" } else { "#e6a817" }
+      $tid = if ($a.task_id) { $a.task_id } else { "&mdash;" }
+      $rows += "<tr><td style='color:$sevColor'>$sev</td><td><code>$($a.id)</code></td><td>$tid</td><td style='font-size:.8rem;color:#aaa'>$($a.diagnosis)</td></tr>"
+    }
+    "<table><tr><th>Severity</th><th>Action</th><th>Task</th><th>Diagnosis</th></tr>$rows</table>"
+  }
+
+  # Runs section
+  $runsHtml = if ($runMap.Count -eq 0) {
+    "<p style='color:#888'>No runs recorded.</p>"
+  } else {
+    $blocks = ""
+    foreach ($rid in $runMap.Keys) {
+      $entry     = $runMap[$rid]
+      $tid       = $entry.task_id
+      $ops       = @($entry.ops)
+      $hasClosure= $closureMap.ContainsKey($tid)
+      $closureBadge = if ($hasClosure) { "<span style='color:#2d9e5f'>&#10003; closure</span>" } else { "<span style='color:#888'>no closure</span>" }
+      $opsComplete  = ($ops | Where-Object { $_.operation -eq "post_merge_memory" }).Count -gt 0
+      $runStatusBadge = if ($opsComplete) { "<span style='color:#2d9e5f'>complete</span>" } else { "<span style='color:#e6a817'>in progress</span>" }
+      $opRows = ""
+      foreach ($op in $ops) {
+        $sc = if ($op.status -match "^(success|checks_passed|verified_existing|already_closed|already_merged|already_exists|merge_completed)$") { "#2d9e5f" } else { "#c0392b" }
+        $ts = if ($op.timestamp) { "<span style='color:#555;font-size:.75rem'>$($op.timestamp)</span>" } else { "" }
+        $opRows += "<tr><td>$($op.operation)</td><td style='color:$sc'>$($op.status)</td><td>$ts</td></tr>"
+      }
+      $opTable = if ($opRows) {
+        "<table style='margin-top:8px'><tr><th>Operation</th><th>Status</th><th>Timestamp</th></tr>$opRows</table>"
+      } else {
+        "<p style='color:#888;font-size:.85rem;margin:8px 0 0'>No ledger entries yet.</p>"
+      }
+      $blocks += @"
+<div class='run-card'>
+<div class='run-header'>
+  <code class='run-id'>$rid</code>
+  $runStatusBadge &nbsp; $closureBadge
+</div>
+<div class='run-task'>Task: <code>$tid</code></div>
+$opTable
+</div>
+"@
+    }
+    $blocks
+  }
+
+  # Scopes section
+  $scopeRows = ""
+  foreach ($sc in ($scopes | Sort-Object { $_.status } -Descending)) {
+    $badge = if ($sc.status -eq "completed") {
+      "<span style='color:#2d9e5f'>&#10003; completed</span>"
+    } else {
+      "<span style='color:#e6a817'>&#9654; active</span>"
+    }
+    $runIdCell = if ($sc.run_id) { "<code style='font-size:.8rem'>$($sc.run_id)</code>" } else { "&mdash;" }
+    $scopeRows += "<tr><td><code>$($sc.contract_id)</code></td><td>$badge</td><td>$runIdCell</td></tr>"
+  }
+  $scopeTableHtml = "<table><tr><th>Contract ID</th><th>Status</th><th>Run ID</th></tr>$scopeRows</table>"
+
+  $ledgerNote = if (-not $ledgerPresent) {
+    "<p style='color:#e6a817;font-size:.85rem'>&#9888; Ledger not found &ndash; first apply-mode run has not started.</p>"
+  } else { "" }
+
+  $html = @"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SpecBridge Studio</title>
+<style>
+  body{font-family:system-ui,sans-serif;background:#0f1117;color:#e0e0e0;margin:0;padding:24px}
+  h1{font-size:1.5rem;margin-bottom:4px}
+  h2{font-size:1rem;margin:28px 0 8px;color:#aaa;text-transform:uppercase;letter-spacing:.05em}
+  .sub{color:#888;font-size:.85rem;margin-bottom:28px}
+  .section{background:#1a1d27;border-radius:8px;padding:16px;margin-bottom:16px}
+  table{width:100%;border-collapse:collapse;background:#1a1d27;border-radius:8px;overflow:hidden;margin-bottom:0}
+  th{background:#23263a;padding:10px 14px;text-align:left;font-size:.78rem;color:#888;text-transform:uppercase}
+  td{padding:9px 14px;border-top:1px solid #23263a;font-size:.85rem}
+  code{background:#23263a;padding:2px 6px;border-radius:4px;font-size:.82em}
+  .run-card{background:#1a1d27;border:1px solid #23263a;border-radius:8px;padding:16px;margin-bottom:12px}
+  .run-header{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  .run-id{font-size:.9rem;background:#23263a;padding:3px 8px;border-radius:4px}
+  .run-task{font-size:.82rem;color:#888;margin-bottom:4px}
+  .run-card table{background:#23263a}
+  .run-card th{background:#2e3248}
+  .fp-section{background:#1a1a0f;border:1px solid #4a4a1a;border-radius:8px;padding:16px;margin-bottom:16px}
+  .fp-section table{background:#1a1a0f}
+  .fp-section th{background:#2e2e18}
+  .footer{color:#555;font-size:.75rem;margin-top:28px}
+  a{color:#7ab4f5}
+</style>
+</head>
+<body>
+<h1>SpecBridge Studio</h1>
+<p class="sub">Generated $generatedAt &mdash; repo: $repoSlug</p>
+
+<h2>Current Goal</h2>
+<div class="section">$cgHtml</div>
+
+<h2>Fix-Plan Alerts</h2>
+<div class="fp-section">$fpHtml</div>
+
+$ledgerNote
+<h2>Runs ($($runMap.Count))</h2>
+$runsHtml
+
+<h2>Scopes ($($scopes.Count) total &mdash; $($activeScopes.Count) active, $($completedScopes.Count) completed)</h2>
+<div class="section">$scopeTableHtml</div>
+
+<p class="footer">SpecBridge Studio &mdash; generate-studio-dashboard &mdash; $generatedAt</p>
+</body>
+</html>
+"@
+
+  $outPath = Join-Path $repoRoot "docs/specbridge-studio.html"
+  $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+  [System.IO.File]::WriteAllText($outPath, $html, $utf8NoBom)
+
+  Write-CliJson ([ordered]@{
+    command        = "generate-studio-dashboard"
+    output         = "docs/specbridge-studio.html"
+    current_goal   = $cgTaskId
+    runs           = $runMap.Count
+    active_scopes  = $activeScopes.Count
+    completed_scopes = $completedScopes.Count
+    ledger_entries = $ledgerEntries.Count
+    fix_plan_actions = $fixPlanActions.Count
+    status         = "generated"
+  })
+  exit 0
+}
+
 function Invoke-LifecycleGuardCommand {
   $violations = [System.Collections.Generic.List[string]]::new()
   $warnings   = [System.Collections.Generic.List[string]]::new()
@@ -6573,6 +6809,7 @@ switch ($Command) {
   "specbridge-intake" { Invoke-SpecbridgeIntakeCommand }
   "specbridge-doctor" { Invoke-SpecbridgeDoctorCommand }
   "generate-dashboard" { Invoke-GenerateDashboardCommand }
+  "generate-studio-dashboard" { Invoke-GenerateStudioDashboardCommand }
   "lifecycle-guard" { Invoke-LifecycleGuardCommand }
   "quickstart" { Invoke-QuickstartCommand }
   "v5-pilot-status" { Invoke-V5PilotStatusCommand }
