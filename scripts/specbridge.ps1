@@ -161,17 +161,20 @@ function Write-LedgerEntry {
     [string] $TaskId,
     [string] $Operation,
     [string] $Status,
-    [string] $Detail = ""
+    [string] $Detail = "",
+    [string] $RunId  = ""
   )
   $ledgerDir = Join-Path $repoRoot ".specbridge/ledger"
   if (-not (Test-Path $ledgerDir)) { New-Item -ItemType Directory -Force -Path $ledgerDir | Out-Null }
-  $entry = [ordered]@{
+  $entryObj = [ordered]@{
     task_id   = $TaskId
     operation = $Operation
     status    = $Status
     detail    = $Detail
     timestamp = (Get-Date -Format "o")
-  } | ConvertTo-Json -Compress
+  }
+  if (-not [string]::IsNullOrWhiteSpace($RunId)) { $entryObj["run_id"] = $RunId }
+  $entry = $entryObj | ConvertTo-Json -Compress
   $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
   $ledgerPath = Join-Path $ledgerDir "operations.ndjson"
   $sw = New-Object System.IO.StreamWriter($ledgerPath, $true, $utf8NoBom)
@@ -1248,6 +1251,16 @@ function Invoke-IssueToMergeGithubCommand {
   $safeTaskId = Convert-ToSafeName -Value $TaskId -FieldName "task_id"
   $contractSeed = New-StandardLoopContractSeed -TaskIdentifier $safeTaskId
 
+  # Read run_id from scope file (set by specbridge-intake; empty string if not present or not an intake-generated task)
+  $taskRunId = ""
+  $taskScopePath = ".specbridge/scopes/$safeTaskId.scope.json"
+  if (Test-Path (Join-Path $repoRoot $taskScopePath)) {
+    try {
+      $taskScope = (Get-Content (Join-Path $repoRoot $taskScopePath) -Raw -Encoding UTF8) | ConvertFrom-Json
+      if ($taskScope.run_id) { $taskRunId = $taskScope.run_id }
+    } catch {}
+  }
+
   $issueReference = $RelatedIssue
   if ([string]::IsNullOrWhiteSpace($issueReference)) {
     $issueReference = $contractSeed.issue_reference
@@ -1446,7 +1459,7 @@ function Invoke-IssueToMergeGithubCommand {
           status       = if ($ghExitCode -eq 0) { "success" } else { "failed" }
         }
       }
-      Write-LedgerEntry -TaskId $safeTaskId -Operation "issue_create" -Status $githubMutationResult.status -Detail $(if ($githubMutationResult.issue_url) { $githubMutationResult.issue_url } else { "" })
+      Write-LedgerEntry -TaskId $safeTaskId -Operation "issue_create" -Status $githubMutationResult.status -Detail $(if ($githubMutationResult.issue_url) { $githubMutationResult.issue_url } else { "" }) -RunId $taskRunId
     }
 
     if ($applyAllowed -and $selectedOperations -contains "pr_open") {
@@ -1495,7 +1508,7 @@ function Invoke-IssueToMergeGithubCommand {
         gh_output = $allOutputStr.Trim()
         status = if ($ghExitCode -eq 0) { "success" } elseif ($allOutputStr -match "already exists") { "already_exists" } else { "failed" }
       }
-      Write-LedgerEntry -TaskId $safeTaskId -Operation "pr_open" -Status $githubMutationResult.status -Detail $(if ($githubMutationResult.pr_url) { $githubMutationResult.pr_url } else { "" })
+      Write-LedgerEntry -TaskId $safeTaskId -Operation "pr_open" -Status $githubMutationResult.status -Detail $(if ($githubMutationResult.pr_url) { $githubMutationResult.pr_url } else { "" }) -RunId $taskRunId
     }
 
     if ($applyAllowed -and $selectedOperations -contains "ci_wait") {
@@ -1554,7 +1567,7 @@ function Invoke-IssueToMergeGithubCommand {
           status       = $checksStatus
         }
       }
-      Write-LedgerEntry -TaskId $safeTaskId -Operation "ci_wait" -Status $githubMutationResult.status -Detail "pr #$($githubMutationResult.pr_number)"
+      Write-LedgerEntry -TaskId $safeTaskId -Operation "ci_wait" -Status $githubMutationResult.status -Detail "pr #$($githubMutationResult.pr_number)" -RunId $taskRunId
     }
 
     if ($applyAllowed -and $selectedOperations -contains "merge") {
@@ -1615,7 +1628,7 @@ function Invoke-IssueToMergeGithubCommand {
           status       = $mergeStatus
         }
       }
-      Write-LedgerEntry -TaskId $safeTaskId -Operation "merge" -Status $githubMutationResult.status -Detail "pr #$($githubMutationResult.pr_number)"
+      Write-LedgerEntry -TaskId $safeTaskId -Operation "merge" -Status $githubMutationResult.status -Detail "pr #$($githubMutationResult.pr_number)" -RunId $taskRunId
     }
 
     # issue_close runs AFTER merge and only when merge is confirmed complete
@@ -1641,14 +1654,14 @@ function Invoke-IssueToMergeGithubCommand {
         gh_output    = ($ghOutput -join " ").Trim()
         status       = if ($ghExitCode -eq 0) { "success" } elseif (($ghOutput -join " ") -match "already closed|issue is already") { "already_closed" } else { "failed" }
       }
-      Write-LedgerEntry -TaskId $safeTaskId -Operation "issue_close" -Status $githubMutationResult.status -Detail "issue #$($githubMutationResult.issue_number)"
+      Write-LedgerEntry -TaskId $safeTaskId -Operation "issue_close" -Status $githubMutationResult.status -Detail "issue #$($githubMutationResult.issue_number)" -RunId $taskRunId
     } elseif ($applyAllowed -and (-not $mergeCompleted) -and $selectedOperations -contains "issue_close") {
       $githubMutationResult = [ordered]@{
         operation    = "issue_close"
         merge_status = if ($mergeCompleted) { "merge_completed" } else { "not_merge_completed" }
         status       = "blocked_merge_not_completed"
       }
-      Write-LedgerEntry -TaskId $safeTaskId -Operation "issue_close" -Status "blocked_merge_not_completed" -Detail "merge not confirmed complete"
+      Write-LedgerEntry -TaskId $safeTaskId -Operation "issue_close" -Status "blocked_merge_not_completed" -Detail "merge not confirmed complete" -RunId $taskRunId
     }
 
     if ($applyAllowed -and $selectedOperations -contains "post_merge_memory") {
@@ -1676,7 +1689,7 @@ function Invoke-IssueToMergeGithubCommand {
           repository   = $repoSlug
           status       = "blocked_pr_not_merged"
         }
-        Write-LedgerEntry -TaskId $safeTaskId -Operation "post_merge_memory" -Status "blocked_pr_not_merged" -Detail "pr #$mergedPrNumber state=$primaryPrActualState"
+        Write-LedgerEntry -TaskId $safeTaskId -Operation "post_merge_memory" -Status "blocked_pr_not_merged" -Detail "pr #$mergedPrNumber state=$primaryPrActualState" -RunId $taskRunId
       } else {
 
       $previousEap = $ErrorActionPreference
@@ -1709,6 +1722,7 @@ function Invoke-IssueToMergeGithubCommand {
         $closureEvidence = [ordered]@{
           schema_version = "1"
           task_id        = $safeTaskId
+          run_id         = $taskRunId
           closure_type   = "post_merge_closure"
           closed_at      = (Get-Date -Format "yyyy-MM-dd")
           pr_merged      = $true
@@ -1792,7 +1806,7 @@ function Invoke-IssueToMergeGithubCommand {
           }
         }
       }
-      Write-LedgerEntry -TaskId $safeTaskId -Operation "post_merge_memory" -Status $githubMutationResult.status -Detail $(if ($githubMutationResult.closure_pr_url) { $githubMutationResult.closure_pr_url } else { "" })
+      Write-LedgerEntry -TaskId $safeTaskId -Operation "post_merge_memory" -Status $githubMutationResult.status -Detail $(if ($githubMutationResult.closure_pr_url) { $githubMutationResult.closure_pr_url } else { "" }) -RunId $taskRunId
       } # end else (primaryPrActualState eq MERGED)
     }
   }
@@ -5249,6 +5263,7 @@ function Invoke-SpecbridgeIntakeCommand {
   $taskGoal  = if ([string]::IsNullOrWhiteSpace($Goal))  { "Run the governed SpecBridge issue-to-merge loop for $safeId." } else { $Goal }
   $today     = Get-Date -Format "yyyy-MM-dd"
   $branch    = "codex/$safeId"
+  $runId     = "sb-$(Get-Date -Format 'yyyyMMdd')-$([guid]::NewGuid().ToString('N').Substring(0, 8))"
 
   $contractPath  = ".specbridge/contracts/$safeId.execution.md"
   $scopePath     = ".specbridge/scopes/$safeId.scope.json"
@@ -5301,6 +5316,7 @@ function Invoke-SpecbridgeIntakeCommand {
 ## Contract Metadata
 
 - contract_id: $safeId
+- run_id: $runId
 - related_issue: $relatedIssueUrl
 - created_by: specbridge-intake
 - created_at: $today
@@ -5398,6 +5414,7 @@ Task is complete when all acceptance criteria are met and all required validatio
 
   $scopeObj = [ordered]@{
     contract_id    = $safeId
+    run_id         = $runId
     status         = "active"
     exclusive_write = @(
       "README.md",
@@ -5418,6 +5435,7 @@ Task is complete when all acceptance criteria are met and all required validatio
   $evidenceObj = [ordered]@{
     schema_version             = "1"
     task_id                    = $safeId
+    run_id                     = $runId
     evidence_type              = "github_mutation_evidence"
     collected_by               = "specbridge-intake"
     collected_at               = $today
@@ -5439,6 +5457,7 @@ Task is complete when all acceptance criteria are met and all required validatio
   $currentGoalPath = ".specbridge/state/current-goal.json"
   $currentGoalObj = [ordered]@{
     current_task_id  = $safeId
+    run_id           = $runId
     title            = $taskTitle
     status           = "active"
     primary_pr       = $null
@@ -5479,6 +5498,7 @@ Task is complete when all acceptance criteria are met and all required validatio
   Write-CliJson ([ordered]@{
     command        = "specbridge-intake"
     task_id        = $safeId
+    run_id         = $runId
     title          = $taskTitle
     goal           = $taskGoal
     branch         = $branch
@@ -5547,6 +5567,7 @@ function Invoke-DoctorFixPlanCommand {
     foreach ($line in (Get-Content $ledgerPath -Encoding UTF8)) {
       try {
         $e = $line | ConvertFrom-Json
+        if ($null -eq $e) { continue }
         $ledgerEntries += $e
         if ($e.operation -eq "issue_close"       -and $e.status -match "^(success|already_closed)$") { $closedTaskIds[$e.task_id]   = $e }
         if ($e.operation -eq "merge"              -and $e.status -match "^(success|merge_completed|already_merged)$") { $mergedTaskIds[$e.task_id]   = $e }
@@ -5750,12 +5771,13 @@ function Invoke-DoctorFixPlanCommand {
   if ($null -ne $currentGoal) {
     $cgStatus = $currentGoal.status
     $cgTaskId = $currentGoal.current_task_id
-    if ($cgStatus -eq "active" -and $activeScopes.Count -eq 0) {
+    $cgMatchingActiveScopes = @($activeScopes | Where-Object { $_.contract_id -eq $cgTaskId })
+    if ($cgStatus -eq "active" -and $cgMatchingActiveScopes.Count -eq 0) {
       $actions.Add([ordered]@{
         id                 = "current_goal_active_but_no_active_scope"
         severity           = "warning"
         task_id            = $cgTaskId
-        diagnosis          = "current-goal.json status is 'active' for task '$cgTaskId' but no scope file has status='active'."
+        diagnosis          = "current-goal.json status is 'active' for task '$cgTaskId' but no scope file with status='active' exists for that task."
         recommended_action = "regenerate_dashboard"
         command            = "powershell -ExecutionPolicy Bypass -Command `"& '.\scripts\specbridge.ps1' -Command generate-dashboard`""
         safe_to_automate   = $true
@@ -5840,7 +5862,8 @@ function Invoke-DoctorFixPlanCommand {
     }
   }
 
-  # I: ledger missing
+  # I: ledger missing + incomplete runs
+  $runOpMap = @{}
   if (-not (Test-Path $ledgerPath)) {
     $actions.Add([ordered]@{
       id                 = "ledger_missing"
@@ -5852,6 +5875,54 @@ function Invoke-DoctorFixPlanCommand {
       safe_to_automate   = $false
     })
     $warningIds.Add("ledger_missing")
+  } else {
+    # Build run map from ledger (entries with run_id)
+    foreach ($line in (Get-Content $ledgerPath -Encoding UTF8)) {
+      try {
+        $e = $line | ConvertFrom-Json
+        if ($e.run_id) {
+          if (-not $runOpMap.ContainsKey($e.run_id)) { $runOpMap[$e.run_id] = @{ ops=@(); task_id=$e.task_id } }
+          $runOpMap[$e.run_id].ops += $e.operation
+        }
+      } catch {}
+    }
+    # I2: run has merge recorded but no post_merge_memory — incomplete run
+    foreach ($rid in $runOpMap.Keys) {
+      $ops = $runOpMap[$rid].ops
+      $tid = $runOpMap[$rid].task_id
+      $mergeOps = @("success","merge_completed","already_merged")
+      $hasMerge = (@($ledgerEntries | Where-Object { $_.run_id -eq $rid -and $_.operation -eq "merge" -and $_.status -match "^(success|merge_completed|already_merged)$" })).Count -gt 0
+      $hasPostMerge = ($ops -contains "post_merge_memory")
+      if ($hasMerge -and -not $hasPostMerge) {
+        $actions.Add([ordered]@{
+          id                 = "run_merge_without_closure"
+          severity           = "warning"
+          task_id            = $tid
+          diagnosis          = "Run '$rid' for '$tid' has a completed merge in the ledger but no post_merge_memory entry. Run may be incomplete."
+          recommended_action = "run_post_merge_memory"
+          command            = "powershell -ExecutionPolicy Bypass -Command `"& '.\scripts\specbridge.ps1' -Command issue-to-merge-github -TaskId '$tid' -GithubOperation @('post_merge_memory') -MutationMode apply -ConfirmGithubMutation -Force`""
+          safe_to_automate   = $false
+        })
+        $warningIds.Add("run_merge_without_closure:$rid")
+      }
+    }
+  }
+  # I1: scope has run_id but no ledger entry — intake created, apply-mode never ran
+  # Runs whether ledger exists or not; $runOpMap is empty when ledger is missing
+  foreach ($sc in ($activeScopes + $completedScopes)) {
+    if ($sc.run_id -and -not $runOpMap.ContainsKey($sc.run_id)) {
+      $tid = $sc.contract_id
+      $actions.Add([ordered]@{
+        id                 = "intake_run_never_started"
+        severity           = "warning"
+        task_id            = $tid
+        diagnosis          = "Run '$($sc.run_id)' was created by specbridge-intake for '$tid' but no ledger entry exists. Apply-mode has not started."
+        recommended_action = "run_apply_mode_from_intake_branch"
+        command            = "git checkout codex/$tid && powershell -ExecutionPolicy Bypass -Command `"& '.\scripts\specbridge.ps1' -Command issue-to-merge-github -TaskId '$tid' -MutationMode apply -ConfirmGithubMutation -Force`""
+        safe_to_automate   = $false
+      })
+      $warningIds.Add("intake_run_never_started:$($sc.run_id)")
+    }
   }
 
   # J: stale locks
@@ -6028,6 +6099,7 @@ function Invoke-SpecbridgeDoctorCommand {
     foreach ($line in $ledgerLines) {
       try {
         $entry = $line | ConvertFrom-Json
+        if ($null -eq $entry) { continue }
         if ($entry.operation -eq "issue_close" -and $entry.status -match "^(success|already_closed)$") {
           $closedTasks[$entry.task_id] = $true
         }
@@ -6134,16 +6206,34 @@ function Invoke-GenerateDashboardCommand {
   $ledgerPath = Join-Path $repoRoot ".specbridge/ledger/operations.ndjson"
   if (Test-Path $ledgerPath) {
     foreach ($line in (Get-Content $ledgerPath -Encoding UTF8)) {
-      try { $obj = $line | ConvertFrom-Json; $ledgerEntries.Add($obj) } catch {}
+      try { $obj = $line | ConvertFrom-Json; if ($null -ne $obj) { $ledgerEntries.Add($obj) } } catch {}
     }
   }
   $opCounts = @{}
+  $runStats = @{ total=0; complete=0; in_progress=0 }
+  $runIds = @{}
   foreach ($e in $ledgerEntries) {
     if (-not $opCounts.ContainsKey($e.operation)) { $opCounts[$e.operation] = @{ total=0; passed=0 } }
     $opCounts[$e.operation].total++
     if ($e.status -match "^(success|checks_passed|verified_existing|already_closed|already_merged|already_exists)$") {
       $opCounts[$e.operation].passed++
     }
+    if ($e.run_id) {
+      if (-not $runIds.ContainsKey($e.run_id)) { $runIds[$e.run_id] = @{ ops=@(); task_id=$e.task_id } }
+      $runIds[$e.run_id].ops += $e.operation
+    }
+  }
+  # Augment with scope-only runs (intake created but apply-mode not started yet)
+  foreach ($sc in $scopes) {
+    if ($sc.run_id -and -not $runIds.ContainsKey($sc.run_id)) {
+      $runIds[$sc.run_id] = @{ ops=@(); task_id=$sc.contract_id }
+    }
+  }
+  $runStats.total = $runIds.Count
+  foreach ($rid in $runIds.Keys) {
+    $ops = $runIds[$rid].ops
+    if ($ops -contains "post_merge_memory") { $runStats.complete++ }
+    else { $runStats.in_progress++ }
   }
 
   $currentGoalTaskId = "unknown"
@@ -6177,6 +6267,7 @@ function Invoke-GenerateDashboardCommand {
         foreach ($line in (Get-Content $ldgrPath2 -Encoding UTF8)) {
           try {
             $entry = $line | ConvertFrom-Json
+            if ($null -eq $entry) { continue }
             if ($entry.operation -eq "issue_close" -and $entry.status -match "^(success|already_closed)$") {
               $matchingExec = @($dashExecPrs | Where-Object { $_.headRefName -match [regex]::Escape($entry.task_id) })
               if ($matchingExec.Count -gt 0) {
@@ -6261,6 +6352,11 @@ $debtHtml
   <div class="card"><div class="val">$($ledgerEntries.Count)</div><div class="lbl">Total Operations</div></div>
   <div class="card"><div class="val" title="$currentGoalTaskId">$currentGoalStatus</div><div class="lbl">Current Goal Status</div></div>
 </div>
+<div class="grid">
+  <div class="card"><div class="val">$($runStats.total)</div><div class="lbl">Total Runs</div></div>
+  <div class="card"><div class="val" style='color:#2d9e5f'>$($runStats.complete)</div><div class="lbl">Complete Runs</div></div>
+  <div class="card"><div class="val" style='color:#e6a817'>$($runStats.in_progress)</div><div class="lbl">Runs In Progress</div></div>
+</div>
 
 <h2>Current Goal</h2>
 <table><tr><th>Task ID</th><th>Status</th></tr>
@@ -6343,6 +6439,7 @@ function Invoke-LifecycleGuardCommand {
     foreach ($line in (Get-Content $ledgerPath -Encoding UTF8)) {
       try {
         $entry = $line | ConvertFrom-Json
+        if ($null -eq $entry) { continue }
         if ($entry.operation -eq "issue_close" -and $entry.status -match "^(success|already_closed)$") {
           $closedTasks[$entry.task_id] = $true
         }

@@ -1815,7 +1815,108 @@ try {
       }
     }
 
-    # 7. Human output format: contains "SpecBridge Fix Plan" text
+    # 7. specbridge-intake emits run_id in output and scope.json
+    $riTaskId = "trace-test-$(Get-Date -Format 'HHmmss')"
+    $riResult = Invoke-Cli -Arguments @("specbridge-intake", "-TaskId", $riTaskId, "-Title", "Trace test intake", "-Goal", "Verify run_id propagation.", "-RepositoryUrl", "https://github.com/test/test")
+    if ($riResult.ExitCode -eq 0) {
+      try {
+        $riJson    = $riResult.Text | ConvertFrom-Json
+        $riScopePath = ".specbridge/scopes/$riTaskId.scope.json"
+        $riScopeJson = if (Test-Path $riScopePath) { Get-Content $riScopePath -Raw | ConvertFrom-Json } else { $null }
+        $riContractPath = ".specbridge/contracts/$riTaskId.execution.md"
+        $riContractText = if (Test-Path $riContractPath) { Get-Content $riContractPath -Raw } else { "" }
+        $runIdPresent = ($riJson.PSObject.Properties.Name -contains "run_id") -and ($riJson.run_id -match "^sb-\d{8}-[a-f0-9]{8}$")
+        $scopeHasRunId = ($null -ne $riScopeJson) -and ($riScopeJson.PSObject.Properties.Name -contains "run_id") -and ($riScopeJson.run_id -eq $riJson.run_id)
+        $contractHasRunId = $riContractText -match "- run_id: sb-\d{8}-"
+        if ($runIdPresent -and $scopeHasRunId -and $contractHasRunId) {
+          Write-Output "PASS trace-run-id-propagation: intake emits run_id, scope.json and contract carry it."
+        } else {
+          Write-Output "FAIL trace-run-id-propagation: run_id=$($runIdPresent) scope=$($scopeHasRunId) contract=$($contractHasRunId)."
+          $script:failed = $true
+        }
+      } catch {
+        Write-Output "FAIL trace-run-id-propagation: output was not valid JSON."
+        $script:failed = $true
+      }
+    } else {
+      Write-Output "FAIL trace-run-id-propagation: specbridge-intake command failed."
+      $script:failed = $true
+    }
+    # cleanup
+    Remove-Item ".specbridge/contracts/$riTaskId.execution.md" -Force -ErrorAction SilentlyContinue
+    Remove-Item ".specbridge/scopes/$riTaskId.scope.json" -Force -ErrorAction SilentlyContinue
+    Remove-Item ".specbridge/github-evidence/$riTaskId.github-mutation-evidence.json" -Force -ErrorAction SilentlyContinue
+
+    # 8. fix-plan detects intake_run_never_started when scope has run_id but no ledger entry
+    $neverStartedId = "fp-never-started-$(Get-Date -Format 'HHmmss')"
+    $neverStartedScope = ".specbridge/scopes/$neverStartedId.scope.json"
+    try {
+      Set-Content $neverStartedScope -Encoding UTF8 -Value "{`"contract_id`":`"$neverStartedId`",`"run_id`":`"sb-20260101-abcd1234`",`"status`":`"active`"}"
+      $nsResult = Invoke-Cli -Arguments @("specbridge-doctor", "-FixPlan", "-Offline")
+      if ($nsResult.ExitCode -eq 0) {
+        try {
+          $nsJson = $nsResult.Text | ConvertFrom-Json
+          $nsAction = @($nsJson.actions | Where-Object { $_.id -eq "intake_run_never_started" -and $_.task_id -eq $neverStartedId })
+          if ($nsAction.Count -gt 0) {
+            Write-Output "PASS fix-plan-intake-run-never-started: action detected for scope with run_id and no ledger entry."
+          } else {
+            Write-Output "FAIL fix-plan-intake-run-never-started: expected intake_run_never_started for $neverStartedId not found."
+            $script:failed = $true
+          }
+        } catch {
+          Write-Output "FAIL fix-plan-intake-run-never-started: output was not valid JSON."
+          $script:failed = $true
+        }
+      } else {
+        Write-Output "FAIL fix-plan-intake-run-never-started: command failed."
+        $script:failed = $true
+      }
+    } finally {
+      Remove-Item $neverStartedScope -Force -ErrorAction SilentlyContinue
+    }
+
+    # 9. fix-plan detects run_merge_without_closure when ledger has merge but no post_merge_memory for same run_id
+    $rmwcId         = "fp-run-merge-no-closure-$(Get-Date -Format 'HHmmss')"
+    $rmwcScopePath  = ".specbridge/scopes/$rmwcId.scope.json"
+    $rmwcRunId      = "sb-20260101-eeee9999"
+    $rmwcLedgerDir  = ".specbridge/ledger"
+    $rmwcLedgerPath = "$rmwcLedgerDir/operations.ndjson"
+    $rmwcLedgerBak  = if (Test-Path $rmwcLedgerPath) { Get-Content $rmwcLedgerPath -Raw -Encoding UTF8 } else { $null }
+    try {
+      Set-Content $rmwcScopePath -Encoding UTF8 -Value "{`"contract_id`":`"$rmwcId`",`"run_id`":`"$rmwcRunId`",`"status`":`"active`"}"
+      New-Item -ItemType Directory -Force -Path $rmwcLedgerDir | Out-Null
+      $rmwcLine = "{`"task_id`":`"$rmwcId`",`"run_id`":`"$rmwcRunId`",`"operation`":`"merge`",`"status`":`"success`",`"timestamp`":`"2026-01-01T00:00:00Z`"}"
+      $newContent = if ($null -ne $rmwcLedgerBak) { $rmwcLedgerBak.TrimEnd() + "`n" + $rmwcLine } else { $rmwcLine }
+      Set-Content $rmwcLedgerPath -Encoding UTF8 -Value $newContent
+      $rmwcResult = Invoke-Cli -Arguments @("specbridge-doctor", "-FixPlan", "-Offline")
+      if ($rmwcResult.ExitCode -eq 0) {
+        try {
+          $rmwcJson = $rmwcResult.Text | ConvertFrom-Json
+          $rmwcAction = @($rmwcJson.actions | Where-Object { $_.id -eq "run_merge_without_closure" -and $_.task_id -eq $rmwcId })
+          if ($rmwcAction.Count -gt 0) {
+            Write-Output "PASS fix-plan-run-merge-without-closure: action detected for run with merge but no post_merge_memory."
+          } else {
+            Write-Output "FAIL fix-plan-run-merge-without-closure: expected action for $rmwcRunId not found."
+            $script:failed = $true
+          }
+        } catch {
+          Write-Output "FAIL fix-plan-run-merge-without-closure: output was not valid JSON."
+          $script:failed = $true
+        }
+      } else {
+        Write-Output "FAIL fix-plan-run-merge-without-closure: command failed."
+        $script:failed = $true
+      }
+    } finally {
+      Remove-Item $rmwcScopePath -Force -ErrorAction SilentlyContinue
+      if ($null -ne $rmwcLedgerBak) {
+        Set-Content $rmwcLedgerPath -Encoding UTF8 -Value $rmwcLedgerBak
+      } else {
+        Remove-Item $rmwcLedgerPath -Force -ErrorAction SilentlyContinue
+      }
+    }
+
+    # 10. Human output format: contains "SpecBridge Fix Plan" text
     $fpHumanResult = Invoke-Cli -Arguments @("specbridge-doctor", "-FixPlan", "-Offline", "-OutputFormat", "human")
     if ($fpHumanResult.ExitCode -eq 0 -and $fpHumanResult.Text -match "SpecBridge Fix Plan") {
       Write-Output "PASS fix-plan-human-output: 'SpecBridge Fix Plan' header present."

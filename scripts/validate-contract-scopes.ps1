@@ -17,6 +17,7 @@ $requiredProperties = @(
 
 $allowedProperties = @(
   "contract_id",
+  "run_id",
   "status",
   "exclusive_write",
   "read_only",
@@ -262,6 +263,13 @@ foreach ($file in $scopeFiles) {
 
   if ($status -and $allowedStatuses -notcontains $status) {
     Write-Failure "invalid status in $($file.FullName): contract=$contractId status=$status"
+  }
+
+  if ($propertyNames -contains "run_id") {
+    $runIdVal = $scope.run_id
+    if ($runIdVal -and $runIdVal -notmatch "^sb-\d{8}-[a-f0-9]{8}$") {
+      Write-Failure "invalid run_id format in $($file.FullName): contract=$contractId run_id=$runIdVal"
+    }
   }
 
   $exclusiveWrite = Normalize-PathArray `

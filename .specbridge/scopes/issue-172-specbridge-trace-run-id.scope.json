@@ -1,0 +1,28 @@
+{
+  "contract_id": "issue-172-specbridge-trace-run-id",
+  "run_id": "sb-20260608-abcd0172",
+  "status": "active",
+  "exclusive_write": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-172-specbridge-trace-run-id.execution.md",
+    ".specbridge/scopes/issue-172-specbridge-trace-run-id.scope.json",
+    ".specbridge/reports/issue-172-specbridge-trace-run-id.final-report.json",
+    ".specbridge/audit-packets/issue-172-specbridge-trace-run-id.audit-packet.json",
+    ".specbridge/audits/issue-172-specbridge-trace-run-id.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-172-specbridge-trace-run-id.github-mutation-evidence.json",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "docs/status-dashboard.html",
+    "scripts/validate-contract-scopes.ps1"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-172-specbridge-trace-run-id.final-report.json"
+}
