@@ -2,9 +2,9 @@
   "current_task_id": "issue-178-specbridge-multi-agent-orchestration-manifest",
   "run_id": "sb-20260609-06e1b8e9",
   "title": "Add SpecBridge multi-agent orchestration manifest",
-  "status": "active",
-  "primary_pr": null,
+  "status": "ready_for_next_task",
+  "primary_pr": 180,
   "closure_pr": null,
-  "last_updated": "2026-06-09T15:25:04.8877157+00:00",
-  "updated_by": "specbridge-intake"
+  "last_updated": "2026-06-09T19:40:00Z",
+  "updated_by": "specbridge-post-merge-closure"
 }

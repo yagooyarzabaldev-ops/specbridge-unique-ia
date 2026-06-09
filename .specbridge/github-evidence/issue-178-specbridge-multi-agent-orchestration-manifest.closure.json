@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-178-specbridge-multi-agent-orchestration-manifest",
+  "run_id": "sb-20260609-06e1b8e9",
+  "evidence_type": "closure_evidence",
+  "collected_by": "specbridge-post-merge-closure",
+  "collected_at": "2026-06-09",
+  "merge_commit": "3632fb3",
+  "primary_pr": 180,
+  "issue_closed": true,
+  "scope_status": "completed",
+  "all_validations_passed": true,
+  "notes": "PR #180 merged. specbridge-orchestrate command, validate-orchestrations.ps1, doctor orchestration_stale check and Studio orchestrations section implemented. Issue #178 closed."
+}

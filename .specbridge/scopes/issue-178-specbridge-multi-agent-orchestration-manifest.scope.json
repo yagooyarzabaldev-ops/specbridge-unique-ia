@@ -1,7 +1,7 @@
-{
+﻿{
   "contract_id": "issue-178-specbridge-multi-agent-orchestration-manifest",
   "run_id": "sb-20260609-06e1b8e9",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     "README.md",
     ".specbridge/context/CURRENT_GOAL.md",

@@ -1,2 +1,7 @@
 .agents/
 .claude/settings.local.json
+
+# Local run outputs and test residue (never evidence)
+smoke-output.txt
+*.output.txt
+.specbridge/standard-loop-runs/cli-fixture.standard-loop-run.json
