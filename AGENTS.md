@@ -187,7 +187,7 @@ This repository runs PowerShell in two different editions, and the difference ha
 
 Known divergence traps agents must respect:
 
-- PS 5.1 reads files without a BOM as Windows-1252, not UTF-8. Always pass `-Encoding UTF8` to `Get-Content` and write files through the UTF-8 helpers in `scripts/specbridge.ps1` (`Write-Utf8JsonFile`, `Write-Utf8TextFile`). Never embed text read without explicit encoding into JSON output.
+- PS 5.1 reads files without a BOM as Windows-1252, not UTF-8. Always pass `-Encoding UTF8` to `Get-Content` and write files through the UTF-8 helpers in `scripts/lib/common.ps1` (`Write-Utf8JsonFile`, `Write-Utf8TextFile`). Never embed text read without explicit encoding into JSON output.
 - Em dashes and arrows in repository markdown are multi-byte UTF-8; reading them as Windows-1252 produces a stray right-double-quote byte that breaks JSON strings in PS 5.1.
 - `Where-Object` returning a single item yields a bare object in PS 5.1; wrap in `@()` before using `.Count`.
 - `[ordered]@{}` exposes `.Contains()`, not `.ContainsKey()`; prefer plain hashtables when key checks are needed.
