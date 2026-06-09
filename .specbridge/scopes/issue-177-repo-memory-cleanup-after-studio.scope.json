@@ -1,0 +1,24 @@
+{
+  "contract_id": "issue-177-repo-memory-cleanup-after-studio",
+  "run_id": "sb-20260609-b3bc65dc",
+  "status": "active",
+  "exclusive_write": [
+    "README.md",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-177-repo-memory-cleanup-after-studio.execution.md",
+    ".specbridge/scopes/issue-177-repo-memory-cleanup-after-studio.scope.json",
+    ".specbridge/reports/issue-177-repo-memory-cleanup-after-studio.final-report.json",
+    ".specbridge/audit-packets/issue-177-repo-memory-cleanup-after-studio.audit-packet.json",
+    ".specbridge/audits/issue-177-repo-memory-cleanup-after-studio.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-177-repo-memory-cleanup-after-studio.github-mutation-evidence.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-177-repo-memory-cleanup-after-studio.final-report.json"
+}

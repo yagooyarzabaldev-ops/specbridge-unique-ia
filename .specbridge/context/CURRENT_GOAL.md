@@ -2,11 +2,11 @@
 
 ## Goal
 
-Foundation complete. All issue-to-merge apply-mode operations proven end-to-end via external trigger. Next: intake bridge improvements or new product feature work.
+Multi-agent orchestration: build the coordinator/subagent layer that turns SpecBridge from a governed loop into an auditable multi-agent platform.
 
 ## Current Phase
 
-Foundation complete. Repository-first MVP complete. Full Autopilot enabled. V5 live parallel pilot complete and merged. Full apply-mode loop operational. Intake bridge proven end-to-end via gh workflow run (issue-157). All 6 operations run autonomously: issue_create → pr_open → ci_wait → merge → issue_close → post_merge_memory. Operator hardening + lifecycle guard + intake contract quality fixes all on main. Current phase: ready for next governed task.
+Foundation complete. V5 live parallel pilot complete and merged. Full autonomous loop proven end-to-end. run_id tracing added across all artifacts. Studio dashboard operational. Post-merge closure cycle clean. Ready for multi-agent governance layer.
 
 ## Completion History
 
@@ -20,10 +20,32 @@ Foundation complete. Repository-first MVP complete. Full Autopilot enabled. V5 l
 | 157 | Intake bridge end-to-end test (execution) | 158-162 | Merged 2026-06-08 |
 | 159/166 | specbridge quickstart command | 167-169 | Merged 2026-06-08 |
 | — | doctor --fix-plan + lifecycle debt dashboard fix | 170 | Merged 2026-06-08 |
+| 172 | specbridge trace — run_id end-to-end propagation | 173 | Merged 2026-06-09 |
+| 174 | SpecBridge Studio dashboard MVP | 175 | Merged 2026-06-09 |
+| — | Post-merge closure: scope completed, dashboards regenerated | 176 | Merged 2026-06-09 |
+| 177 | Repo memory cleanup after trace and studio | 179 | Merged 2026-06-09 |
+
+## Architecture Status
+
+SpecBridge currently has:
+- Intake bridge (specbridge-intake)
+- Execution contracts, scopes, evidence
+- Automatic PR creation and CI gating
+- run_id end-to-end (intake → scope → contract → ledger → dashboard)
+- doctor --fix-plan (offline health checks)
+- Status dashboard (docs/status-dashboard.html)
+- Studio dashboard with run-grouped ledger view (docs/specbridge-studio.html)
+- Post-merge closure cycle (scope → completed, issue closed, current-goal reset)
 
 ## Next Recommended Task
 
-The full autonomous loop is proven. Candidate next tasks:
-1. `specbridge trace` — unique run_id per loop connecting issue → contract → branch → PR → CI → merge → closure → dashboard
-2. Improve intake bridge error handling (e.g. what if issue already exists with different title)
-3. Add structured observability per operation (emit events with trace context)
+**issue-178 — SpecBridge multi-agent orchestration manifest**
+
+Add the coordinator/subagent governance layer:
+- Define agent roles: planner, implementer, reviewer, tester, security, docs, closure
+- Add `specbridge-orchestrate` command generating `.specbridge/orchestrations/<task>.orchestration.json`
+- Wire run_id and task_id through orchestration artifacts
+- Add validation, tests, doctor checks, dashboard visibility
+- No external agent invocation in v1 — governance structure first
+
+This is the key architectural leap: from "one governed loop" to "auditable multi-agent platform".

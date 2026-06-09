@@ -1,10 +1,10 @@
 {
-  "current_task_id": "issue-174-specbridge-studio-dashboard",
-  "run_id": "sb-20260609-cc04eda9",
-  "title": "Build SpecBridge Studio dashboard MVP",
-  "status": "ready_for_next_task",
-  "primary_pr": 175,
+  "current_task_id": "issue-177-repo-memory-cleanup-after-studio",
+  "run_id": "sb-20260609-b3bc65dc",
+  "title": "Clean up repo memory after trace and studio completion",
+  "status": "active",
+  "primary_pr": null,
   "closure_pr": null,
-  "last_updated": "2026-06-09T02:41:25Z",
-  "updated_by": "specbridge-post-merge-closure"
+  "last_updated": "2026-06-09T15:25:01.5145595+00:00",
+  "updated_by": "specbridge-intake"
 }
