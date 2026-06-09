@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-179-agent-handoff-protocol",
+  "run_id": "sb-20260609-78e0b3b4",
+  "evidence_type": "closure_evidence",
+  "collected_by": "specbridge-post-merge-closure",
+  "collected_at": "2026-06-09",
+  "merge_commit": "2a34430b86eaa93b20b3a7b94f90e3fa92a18c0b",
+  "primary_pr": 185,
+  "related_issue": 184,
+  "issue_closed": true,
+  "scope_status": "completed",
+  "all_validations_passed": true,
+  "notes": "PR #185 merged. specbridge-handoff command, validator handoff-consistency rules, and the no-op validator em-dash fix shipped. Issue #184 closed. Orchestration completed 7/7 via closure handoff."
+}

@@ -2,9 +2,9 @@
   "current_task_id": "issue-179-agent-handoff-protocol",
   "run_id": "sb-20260609-78e0b3b4",
   "title": "Agent handoff protocol for orchestration manifests",
-  "status": "active",
-  "primary_pr": null,
+  "status": "ready_for_next_task",
+  "primary_pr": 185,
   "closure_pr": null,
-  "last_updated": "2026-06-09T20:17:53.9496121+00:00",
-  "updated_by": "specbridge-intake"
+  "last_updated": "2026-06-09T21:40:00Z",
+  "updated_by": "specbridge-post-merge-closure"
 }

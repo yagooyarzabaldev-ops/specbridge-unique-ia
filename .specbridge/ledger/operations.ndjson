@@ -57,3 +57,4 @@
 {"task_id":"issue-179-agent-handoff-protocol","operation":"agent_handoff","status":"completed","detail":"agent=tester next=security","timestamp":"2026-06-09T18:18:03.9496838-03:00","run_id":"sb-20260609-78e0b3b4"}
 {"task_id":"issue-179-agent-handoff-protocol","operation":"agent_handoff","status":"completed","detail":"agent=security next=docs","timestamp":"2026-06-09T18:25:35.9009690-03:00","run_id":"sb-20260609-78e0b3b4"}
 {"task_id":"issue-179-agent-handoff-protocol","operation":"agent_handoff","status":"completed","detail":"agent=docs next=closure","timestamp":"2026-06-09T18:25:36.6208193-03:00","run_id":"sb-20260609-78e0b3b4"}
+{"task_id":"issue-179-agent-handoff-protocol","operation":"agent_handoff","status":"completed","detail":"agent=closure next=none","timestamp":"2026-06-09T18:36:00.9286976-03:00","run_id":"sb-20260609-78e0b3b4"}

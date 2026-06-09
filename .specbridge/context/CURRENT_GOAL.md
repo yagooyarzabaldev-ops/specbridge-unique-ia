@@ -25,6 +25,10 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | — | Post-merge closure: scope completed, dashboards regenerated | 176 | Merged 2026-06-09 |
 | 177 | Repo memory cleanup after trace and studio | 179 | Merged 2026-06-09 |
 | 178 | Multi-agent orchestration manifest (specbridge-orchestrate) | 180 | Merged 2026-06-09 |
+| — | Post-merge closure issue-178 + P0 repo hygiene (ledger tracked) | 181 | Merged 2026-06-09 |
+| — | Execution environment rules, docs index, merge policy clarification | 182 | Merged 2026-06-09 |
+| — | specbridge.ps1 split into scripts/lib modules + explicit UTF-8 reads | 183 | Merged 2026-06-09 |
+| 179/#184 | Agent handoff protocol (specbridge-handoff) + no-op validator fix | 185 | Merged 2026-06-09 |
 
 ## Architecture Status
 
@@ -37,17 +41,23 @@ SpecBridge currently has:
 - Status dashboard (docs/status-dashboard.html)
 - Studio dashboard with run-grouped ledger view (docs/specbridge-studio.html)
 - Post-merge closure cycle (scope → completed, issue closed, current-goal reset)
+- Multi-agent orchestration manifests (specbridge-orchestrate, 7 agent roles)
+- Agent handoff protocol (specbridge-handoff: sequential handoffs, output artifacts, ledger entries, validator-enforced consistency)
+- Modular CLI (scripts/lib/, 109-line entry point, explicit UTF-8 reads)
 
 ## Next Recommended Task
 
-**Repo improvement plan (maintenance phase)**
+**issue-180 — Independent review-agent report**
 
-Approved improvement plan, in order:
-1. P0 hygiene: track evidence artifacts (ledger, orchestrations, issue-to-merge-runs), expand .gitignore, delete stray outputs, clean ~170 merged branches
-2. P1 CI: remove duplicated validator steps from foundation-validation.yml (smoke already runs them), document pwsh vs PS5.1 divergence in AGENTS.md
-3. P2 maintainability: UTF-8 read/write helpers, split scripts/specbridge.ps1 (6,978 lines) into scripts/lib/ modules
-4. P3 governance debt: archive closed-issue artifacts, docs/README.md index, align policy.yaml merge flag with actual rules
+Now that handoffs are real, make the reviewer agent produce a structured,
+machine-validated review report instead of a free-text summary:
+- Define `.specbridge/review-reports/<task>.review-agent-report.json` schema
+  (findings list with severity, file, rationale; verdict approve/block)
+- `specbridge-handoff -Agent reviewer` requires or generates the report
+- Validator: reviewer handoff without a valid report fails
+- Wire the report into the Studio dashboard orchestration cards
 
-After maintenance: **issue-179 agent handoff protocol** — give life to the
-agent input/output artifact pointers declared in orchestration manifests
-(planner, implementer, reviewer, tester, security, docs, closure).
+Maintenance debt still open (human action required):
+- foundation-validation.yml CI dedup is BLOCKED by
+  validate-standard-ci-authority.ps1 (fails any commit touching
+  .github/workflows/); needs a human-committed change.
