@@ -47,6 +47,14 @@ quality_gates:
   require_policy_validation: true
   require_codex_review: true
 
+# Merge authority clarification (2026-06-09):
+# autonomous_merge_enabled below is constrained by
+# .claude/rules/specbridge-autonomous-execution.md, which forbids agents
+# from merging PRs themselves. In practice every merge is performed or
+# explicitly authorized per-PR by the human operator. The flag means
+# "merge does not require an additional review board", not
+# "agents may merge unprompted". The minimum_conditions still apply
+# to every merge regardless of who performs it.
 merge:
   autonomous_merge_enabled: true
   minimum_conditions:

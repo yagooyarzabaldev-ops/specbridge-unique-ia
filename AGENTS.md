@@ -178,6 +178,23 @@ A merge requires evidence:
 - no policy violation
 - review passed when configured
 
+## Execution Environment Rules
+
+This repository runs PowerShell in two different editions, and the difference has caused real bugs:
+
+- Local development and the inner loop of `specbridge-smoke.ps1` use Windows PowerShell 5.1 (`powershell.exe`).
+- GitHub Actions workflow steps use PowerShell Core 7+ (`shell: pwsh`) on `windows-latest`, but smoke and CLI tests still spawn `powershell.exe` internally, so PS 5.1 semantics are exercised in CI too.
+
+Known divergence traps agents must respect:
+
+- PS 5.1 reads files without a BOM as Windows-1252, not UTF-8. Always pass `-Encoding UTF8` to `Get-Content` and write files through the UTF-8 helpers in `scripts/specbridge.ps1` (`Write-Utf8JsonFile`, `Write-Utf8TextFile`). Never embed text read without explicit encoding into JSON output.
+- Em dashes and arrows in repository markdown are multi-byte UTF-8; reading them as Windows-1252 produces a stray right-double-quote byte that breaks JSON strings in PS 5.1.
+- `Where-Object` returning a single item yields a bare object in PS 5.1; wrap in `@()` before using `.Count`.
+- `[ordered]@{}` exposes `.Contains()`, not `.ContainsKey()`; prefer plain hashtables when key checks are needed.
+- The operations ledger and other evidence files are tracked in git; code must still handle their absence gracefully in fresh clones.
+
+Validation parity rule: a change is not CI-safe until `./scripts/specbridge-smoke.ps1` passes locally, because CI runs the same scripts.
+
 ## Final Report Standard
 
 Every completed task must end with a concise final report containing:
