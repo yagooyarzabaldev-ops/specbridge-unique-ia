@@ -1,10 +1,10 @@
 {
-  "current_task_id": "operator-queue-hygiene",
-  "run_id": "sb-20260610-f4fc2874",
-  "title": "SpecBridge Operator Queue Hygiene + Next Task Selector",
-  "status": "active",
-  "primary_pr": null,
-  "closure_pr": null,
-  "last_updated": "2026-06-10T17:37:41.4341815+00:00",
-  "updated_by": "specbridge-intake"
+    "current_task_id":  "operator-queue-hygiene",
+    "run_id":  "sb-20260610-f4fc2874",
+    "title":  "SpecBridge Operator Queue Hygiene + Next Task Selector",
+    "status":  "ready_for_next_task",
+    "primary_pr":  197,
+    "closure_pr":  null,
+    "last_updated":  "2026-06-10T18:25:14Z",
+    "updated_by":  "specbridge-post-merge-closure"
 }

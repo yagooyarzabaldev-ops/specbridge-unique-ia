@@ -35,6 +35,8 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | 180/#188 | Independent review-agent report (specbridge-review-report) | 190 | Merged 2026-06-09 |
 | — | Post-merge closure issue-180: second orchestration completed 7/7 | 191 | Merged 2026-06-09 |
 | 181/#192 | Claude Code project config (.claude settings, sb-* commands) | 193 | Merged 2026-06-10 |
+| — | Post-merge closure issue-181: third orchestration completed 7/7 | 195 | Merged 2026-06-10 |
+| queue/#196 | Operator queue hygiene + next-task selector | 197 | Merged 2026-06-10 |
 
 ## Architecture Status
 
@@ -53,20 +55,27 @@ SpecBridge currently has:
 - Machine-validated review-agent reports (specbridge-review-report; reviewer handoff hard-gated on verdict approve with no blocker findings)
 - Governed workflow-change authorization registry (.specbridge/policies/workflow-change-authorizations.json)
 - Claude Code project config (.claude/settings.json bounded allowlist; /sb-intake, /sb-handoff, /sb-review, /sb-close; operating model in CLAUDE.md)
+- Operator queue hygiene (operator-task-decisions registry; specbridge-next-task offline selector; open GitHub issues are storage, the registry decides eligibility)
 
 ## Next Recommended Task
 
-**visual-digital-twin-rosario-mvp** (intake already triggered by the
-operator; branch `codex/visual-digital-twin-rosario-mvp` exists).
+**V5 Serious Live Pilot — no coordinator remediation**
 
-This is the first product task to run on the full governance stack:
-intake -> orchestrate -> handoff chain -> review report -> PR/CI ->
-human-authorized merge -> closure. Note for the executor: the intake
-branch was cut before PR #193 and this closure merged; rebase onto main
-and resolve the `current-goal.json` conflict in favor of the new intake
-(same pattern as the issue-178 rebase).
+The standard is already defined (`v5-serious-pilot-status`):
+- pilot standard: `serious_live_multi_slice_no_remediation`
+- baseline: `v5_hardened_runtime_runner`
+- required slices: `status`, `tests`, `docs`
+- runtime budget: 2.00 USD default per slice
+- diagnostics: `ascii_stable_bounded_240_chars`
+- target: all three slices complete without coordinator remediation
+- boundaries: no production, secrets, billing, auth, DB, deployment or
+  dependency installation
 
-Backlog alternative: **issue-182 — MCP resources** exposing current-goal,
-fix-plan and orchestration state as MCP resources for external agents.
+Queue note: issue #194 (digital twin) stays open on GitHub but is
+excluded as `not_planned` by the operator decision registry;
+`specbridge-next-task` will not select it.
+
+Backlog: issue-182 MCP resources (current-goal, fix-plan, orchestrations
+as MCP resources for external agents).
 
 Maintenance debt: none open.

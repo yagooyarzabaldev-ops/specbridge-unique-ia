@@ -1,0 +1,12 @@
+{
+    "schema_version":  "1",
+    "task_id":  "operator-queue-hygiene",
+    "run_id":  "sb-20260610-f4fc2874",
+    "agent":  "closure",
+    "review_report":  null,
+    "role":  "Close issue, mark scope completed, write closure evidence, regenerate dashboards",
+    "status":  "completed",
+    "summary":  "PR #197 squash-merged (cc04458). Issue #196 closed; issue #194 left open by design, excluded as not_planned by the registry. Fourth orchestration completed end-to-end. The queue now distinguishes pending-real from historical-noise.",
+    "input_artifact":  ".specbridge/orchestrations/operator-queue-hygiene/docs-output.json",
+    "produced_at":  "2026-06-10T18:25:12.5407929-03:00"
+}

@@ -1,7 +1,7 @@
 {
     "contract_id":  "operator-queue-hygiene",
     "run_id":  "sb-20260610-f4fc2874",
-    "status":  "active",
+    "status":  "completed",
     "exclusive_write":  [
                             "README.md",
                             ".specbridge/context/CURRENT_GOAL.md",

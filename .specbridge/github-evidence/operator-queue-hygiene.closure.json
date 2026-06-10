@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "task_id": "operator-queue-hygiene",
+  "run_id": "sb-20260610-f4fc2874",
+  "evidence_type": "closure_evidence",
+  "collected_by": "specbridge-post-merge-closure",
+  "collected_at": "2026-06-10",
+  "merge_commit": "cc04458d8e358af7ec37bac90fdfb7cb084aed0c",
+  "primary_pr": 197,
+  "related_issue": 196,
+  "issue_closed": true,
+  "scope_status": "completed",
+  "all_validations_passed": true,
+  "notes": "PR #197 merged. Operator task decision registry, specbridge-next-task offline selector, validate-operator-task-decisions.ps1 and Studio Operator Queue shipped. Issue #196 closed; issue #194 deliberately left open and excluded as not_planned by the registry. Orchestration completed 7/7 via closure handoff."
+}
