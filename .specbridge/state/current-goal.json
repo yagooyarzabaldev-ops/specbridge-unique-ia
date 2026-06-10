@@ -1,10 +1,10 @@
 {
-  "current_task_id": "issue-179-agent-handoff-protocol",
-  "run_id": "sb-20260609-78e0b3b4",
-  "title": "Agent handoff protocol for orchestration manifests",
-  "status": "ready_for_next_task",
-  "primary_pr": 185,
+  "current_task_id": "issue-180-review-agent-report",
+  "run_id": "sb-20260609-f0c8fb8c",
+  "title": "Independent review-agent report",
+  "status": "active",
+  "primary_pr": null,
   "closure_pr": null,
-  "last_updated": "2026-06-09T21:40:00Z",
-  "updated_by": "specbridge-post-merge-closure"
+  "last_updated": "2026-06-09T22:05:42.5967448+00:00",
+  "updated_by": "specbridge-intake"
 }

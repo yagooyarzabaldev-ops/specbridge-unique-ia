@@ -406,7 +406,17 @@ $opTable
         }
         $agentRows += "<tr><td><code>$($ag.name)</code></td><td style='color:$aColor'>$($ag.status)</td><td style='font-size:.8rem;color:#aaa'>$($ag.role)</td></tr>"
       }
-      $orchBlocks += "<div class='run-card'><div class='run-header'><code class='run-id'>$($orch.run_id)</code> <span style='color:$oColor'>$oStatus</span></div><div class='run-task'>Task: <code>$($orch.task_id)</code> &nbsp; Coordinator: $($orch.coordinator)</div><table style='margin-top:8px'><tr><th>Agent</th><th>Status</th><th>Role</th></tr>$agentRows</table></div>"
+      $reviewLine = ""
+      $reviewReportPath = Join-Path $repoRoot ".specbridge/agent-reviews/$($orch.task_id).review-agent-report.json"
+      if (Test-Path -LiteralPath $reviewReportPath -PathType Leaf) {
+        try {
+          $rv = Get-Content -LiteralPath $reviewReportPath -Raw -Encoding UTF8 | ConvertFrom-Json
+          $rvColor = if ($rv.verdict -eq "approve") { "#2d9e5f" } else { "#c0392b" }
+          $rvFindings = @($rv.findings).Count
+          $reviewLine = "<div class='run-task'>Review: <span style='color:$rvColor'>$($rv.verdict)</span> ($rvFindings finding$(if ($rvFindings -ne 1) { 's' })) at <code>$($rv.reviewed_commit)</code></div>"
+        } catch {}
+      }
+      $orchBlocks += "<div class='run-card'><div class='run-header'><code class='run-id'>$($orch.run_id)</code> <span style='color:$oColor'>$oStatus</span></div><div class='run-task'>Task: <code>$($orch.task_id)</code> &nbsp; Coordinator: $($orch.coordinator)</div>$reviewLine<table style='margin-top:8px'><tr><th>Agent</th><th>Status</th><th>Role</th></tr>$agentRows</table></div>"
     }
     $orchBlocks
   }

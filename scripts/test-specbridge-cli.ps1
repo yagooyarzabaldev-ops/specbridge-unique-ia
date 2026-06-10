@@ -803,8 +803,91 @@ try {
         $script:failed = $true
       }
 
+      # Reviewer gate: review-report command and handoff enforcement
+      $rrImpl = Invoke-Cli -Arguments @("specbridge-handoff", "-TaskId", $hoTaskId, "-Agent", "implementer", "-Summary", "fixture implementer summary")
+      if ($rrImpl.ExitCode -ne 0) {
+        Write-Output "FAIL specbridge-review-report: setup implementer handoff failed."
+        $script:failed = $true
+      }
+
+      $rrNoReport = Invoke-Cli -Arguments @("specbridge-handoff", "-TaskId", $hoTaskId, "-Agent", "reviewer")
+      if ($rrNoReport.ExitCode -ne 0 -and $rrNoReport.Text -match "requires a review-agent report") {
+        Write-Output "PASS CLI failure: reviewer-handoff-without-report"
+      } else {
+        Write-Output "FAIL reviewer-handoff-without-report: expected failure without a review report."
+        $script:failed = $true
+      }
+
+      $rrNoVerdict = Invoke-Cli -Arguments @("specbridge-review-report", "-TaskId", $hoTaskId)
+      if ($rrNoVerdict.ExitCode -ne 0) {
+        Write-Output "PASS CLI failure: review-report-missing-verdict"
+      } else {
+        Write-Output "FAIL review-report-missing-verdict: expected failure without -Verdict."
+        $script:failed = $true
+      }
+
+      $rrBadSeverity = Invoke-Cli -Arguments @("specbridge-review-report", "-TaskId", $hoTaskId, "-Verdict", "approve", "-Validation", "catastrophic|file.ps1|bad severity")
+      if ($rrBadSeverity.ExitCode -ne 0) {
+        Write-Output "PASS CLI failure: review-report-invalid-severity"
+      } else {
+        Write-Output "FAIL review-report-invalid-severity: expected failure on invalid severity."
+        $script:failed = $true
+      }
+
+      $rrBlockerApprove = Invoke-Cli -Arguments @("specbridge-review-report", "-TaskId", $hoTaskId, "-Verdict", "approve", "-Validation", "blocker|file.ps1|fixture blocker")
+      if ($rrBlockerApprove.ExitCode -ne 0) {
+        Write-Output "PASS CLI failure: review-report-blocker-approve-inconsistent"
+      } else {
+        Write-Output "FAIL review-report-blocker-approve-inconsistent: expected failure."
+        $script:failed = $true
+      }
+
+      $rrBlock = Invoke-Cli -Arguments @("specbridge-review-report", "-TaskId", $hoTaskId, "-Verdict", "block", "-Validation", "blocker|file.ps1|fixture blocker finding")
+      if ($rrBlock.ExitCode -eq 0) {
+        $rrBlockedHandoff = Invoke-Cli -Arguments @("specbridge-handoff", "-TaskId", $hoTaskId, "-Agent", "reviewer")
+        if ($rrBlockedHandoff.ExitCode -ne 0 -and $rrBlockedHandoff.Text -match "verdict") {
+          Write-Output "PASS CLI failure: reviewer-handoff-blocked-by-verdict"
+        } else {
+          Write-Output "FAIL reviewer-handoff-blocked-by-verdict: expected failure on block verdict."
+          $script:failed = $true
+        }
+      } else {
+        Write-Output "FAIL specbridge-review-report: block report generation failed."
+        $script:failed = $true
+      }
+
+      $rrApprove = Invoke-Cli -Arguments @("specbridge-review-report", "-TaskId", $hoTaskId, "-Verdict", "approve", "-Summary", "fixture approve review", "-Validation", "minor|file.ps1|fixture minor finding")
+      Assert-Success `
+        -Name "specbridge-review-report approve" `
+        -Result $rrApprove `
+        -ExpectedPattern '"verdict"\s*:\s*"approve"'
+
+      $rrReviewerOk = Invoke-Cli -Arguments @("specbridge-handoff", "-TaskId", $hoTaskId, "-Agent", "reviewer", "-Summary", "fixture reviewer summary")
+      if ($rrReviewerOk.ExitCode -eq 0) {
+        $rrReviewerOut = ".specbridge/orchestrations/$hoTaskId/reviewer-output.json"
+        $rrOutJson = $null
+        try { $rrOutJson = Get-Content $rrReviewerOut -Raw -Encoding UTF8 | ConvertFrom-Json } catch {}
+        if ($null -ne $rrOutJson -and $rrOutJson.review_report -eq ".specbridge/agent-reviews/$hoTaskId.review-agent-report.json") {
+          Write-Output "PASS specbridge-handoff: reviewer artifact references the review report."
+        } else {
+          Write-Output "FAIL specbridge-handoff: reviewer artifact does not reference the review report."
+          $script:failed = $true
+        }
+      } else {
+        Write-Output "FAIL specbridge-handoff: reviewer handoff with approve report failed."
+        $script:failed = $true
+      }
+
+      $null = powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-agent-review-reports.ps1 2>&1
+      if ($LASTEXITCODE -eq 0) {
+        Write-Output "PASS validate-agent-review-reports: passes on fixture report."
+      } else {
+        Write-Output "FAIL validate-agent-review-reports: failed on valid fixture report."
+        $script:failed = $true
+      }
+
       $hoLast = $null
-      foreach ($hoNext in @("implementer", "reviewer", "tester", "security", "docs", "closure")) {
+      foreach ($hoNext in @("tester", "security", "docs", "closure")) {
         $hoLast = Invoke-Cli -Arguments @("specbridge-handoff", "-TaskId", $hoTaskId, "-Agent", $hoNext, "-Summary", "fixture $hoNext summary")
         if ($hoLast.ExitCode -ne 0) {
           Write-Output "FAIL specbridge-handoff: chain handoff for '$hoNext' failed."
@@ -847,6 +930,25 @@ try {
         $script:failed = $true
       }
 
+      # validator negative: review report with invalid verdict must fail
+      $rrFixturePath = ".specbridge/agent-reviews/$hoTaskId.review-agent-report.json"
+      try {
+        $rrCorrupt = Get-Content $rrFixturePath -Raw -Encoding UTF8 | ConvertFrom-Json
+        $rrCorrupt.verdict = "maybe"
+        Set-Content -Path $rrFixturePath -Value ($rrCorrupt | ConvertTo-Json -Depth 5) -Encoding UTF8
+        $null = powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-agent-review-reports.ps1 2>&1
+        if ($LASTEXITCODE -ne 0) {
+          Write-Output "PASS validate-agent-review-reports: detects invalid verdict."
+        } else {
+          Write-Output "FAIL validate-agent-review-reports: invalid verdict not detected."
+          $script:failed = $true
+        }
+      } catch {
+        Write-Output "FAIL validate-agent-review-reports: could not exercise negative case."
+        $script:failed = $true
+      }
+
+      Remove-Item $rrFixturePath -Force -ErrorAction SilentlyContinue
       Remove-Item ".specbridge/orchestrations/$hoTaskId.orchestration.json" -Force -ErrorAction SilentlyContinue
       Remove-Item ".specbridge/orchestrations/$hoTaskId" -Recurse -Force -ErrorAction SilentlyContinue
     }

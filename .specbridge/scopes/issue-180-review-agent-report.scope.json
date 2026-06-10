@@ -1,0 +1,46 @@
+{
+    "contract_id":  "issue-180-review-agent-report",
+    "run_id":  "sb-20260609-f0c8fb8c",
+    "status":  "active",
+    "exclusive_write":  [
+                            "README.md",
+                            ".specbridge/context/CURRENT_GOAL.md",
+                            ".specbridge/contracts/issue-180-review-agent-report.execution.md",
+                            ".specbridge/scopes/issue-180-review-agent-report.scope.json",
+                            ".specbridge/reports/issue-180-review-agent-report.final-report.json",
+                            ".specbridge/audit-packets/issue-180-review-agent-report.audit-packet.json",
+                            ".specbridge/audits/issue-180-review-agent-report.chatgpt-audit.json",
+                            ".specbridge/github-evidence/issue-180-review-agent-report.github-mutation-evidence.json",
+                            "scripts/specbridge.ps1",
+                            "scripts/lib/intake-doctor.ps1",
+                            "scripts/lib/dashboards.ps1",
+                            "scripts/validate-agent-review-reports.ps1",
+                            "scripts/specbridge-smoke.ps1",
+                            "scripts/test-specbridge-cli.ps1",
+                            ".specbridge/agent-reviews/issue-180-review-agent-report.review-agent-report.json",
+                            ".specbridge/orchestrations/issue-180-review-agent-report.orchestration.json",
+                            ".specbridge/orchestrations/issue-180-review-agent-report/planner-output.json",
+                            ".specbridge/orchestrations/issue-180-review-agent-report/implementer-output.json",
+                            ".specbridge/orchestrations/issue-180-review-agent-report/reviewer-output.json",
+                            ".specbridge/orchestrations/issue-180-review-agent-report/tester-output.json",
+                            ".specbridge/orchestrations/issue-180-review-agent-report/security-output.json",
+                            ".specbridge/orchestrations/issue-180-review-agent-report/docs-output.json",
+                            ".specbridge/orchestrations/issue-180-review-agent-report/closure-output.json",
+                            ".specbridge/ledger/operations.ndjson",
+                            "docs/specbridge-studio.html",
+                            "docs/status-dashboard.html"
+                        ],
+    "read_only":  [
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      "CLAUDE.md",
+                      ".specbridge/policy.yaml"
+                  ],
+    "coordinator_owned":  [
+
+                          ],
+    "dependencies":  [
+
+                     ],
+    "final_report":  ".specbridge/reports/issue-180-review-agent-report.final-report.json"
+}

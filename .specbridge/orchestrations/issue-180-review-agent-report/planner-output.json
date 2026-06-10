@@ -1,0 +1,12 @@
+{
+    "schema_version":  "1",
+    "task_id":  "issue-180-review-agent-report",
+    "run_id":  "sb-20260609-f0c8fb8c",
+    "agent":  "planner",
+    "review_report":  null,
+    "role":  "Classify complexity, detect critical files, propose scope and acceptance criteria",
+    "status":  "completed",
+    "summary":  "Scope: structured review reports. Critical files: lib/intake-doctor.ps1 (command + reviewer gate), validate-agent-review-reports.ps1, lib/dashboards.ps1, tests. Acceptance: reviewer handoff hard-gated on machine-validated report.",
+    "input_artifact":  null,
+    "produced_at":  "2026-06-09T19:15:57.5296648-03:00"
+}

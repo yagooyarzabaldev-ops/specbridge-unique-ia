@@ -1,0 +1,60 @@
+{
+    "schema_version":  "1",
+    "task_id":  "issue-180-review-agent-report",
+    "run_id":  "sb-20260609-f0c8fb8c",
+    "coordinator":  "specbridge",
+    "created_at":  "2026-06-09",
+    "status":  "in_progress",
+    "agents":  [
+                   {
+                       "name":  "planner",
+                       "role":  "Classify complexity, detect critical files, propose scope and acceptance criteria",
+                       "status":  "completed",
+                       "input_artifact":  null,
+                       "output_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/planner-output.json"
+                   },
+                   {
+                       "name":  "implementer",
+                       "role":  "Modify code within declared scope, generate implementation artifacts",
+                       "status":  "completed",
+                       "input_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/planner-output.json",
+                       "output_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/implementer-output.json"
+                   },
+                   {
+                       "name":  "reviewer",
+                       "role":  "Review diff independently, detect bugs, scope drift, and inconsistencies",
+                       "status":  "completed",
+                       "input_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/implementer-output.json",
+                       "output_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/reviewer-output.json"
+                   },
+                   {
+                       "name":  "tester",
+                       "role":  "Create or update tests, run smoke locally, interpret failures, propose fixes",
+                       "status":  "completed",
+                       "input_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/reviewer-output.json",
+                       "output_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/tester-output.json"
+                   },
+                   {
+                       "name":  "security",
+                       "role":  "Check secrets, blocked paths, GitHub permissions, destructive commands, risk level",
+                       "status":  "completed",
+                       "input_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/tester-output.json",
+                       "output_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/security-output.json"
+                   },
+                   {
+                       "name":  "docs",
+                       "role":  "Update README, CURRENT_GOAL.md, dashboard artifacts, release notes",
+                       "status":  "completed",
+                       "input_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/security-output.json",
+                       "output_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/docs-output.json"
+                   },
+                   {
+                       "name":  "closure",
+                       "role":  "Close issue, mark scope completed, write closure evidence, regenerate dashboards",
+                       "status":  "active",
+                       "input_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/docs-output.json",
+                       "output_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/closure-output.json"
+                   }
+               ],
+    "updated_at":  "2026-06-09T20:20:04.8339933-03:00"
+}

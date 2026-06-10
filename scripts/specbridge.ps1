@@ -1,10 +1,11 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "issue-to-merge-plan", "issue-to-merge-github", "specbridge-intake", "specbridge-doctor", "specbridge-orchestrate", "specbridge-handoff", "generate-dashboard", "generate-studio-dashboard", "lifecycle-guard", "quickstart", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "issue-to-merge-plan", "issue-to-merge-github", "specbridge-intake", "specbridge-doctor", "specbridge-orchestrate", "specbridge-handoff", "specbridge-review-report", "generate-dashboard", "generate-studio-dashboard", "lifecycle-guard", "quickstart", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
   [string] $Agent = "",
+  [string] $Verdict = "",
   [string] $Title = "",
   [string] $Goal = "",
   [string] $RelatedIssue = "",
@@ -93,6 +94,7 @@ switch ($Command) {
   "specbridge-doctor" { Invoke-SpecbridgeDoctorCommand }
   "specbridge-orchestrate" { Invoke-SpecbridgeOrchestrateCommand }
   "specbridge-handoff" { Invoke-SpecbridgeHandoffCommand }
+  "specbridge-review-report" { Invoke-SpecbridgeReviewReportCommand }
   "generate-dashboard" { Invoke-GenerateDashboardCommand }
   "generate-studio-dashboard" { Invoke-GenerateStudioDashboardCommand }
   "lifecycle-guard" { Invoke-LifecycleGuardCommand }

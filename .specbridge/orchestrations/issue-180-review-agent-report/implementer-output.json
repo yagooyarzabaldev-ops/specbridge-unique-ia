@@ -1,0 +1,12 @@
+{
+    "schema_version":  "1",
+    "task_id":  "issue-180-review-agent-report",
+    "run_id":  "sb-20260609-f0c8fb8c",
+    "agent":  "implementer",
+    "review_report":  null,
+    "role":  "Modify code within declared scope, generate implementation artifacts",
+    "status":  "completed",
+    "summary":  "specbridge-review-report command (verdict, findings severity|file|summary, blocker/approve consistency, ledger entry), reviewer gate in specbridge-handoff, validate-agent-review-reports.ps1 in smoke, Studio review verdict line.",
+    "input_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/planner-output.json",
+    "produced_at":  "2026-06-09T19:15:58.3584051-03:00"
+}

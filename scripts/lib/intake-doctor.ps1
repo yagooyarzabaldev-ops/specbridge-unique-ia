@@ -1043,6 +1043,99 @@ function Invoke-SpecbridgeOrchestrateCommand {
   exit 0
 }
 
+function Invoke-SpecbridgeReviewReportCommand {
+  if ([string]::IsNullOrWhiteSpace($TaskId)) {
+    Fail "specbridge-review-report requires -TaskId"
+  }
+  if ($Verdict -ne "approve" -and $Verdict -ne "block") {
+    Fail "specbridge-review-report requires -Verdict approve|block"
+  }
+  $safeTaskId = $TaskId.Trim()
+
+  # Resolve run_id: orchestration manifest first, then scope file
+  $resolvedRunId = ""
+  $manifestPath = Join-Path $repoRoot ".specbridge/orchestrations/$safeTaskId.orchestration.json"
+  if (Test-Path -LiteralPath $manifestPath) {
+    try {
+      $orch = Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+      if ($orch.run_id) { $resolvedRunId = $orch.run_id }
+    } catch {}
+  }
+  if (-not $resolvedRunId) {
+    $scopeFile = Join-Path $repoRoot ".specbridge/scopes/$safeTaskId.scope.json"
+    if (Test-Path -LiteralPath $scopeFile) {
+      try {
+        $sc = Get-Content -LiteralPath $scopeFile -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($sc.run_id) { $resolvedRunId = $sc.run_id }
+      } catch {}
+    }
+  }
+  if (-not $resolvedRunId) {
+    Fail "cannot resolve run_id for task '$safeTaskId' (no orchestration manifest or scope file)"
+  }
+
+  # Findings come from repeated -Validation entries: "severity|file|summary"
+  $allowedSeverities = @("info", "minor", "major", "blocker")
+  $findings = @()
+  $findingIndex = 0
+  foreach ($entry in $Validation) {
+    if ([string]::IsNullOrWhiteSpace($entry)) { continue }
+    $parts = $entry.Split("|", 3)
+    if ($parts.Count -lt 3) {
+      Fail "invalid finding '$entry'. Expected format: severity|file|summary"
+    }
+    $sev = $parts[0].Trim().ToLowerInvariant()
+    if ($allowedSeverities -notcontains $sev) {
+      Fail "invalid finding severity '$sev'. Allowed: $($allowedSeverities -join ', ')"
+    }
+    $findingIndex++
+    $findings += [ordered]@{
+      id       = "f$findingIndex"
+      severity = $sev
+      file     = $parts[1].Trim()
+      summary  = $parts[2].Trim()
+    }
+  }
+
+  $blockerCount = @($findings | Where-Object { $_.severity -eq "blocker" }).Count
+  if ($blockerCount -gt 0 -and $Verdict -eq "approve") {
+    Fail "verdict 'approve' is inconsistent with $blockerCount blocker finding(s); use -Verdict block or downgrade the findings"
+  }
+
+  $report = [ordered]@{
+    schema_version  = "1"
+    task_id         = $safeTaskId
+    run_id          = $resolvedRunId
+    reviewer        = "agent:reviewer"
+    verdict         = $Verdict
+    findings        = @($findings)
+    reviewed_commit = (Get-GitValue -Arguments @("rev-parse", "--short", "HEAD") -Fallback "unknown")
+    summary         = $(if ([string]::IsNullOrWhiteSpace($Summary)) { "review recorded without summary" } else { $Summary })
+    created_at      = (Get-Date -Format "o")
+  }
+
+  $reviewDir = Join-Path $repoRoot ".specbridge/agent-reviews"
+  if (-not (Test-Path $reviewDir)) {
+    New-Item -ItemType Directory -Path $reviewDir -Force | Out-Null
+  }
+  $outRel = ".specbridge/agent-reviews/$safeTaskId.review-agent-report.json"
+  $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+  [System.IO.File]::WriteAllText((Join-Path $repoRoot $outRel), ($report | ConvertTo-Json -Depth 5), $utf8NoBom)
+
+  Write-LedgerEntry -TaskId $safeTaskId -Operation "review_report" -Status $Verdict -Detail "findings=$($findings.Count) blockers=$blockerCount" -RunId $resolvedRunId
+
+  Write-CliJson ([ordered]@{
+    command  = "specbridge-review-report"
+    task_id  = $safeTaskId
+    run_id   = $resolvedRunId
+    output   = $outRel
+    verdict  = $Verdict
+    findings = $findings.Count
+    blockers = $blockerCount
+  })
+  exit 0
+}
+
 function Invoke-SpecbridgeHandoffCommand {
   if ([string]::IsNullOrWhiteSpace($TaskId)) {
     Fail "specbridge-handoff requires -TaskId"
@@ -1094,6 +1187,32 @@ function Invoke-SpecbridgeHandoffCommand {
     }
   }
 
+  # Reviewer gate: a reviewer handoff requires a valid review-agent report
+  # with verdict approve and no blocker findings.
+  $reviewReportRel = $null
+  if ($safeAgent -eq "reviewer") {
+    $reviewReportRel = ".specbridge/agent-reviews/$safeTaskId.review-agent-report.json"
+    $reviewReportPath = Join-Path $repoRoot $reviewReportRel
+    if (-not (Test-Path -LiteralPath $reviewReportPath -PathType Leaf)) {
+      Fail "reviewer handoff requires a review-agent report. Run: specbridge-review-report -TaskId $safeTaskId -Verdict approve|block first."
+    }
+    $review = $null
+    try { $review = Get-Content -LiteralPath $reviewReportPath -Raw -Encoding UTF8 | ConvertFrom-Json } catch {}
+    if ($null -eq $review) {
+      Fail "review-agent report is not valid JSON: $reviewReportRel"
+    }
+    if ($review.task_id -ne $safeTaskId) {
+      Fail "review-agent report task_id '$($review.task_id)' does not match '$safeTaskId'"
+    }
+    if ($review.verdict -ne "approve") {
+      Fail "reviewer handoff blocked: review verdict is '$($review.verdict)'"
+    }
+    $reviewBlockers = @($review.findings | Where-Object { $_.severity -eq "blocker" })
+    if ($reviewBlockers.Count -gt 0) {
+      Fail "reviewer handoff blocked: report contains $($reviewBlockers.Count) blocker finding(s)"
+    }
+  }
+
   $outputRel = $target.output_artifact
   if ([string]::IsNullOrWhiteSpace($outputRel)) {
     $outputRel = ".specbridge/orchestrations/$safeTaskId/$safeAgent-output.json"
@@ -1107,6 +1226,7 @@ function Invoke-SpecbridgeHandoffCommand {
     task_id        = $safeTaskId
     run_id         = $orch.run_id
     agent          = $safeAgent
+    review_report  = $reviewReportRel
     role           = $target.role
     status         = "completed"
     summary        = $handoffSummary
