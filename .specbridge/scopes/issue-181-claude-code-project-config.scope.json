@@ -1,7 +1,7 @@
 {
     "contract_id":  "issue-181-claude-code-project-config",
     "run_id":  "sb-20260610-d3d9aafd",
-    "status":  "active",
+    "status":  "completed",
     "exclusive_write":  [
                             "README.md",
                             ".specbridge/context/CURRENT_GOAL.md",

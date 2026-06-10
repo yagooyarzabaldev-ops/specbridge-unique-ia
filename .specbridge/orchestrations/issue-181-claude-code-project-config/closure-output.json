@@ -1,0 +1,12 @@
+{
+    "schema_version":  "1",
+    "task_id":  "issue-181-claude-code-project-config",
+    "run_id":  "sb-20260610-d3d9aafd",
+    "agent":  "closure",
+    "review_report":  null,
+    "role":  "Close issue, mark scope completed, write closure evidence, regenerate dashboards",
+    "status":  "completed",
+    "summary":  "PR #193 squash-merged (2c30235). Issue #192 closed. Scope completed. Third orchestration completed end-to-end. Three dogfood findings recorded: repeated -Validation flags break binding, -File flattens arrays from bash, and a project deny on gh pr merge blocked its own author\u0027s authorized merge.",
+    "input_artifact":  ".specbridge/orchestrations/issue-181-claude-code-project-config/docs-output.json",
+    "produced_at":  "2026-06-10T01:31:09.2637415-03:00"
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-181-claude-code-project-config",
+  "run_id": "sb-20260610-d3d9aafd",
+  "evidence_type": "closure_evidence",
+  "collected_by": "specbridge-post-merge-closure",
+  "collected_at": "2026-06-10",
+  "merge_commit": "2c30235ee7b9dc74f98d310a31549b53eab2b841",
+  "primary_pr": 193,
+  "related_issue": 192,
+  "issue_closed": true,
+  "scope_status": "completed",
+  "all_validations_passed": true,
+  "notes": "PR #193 merged. .claude/settings.json bounded allowlist, four sb-* slash commands and CLAUDE.md Governed Operating Model shipped. Review gate caught two doc bugs pre-merge; a third dogfood finding (project deny overriding operator merge authorization) was fixed in commit 8b30f29. Issue #192 closed. Orchestration completed 7/7 via closure handoff."
+}

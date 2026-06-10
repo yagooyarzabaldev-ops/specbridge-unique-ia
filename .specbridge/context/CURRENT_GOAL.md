@@ -33,6 +33,8 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | — | Governed workflow-change authorization registry | 187 | Merged 2026-06-09 |
 | — | Foundation Validation workflow dedup (smoke is the single gate) | 189 | Merged 2026-06-09 |
 | 180/#188 | Independent review-agent report (specbridge-review-report) | 190 | Merged 2026-06-09 |
+| — | Post-merge closure issue-180: second orchestration completed 7/7 | 191 | Merged 2026-06-09 |
+| 181/#192 | Claude Code project config (.claude settings, sb-* commands) | 193 | Merged 2026-06-10 |
 
 ## Architecture Status
 
@@ -50,22 +52,21 @@ SpecBridge currently has:
 - Modular CLI (scripts/lib/, 109-line entry point, explicit UTF-8 reads)
 - Machine-validated review-agent reports (specbridge-review-report; reviewer handoff hard-gated on verdict approve with no blocker findings)
 - Governed workflow-change authorization registry (.specbridge/policies/workflow-change-authorizations.json)
+- Claude Code project config (.claude/settings.json bounded allowlist; /sb-intake, /sb-handoff, /sb-review, /sb-close; operating model in CLAUDE.md)
 
 ## Next Recommended Task
 
-**issue-181 — Claude Code project configuration for SpecBridge operation**
+**visual-digital-twin-rosario-mvp** (intake already triggered by the
+operator; branch `codex/visual-digital-twin-rosario-mvp` exists).
 
-Give the implementer agent a first-class operating environment:
-- `.claude/settings.json` permission allowlist for the specbridge CLI,
-  validators and gh read commands (fewer prompts, bounded autonomy)
-- Project slash commands for the governed cycle: /sb-intake, /sb-handoff,
-  /sb-review, /sb-close (thin wrappers over scripts/specbridge.ps1)
-- Document the operating model in CLAUDE.md: orchestrate -> handoff chain
-  -> review report -> closure, with the validator gates that enforce it
+This is the first product task to run on the full governance stack:
+intake -> orchestrate -> handoff chain -> review report -> PR/CI ->
+human-authorized merge -> closure. Note for the executor: the intake
+branch was cut before PR #193 and this closure merged; rebase onto main
+and resolve the `current-goal.json` conflict in favor of the new intake
+(same pattern as the issue-178 rebase).
 
-Alternative if preferred: **issue-182 — MCP resources** exposing
-current-goal, fix-plan and orchestration state as MCP resources for
-external agents.
+Backlog alternative: **issue-182 — MCP resources** exposing current-goal,
+fix-plan and orchestration state as MCP resources for external agents.
 
-Maintenance debt: none open. The former CI-dedup blocker was resolved via
-the governed workflow-change authorization registry (PRs #187/#189).
+Maintenance debt: none open.
