@@ -953,6 +953,105 @@ try {
       Remove-Item ".specbridge/orchestrations/$hoTaskId" -Recurse -Force -ErrorAction SilentlyContinue
     }
 
+    # specbridge-next-task: offline queue selector
+    $ntResult = Invoke-Cli -Arguments @("specbridge-next-task")
+    Assert-Success `
+      -Name "specbridge-next-task" `
+      -Result $ntResult `
+      -ExpectedPattern '"command"\s*:\s*"specbridge-next-task"'
+    if ($ntResult.ExitCode -eq 0) {
+      $ntJson = $null
+      try { $ntJson = $ntResult.Text.Trim() | ConvertFrom-Json } catch {}
+      if ($null -eq $ntJson) {
+        Write-Output "FAIL specbridge-next-task: output not valid JSON."
+        $script:failed = $true
+      } else {
+        $ntProps = @($ntJson.PSObject.Properties.Name)
+        $ntMissing = @("ok", "current_goal_status", "eligible_tasks", "excluded_issues", "recommended_action") |
+          Where-Object { $ntProps -notcontains $_ }
+        if ($ntMissing.Count -gt 0) {
+          Write-Output "FAIL specbridge-next-task: missing fields: $($ntMissing -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-next-task: all required fields present."
+        }
+        $ntExcluded = @($ntJson.excluded_issues | Where-Object { $_.issue -eq 194 })
+        if ($ntExcluded.Count -eq 1 -and $ntExcluded[0].reason -eq "not_planned") {
+          Write-Output "PASS specbridge-next-task: issue 194 excluded as not_planned."
+        } else {
+          Write-Output "FAIL specbridge-next-task: issue 194 not reported as excluded not_planned."
+          $script:failed = $true
+        }
+        if (@("continue_current_goal", "execute_eligible_task", "create_new_operator_task") -contains $ntJson.recommended_action) {
+          Write-Output "PASS specbridge-next-task: recommended_action within enum."
+        } else {
+          Write-Output "FAIL specbridge-next-task: unexpected recommended_action '$($ntJson.recommended_action)'."
+          $script:failed = $true
+        }
+      }
+
+      # read-only guarantee: no tracked file may change
+      $ntDiff = git status --porcelain 2>$null | Out-String
+      $ntDiffBefore = $ntDiff
+      $null = Invoke-Cli -Arguments @("specbridge-next-task")
+      $ntDiffAfter = git status --porcelain 2>$null | Out-String
+      if ($ntDiffBefore -eq $ntDiffAfter) {
+        Write-Output "PASS specbridge-next-task: read-only (no working tree mutation)."
+      } else {
+        Write-Output "FAIL specbridge-next-task: mutated the working tree."
+        $script:failed = $true
+      }
+    }
+
+    # validate-operator-task-decisions: positive on committed registry
+    $null = powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-operator-task-decisions.ps1 2>&1
+    if ($LASTEXITCODE -eq 0) {
+      Write-Output "PASS validate-operator-task-decisions: passes on committed registry."
+    } else {
+      Write-Output "FAIL validate-operator-task-decisions: failed on committed registry."
+      $script:failed = $true
+    }
+
+    # validate-operator-task-decisions: negatives (bad enum, duplicate issue, empty reason)
+    $otdPath = ".specbridge/policies/operator-task-decisions.json"
+    $otdBackup = Get-Content $otdPath -Raw -Encoding UTF8
+    try {
+      $otdBad = $otdBackup | ConvertFrom-Json
+      $otdBad.decisions[0].decision = "maybe_later"
+      Set-Content -Path $otdPath -Value ($otdBad | ConvertTo-Json -Depth 4) -Encoding UTF8
+      $null = powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-operator-task-decisions.ps1 2>&1
+      if ($LASTEXITCODE -ne 0) {
+        Write-Output "PASS validate-operator-task-decisions: detects invalid decision enum."
+      } else {
+        Write-Output "FAIL validate-operator-task-decisions: invalid enum not detected."
+        $script:failed = $true
+      }
+
+      $otdDup = $otdBackup | ConvertFrom-Json
+      $otdDup.decisions = @($otdDup.decisions[0], $otdDup.decisions[0])
+      Set-Content -Path $otdPath -Value ($otdDup | ConvertTo-Json -Depth 4) -Encoding UTF8
+      $null = powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-operator-task-decisions.ps1 2>&1
+      if ($LASTEXITCODE -ne 0) {
+        Write-Output "PASS validate-operator-task-decisions: detects duplicate github_issue."
+      } else {
+        Write-Output "FAIL validate-operator-task-decisions: duplicate issue not detected."
+        $script:failed = $true
+      }
+
+      $otdNoReason = $otdBackup | ConvertFrom-Json
+      $otdNoReason.decisions[0].reason = ""
+      Set-Content -Path $otdPath -Value ($otdNoReason | ConvertTo-Json -Depth 4) -Encoding UTF8
+      $null = powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-operator-task-decisions.ps1 2>&1
+      if ($LASTEXITCODE -ne 0) {
+        Write-Output "PASS validate-operator-task-decisions: detects empty reason."
+      } else {
+        Write-Output "FAIL validate-operator-task-decisions: empty reason not detected."
+        $script:failed = $true
+      }
+    } finally {
+      Set-Content -Path $otdPath -Value $otdBackup -Encoding UTF8 -NoNewline
+    }
+
     # lifecycle-guard: verify output structure regardless of exit code (violations may exist in repo state)
     $lgResult = Invoke-Cli -Arguments @("lifecycle-guard")
     if ($lgResult.Text -notmatch '"command"\s*:\s*"lifecycle-guard"') {

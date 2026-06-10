@@ -30,6 +30,7 @@ $validationScripts = @(
   "./scripts/validate-autonomous-execution-protocol.ps1",
   "./scripts/validate-orchestrations.ps1",
   "./scripts/validate-agent-review-reports.ps1",
+  "./scripts/validate-operator-task-decisions.ps1",
   "./scripts/test-specbridge-cli.ps1",
   "./scripts/test-specbridge-multi-agent-pilot.ps1",
   "./scripts/test-specbridge-executor-handoff.ps1",

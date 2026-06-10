@@ -1,0 +1,47 @@
+{
+    "contract_id":  "operator-queue-hygiene",
+    "run_id":  "sb-20260610-f4fc2874",
+    "status":  "active",
+    "exclusive_write":  [
+                            "README.md",
+                            ".specbridge/context/CURRENT_GOAL.md",
+                            ".specbridge/contracts/operator-queue-hygiene.execution.md",
+                            ".specbridge/scopes/operator-queue-hygiene.scope.json",
+                            ".specbridge/reports/operator-queue-hygiene.final-report.json",
+                            ".specbridge/audit-packets/operator-queue-hygiene.audit-packet.json",
+                            ".specbridge/audits/operator-queue-hygiene.chatgpt-audit.json",
+                            ".specbridge/github-evidence/operator-queue-hygiene.github-mutation-evidence.json",
+                            "scripts/specbridge.ps1",
+                            "scripts/lib/intake-doctor.ps1",
+                            "scripts/lib/dashboards.ps1",
+                            "scripts/validate-operator-task-decisions.ps1",
+                            "scripts/specbridge-smoke.ps1",
+                            "scripts/test-specbridge-cli.ps1",
+                            ".specbridge/policies/operator-task-decisions.json",
+                            ".specbridge/agent-reviews/operator-queue-hygiene.review-agent-report.json",
+                            ".specbridge/orchestrations/operator-queue-hygiene.orchestration.json",
+                            ".specbridge/orchestrations/operator-queue-hygiene/planner-output.json",
+                            ".specbridge/orchestrations/operator-queue-hygiene/implementer-output.json",
+                            ".specbridge/orchestrations/operator-queue-hygiene/reviewer-output.json",
+                            ".specbridge/orchestrations/operator-queue-hygiene/tester-output.json",
+                            ".specbridge/orchestrations/operator-queue-hygiene/security-output.json",
+                            ".specbridge/orchestrations/operator-queue-hygiene/docs-output.json",
+                            ".specbridge/orchestrations/operator-queue-hygiene/closure-output.json",
+                            ".specbridge/ledger/operations.ndjson",
+                            "docs/specbridge-studio.html",
+                            "docs/status-dashboard.html"
+                        ],
+    "read_only":  [
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      "CLAUDE.md",
+                      ".specbridge/policy.yaml"
+                  ],
+    "coordinator_owned":  [
+
+                          ],
+    "dependencies":  [
+
+                     ],
+    "final_report":  ".specbridge/reports/operator-queue-hygiene.final-report.json"
+}

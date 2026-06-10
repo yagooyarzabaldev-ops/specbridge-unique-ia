@@ -1043,6 +1043,82 @@ function Invoke-SpecbridgeOrchestrateCommand {
   exit 0
 }
 
+function Get-OperatorTaskDecisions {
+  $registryPath = Join-Path $repoRoot ".specbridge/policies/operator-task-decisions.json"
+  if (-not (Test-Path -LiteralPath $registryPath -PathType Leaf)) {
+    return @()
+  }
+  try {
+    $registry = Get-Content -LiteralPath $registryPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    return @($registry.decisions | Where-Object { $null -ne $_ })
+  } catch {
+    return @()
+  }
+}
+
+function Invoke-SpecbridgeNextTaskCommand {
+  # Offline and read-only by contract: no GitHub calls, no repository mutation.
+  $decisions = Get-OperatorTaskDecisions
+  $excludedTaskIds = @($decisions | ForEach-Object { $_.task_id })
+
+  $currentGoalStatus = "unknown"
+  $currentTaskId = "unknown"
+  $cgPath = Join-Path $repoRoot ".specbridge/state/current-goal.json"
+  if (Test-Path -LiteralPath $cgPath) {
+    try {
+      $cg = Get-Content -LiteralPath $cgPath -Raw -Encoding UTF8 | ConvertFrom-Json
+      if ($cg.status) { $currentGoalStatus = $cg.status }
+      if ($cg.current_task_id) { $currentTaskId = $cg.current_task_id }
+    } catch {}
+  }
+
+  # Eligible work = active scopes whose task is neither the operator-excluded
+  # set nor the already-running current goal.
+  $eligible = @()
+  $scopeDir = Join-Path $repoRoot ".specbridge/scopes"
+  if (Test-Path $scopeDir) {
+    foreach ($sf in (Get-ChildItem $scopeDir -Filter "*.scope.json" -File -ErrorAction SilentlyContinue)) {
+      try {
+        $sc = Get-Content -LiteralPath $sf.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($sc.status -ne "active") { continue }
+        if ($excludedTaskIds -contains $sc.contract_id) { continue }
+        if ($currentGoalStatus -eq "active" -and $sc.contract_id -eq $currentTaskId) { continue }
+        $eligible += [ordered]@{
+          task_id = $sc.contract_id
+          run_id  = $sc.run_id
+        }
+      } catch {}
+    }
+  }
+
+  $excluded = @($decisions | ForEach-Object {
+    [ordered]@{
+      issue    = $_.github_issue
+      task_id  = $_.task_id
+      reason   = $_.decision
+    }
+  })
+
+  $recommended = if ($currentGoalStatus -eq "active") {
+    "continue_current_goal"
+  } elseif (@($eligible).Count -gt 0) {
+    "execute_eligible_task"
+  } else {
+    "create_new_operator_task"
+  }
+
+  Write-CliJson ([ordered]@{
+    command             = "specbridge-next-task"
+    ok                  = $true
+    current_goal_status = $currentGoalStatus
+    current_task_id     = $currentTaskId
+    eligible_tasks      = @($eligible)
+    excluded_issues     = @($excluded)
+    recommended_action  = $recommended
+  })
+  exit 0
+}
+
 function Invoke-SpecbridgeReviewReportCommand {
   if ([string]::IsNullOrWhiteSpace($TaskId)) {
     Fail "specbridge-review-report requires -TaskId"

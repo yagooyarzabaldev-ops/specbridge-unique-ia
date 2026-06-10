@@ -291,6 +291,15 @@ function Invoke-GenerateStudioDashboardCommand {
     }
   } catch {}
 
+  # ── Operator queue (next-task, offline) ──────────────────────────────────
+  $queueInfo = $null
+  try {
+    $qRaw = & $PSCommandPath -Command specbridge-next-task 2>&1
+    if ($LASTEXITCODE -eq 0) {
+      $queueInfo = ($qRaw | Out-String).Trim() | ConvertFrom-Json
+    }
+  } catch {}
+
   # ── Build HTML ───────────────────────────────────────────────────────────
   $generatedAt = Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"
   $repoSlug    = ($RepositoryUrl -replace "https://github\.com/", "")
@@ -383,6 +392,27 @@ $opTable
   } else { "" }
 
   # Orchestrations section
+  $queueSectionHtml = if ($null -eq $queueInfo) {
+    "<p style='color:#888'>Operator queue state unavailable.</p>"
+  } else {
+    $qEligible = @($queueInfo.eligible_tasks).Count
+    $qExcludedRows = ""
+    foreach ($qx in @($queueInfo.excluded_issues)) {
+      $qExcludedRows += "<tr><td>#$($qx.issue)</td><td><code>$($qx.task_id)</code></td><td style='color:#e6a817'>$($qx.reason)</td></tr>"
+    }
+    $qExcludedTable = if ($qExcludedRows -eq "") {
+      "<p style='color:#2d9e5f'>No excluded issues.</p>"
+    } else {
+      "<table style='margin-top:8px'><tr><th>Issue</th><th>Task</th><th>Decision</th></tr>$qExcludedRows</table>"
+    }
+    $qActionColor = switch ($queueInfo.recommended_action) {
+      "continue_current_goal"     { "#7ab4f5" }
+      "execute_eligible_task"     { "#2d9e5f" }
+      default                     { "#e6a817" }
+    }
+    "<p>Eligible tasks: <strong>$qEligible</strong> &nbsp; Excluded tasks: <strong>$(@($queueInfo.excluded_issues).Count)</strong> &nbsp; Recommended action: <strong style='color:$qActionColor'>$($queueInfo.recommended_action)</strong></p>$qExcludedTable"
+  }
+
   $orchSectionHtml = if ($orchestrations.Count -eq 0) {
     "<p style='color:#888'>No orchestration manifests found.</p>"
   } else {
@@ -463,6 +493,9 @@ $opTable
 <div class="fp-section">$fpHtml</div>
 
 $ledgerNote
+<h2>Operator Queue</h2>
+<div class="section">$queueSectionHtml</div>
+
 <h2>Orchestrations ($($orchestrations.Count))</h2>
 <div class="orch-section">$orchSectionHtml</div>
 

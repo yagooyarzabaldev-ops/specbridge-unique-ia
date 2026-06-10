@@ -1,0 +1,30 @@
+{
+    "schema_version":  "1",
+    "task_id":  "operator-queue-hygiene",
+    "run_id":  "sb-20260610-f4fc2874",
+    "reviewer":  "agent:reviewer",
+    "verdict":  "approve",
+    "findings":  [
+                     {
+                         "id":  "f1",
+                         "severity":  "info",
+                         "file":  "scripts/lib/intake-doctor.ps1",
+                         "summary":  "eligible set derives from active scopes only; intake-created tasks on unmerged branches are invisible until merged, which matches the offline boundary"
+                     },
+                     {
+                         "id":  "f2",
+                         "severity":  "minor",
+                         "file":  "scripts/lib/dashboards.ps1",
+                         "summary":  "queue section spawns a second specbridge process per dashboard generation; acceptable cost, could reuse in-process data later"
+                     },
+                     {
+                         "id":  "f3",
+                         "severity":  "info",
+                         "file":  ".specbridge/policies/operator-task-decisions.json",
+                         "summary":  "schema_version is numeric 1 per operator spec while other registries use string 1; validator accepts presence not type"
+                     }
+                 ],
+    "reviewed_commit":  "542ddf5",
+    "summary":  "Reviewed full diff: next-task is offline and read-only by construction (no gh calls, no writes; verified by dedicated test that compares git status before/after). Validator covers schema, enums, duplicates, empty reason and timestamps with three negative tests. Registry records issue 194 as not_planned with mandatory reason. Studio renders the queue from the same command (single source of truth). README states GitHub issues are storage, the decision registry is authoritative.",
+    "created_at":  "2026-06-10T17:56:45.2228441-03:00"
+}

@@ -1,10 +1,10 @@
 {
-    "current_task_id":  "issue-181-claude-code-project-config",
-    "run_id":  "sb-20260610-d3d9aafd",
-    "title":  "Claude Code project configuration for SpecBridge operation",
-    "status":  "ready_for_next_task",
-    "primary_pr":  193,
-    "closure_pr":  null,
-    "last_updated":  "2026-06-10T01:31:27Z",
-    "updated_by":  "specbridge-post-merge-closure"
+  "current_task_id": "operator-queue-hygiene",
+  "run_id": "sb-20260610-f4fc2874",
+  "title": "SpecBridge Operator Queue Hygiene + Next Task Selector",
+  "status": "active",
+  "primary_pr": null,
+  "closure_pr": null,
+  "last_updated": "2026-06-10T17:37:41.4341815+00:00",
+  "updated_by": "specbridge-intake"
 }

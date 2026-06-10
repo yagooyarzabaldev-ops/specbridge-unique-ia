@@ -1,0 +1,12 @@
+{
+    "schema_version":  "1",
+    "task_id":  "operator-queue-hygiene",
+    "run_id":  "sb-20260610-f4fc2874",
+    "agent":  "tester",
+    "review_report":  null,
+    "role":  "Create or update tests, run smoke locally, interpret failures, propose fixes",
+    "status":  "completed",
+    "summary":  "Full smoke green (30 scripts including the new validate-operator-task-decisions). 9 new CLI tests pass: next-task fields, issue 194 exclusion, action enum, read-only guarantee via git status comparison, validator positive plus three negatives (invalid enum, duplicate issue, empty reason).",
+    "input_artifact":  ".specbridge/orchestrations/operator-queue-hygiene/reviewer-output.json",
+    "produced_at":  "2026-06-10T18:13:09.0754876-03:00"
+}

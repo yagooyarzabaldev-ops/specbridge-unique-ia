@@ -1,0 +1,12 @@
+{
+    "schema_version":  "1",
+    "task_id":  "operator-queue-hygiene",
+    "run_id":  "sb-20260610-f4fc2874",
+    "agent":  "docs",
+    "review_report":  null,
+    "role":  "Update README, CURRENT_GOAL.md, dashboard artifacts, release notes",
+    "status":  "completed",
+    "summary":  "README documents that open GitHub issues are not automatically eligible work and the operator decision registry is authoritative; also added the missing capability bullets for issues 180 and 181. Studio shows the Operator Queue from the same command output.",
+    "input_artifact":  ".specbridge/orchestrations/operator-queue-hygiene/security-output.json",
+    "produced_at":  "2026-06-10T18:13:12.9896821-03:00"
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "description": "Operator decisions over GitHub issues and task ids. An open GitHub issue is NOT automatically eligible SpecBridge work; entries here are authoritative for queue selection. Allowed decisions: not_planned, deferred, superseded, blocked.",
+  "decisions": [
+    {
+      "github_issue": 194,
+      "task_id": "visual-digital-twin-rosario-mvp",
+      "decision": "not_planned",
+      "reason": "Operator rejected the digital twin work as current SpecBridge backlog.",
+      "decided_by": "operator",
+      "decided_at": "2026-06-10T17:10:00Z"
+    }
+  ]
+}
