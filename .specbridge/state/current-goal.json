@@ -1,10 +1,10 @@
 {
-  "current_task_id": "issue-180-review-agent-report",
-  "run_id": "sb-20260609-f0c8fb8c",
-  "title": "Independent review-agent report",
-  "status": "ready_for_next_task",
-  "primary_pr": 190,
+  "current_task_id": "issue-181-claude-code-project-config",
+  "run_id": "sb-20260610-d3d9aafd",
+  "title": "Claude Code project configuration for SpecBridge operation",
+  "status": "active",
+  "primary_pr": null,
   "closure_pr": null,
-  "last_updated": "2026-06-09T23:40:00Z",
-  "updated_by": "specbridge-post-merge-closure"
+  "last_updated": "2026-06-10T03:20:13.0902686+00:00",
+  "updated_by": "specbridge-intake"
 }

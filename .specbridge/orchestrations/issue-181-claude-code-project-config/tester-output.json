@@ -1,0 +1,12 @@
+{
+    "schema_version":  "1",
+    "task_id":  "issue-181-claude-code-project-config",
+    "run_id":  "sb-20260610-d3d9aafd",
+    "agent":  "tester",
+    "review_report":  null,
+    "role":  "Create or update tests, run smoke locally, interpret failures, propose fixes",
+    "status":  "completed",
+    "summary":  "Full smoke green (29 scripts). Config-only change: no script modifications, no new CLI tests required. The review gate was exercised live during this task and caught two real doc bugs (repeated -Validation flags; -File array flattening from bash) before merge.",
+    "input_artifact":  ".specbridge/orchestrations/issue-181-claude-code-project-config/reviewer-output.json",
+    "produced_at":  "2026-06-10T00:44:13.1609511-03:00"
+}

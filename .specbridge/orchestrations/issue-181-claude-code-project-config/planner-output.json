@@ -1,0 +1,12 @@
+{
+    "schema_version":  "1",
+    "task_id":  "issue-181-claude-code-project-config",
+    "run_id":  "sb-20260610-d3d9aafd",
+    "agent":  "planner",
+    "review_report":  null,
+    "role":  "Classify complexity, detect critical files, propose scope and acceptance criteria",
+    "status":  "completed",
+    "summary":  "Config-only task, low risk. Files: .claude/settings.json (bounded allowlist, deny on merge/secrets), 4 slash commands wrapping the governed cycle, CLAUDE.md operating model section. No script changes, no new validators needed; smoke must stay green.",
+    "input_artifact":  null,
+    "produced_at":  "2026-06-10T00:35:46.3977913-03:00"
+}

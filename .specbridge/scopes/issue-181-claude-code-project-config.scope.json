@@ -1,0 +1,45 @@
+{
+    "contract_id":  "issue-181-claude-code-project-config",
+    "run_id":  "sb-20260610-d3d9aafd",
+    "status":  "active",
+    "exclusive_write":  [
+                            "README.md",
+                            ".specbridge/context/CURRENT_GOAL.md",
+                            ".specbridge/contracts/issue-181-claude-code-project-config.execution.md",
+                            ".specbridge/scopes/issue-181-claude-code-project-config.scope.json",
+                            ".specbridge/reports/issue-181-claude-code-project-config.final-report.json",
+                            ".specbridge/audit-packets/issue-181-claude-code-project-config.audit-packet.json",
+                            ".specbridge/audits/issue-181-claude-code-project-config.chatgpt-audit.json",
+                            ".specbridge/github-evidence/issue-181-claude-code-project-config.github-mutation-evidence.json",
+                            "CLAUDE.md",
+                            ".claude/settings.json",
+                            ".claude/commands/sb-intake.md",
+                            ".claude/commands/sb-handoff.md",
+                            ".claude/commands/sb-review.md",
+                            ".claude/commands/sb-close.md",
+                            ".specbridge/agent-reviews/issue-181-claude-code-project-config.review-agent-report.json",
+                            ".specbridge/orchestrations/issue-181-claude-code-project-config.orchestration.json",
+                            ".specbridge/orchestrations/issue-181-claude-code-project-config/planner-output.json",
+                            ".specbridge/orchestrations/issue-181-claude-code-project-config/implementer-output.json",
+                            ".specbridge/orchestrations/issue-181-claude-code-project-config/reviewer-output.json",
+                            ".specbridge/orchestrations/issue-181-claude-code-project-config/tester-output.json",
+                            ".specbridge/orchestrations/issue-181-claude-code-project-config/security-output.json",
+                            ".specbridge/orchestrations/issue-181-claude-code-project-config/docs-output.json",
+                            ".specbridge/orchestrations/issue-181-claude-code-project-config/closure-output.json",
+                            ".specbridge/ledger/operations.ndjson",
+                            "docs/specbridge-studio.html",
+                            "docs/status-dashboard.html"
+                        ],
+    "read_only":  [
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      ".specbridge/policy.yaml"
+                  ],
+    "coordinator_owned":  [
+
+                          ],
+    "dependencies":  [
+
+                     ],
+    "final_report":  ".specbridge/reports/issue-181-claude-code-project-config.final-report.json"
+}

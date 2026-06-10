@@ -1,0 +1,12 @@
+{
+    "schema_version":  "1",
+    "task_id":  "issue-181-claude-code-project-config",
+    "run_id":  "sb-20260610-d3d9aafd",
+    "agent":  "docs",
+    "review_report":  null,
+    "role":  "Update README, CURRENT_GOAL.md, dashboard artifacts, release notes",
+    "status":  "completed",
+    "summary":  "CLAUDE.md Governed Operating Model section maps each cycle step to its enforcing validator. Four slash commands documented with arguments, rules and gates. sb-review.md corrected during review with array syntax and -Command invocation form.",
+    "input_artifact":  ".specbridge/orchestrations/issue-181-claude-code-project-config/security-output.json",
+    "produced_at":  "2026-06-10T00:44:14.7916163-03:00"
+}

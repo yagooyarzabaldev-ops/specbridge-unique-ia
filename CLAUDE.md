@@ -171,6 +171,48 @@ specs/003-mvp-plan.md
 specs/004-acceptance-tests.md
 ```
 
+## Governed Operating Model (current)
+
+The repository runs every task through one governed cycle. Each step has a
+machine gate; none of them is optional.
+
+```text
+intake -> orchestrate -> handoff chain -> review report -> PR/CI -> merge -> closure
+```
+
+1. Intake: `/sb-intake` triggers `specbridge-intake.yml`, which creates the
+   GitHub issue, the `codex/<task-id>` branch, the execution contract, the
+   scope manifest and the evidence file. Gate: `validate-contract-scopes.ps1`
+   (scope conflicts), `validate-contracts.ps1`.
+2. Orchestrate: `specbridge-orchestrate -TaskId <t>` writes the manifest with
+   the seven agent roles (planner, implementer, reviewer, tester, security,
+   docs, closure). Gate: `validate-orchestrations.ps1`.
+3. Handoff chain: `/sb-handoff` records each agent's output artifact and
+   advances the manifest. Handoffs are strictly sequential; out-of-order,
+   repeated or post-completion handoffs fail. Gate: sequential-prefix and
+   artifact-on-disk rules in `validate-orchestrations.ps1`.
+4. Review report: `/sb-review` writes the structured report. The reviewer
+   handoff is hard-gated: missing report, verdict `block` or any `blocker`
+   finding fails. Gate: `validate-agent-review-reports.ps1` plus the gate
+   inside `specbridge-handoff`.
+5. PR/CI: push the branch, open the PR. GitHub CI is the merge authority
+   (Foundation Validation runs the full smoke). Workflow files may only
+   change with an unexpired entry in
+   `.specbridge/policies/workflow-change-authorizations.json`.
+6. Merge: squash merge, human-authorized per PR (explicit chat
+   authorization or harness permission prompt). `gh pr merge` is
+   deliberately absent from the settings allowlist so it always requires
+   that authorization. Do not hard-deny it: a project deny overrides the
+   operator's own permission grants and blocks even explicitly authorized
+   merges (verified live on 2026-06-10, when the deny rule fired against
+   its own author).
+7. Closure: `/sb-close` marks the scope completed, closes the issue, writes
+   closure evidence, hands off the closure agent (orchestration reaches
+   `completed`), resets `current-goal.json` and regenerates both dashboards.
+
+Local rule of thumb: a change is ready only when
+`./scripts/specbridge-smoke.ps1` passes, because CI runs exactly that.
+
 ## Final Report Format
 
 End every completed task with:

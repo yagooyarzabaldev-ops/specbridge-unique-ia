@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1:*)",
+      "Bash(powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1:*)",
+      "Bash(powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-:*)",
+      "Bash(powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-:*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1:*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File ./scripts/validate-:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh run watch:*)",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git branch:*)",
+      "Bash(git fetch:*)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(secrets/**)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)"
+    ]
+  }
+}
