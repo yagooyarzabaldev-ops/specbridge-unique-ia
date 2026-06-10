@@ -29,6 +29,10 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | — | Execution environment rules, docs index, merge policy clarification | 182 | Merged 2026-06-09 |
 | — | specbridge.ps1 split into scripts/lib modules + explicit UTF-8 reads | 183 | Merged 2026-06-09 |
 | 179/#184 | Agent handoff protocol (specbridge-handoff) + no-op validator fix | 185 | Merged 2026-06-09 |
+| — | Post-merge closure issue-179: first orchestration completed 7/7 | 186 | Merged 2026-06-09 |
+| — | Governed workflow-change authorization registry | 187 | Merged 2026-06-09 |
+| — | Foundation Validation workflow dedup (smoke is the single gate) | 189 | Merged 2026-06-09 |
+| 180/#188 | Independent review-agent report (specbridge-review-report) | 190 | Merged 2026-06-09 |
 
 ## Architecture Status
 
@@ -44,20 +48,24 @@ SpecBridge currently has:
 - Multi-agent orchestration manifests (specbridge-orchestrate, 7 agent roles)
 - Agent handoff protocol (specbridge-handoff: sequential handoffs, output artifacts, ledger entries, validator-enforced consistency)
 - Modular CLI (scripts/lib/, 109-line entry point, explicit UTF-8 reads)
+- Machine-validated review-agent reports (specbridge-review-report; reviewer handoff hard-gated on verdict approve with no blocker findings)
+- Governed workflow-change authorization registry (.specbridge/policies/workflow-change-authorizations.json)
 
 ## Next Recommended Task
 
-**issue-180 — Independent review-agent report**
+**issue-181 — Claude Code project configuration for SpecBridge operation**
 
-Now that handoffs are real, make the reviewer agent produce a structured,
-machine-validated review report instead of a free-text summary:
-- Define `.specbridge/review-reports/<task>.review-agent-report.json` schema
-  (findings list with severity, file, rationale; verdict approve/block)
-- `specbridge-handoff -Agent reviewer` requires or generates the report
-- Validator: reviewer handoff without a valid report fails
-- Wire the report into the Studio dashboard orchestration cards
+Give the implementer agent a first-class operating environment:
+- `.claude/settings.json` permission allowlist for the specbridge CLI,
+  validators and gh read commands (fewer prompts, bounded autonomy)
+- Project slash commands for the governed cycle: /sb-intake, /sb-handoff,
+  /sb-review, /sb-close (thin wrappers over scripts/specbridge.ps1)
+- Document the operating model in CLAUDE.md: orchestrate -> handoff chain
+  -> review report -> closure, with the validator gates that enforce it
 
-Maintenance debt still open (human action required):
-- foundation-validation.yml CI dedup is BLOCKED by
-  validate-standard-ci-authority.ps1 (fails any commit touching
-  .github/workflows/); needs a human-committed change.
+Alternative if preferred: **issue-182 — MCP resources** exposing
+current-goal, fix-plan and orchestration state as MCP resources for
+external agents.
+
+Maintenance debt: none open. The former CI-dedup blocker was resolved via
+the governed workflow-change authorization registry (PRs #187/#189).

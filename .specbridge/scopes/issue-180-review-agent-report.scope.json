@@ -1,7 +1,7 @@
 {
     "contract_id":  "issue-180-review-agent-report",
     "run_id":  "sb-20260609-f0c8fb8c",
-    "status":  "active",
+    "status":  "completed",
     "exclusive_write":  [
                             "README.md",
                             ".specbridge/context/CURRENT_GOAL.md",

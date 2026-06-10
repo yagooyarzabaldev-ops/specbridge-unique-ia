@@ -4,7 +4,7 @@
     "run_id":  "sb-20260609-f0c8fb8c",
     "coordinator":  "specbridge",
     "created_at":  "2026-06-09",
-    "status":  "in_progress",
+    "status":  "completed",
     "agents":  [
                    {
                        "name":  "planner",
@@ -51,10 +51,10 @@
                    {
                        "name":  "closure",
                        "role":  "Close issue, mark scope completed, write closure evidence, regenerate dashboards",
-                       "status":  "active",
+                       "status":  "completed",
                        "input_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/docs-output.json",
                        "output_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/closure-output.json"
                    }
                ],
-    "updated_at":  "2026-06-09T20:20:04.8339933-03:00"
+    "updated_at":  "2026-06-09T22:04:05.3850157-03:00"
 }

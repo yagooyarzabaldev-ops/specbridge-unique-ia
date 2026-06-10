@@ -1,0 +1,12 @@
+{
+    "schema_version":  "1",
+    "task_id":  "issue-180-review-agent-report",
+    "run_id":  "sb-20260609-f0c8fb8c",
+    "agent":  "closure",
+    "review_report":  null,
+    "role":  "Close issue, mark scope completed, write closure evidence, regenerate dashboards",
+    "status":  "completed",
+    "summary":  "PR #190 squash-merged (2664986). Issue #188 closed. Scope completed. Closure evidence written. Second orchestration completed end-to-end, first with a machine-validated review report in the chain.",
+    "input_artifact":  ".specbridge/orchestrations/issue-180-review-agent-report/docs-output.json",
+    "produced_at":  "2026-06-09T22:04:05.3507727-03:00"
+}

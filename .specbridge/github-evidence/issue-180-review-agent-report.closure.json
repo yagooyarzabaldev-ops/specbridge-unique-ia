@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-180-review-agent-report",
+  "run_id": "sb-20260609-f0c8fb8c",
+  "evidence_type": "closure_evidence",
+  "collected_by": "specbridge-post-merge-closure",
+  "collected_at": "2026-06-09",
+  "merge_commit": "2664986bc521db7da716340f67af7bf621471d23",
+  "primary_pr": 190,
+  "related_issue": 188,
+  "issue_closed": true,
+  "scope_status": "completed",
+  "all_validations_passed": true,
+  "notes": "PR #190 merged. specbridge-review-report command, reviewer gate in specbridge-handoff, validate-agent-review-reports.ps1 and Studio review verdict shipped. Issue #188 closed. Orchestration completed 7/7 via closure handoff."
+}
