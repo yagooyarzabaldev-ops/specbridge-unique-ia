@@ -1,0 +1,282 @@
+﻿{
+    "schema_version":  "1",
+    "task_id":  "v5-serious-live-pilot-no-coordinator-remediation",
+    "generated_by":  "specbridge-audit-packet-generator",
+    "execution_contract_path":  ".specbridge/contracts/v5-serious-live-pilot-no-coordinator-remediation.execution.md",
+    "changed_files":  [
+                          ".specbridge/agent-reviews/v5-serious-live-pilot-no-coordinator-remediation.review-agent-report.json",
+                          ".specbridge/audit-packets/v5-serious-live-pilot-no-coordinator-remediation.audit-packet.json",
+                          ".specbridge/audits/v5-serious-live-pilot-no-coordinator-remediation.chatgpt-audit.json",
+                          ".specbridge/contracts/v5-serious-live-pilot-no-coordinator-remediation.execution.md",
+                          ".specbridge/executor-packets/v5-serious-live-pilot-no-coordinator-remediation-docs.executor-packet.json",
+                          ".specbridge/executor-packets/v5-serious-live-pilot-no-coordinator-remediation-status.executor-packet.json",
+                          ".specbridge/executor-packets/v5-serious-live-pilot-no-coordinator-remediation-tests.executor-packet.json",
+                          ".specbridge/metrics/v5-serious-live-pilot-no-coordinator-remediation.autonomy-metrics.json",
+                          ".specbridge/orchestrations/v5-serious-live-pilot-no-coordinator-remediation.orchestration.json",
+                          ".specbridge/preflights/v5-serious-live-pilot-no-coordinator-remediation.runtime-preflight.json",
+                          ".specbridge/reports/v5-serious-live-pilot-no-coordinator-remediation.final-report.json",
+                          ".specbridge/runtime-evidence/v5-serious-live-pilot-no-coordinator-remediation-docs.executor-output.md",
+                          ".specbridge/runtime-evidence/v5-serious-live-pilot-no-coordinator-remediation-status.executor-output.md",
+                          ".specbridge/runtime-evidence/v5-serious-live-pilot-no-coordinator-remediation-tests.executor-output.md",
+                          ".specbridge/runtime-executions/v5-serious-live-pilot-no-coordinator-remediation-docs.runtime-execution.json",
+                          ".specbridge/runtime-executions/v5-serious-live-pilot-no-coordinator-remediation-status.runtime-execution.json",
+                          ".specbridge/runtime-executions/v5-serious-live-pilot-no-coordinator-remediation-tests.runtime-execution.json",
+                          ".specbridge/runtime-launches/v5-serious-live-pilot-no-coordinator-remediation-docs.runtime-launch.json",
+                          ".specbridge/runtime-launches/v5-serious-live-pilot-no-coordinator-remediation-status.runtime-launch.json",
+                          ".specbridge/runtime-launches/v5-serious-live-pilot-no-coordinator-remediation-tests.runtime-launch.json",
+                          ".specbridge/runtime-results/v5-serious-live-pilot-no-coordinator-remediation-docs.runtime-result.json",
+                          ".specbridge/runtime-results/v5-serious-live-pilot-no-coordinator-remediation-status.runtime-result.json",
+                          ".specbridge/runtime-results/v5-serious-live-pilot-no-coordinator-remediation-tests.runtime-result.json",
+                          ".specbridge/runtime-runs/v5-serious-live-pilot-no-coordinator-remediation-docs.runtime-run.json",
+                          ".specbridge/runtime-runs/v5-serious-live-pilot-no-coordinator-remediation-status.runtime-run.json",
+                          ".specbridge/runtime-runs/v5-serious-live-pilot-no-coordinator-remediation-tests.runtime-run.json",
+                          ".specbridge/runtime-summaries/v5-serious-live-pilot-no-coordinator-remediation-docs.runtime-summary.json",
+                          ".specbridge/runtime-summaries/v5-serious-live-pilot-no-coordinator-remediation-status.runtime-summary.json",
+                          ".specbridge/runtime-summaries/v5-serious-live-pilot-no-coordinator-remediation-tests.runtime-summary.json",
+                          ".specbridge/scopes/v5-serious-live-pilot-no-coordinator-remediation.scope.json",
+                          "docs/specbridge-v5-serious-pilot-status.md",
+                          "scripts/lib/status.ps1",
+                          "scripts/test-specbridge-cli.ps1"
+                      ],
+    "diff_summary":  [
+                         {
+                             "file":  ".specbridge/agent-reviews/v5-serious-live-pilot-no-coordinator-remediation.review-agent-report.json",
+                             "added_lines":  30,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/audit-packets/v5-serious-live-pilot-no-coordinator-remediation.audit-packet.json",
+                             "added_lines":  282,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/audits/v5-serious-live-pilot-no-coordinator-remediation.chatgpt-audit.json",
+                             "added_lines":  104,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/contracts/v5-serious-live-pilot-no-coordinator-remediation.execution.md",
+                             "added_lines":  99,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-packets/v5-serious-live-pilot-no-coordinator-remediation-docs.executor-packet.json",
+                             "added_lines":  41,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-packets/v5-serious-live-pilot-no-coordinator-remediation-status.executor-packet.json",
+                             "added_lines":  42,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/executor-packets/v5-serious-live-pilot-no-coordinator-remediation-tests.executor-packet.json",
+                             "added_lines":  42,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/metrics/v5-serious-live-pilot-no-coordinator-remediation.autonomy-metrics.json",
+                             "added_lines":  47,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/orchestrations/v5-serious-live-pilot-no-coordinator-remediation.orchestration.json",
+                             "added_lines":  60,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/preflights/v5-serious-live-pilot-no-coordinator-remediation.runtime-preflight.json",
+                             "added_lines":  134,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/reports/v5-serious-live-pilot-no-coordinator-remediation.final-report.json",
+                             "added_lines":  61,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-evidence/v5-serious-live-pilot-no-coordinator-remediation-docs.executor-output.md",
+                             "added_lines":  49,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-evidence/v5-serious-live-pilot-no-coordinator-remediation-status.executor-output.md",
+                             "added_lines":  29,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-evidence/v5-serious-live-pilot-no-coordinator-remediation-tests.executor-output.md",
+                             "added_lines":  52,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-executions/v5-serious-live-pilot-no-coordinator-remediation-docs.runtime-execution.json",
+                             "added_lines":  79,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-executions/v5-serious-live-pilot-no-coordinator-remediation-status.runtime-execution.json",
+                             "added_lines":  78,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-executions/v5-serious-live-pilot-no-coordinator-remediation-tests.runtime-execution.json",
+                             "added_lines":  79,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-launches/v5-serious-live-pilot-no-coordinator-remediation-docs.runtime-launch.json",
+                             "added_lines":  68,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-launches/v5-serious-live-pilot-no-coordinator-remediation-status.runtime-launch.json",
+                             "added_lines":  68,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-launches/v5-serious-live-pilot-no-coordinator-remediation-tests.runtime-launch.json",
+                             "added_lines":  69,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-results/v5-serious-live-pilot-no-coordinator-remediation-docs.runtime-result.json",
+                             "added_lines":  48,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-results/v5-serious-live-pilot-no-coordinator-remediation-status.runtime-result.json",
+                             "added_lines":  48,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-results/v5-serious-live-pilot-no-coordinator-remediation-tests.runtime-result.json",
+                             "added_lines":  48,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-runs/v5-serious-live-pilot-no-coordinator-remediation-docs.runtime-run.json",
+                             "added_lines":  56,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-runs/v5-serious-live-pilot-no-coordinator-remediation-status.runtime-run.json",
+                             "added_lines":  55,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-runs/v5-serious-live-pilot-no-coordinator-remediation-tests.runtime-run.json",
+                             "added_lines":  56,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-summaries/v5-serious-live-pilot-no-coordinator-remediation-docs.runtime-summary.json",
+                             "added_lines":  43,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-summaries/v5-serious-live-pilot-no-coordinator-remediation-status.runtime-summary.json",
+                             "added_lines":  43,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/runtime-summaries/v5-serious-live-pilot-no-coordinator-remediation-tests.runtime-summary.json",
+                             "added_lines":  43,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/scopes/v5-serious-live-pilot-no-coordinator-remediation.scope.json",
+                             "added_lines":  65,
+                             "deleted_lines":  22
+                         },
+                         {
+                             "file":  "docs/specbridge-v5-serious-pilot-status.md",
+                             "added_lines":  16,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  "scripts/lib/status.ps1",
+                             "added_lines":  2,
+                             "deleted_lines":  1
+                         },
+                         {
+                             "file":  "scripts/test-specbridge-cli.ps1",
+                             "added_lines":  3,
+                             "deleted_lines":  1
+                         }
+                     ],
+    "validation_commands":  [
+                                "GitHub CI",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 v5-serious-pilot-status",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-autonomy-metrics.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-executor-packets.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-executions.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-launches.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-preflights.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-results.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-runs.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-summaries.ps1"
+                            ],
+    "validation_results":  [
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 v5-serious-pilot-status",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-executor-packets.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-launches.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-preflights.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-executions.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-runs.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-results.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-summaries.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-autonomy-metrics.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "GitHub CI",
+                                   "result":  "not_collected"
+                               }
+                           ],
+    "final_report_path":  ".specbridge/reports/v5-serious-live-pilot-no-coordinator-remediation.final-report.json",
+    "ci_status":  "not_collected",
+    "pr_review_report_path":  null,
+    "policy_result":  "Compliant. Live execution used bounded claude -p with budget cap 2.00 USD per launch, ASCII-bounded redacted diagnostics, Read/Write/Edit tools only. No production, secrets, billing, auth, authorization, database, dependency installation, deployment, or CI/CD security changes. Issue #194 untouched and still excluded as not_planned by the operator decision registry.",
+    "unresolved_risks":  [
+                             "prepare-runtime-launch defaults AllowedTool to Read,Write without Edit, which forces full-file rewrites and burned one slice budget; recommend changing the default in a runner-hardening task.",
+                             "Operator plan session limits can fail live slices for reasons outside the protocol; retry timing depends on the reset window.",
+                             "Slice retries consumed up to double the per-slice budget envelope (5 live executions total against a 3-execution baseline)."
+                         ],
+    "completion_status":  "complete",
+    "source_files":  [
+                         ".specbridge/contracts/v5-serious-live-pilot-no-coordinator-remediation.execution.md",
+                         ".specbridge/reports/v5-serious-live-pilot-no-coordinator-remediation.final-report.json"
+                     ],
+    "secret_omission":  "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

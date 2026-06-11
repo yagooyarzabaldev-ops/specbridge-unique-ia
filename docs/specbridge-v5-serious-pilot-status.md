@@ -204,3 +204,19 @@ The standard sequence is:
 - `docs/specbridge-autonomy-metrics.md` - Autonomy metrics format and fields.
 - `docs/specbridge-runtime-summaries.md` - Runtime summary format and merge readiness.
 - `docs/specbridge-standard-loop-v1.md` - The canonical Standard Loop that V5 extends.
+
+## Live pilot execution (2026-06-10)
+
+The `serious_live_multi_slice_no_remediation` pilot ran three bounded live
+Claude Code slices (`status`, `tests`, `docs`) on branch
+`codex/v5-serious-live-pilot-no-coordinator-remediation` with a 2.00 USD budget
+per slice, a maximum of one live retry per slice, and the rule that two
+failures on any slice block the pilot instead of triggering coordinator repair.
+
+During this execution:
+
+- The `status` slice encoded `max_live_retry_per_slice` and `pilot_block_rule`
+  into the `v5-serious-pilot-status` output, making the retry limit and the
+  pilot block rule machine-readable evidence in every response.
+- The `tests` slice added deterministic assertions for those fields, so the
+  CLI test suite fails if either field is missing or changes value.

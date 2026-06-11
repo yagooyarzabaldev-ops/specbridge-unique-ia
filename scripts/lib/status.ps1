@@ -1096,6 +1096,8 @@ function Invoke-V5SeriousPilotStatusCommand {
     diagnostic_preview_policy = "ascii_stable_bounded_240_chars"
     target_completion_status = "completed_without_coordinator_remediation"
     coordinator_remediation_allowed = $false
+    max_live_retry_per_slice = 1
+    pilot_block_rule = "two_failures_per_slice_block_the_pilot"
     policy_boundary = "no-production no-secrets no-billing no-auth no-authorization no-database no-dependency-installation no-ci-cd-security no-deployment"
   })
 
@@ -1140,4 +1142,3 @@ function Invoke-BoundedLivePilotStatusCommand {
 
   exit 0
 }
-

@@ -1,0 +1,41 @@
+{
+    "schema_version":  "1",
+    "packet_id":  "v5-serious-live-pilot-no-coordinator-remediation-docs",
+    "task_id":  "v5-serious-live-pilot-no-coordinator-remediation",
+    "slice_id":  "docs",
+    "agent_role":  "documentation",
+    "goal":  "Bounded docs slice for the V5 serious live pilot. In docs/specbridge-v5-serious-pilot-status.md, append a new section titled \u0027Live pilot execution (2026-06-10)\u0027 stating: the serious_live_multi_slice_no_remediation pilot ran three bounded live Claude Code slices (status, tests, docs) on branch codex/v5-serious-live-pilot-no-coordinator-remediation with a 2.00 USD budget per slice, max one live retry per slice, and the rule that two failures on any slice block the pilot instead of coordinator repair; the status slice encoded max_live_retry_per_slice and pilot_block_rule into the v5-serious-pilot-status output and the tests slice added deterministic assertions for those fields. Keep the existing document content untouched above the new section. Write a short executor evidence note describing the section added to .specbridge/runtime-evidence/v5-serious-live-pilot-no-coordinator-remediation-docs.executor-output.md. Do not modify README.md in this slice.",
+    "launch_mode":  "manual_antigravity",
+    "branch_name":  "claude/v5-serious-live-pilot-no-coordinator-remediation-docs",
+    "execution_contract_path":  ".specbridge/contracts/v5-serious-live-pilot-no-coordinator-remediation.execution.md",
+    "final_report_path":  ".specbridge/reports/v5-serious-live-pilot-no-coordinator-remediation.final-report.json",
+    "exclusive_write":  [
+                            "docs/specbridge-v5-serious-pilot-status.md",
+                            ".specbridge/runtime-evidence/v5-serious-live-pilot-no-coordinator-remediation-docs.executor-output.md"
+                        ],
+    "read_only":  [
+                      "README.md",
+                      "SPECBRIDGE.md",
+                      "AGENTS.md",
+                      "CLAUDE.md",
+                      ".specbridge/policy.yaml",
+                      ".specbridge/contracts/v5-serious-live-pilot-no-coordinator-remediation.execution.md",
+                      "scripts/lib/status.ps1"
+                  ],
+    "required_validations":  [
+                                 "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 v5-serious-pilot-status"
+                             ],
+    "stop_conditions":  [
+                            "policy_conflict",
+                            "scope_conflict",
+                            "missing_required_context",
+                            "impossible_acceptance_criteria",
+                            "protected_resource_required"
+                        ],
+    "status":  "ready_for_handoff",
+    "source_files":  [
+                         ".specbridge/contracts/v5-serious-live-pilot-no-coordinator-remediation.execution.md",
+                         ".specbridge/scopes/v5-serious-live-pilot-no-coordinator-remediation.scope.json"
+                     ],
+    "generated_by":  "specbridge-cli"
+}

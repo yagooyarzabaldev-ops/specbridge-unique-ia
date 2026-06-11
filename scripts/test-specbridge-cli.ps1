@@ -1169,7 +1169,9 @@ try {
       foreach ($fieldCheck in @(
         [pscustomobject]@{ Field = "runner_baseline"; Expected = "v5_hardened_runtime_runner" },
         [pscustomobject]@{ Field = "default_runtime_budget_usd"; Expected = "2.00" },
-        [pscustomobject]@{ Field = "diagnostic_preview_policy"; Expected = "ascii_stable_bounded_240_chars" }
+        [pscustomobject]@{ Field = "diagnostic_preview_policy"; Expected = "ascii_stable_bounded_240_chars" },
+        [pscustomobject]@{ Field = "max_live_retry_per_slice"; Expected = 1 },
+        [pscustomobject]@{ Field = "pilot_block_rule"; Expected = "two_failures_per_slice_block_the_pilot" }
       )) {
         $actual = if ($null -ne $v5SeriousPilotStatusJson) { $v5SeriousPilotStatusJson.($fieldCheck.Field) } else { $null }
         if ($actual -ne $fieldCheck.Expected) {
