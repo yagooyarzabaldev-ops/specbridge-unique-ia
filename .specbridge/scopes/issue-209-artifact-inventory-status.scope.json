@@ -1,0 +1,34 @@
+{
+  "contract_id": "issue-209-artifact-inventory-status",
+  "run_id": "sb-20260615-0209a1b2",
+  "status": "active",
+  "exclusive_write": [
+    ".specbridge/contracts/issue-209-artifact-inventory-status.execution.md",
+    ".specbridge/scopes/issue-209-artifact-inventory-status.scope.json",
+    ".specbridge/reports/issue-209-artifact-inventory-status.final-report.json",
+    ".specbridge/audit-packets/issue-209-artifact-inventory-status.audit-packet.json",
+    ".specbridge/audits/issue-209-artifact-inventory-status.chatgpt-audit.json",
+    ".specbridge/artifact-inventory/current.inventory.json",
+    "docs/specbridge-artifact-inventory.md",
+    "scripts/specbridge.ps1",
+    "scripts/lib/artifact-inventory.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "docs/status-dashboard.html",
+    "docs/specbridge-studio.html",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/state/current-goal.json",
+    ".specbridge/mcp-resources/operator-state.catalog.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    "scripts/lib/common.ps1",
+    ".specbridge"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-209-artifact-inventory-status.final-report.json"
+}

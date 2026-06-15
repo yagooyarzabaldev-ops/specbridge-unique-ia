@@ -1,0 +1,39 @@
+{
+  "summary": "Implemented specbridge-artifact-inventory as a deterministic, read-only local CLI surface for repository evidence growth. The command reports the main .specbridge evidence families, per-family counts, bytes, latest modified timestamps, retention_posture=preserve, cleanup_permission=none, aggregate totals, and retention_enforcement=none. Optional file output is limited to .specbridge/artifact-inventory/current.inventory.json and requires -Force when replacing.",
+  "changed_files": [
+    ".specbridge/artifact-inventory/current.inventory.json",
+    ".specbridge/audit-packets/issue-209-artifact-inventory-status.audit-packet.json",
+    ".specbridge/audits/issue-209-artifact-inventory-status.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-209-artifact-inventory-status.execution.md",
+    ".specbridge/mcp-resources/operator-state.catalog.json",
+    ".specbridge/reports/issue-209-artifact-inventory-status.final-report.json",
+    ".specbridge/scopes/issue-209-artifact-inventory-status.scope.json",
+    ".specbridge/state/current-goal.json",
+    "docs/specbridge-artifact-inventory.md",
+    "docs/specbridge-studio.html",
+    "docs/status-dashboard.html",
+    "scripts/lib/artifact-inventory.ps1",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "git diff --check: passed"
+  ],
+  "policy_result": "Within policy. All changed files are inside the issue-209 exclusive_write scope. No protected files, secrets, production configuration, billing, authentication, authorization, database, dependency, deployment, workflow, CI/CD security, operator decision registry, issue #194, or digital twin changes are included.",
+  "risk_result": "Within bounds. The command is read-only when -OutputPath is omitted and the only allowed write path is the governed inventory artifact. The feature explicitly performs no deletion, archival, pruning, compression, movement, or retention enforcement.",
+  "unresolved_risks": [
+    "GitHub CI is pending until branch push and PR creation.",
+    "Post-merge closure is still required after the primary PR merges."
+  ],
+  "merge_status": "Pending PR creation, GitHub CI, and merge gate.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "local_complete_ci_pending"
+}

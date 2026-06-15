@@ -2544,6 +2544,186 @@ try {
       -Name "specbridge-mcp-resources-bad-output-path" `
       -Result $mcpBadPathResult `
       -ExpectedPattern "OutputPath must be .specbridge/mcp-resources/operator-state.catalog.json"
+
+    # specbridge-artifact-inventory tests
+
+    # 1. Command shape: exits 0, returns JSON with command and ok fields
+    $aiResult = Invoke-Cli -Arguments @("specbridge-artifact-inventory")
+    Assert-Success `
+      -Name "specbridge-artifact-inventory" `
+      -Result $aiResult `
+      -ExpectedPattern '"command"\s*:\s*"specbridge-artifact-inventory"'
+
+    $aiRepeatResult = Invoke-Cli -Arguments @("specbridge-artifact-inventory")
+    if ($aiResult.ExitCode -eq 0 -and $aiRepeatResult.ExitCode -eq 0) {
+      if ($aiResult.Text.Trim() -ceq $aiRepeatResult.Text.Trim()) {
+        Write-Output "PASS specbridge-artifact-inventory-deterministic: repeated read-only output is stable."
+      } else {
+        Write-Output "FAIL specbridge-artifact-inventory-deterministic: repeated read-only output changed."
+        $script:failed = $true
+      }
+    }
+
+    if ($aiResult.ExitCode -eq 0) {
+      $aiJson = $null
+      try { $aiJson = $aiResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      if ($null -eq $aiJson) {
+        Write-Output "FAIL specbridge-artifact-inventory: output was not valid JSON."
+        $script:failed = $true
+      } else {
+        # ok field
+        if ($aiJson.ok -ne $true) {
+          Write-Output "FAIL specbridge-artifact-inventory: ok field is not true."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-artifact-inventory: ok is true."
+        }
+
+        # inventory top-level fields
+        $requiredTopFields = @("command", "generated_at", "families", "totals", "retention_enforcement", "read_only_note")
+        $missingTop = $requiredTopFields | Where-Object { $null -eq $aiJson.inventory.$_ -and $aiJson.inventory.$_ -ne 0 }
+        if ($missingTop.Count -gt 0) {
+          Write-Output "FAIL specbridge-artifact-inventory: inventory missing fields: $($missingTop -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-artifact-inventory: inventory has all required top-level fields."
+        }
+
+        # retention_enforcement must be "none"
+        if ($aiJson.inventory.retention_enforcement -ne "none") {
+          Write-Output "FAIL specbridge-artifact-inventory: retention_enforcement expected 'none', got '$($aiJson.inventory.retention_enforcement)'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-artifact-inventory: retention_enforcement is none."
+        }
+
+        # 2. Required families present
+        $families = @($aiJson.inventory.families)
+        $requiredFamilyIds = @(
+          "contracts", "scopes", "reports", "audit_packets", "chatgpt_audits",
+          "runtime_launches", "runtime_preflights", "runtime_results", "runtime_summaries",
+          "runtime_runs", "runtime_executions", "orchestrations", "executor_packets",
+          "github_evidence", "ledger", "mcp_resources", "artifact_inventory"
+        )
+        $actualFamilyIds = $families | ForEach-Object { $_.family_id }
+        $missingFamilies = $requiredFamilyIds | Where-Object { $actualFamilyIds -notcontains $_ }
+        if ($missingFamilies.Count -gt 0) {
+          Write-Output "FAIL specbridge-artifact-inventory: missing families: $($missingFamilies -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-artifact-inventory: all required family IDs present."
+        }
+
+        # 3. Required fields per family entry
+        $requiredFamilyFields = @("family_id", "repository_path", "file_count", "total_bytes", "latest_modified", "retention_posture", "cleanup_permission")
+        $familyFieldFail = $false
+        foreach ($fam in $families) {
+          $missingFamFields = $requiredFamilyFields | Where-Object { -not ($fam.PSObject.Properties.Name -contains $_) }
+          if ($missingFamFields.Count -gt 0) {
+            Write-Output "FAIL specbridge-artifact-inventory: family '$($fam.family_id)' missing fields: $($missingFamFields -join ', ')."
+            $script:failed = $true
+            $familyFieldFail = $true
+          }
+          if ($fam.cleanup_permission -ne "none") {
+            Write-Output "FAIL specbridge-artifact-inventory: family '$($fam.family_id)' cleanup_permission must be 'none'."
+            $script:failed = $true
+            $familyFieldFail = $true
+          }
+          if ($fam.retention_posture -ne "preserve") {
+            Write-Output "FAIL specbridge-artifact-inventory: family '$($fam.family_id)' retention_posture must be 'preserve'."
+            $script:failed = $true
+            $familyFieldFail = $true
+          }
+        }
+        if (-not $familyFieldFail) {
+          Write-Output "PASS specbridge-artifact-inventory: all family entries have required fields, cleanup_permission=none, retention_posture=preserve."
+        }
+
+        # 4. Totals fields
+        $totalsFields = @("family_count", "total_file_count", "total_bytes")
+        $missingTotals = $totalsFields | Where-Object { $null -eq $aiJson.inventory.totals.$_ -and $aiJson.inventory.totals.$_ -ne 0 }
+        if ($missingTotals.Count -gt 0) {
+          Write-Output "FAIL specbridge-artifact-inventory: totals missing fields: $($missingTotals -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-artifact-inventory: totals has all required fields."
+        }
+
+        if ($aiJson.inventory.totals.family_count -ne $requiredFamilyIds.Count) {
+          Write-Output "FAIL specbridge-artifact-inventory: totals.family_count expected $($requiredFamilyIds.Count), got $($aiJson.inventory.totals.family_count)."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-artifact-inventory: totals.family_count is $($requiredFamilyIds.Count)."
+        }
+      }
+    }
+
+    # 8. No mutation without OutputPath: no inventory file written
+    $aiInventoryArtifact = Join-Path (Get-Location).Path ".specbridge/artifact-inventory/current.inventory.json"
+    $aiInventoryExistedBefore = Test-Path $aiInventoryArtifact
+    $aiInventoryOriginalRaw = $null
+    if ($aiInventoryExistedBefore) {
+      $aiInventoryOriginalRaw = Get-Content $aiInventoryArtifact -Raw -Encoding UTF8
+    }
+    Remove-Item $aiInventoryArtifact -Force -ErrorAction SilentlyContinue
+    $aiNoPathResult = Invoke-Cli -Arguments @("specbridge-artifact-inventory")
+    if (Test-Path $aiInventoryArtifact) {
+      Write-Output "FAIL specbridge-artifact-inventory-no-mutation: inventory file was written without -OutputPath."
+      $script:failed = $true
+    } else {
+      Write-Output "PASS specbridge-artifact-inventory-no-mutation: no inventory file written without -OutputPath."
+    }
+
+    # 6. OutputPath behavior: writes inventory to declared path
+    $aiOutputResult = Invoke-Cli -Arguments @("specbridge-artifact-inventory", "-OutputPath", ".specbridge/artifact-inventory/current.inventory.json", "-Force")
+    Assert-Success `
+      -Name "specbridge-artifact-inventory-output-path" `
+      -Result $aiOutputResult `
+      -ExpectedPattern '"output_path"'
+
+    if ($aiOutputResult.ExitCode -eq 0) {
+      if (-not (Test-Path $aiInventoryArtifact)) {
+        Write-Output "FAIL specbridge-artifact-inventory-output-path: inventory file was not written."
+        $script:failed = $true
+      } else {
+        $writtenInventory = $null
+        try {
+          $writtenInventory = Get-Content $aiInventoryArtifact -Raw -Encoding UTF8 | ConvertFrom-Json
+        } catch {}
+        if ($null -eq $writtenInventory) {
+          Write-Output "FAIL specbridge-artifact-inventory-output-path: written inventory is not valid JSON."
+          $script:failed = $true
+        } elseif ($writtenInventory.command -ne "specbridge-artifact-inventory") {
+          Write-Output "FAIL specbridge-artifact-inventory-output-path: written inventory command field mismatch."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-artifact-inventory-output-path: inventory file written and valid."
+        }
+      }
+
+      # Force required when replacing
+      $aiExistingResult = Invoke-Cli -Arguments @("specbridge-artifact-inventory", "-OutputPath", ".specbridge/artifact-inventory/current.inventory.json")
+      Assert-Failure `
+        -Name "specbridge-artifact-inventory-output-path-requires-force" `
+        -Result $aiExistingResult `
+        -ExpectedPattern "use -Force"
+    }
+
+    # Restore artifact state after mutation tests
+    if ($aiInventoryExistedBefore) {
+      $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+      [System.IO.File]::WriteAllText($aiInventoryArtifact, $aiInventoryOriginalRaw, $utf8NoBom)
+    } else {
+      Remove-Item $aiInventoryArtifact -Force -ErrorAction SilentlyContinue
+    }
+
+    # 7. OutputPath outside the contract artifact must fail
+    $aiBadPathResult = Invoke-Cli -Arguments @("specbridge-artifact-inventory", "-OutputPath", "docs/bad-inventory.json")
+    Assert-Failure `
+      -Name "specbridge-artifact-inventory-bad-output-path" `
+      -Result $aiBadPathResult `
+      -ExpectedPattern "OutputPath must be .specbridge/artifact-inventory/current.inventory.json"
   }
   finally {
     Pop-Location

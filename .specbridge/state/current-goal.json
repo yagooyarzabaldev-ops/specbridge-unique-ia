@@ -1,10 +1,10 @@
 {
-    "current_task_id":  "none",
-    "run_id":  null,
-    "title":  "Ready for next operator task",
-    "status":  "ready_for_next_task",
-    "primary_pr":  207,
+    "current_task_id":  "issue-209-artifact-inventory-status",
+    "run_id":  "sb-20260615-0209a1b2",
+    "title":  "Add SpecBridge artifact inventory status",
+    "status":  "active",
+    "primary_pr":  null,
     "closure_pr":  null,
-    "last_updated":  "2026-06-15T06:30:00Z",
-    "updated_by":  "specbridge-post-merge-closure"
+    "last_updated":  "2026-06-15T10:05:00-03:00",
+    "updated_by":  "ChatGPT/Codex"
 }

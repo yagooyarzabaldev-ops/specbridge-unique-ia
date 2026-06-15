@@ -1,7 +1,7 @@
 {
     "schema_version":  "1",
     "catalog_id":  "specbridge-operator-state",
-    "generated_at":  "2026-06-15T03:26:45.5993431-03:00",
+    "generated_at":  "2026-06-15T10:35:39.7093596-03:00",
     "mcp_server_status":  "not_implemented",
     "mcp_server_note":  "No live MCP server is implemented. This catalog is a deterministic local export artifact only.",
     "read_only_policy":  true,
@@ -19,14 +19,14 @@
                           "read_only":  true,
                           "description":  "Machine-readable current SpecBridge operator goal and task status.",
                           "data":  {
-                                       "current_task_id":  "none",
-                                       "run_id":  null,
-                                       "title":  "Ready for next operator task",
-                                       "status":  "ready_for_next_task",
-                                       "primary_pr":  207,
+                                       "current_task_id":  "issue-209-artifact-inventory-status",
+                                       "run_id":  "sb-20260615-0209a1b2",
+                                       "title":  "Add SpecBridge artifact inventory status",
+                                       "status":  "active",
+                                       "primary_pr":  null,
                                        "closure_pr":  null,
-                                       "last_updated":  "2026-06-15T06:30:00Z",
-                                       "updated_by":  "specbridge-post-merge-closure"
+                                       "last_updated":  "2026-06-15T10:05:00-03:00",
+                                       "updated_by":  "ChatGPT/Codex"
                                    }
                       },
                       {
@@ -48,7 +48,7 @@
                           "data":  {
                                        "command":  "specbridge-doctor",
                                        "fix_plan_generated":  true,
-                                       "health":  "healthy",
+                                       "health":  "degraded",
                                        "mode":  "local",
                                        "online_checks":  {
                                                              "enabled":  false,
@@ -59,13 +59,21 @@
 
                                                     ],
                                        "warnings":  [
-
+                                                        "intake_run_never_started:sb-20260615-0209a1b2"
                                                     ],
                                        "actions":  [
-
+                                                       {
+                                                           "id":  "intake_run_never_started",
+                                                           "severity":  "warning",
+                                                           "task_id":  "issue-209-artifact-inventory-status",
+                                                           "diagnosis":  "Run \u0027sb-20260615-0209a1b2\u0027 was created by specbridge-intake for \u0027issue-209-artifact-inventory-status\u0027 but no ledger entry exists. Apply-mode has not started.",
+                                                           "recommended_action":  "run_apply_mode_from_intake_branch",
+                                                           "command":  "git checkout codex/issue-209-artifact-inventory-status \u0026\u0026 powershell -ExecutionPolicy Bypass -Command \"\u0026 \u0027.\\scripts\\specbridge.ps1\u0027 -Command issue-to-merge-github -TaskId \u0027issue-209-artifact-inventory-status\u0027 -MutationMode apply -ConfirmGithubMutation -Force\"",
+                                                           "safe_to_automate":  false
+                                                       }
                                                    ],
-                                       "action_count":  0,
-                                       "checked_at":  "2026-06-15T03:26:45.4863363-03:00"
+                                       "action_count":  1,
+                                       "checked_at":  "2026-06-15T10:35:39.6024297-03:00"
                                    }
                       },
                       {

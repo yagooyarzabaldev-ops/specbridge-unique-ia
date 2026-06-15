@@ -64,13 +64,13 @@ SpecBridge currently has:
 
 ## Next Recommended Task
 
-**Ready for next governed operator task**
+**Active governed operator task: issue-209 artifact inventory status**
 
 Immediate order:
 
-1. Confirm `specbridge-doctor -FixPlan -Offline` remains healthy after issue-206 closure.
-2. Select the next eligible task through `specbridge-next-task` or create a new governed contract if no task is eligible.
-3. Keep future MCP server runtime work blocked until a dedicated contract authorizes it.
+1. Implement `specbridge-artifact-inventory` as a deterministic, read-only inventory of repository evidence growth.
+2. Write the governed inventory artifact only through explicit `-OutputPath`.
+3. Validate contract, scope, CLI tests, final report, audit packet, ChatGPT audit, full smoke, and diff hygiene before PR/CI.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;
@@ -80,4 +80,4 @@ Backlog: future governed MCP server runtime remains blocked until a dedicated
 contract explicitly authorizes it.
 
 Maintenance debt:
-- None active. Local doctor output should return healthy after PR #207 post-merge closure evidence.
+- Artifact growth inventory is active through issue #209. No artifact deletion, archival, pruning, compression, or retention enforcement is authorized.
