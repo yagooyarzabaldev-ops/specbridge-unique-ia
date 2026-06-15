@@ -42,6 +42,7 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | — | Post-merge closure: Studio queue memory and dashboards | 203 | Merged 2026-06-15 |
 | — | Historical doctor warning reconciliation | 204 | Merged 2026-06-15 |
 | 206 | MCP resource exports for operator state | 207 | Merged 2026-06-15 |
+| 209 | Artifact inventory status | 210 | Merged 2026-06-15 |
 
 ## Architecture Status
 
@@ -61,16 +62,17 @@ SpecBridge currently has:
 - Governed workflow-change authorization registry (.specbridge/policies/workflow-change-authorizations.json)
 - Claude Code project config (.claude/settings.json bounded allowlist; /sb-intake, /sb-handoff, /sb-review, /sb-close; operating model in CLAUDE.md)
 - Operator queue hygiene (operator-task-decisions registry; specbridge-next-task offline selector; open GitHub issues are storage, the registry decides eligibility)
+- Artifact inventory status (specbridge-artifact-inventory: deterministic read-only evidence family counts, bytes, latest modified timestamps, preservation posture, and retention_enforcement=none)
 
 ## Next Recommended Task
 
-**Active governed operator task: issue-209 artifact inventory status**
+**Ready for next governed operator task**
 
 Immediate order:
 
-1. Implement `specbridge-artifact-inventory` as a deterministic, read-only inventory of repository evidence growth.
-2. Write the governed inventory artifact only through explicit `-OutputPath`.
-3. Validate contract, scope, CLI tests, final report, audit packet, ChatGPT audit, full smoke, and diff hygiene before PR/CI.
+1. Confirm `specbridge-doctor -FixPlan -Offline` remains healthy after issue-209 closure.
+2. Select the next eligible task through `specbridge-next-task` or create a new governed contract if no task is eligible.
+3. Keep future MCP server runtime and retention enforcement work blocked until dedicated contracts authorize them.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;
@@ -80,4 +82,4 @@ Backlog: future governed MCP server runtime remains blocked until a dedicated
 contract explicitly authorizes it.
 
 Maintenance debt:
-- Artifact growth inventory is active through issue #209. No artifact deletion, archival, pruning, compression, or retention enforcement is authorized.
+- None active. Artifact growth is now observable through `specbridge-artifact-inventory`; no artifact deletion, archival, pruning, compression, movement, or retention enforcement is authorized.

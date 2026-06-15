@@ -1,7 +1,7 @@
 {
   "contract_id": "issue-209-artifact-inventory-status",
   "run_id": "sb-20260615-0209a1b2",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/contracts/issue-209-artifact-inventory-status.execution.md",
     ".specbridge/scopes/issue-209-artifact-inventory-status.scope.json",

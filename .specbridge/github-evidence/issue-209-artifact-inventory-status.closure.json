@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-209-artifact-inventory-status",
+  "run_id": "sb-20260615-0209a1b2",
+  "evidence_type": "closure_evidence",
+  "collected_by": "ChatGPT/Codex post-merge closure",
+  "collected_at": "2026-06-15",
+  "merge_commit": "8c088d001d63b6305ab201a214f503294ff040f1",
+  "primary_pr": 210,
+  "issue_closed": true,
+  "scope_status": "completed",
+  "all_validations_passed": true,
+  "notes": "PR #210 merged after local smoke and GitHub checks passed. Artifact inventory status is implemented as a deterministic local CLI/artifact surface with no deletion, archival, pruning, compression, movement, or retention enforcement."
+}
