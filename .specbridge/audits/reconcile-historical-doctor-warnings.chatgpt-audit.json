@@ -1,0 +1,77 @@
+{
+  "schema_version": "1",
+  "audit_id": "reconcile-historical-doctor-warnings",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/reconcile-historical-doctor-warnings.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/reconcile-historical-doctor-warnings.execution.md",
+  "final_report_path": ".specbridge/reports/reconcile-historical-doctor-warnings.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "The task has a dedicated execution contract, scope manifest, allowed scope, blocked scope, acceptance criteria, validation commands, stop conditions, merge policy, deployment policy, final report, audit packet, and ChatGPT/Codex audit.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "Missing closure evidence was added for issue-172 and issue-177; ledger reconciliation entries were added for run IDs sb-20260608-abcd0172, sb-20260609-cc04eda9, sb-20260609-b3bc65dc, and sb-20260609-06e1b8e9; CURRENT_GOAL no longer says PR #200 is open or failing; dashboards were regenerated; doctor reports healthy action_count=0.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The diff is limited to governance evidence, ledger, current goal memory, generated dashboards, and task audit artifacts; no scripts, workflows, operator decisions, issue #194 lifecycle, or digital twin implementation changed.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "No protected files, secrets, production configuration, billing, authentication, authorization, databases, dependency installation, CI/CD security controls, or deployment automation were touched.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "The scope manifest declares every changed file and only the declared reconcile paths changed.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "Required local validation suite includes dashboard generation, doctor health, contract validation, scope validation, final report validation, audit packet validation, ChatGPT audit validation, full smoke, and diff check.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub CI is not collected at local report creation time; merge policy still requires GitHub checks to pass before merge. Local CI parity is covered by specbridge-smoke.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records the reconciliation, changed files, local validation evidence, policy result, low risk result, no deployment, no unresolved risks, and pending GitHub PR/CI/merge status.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "doctor_health",
+      "file": ".specbridge/ledger/operations.ndjson",
+      "line": null,
+      "evidence": "After adding closure evidence and historical reconciliation ledger entries, specbridge-doctor -FixPlan -Offline reports health=healthy and action_count=0.",
+      "recommendation": "Require GitHub CI to pass before merging this reconciliation PR.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [],
+  "source_files": [
+    ".specbridge/audit-packets/reconcile-historical-doctor-warnings.audit-packet.json",
+    ".specbridge/contracts/reconcile-historical-doctor-warnings.execution.md",
+    ".specbridge/reports/reconcile-historical-doctor-warnings.final-report.json"
+  ]
+}

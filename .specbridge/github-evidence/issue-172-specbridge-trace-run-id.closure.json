@@ -1,0 +1,16 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-172-specbridge-trace-run-id",
+  "run_id": "sb-20260608-abcd0172",
+  "evidence_type": "closure_evidence",
+  "collected_by": "ChatGPT/Codex historical reconciliation",
+  "collected_at": "2026-06-15",
+  "merge_commit": "c84512354a6b0d5bb07fcb62677cc493cd838604",
+  "primary_pr": 173,
+  "related_issue": 172,
+  "issue_closed": true,
+  "issue_closed_at": "2026-06-09T15:24:27Z",
+  "scope_status": "completed",
+  "all_validations_passed": true,
+  "notes": "PR #173 merged on 2026-06-09T01:49:14Z and issue #172 is closed. This reconciliation records missing closure evidence without rerunning historical apply-mode."
+}

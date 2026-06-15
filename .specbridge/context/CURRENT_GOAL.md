@@ -38,6 +38,8 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | — | Post-merge closure issue-181: third orchestration completed 7/7 | 195 | Merged 2026-06-10 |
 | queue/#196 | Operator queue hygiene + next-task selector | 197 | Merged 2026-06-10 |
 | 199 | V5 Serious Live Pilot - no coordinator remediation | 201 | Merged 2026-06-11 |
+| 200 | Studio Operator Queue rendering fix | 200 | Merged 2026-06-15 |
+| — | Post-merge closure: Studio queue memory and dashboards | 203 | Merged 2026-06-15 |
 
 ## Architecture Status
 
@@ -64,8 +66,8 @@ SpecBridge currently has:
 
 Immediate order:
 
-1. Repair PR #200 (`fix-studio-operator-queue-rendering`) so Foundation Validation passes.
-2. Close remaining doctor warnings for historical completed scopes that are missing closure evidence.
+1. PR #200 (`fix-studio-operator-queue-rendering`) is repaired, validated, merged, and closed through PR #203 post-merge memory.
+2. Close the remaining doctor warnings for historical completed scopes that are missing closure evidence or ledger coverage.
 3. Open a new governed operator task only after `specbridge-doctor` returns healthy or the remaining warnings are explicitly accepted.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
@@ -76,5 +78,4 @@ Backlog: issue-182 MCP resources (current-goal, fix-plan, orchestrations
 as MCP resources for external agents).
 
 Maintenance debt:
-- PR #200 is open and failed Foundation Validation because its execution contract is missing required sections.
-- `specbridge-doctor` reports missing closure evidence for `issue-172-specbridge-trace-run-id` and `issue-177-repo-memory-cleanup-after-studio`.
+- Historical `specbridge-doctor` warnings for completed scopes `issue-172-specbridge-trace-run-id`, `issue-174-specbridge-studio-dashboard`, `issue-177-repo-memory-cleanup-after-studio`, and `issue-178-specbridge-multi-agent-orchestration-manifest` are reconciled through explicit closure evidence and ledger entries; local `specbridge-doctor -FixPlan -Offline` reports healthy with zero actions before PR publication.

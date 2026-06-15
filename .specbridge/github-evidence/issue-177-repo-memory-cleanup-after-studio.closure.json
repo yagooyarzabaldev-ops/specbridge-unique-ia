@@ -1,0 +1,16 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-177-repo-memory-cleanup-after-studio",
+  "run_id": "sb-20260609-b3bc65dc",
+  "evidence_type": "closure_evidence",
+  "collected_by": "ChatGPT/Codex historical reconciliation",
+  "collected_at": "2026-06-15",
+  "merge_commit": "064bcdd0fc2728c13cdabb7852b6da85c672595e",
+  "primary_pr": 179,
+  "related_issue": 177,
+  "issue_closed": true,
+  "issue_closed_at": "2026-06-09T20:18:26Z",
+  "scope_status": "completed",
+  "all_validations_passed": true,
+  "notes": "PR #179 merged on 2026-06-09T16:01:28Z and issue #177 is closed. This reconciliation records missing closure evidence without rerunning historical apply-mode."
+}

@@ -1,0 +1,141 @@
+{
+  "schema_version": "1",
+  "task_id": "reconcile-historical-doctor-warnings",
+  "generated_by": "ChatGPT/Codex",
+  "execution_contract_path": ".specbridge/contracts/reconcile-historical-doctor-warnings.execution.md",
+  "changed_files": [
+    ".specbridge/contracts/reconcile-historical-doctor-warnings.execution.md",
+    ".specbridge/scopes/reconcile-historical-doctor-warnings.scope.json",
+    ".specbridge/reports/reconcile-historical-doctor-warnings.final-report.json",
+    ".specbridge/audit-packets/reconcile-historical-doctor-warnings.audit-packet.json",
+    ".specbridge/audits/reconcile-historical-doctor-warnings.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-172-specbridge-trace-run-id.closure.json",
+    ".specbridge/github-evidence/issue-177-repo-memory-cleanup-after-studio.closure.json",
+    ".specbridge/ledger/operations.ndjson",
+    ".specbridge/context/CURRENT_GOAL.md",
+    "docs/status-dashboard.html",
+    "docs/specbridge-studio.html"
+  ],
+  "diff_summary": [
+    {
+      "file": ".specbridge/contracts/reconcile-historical-doctor-warnings.execution.md",
+      "added_lines": 131,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/scopes/reconcile-historical-doctor-warnings.scope.json",
+      "added_lines": 34,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/reports/reconcile-historical-doctor-warnings.final-report.json",
+      "added_lines": 34,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/audit-packets/reconcile-historical-doctor-warnings.audit-packet.json",
+      "added_lines": 141,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/audits/reconcile-historical-doctor-warnings.chatgpt-audit.json",
+      "added_lines": 77,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-172-specbridge-trace-run-id.closure.json",
+      "added_lines": 16,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-177-repo-memory-cleanup-after-studio.closure.json",
+      "added_lines": 16,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/ledger/operations.ndjson",
+      "added_lines": 4,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/context/CURRENT_GOAL.md",
+      "added_lines": 5,
+      "deleted_lines": 4
+    },
+    {
+      "file": "docs/status-dashboard.html",
+      "added_lines": 7,
+      "deleted_lines": 7
+    },
+    {
+      "file": "docs/specbridge-studio.html",
+      "added_lines": 18,
+      "deleted_lines": 11
+    }
+  ],
+  "validation_commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 -Command generate-dashboard",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 -Command generate-studio-dashboard",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 -Command specbridge-doctor -FixPlan -Offline -OutputFormat json",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+    "git diff --check"
+  ],
+  "validation_results": [
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 -Command generate-dashboard",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 -Command generate-studio-dashboard",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 -Command specbridge-doctor -FixPlan -Offline -OutputFormat json",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "final_report_path": ".specbridge/reports/reconcile-historical-doctor-warnings.final-report.json",
+  "ci_status": "not_collected",
+  "pr_review_report_path": null,
+  "policy_result": "Passed. The reconciliation is limited to declared governance and evidence paths.",
+  "unresolved_risks": [],
+  "completion_status": "complete",
+  "source_files": [
+    ".specbridge/contracts/reconcile-historical-doctor-warnings.execution.md",
+    ".specbridge/reports/reconcile-historical-doctor-warnings.final-report.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}
