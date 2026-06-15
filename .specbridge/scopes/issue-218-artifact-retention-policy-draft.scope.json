@@ -1,13 +1,15 @@
 {
   "contract_id": "issue-218-artifact-retention-policy-draft",
   "run_id": "sb-20260615-0218a1b2",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/contracts/issue-218-artifact-retention-policy-draft.execution.md",
     ".specbridge/scopes/issue-218-artifact-retention-policy-draft.scope.json",
     ".specbridge/reports/issue-218-artifact-retention-policy-draft.final-report.json",
     ".specbridge/audit-packets/issue-218-artifact-retention-policy-draft.audit-packet.json",
     ".specbridge/audits/issue-218-artifact-retention-policy-draft.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-218-artifact-retention-policy-draft.closure.json",
+    ".specbridge/ledger/operations.ndjson",
     ".specbridge/policies/artifact-retention-policy.draft.json",
     ".specbridge/artifact-retention/current.policy-evaluation.json",
     ".specbridge/artifact-inventory/current.inventory.json",

@@ -10,6 +10,8 @@
     ".specbridge/audits/issue-218-artifact-retention-policy-draft.chatgpt-audit.json",
     ".specbridge/context/CURRENT_GOAL.md",
     ".specbridge/contracts/issue-218-artifact-retention-policy-draft.execution.md",
+    ".specbridge/github-evidence/issue-218-artifact-retention-policy-draft.closure.json",
+    ".specbridge/ledger/operations.ndjson",
     ".specbridge/mcp-resources/operator-state.catalog.json",
     ".specbridge/policies/artifact-retention-policy.draft.json",
     ".specbridge/reports/issue-218-artifact-retention-policy-draft.final-report.json",
@@ -43,6 +45,8 @@
     { "file": "docs/specbridge-studio.html", "added_lines": null, "deleted_lines": null },
     { "file": ".specbridge/context/CURRENT_GOAL.md", "added_lines": null, "deleted_lines": null },
     { "file": ".specbridge/state/current-goal.json", "added_lines": null, "deleted_lines": null },
+    { "file": ".specbridge/github-evidence/issue-218-artifact-retention-policy-draft.closure.json", "added_lines": null, "deleted_lines": 0 },
+    { "file": ".specbridge/ledger/operations.ndjson", "added_lines": null, "deleted_lines": null },
     { "file": ".specbridge/contracts/issue-218-artifact-retention-policy-draft.execution.md", "added_lines": null, "deleted_lines": 0 },
     { "file": ".specbridge/scopes/issue-218-artifact-retention-policy-draft.scope.json", "added_lines": null, "deleted_lines": 0 },
     { "file": ".specbridge/reports/issue-218-artifact-retention-policy-draft.final-report.json", "added_lines": null, "deleted_lines": 0 },
@@ -72,19 +76,18 @@
     { "command": "git diff --check", "result": "passed" }
   ],
   "final_report_path": ".specbridge/reports/issue-218-artifact-retention-policy-draft.final-report.json",
-  "ci_status": "not_collected",
+  "ci_status": "passed",
   "pr_review_report_path": null,
-  "policy_result": "Within policy so far. Task stays inside exclusive_write scope. No blocked scope touched. No artifact deletion, movement, compression, pruning, archival implementation, upload, remote mutation, cleanup apply mode, retention enforcement, workflow, dependency, network call from the policy command, secret, production, billing, authentication, authorization, database, CI/CD security, deployment, operator decision registry, issue #194, or digital twin changes.",
+  "policy_result": "Within policy. Task stays inside exclusive_write scope. No blocked scope touched. No artifact deletion, movement, compression, pruning, archival implementation, upload, remote mutation, cleanup apply mode, retention enforcement, workflow, dependency, network call from the policy command, secret, production, billing, authentication, authorization, database, CI/CD security, deployment, operator decision registry, issue #194, or digital twin changes.",
   "unresolved_risks": [
-    "GitHub CI pending until PR creation.",
-    "Post-merge closure still required after primary merge.",
     "Actual artifact cleanup remains blocked until a future dedicated policy and execution contract authorize it."
   ],
   "completion_status": "complete",
   "source_files": [
     ".specbridge/contracts/issue-218-artifact-retention-policy-draft.execution.md",
     ".specbridge/scopes/issue-218-artifact-retention-policy-draft.scope.json",
-    ".specbridge/reports/issue-218-artifact-retention-policy-draft.final-report.json"
+    ".specbridge/reports/issue-218-artifact-retention-policy-draft.final-report.json",
+    ".specbridge/github-evidence/issue-218-artifact-retention-policy-draft.closure.json"
   ],
   "secret_omission": "This packet contains repository-relative paths, summaries, validation results, policy result, risks, and status only. It does not embed raw diffs, secrets, tokens, private keys, or credential values."
 }

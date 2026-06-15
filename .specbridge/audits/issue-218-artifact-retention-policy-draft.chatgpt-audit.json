@@ -45,13 +45,13 @@
     {
       "name": "ci_evidence",
       "result": "pass",
-      "evidence": "Local validation evidence is tracked in the audit packet, including a passing full smoke run. GitHub CI remains the authoritative remote gate after PR creation.",
+      "evidence": "Local validation evidence is tracked in the audit packet, including a passing full smoke run. GitHub Actions passed Foundation Validation, SpecBridge Review Gate, SpecBridge PR Review Report, and Claude Review Non Blocking before merge.",
       "blocking": false
     },
     {
       "name": "final_report_honesty",
       "result": "pass",
-      "evidence": "The final report records changed files, validation status, policy result, risk result, unresolved smoke and CI risks, merge status, deployment status, and completion status.",
+      "evidence": "The final report records changed files, validation status, policy result, risk result, merge status, deployment status, completion status, and the remaining future enforcement risk.",
       "blocking": false
     }
   ],
@@ -69,13 +69,12 @@
   "outcome": "approved",
   "merge_allowed": true,
   "unresolved_risks": [
-    "GitHub CI pending until PR creation.",
-    "Post-merge closure still required after primary merge.",
     "Actual artifact cleanup remains blocked until a future dedicated policy and execution contract authorize it."
   ],
   "source_files": [
     ".specbridge/audit-packets/issue-218-artifact-retention-policy-draft.audit-packet.json",
     ".specbridge/contracts/issue-218-artifact-retention-policy-draft.execution.md",
-    ".specbridge/reports/issue-218-artifact-retention-policy-draft.final-report.json"
+    ".specbridge/reports/issue-218-artifact-retention-policy-draft.final-report.json",
+    ".specbridge/github-evidence/issue-218-artifact-retention-policy-draft.closure.json"
   ]
 }

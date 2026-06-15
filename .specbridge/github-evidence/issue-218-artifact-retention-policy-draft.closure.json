@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-218-artifact-retention-policy-draft",
+  "run_id": "sb-20260615-0218a1b2",
+  "evidence_type": "closure_evidence",
+  "collected_by": "ChatGPT/Codex post-merge closure",
+  "collected_at": "2026-06-15",
+  "merge_commit": "835bb51b20a0a7628db61eeac542d3725c7b2b88",
+  "primary_pr": 219,
+  "issue_closed": true,
+  "scope_status": "completed",
+  "all_validations_passed": true,
+  "notes": "PR #219 merged after local smoke and GitHub checks passed. The artifact retention policy draft and evaluator are read-only and keep enforcement=none and cleanup_permission=none. No artifact deletion, movement, compression, pruning, archival implementation, upload, remote mutation, cleanup apply mode, or retention enforcement is authorized."
+}

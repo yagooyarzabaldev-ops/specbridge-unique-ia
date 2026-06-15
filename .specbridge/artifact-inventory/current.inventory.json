@@ -1,13 +1,13 @@
 {
     "command":  "specbridge-artifact-inventory",
-    "generated_at":  "2026-06-15T22:15:05.9401435Z",
+    "generated_at":  "2026-06-15T23:21:54.7626488Z",
     "families":  [
                      {
                          "family_id":  "contracts",
                          "repository_path":  ".specbridge/contracts",
                          "file_count":  107,
-                         "total_bytes":  589470,
-                         "latest_modified":  "2026-06-15T21:45:25.3837522Z",
+                         "total_bytes":  589666,
+                         "latest_modified":  "2026-06-15T23:21:53.4392175Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
@@ -15,35 +15,35 @@
                          "family_id":  "scopes",
                          "repository_path":  ".specbridge/scopes",
                          "file_count":  76,
-                         "total_bytes":  133118,
-                         "latest_modified":  "2026-06-15T21:45:25.5607292Z",
+                         "total_bytes":  133345,
+                         "latest_modified":  "2026-06-15T23:21:53.5936281Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
                      {
                          "family_id":  "reports",
                          "repository_path":  ".specbridge/reports",
-                         "file_count":  78,
-                         "total_bytes":  267671,
-                         "latest_modified":  "2026-06-15T18:00:41.4751375Z",
+                         "file_count":  79,
+                         "total_bytes":  271838,
+                         "latest_modified":  "2026-06-15T23:21:54.0721864Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
                      {
                          "family_id":  "audit_packets",
                          "repository_path":  ".specbridge/audit-packets",
-                         "file_count":  59,
-                         "total_bytes":  616935,
-                         "latest_modified":  "2026-06-15T18:00:41.4771291Z",
+                         "file_count":  60,
+                         "total_bytes":  624505,
+                         "latest_modified":  "2026-06-15T23:21:54.2397442Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
                      {
                          "family_id":  "chatgpt_audits",
                          "repository_path":  ".specbridge/audits",
-                         "file_count":  58,
-                         "total_bytes":  242400,
-                         "latest_modified":  "2026-06-15T18:00:41.4781417Z",
+                         "file_count":  59,
+                         "total_bytes":  246974,
+                         "latest_modified":  "2026-06-15T23:21:54.4096709Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
@@ -122,9 +122,9 @@
                      {
                          "family_id":  "github_evidence",
                          "repository_path":  ".specbridge/github-evidence",
-                         "file_count":  101,
-                         "total_bytes":  66464,
-                         "latest_modified":  "2026-06-15T21:15:55.1893818Z",
+                         "file_count":  102,
+                         "total_bytes":  67239,
+                         "latest_modified":  "2026-06-15T23:21:54.5906465Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
@@ -132,8 +132,8 @@
                          "family_id":  "ledger",
                          "repository_path":  ".specbridge/ledger",
                          "file_count":  1,
-                         "total_bytes":  21687,
-                         "latest_modified":  "2026-06-15T21:15:55.1904081Z",
+                         "total_bytes":  21992,
+                         "latest_modified":  "2026-06-15T23:21:54.7626488Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
@@ -151,7 +151,7 @@
                          "repository_path":  ".specbridge/artifact-inventory",
                          "file_count":  1,
                          "total_bytes":  9867,
-                         "latest_modified":  "2026-06-15T22:09:49.3004567Z",
+                         "latest_modified":  "2026-06-15T22:15:06.8061825Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
@@ -177,16 +177,16 @@
                          "family_id":  "artifact_retention_policy",
                          "repository_path":  ".specbridge/artifact-retention",
                          "file_count":  1,
-                         "total_bytes":  15168,
-                         "latest_modified":  "2026-06-15T22:09:43.5508841Z",
+                         "total_bytes":  15172,
+                         "latest_modified":  "2026-06-15T22:15:07.8093211Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      }
                  ],
     "totals":  {
                    "family_count":  20,
-                   "total_file_count":  662,
-                   "total_bytes":  2529462
+                   "total_file_count":  666,
+                   "total_bytes":  2547280
                },
     "retention_enforcement":  "none",
     "read_only_note":  "This command does not delete, archive, prune, compress, or move any artifacts."

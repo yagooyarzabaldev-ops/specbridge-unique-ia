@@ -45,6 +45,7 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | 209 | Artifact inventory status | 210 | Merged 2026-06-15 |
 | 212 | Branch inventory status | 213 | Merged 2026-06-15 |
 | 215 | Governed branch cleanup policy draft | 216 | Merged 2026-06-15 |
+| 218 | Governed artifact retention policy draft | 219 | Merged 2026-06-15 |
 
 ## Architecture Status
 
@@ -67,16 +68,17 @@ SpecBridge currently has:
 - Artifact inventory status (specbridge-artifact-inventory: deterministic read-only evidence family counts, bytes, latest modified timestamps, preservation posture, and retention_enforcement=none)
 - Branch inventory status (specbridge-branch-inventory: deterministic read-only local/origin branch ref counts, prefix counts, merged-into-main posture, preservation posture, cleanup_permission=none, and branch_mutation_policy=none)
 - Branch cleanup policy draft (specbridge-branch-cleanup-policy: deterministic read-only branch cleanup candidate classification with enforcement=none, cleanup_permission=none, future activation gates, and blocked cleanup commands/actions)
+- Artifact retention policy draft (specbridge-artifact-retention-policy: deterministic read-only artifact family classification with enforcement=none, cleanup_permission=none, future activation gates, and blocked cleanup commands/actions)
 
 ## Next Recommended Task
 
-**Active governed operator task: issue-218 artifact retention policy draft**
+**Ready for next governed operator task.**
 
-Immediate order:
+Recommended order:
 
-1. Define a governed artifact retention policy draft with enforcement disabled.
-2. Implement a deterministic read-only evaluator over local artifact inventory.
-3. Validate contract, scope, CLI tests, final report, audit packet, ChatGPT audit, full smoke, and diff hygiene before PR/CI.
+1. Keep branch cleanup and artifact retention enforcement disabled until future dedicated contracts explicitly authorize activation.
+2. Use `specbridge-branch-inventory`, `specbridge-branch-cleanup-policy`, `specbridge-artifact-inventory`, and `specbridge-artifact-retention-policy` as read-only repository health evidence.
+3. Prefer the next governed infrastructure-hardening issue over feature expansion unless a new execution contract says otherwise.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;
@@ -87,4 +89,4 @@ contract explicitly authorizes it.
 
 Maintenance debt:
 - Branch cleanup remains policy-only. Branch debt is observable through `specbridge-branch-inventory` and classified by `specbridge-branch-cleanup-policy`; no branch deletion, pruning, renaming, movement, archival, fetch, pull, force-push, cleanup apply mode, or retention enforcement is authorized.
-- Artifact retention policy draft is active through issue #218. Artifact growth is observable through `specbridge-artifact-inventory`; no artifact deletion, movement, compression, pruning, archival implementation, upload, remote mutation, cleanup apply mode, or retention enforcement is authorized.
+- Artifact retention remains policy-only. Artifact growth is observable through `specbridge-artifact-inventory` and classified by `specbridge-artifact-retention-policy`; no artifact deletion, movement, compression, pruning, archival implementation, upload, remote mutation, cleanup apply mode, or retention enforcement is authorized.

@@ -47,6 +47,8 @@ Medium. The task defines artifact retention policy and a read-only evaluation su
 .specbridge/reports/issue-218-artifact-retention-policy-draft.final-report.json
 .specbridge/audit-packets/issue-218-artifact-retention-policy-draft.audit-packet.json
 .specbridge/audits/issue-218-artifact-retention-policy-draft.chatgpt-audit.json
+.specbridge/github-evidence/issue-218-artifact-retention-policy-draft.closure.json
+.specbridge/ledger/operations.ndjson
 .specbridge/policies/artifact-retention-policy.draft.json
 .specbridge/artifact-retention/current.policy-evaluation.json
 .specbridge/artifact-inventory/current.inventory.json
