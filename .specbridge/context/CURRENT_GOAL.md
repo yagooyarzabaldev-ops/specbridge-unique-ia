@@ -37,6 +37,7 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | 181/#192 | Claude Code project config (.claude settings, sb-* commands) | 193 | Merged 2026-06-10 |
 | — | Post-merge closure issue-181: third orchestration completed 7/7 | 195 | Merged 2026-06-10 |
 | queue/#196 | Operator queue hygiene + next-task selector | 197 | Merged 2026-06-10 |
+| 199 | V5 Serious Live Pilot - no coordinator remediation | 201 | Merged 2026-06-11 |
 
 ## Architecture Status
 
@@ -59,17 +60,13 @@ SpecBridge currently has:
 
 ## Next Recommended Task
 
-**V5 Serious Live Pilot — no coordinator remediation**
+**Operator health cleanup before the next product expansion**
 
-The standard is already defined (`v5-serious-pilot-status`):
-- pilot standard: `serious_live_multi_slice_no_remediation`
-- baseline: `v5_hardened_runtime_runner`
-- required slices: `status`, `tests`, `docs`
-- runtime budget: 2.00 USD default per slice
-- diagnostics: `ascii_stable_bounded_240_chars`
-- target: all three slices complete without coordinator remediation
-- boundaries: no production, secrets, billing, auth, DB, deployment or
-  dependency installation
+Immediate order:
+
+1. Repair PR #200 (`fix-studio-operator-queue-rendering`) so Foundation Validation passes.
+2. Close remaining doctor warnings for historical completed scopes that are missing closure evidence.
+3. Open a new governed operator task only after `specbridge-doctor` returns healthy or the remaining warnings are explicitly accepted.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;
@@ -78,4 +75,6 @@ excluded as `not_planned` by the operator decision registry;
 Backlog: issue-182 MCP resources (current-goal, fix-plan, orchestrations
 as MCP resources for external agents).
 
-Maintenance debt: none open.
+Maintenance debt:
+- PR #200 is open and failed Foundation Validation because its execution contract is missing required sections.
+- `specbridge-doctor` reports missing closure evidence for `issue-172-specbridge-trace-run-id` and `issue-177-repo-memory-cleanup-after-studio`.

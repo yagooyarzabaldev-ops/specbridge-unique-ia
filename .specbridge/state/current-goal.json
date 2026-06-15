@@ -1,10 +1,10 @@
 {
-  "current_task_id": "v5-serious-live-pilot-no-coordinator-remediation",
-  "run_id": "sb-20260610-5a7cca94",
-  "title": "V5 Serious Live Pilot - No Coordinator Remediation",
-  "status": "active",
-  "primary_pr": null,
-  "closure_pr": null,
-  "last_updated": "2026-06-10T21:47:02.0842702+00:00",
-  "updated_by": "specbridge-intake"
+    "current_task_id":  "none",
+    "run_id":  null,
+    "title":  "Ready for next operator task",
+    "status":  "ready_for_next_task",
+    "primary_pr":  201,
+    "closure_pr":  null,
+    "last_updated":  "2026-06-14T20:40:00Z",
+    "updated_by":  "specbridge-post-merge-closure"
 }

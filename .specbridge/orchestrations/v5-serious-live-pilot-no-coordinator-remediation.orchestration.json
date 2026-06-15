@@ -4,7 +4,7 @@
     "run_id":  "sb-20260610-5a7cca94",
     "coordinator":  "specbridge",
     "created_at":  "2026-06-10",
-    "status":  "in_progress",
+    "status":  "completed",
     "agents":  [
                    {
                        "name":  "planner",
@@ -51,10 +51,10 @@
                    {
                        "name":  "closure",
                        "role":  "Close issue, mark scope completed, write closure evidence, regenerate dashboards",
-                       "status":  "active",
+                       "status":  "completed",
                        "input_artifact":  ".specbridge/orchestrations/v5-serious-live-pilot-no-coordinator-remediation/docs-output.json",
                        "output_artifact":  ".specbridge/orchestrations/v5-serious-live-pilot-no-coordinator-remediation/closure-output.json"
                    }
                ],
-    "updated_at":  "2026-06-11T00:56:45.4934974-03:00"
+    "updated_at":  "2026-06-11T02:50:24.2845850-03:00"
 }
