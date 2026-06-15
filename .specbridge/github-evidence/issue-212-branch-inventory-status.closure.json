@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-212-branch-inventory-status",
+  "run_id": "sb-20260615-0212c3d4",
+  "evidence_type": "closure_evidence",
+  "collected_by": "ChatGPT/Codex post-merge closure",
+  "collected_at": "2026-06-15",
+  "merge_commit": "6b822c7d796f3baeb757014ae5626d22b4b681a9",
+  "primary_pr": 213,
+  "issue_closed": true,
+  "scope_status": "completed",
+  "all_validations_passed": true,
+  "notes": "PR #213 merged after local smoke and GitHub checks passed. Branch inventory status is implemented as a deterministic local CLI/artifact surface with no branch deletion, pruning, renaming, movement, archival, force-push, fetch, pull, or retention enforcement."
+}

@@ -43,6 +43,7 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | — | Historical doctor warning reconciliation | 204 | Merged 2026-06-15 |
 | 206 | MCP resource exports for operator state | 207 | Merged 2026-06-15 |
 | 209 | Artifact inventory status | 210 | Merged 2026-06-15 |
+| 212 | Branch inventory status | 213 | Merged 2026-06-15 |
 
 ## Architecture Status
 
@@ -63,16 +64,17 @@ SpecBridge currently has:
 - Claude Code project config (.claude/settings.json bounded allowlist; /sb-intake, /sb-handoff, /sb-review, /sb-close; operating model in CLAUDE.md)
 - Operator queue hygiene (operator-task-decisions registry; specbridge-next-task offline selector; open GitHub issues are storage, the registry decides eligibility)
 - Artifact inventory status (specbridge-artifact-inventory: deterministic read-only evidence family counts, bytes, latest modified timestamps, preservation posture, and retention_enforcement=none)
+- Branch inventory status (specbridge-branch-inventory: deterministic read-only local/origin branch ref counts, prefix counts, merged-into-main posture, preservation posture, cleanup_permission=none, and branch_mutation_policy=none)
 
 ## Next Recommended Task
 
-**Active governed operator task: issue-212 branch inventory status**
+**Ready for next governed operator task**
 
 Immediate order:
 
-1. Implement `specbridge-branch-inventory` as a deterministic, read-only inventory of local and origin branch refs.
-2. Write the governed branch inventory artifact only through explicit `-OutputPath`.
-3. Validate contract, scope, CLI tests, final report, audit packet, ChatGPT audit, full smoke, and diff hygiene before PR/CI.
+1. Confirm `specbridge-doctor -FixPlan -Offline` remains healthy after issue-212 closure.
+2. Select the next eligible task through `specbridge-next-task` or create a new governed contract if no task is eligible.
+3. Keep future MCP server runtime, retention enforcement, and branch cleanup work blocked until dedicated contracts authorize them.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;
@@ -82,4 +84,4 @@ Backlog: future governed MCP server runtime remains blocked until a dedicated
 contract explicitly authorizes it.
 
 Maintenance debt:
-- Branch debt inventory is active through issue #212. No branch deletion, pruning, renaming, movement, archival, fetch, pull, force-push, or retention enforcement is authorized.
+- None active. Artifact growth is observable through `specbridge-artifact-inventory`; branch debt is observable through `specbridge-branch-inventory`. No artifact cleanup or branch cleanup is authorized.
