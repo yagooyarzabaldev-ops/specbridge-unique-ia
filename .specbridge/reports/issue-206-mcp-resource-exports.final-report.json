@@ -1,0 +1,39 @@
+{
+  "summary": "Implemented specbridge-mcp-resources as a deterministic, read-only local CLI export for operator state. The command emits current-goal, doctor-fix-plan, and orchestration-summary MCP-style resources, writes the governed catalog artifact only through the exact -OutputPath with -Force required for replacement, and explicitly does not implement a live MCP server.",
+  "changed_files": [
+    ".specbridge/audit-packets/issue-206-mcp-resource-exports.audit-packet.json",
+    ".specbridge/audits/issue-206-mcp-resource-exports.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-206-mcp-resource-exports.execution.md",
+    ".specbridge/mcp-resources/operator-state.catalog.json",
+    ".specbridge/mcp/specbridge-operator-state-resources.md",
+    ".specbridge/reports/issue-206-mcp-resource-exports.final-report.json",
+    ".specbridge/scopes/issue-206-mcp-resource-exports.scope.json",
+    ".specbridge/state/current-goal.json",
+    "docs/specbridge-mcp-resource-exports.md",
+    "docs/specbridge-studio.html",
+    "docs/status-dashboard.html",
+    "scripts/lib/mcp-resources.ps1",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "git diff --check: passed"
+  ],
+  "policy_result": "Passed. All changed files are inside the issue-206 exclusive_write scope. No blocked scope touched. No live MCP server, workflow, dependency, network, secret, production, billing, authentication, authorization, database, CI/CD security, deployment, operator decision registry, issue #194, or digital twin changes were made.",
+  "risk_result": "Within bounds. The new command reads repository state, runs doctor fix-plan only in offline mode, and writes only the governed catalog artifact when explicitly requested. No source state files are mutated by the no-OutputPath command path.",
+  "unresolved_risks": [
+    "GitHub CI is pending until the branch is pushed and a PR is opened.",
+    "Doctor fix-plan in the generated catalog reports one non-blocking warning while the issue-206 scope is active and has no apply-mode ledger entry; post-merge closure should clear this state."
+  ],
+  "merge_status": "Pending PR creation, GitHub CI, and merge gate.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "local_complete_ci_pending"
+}

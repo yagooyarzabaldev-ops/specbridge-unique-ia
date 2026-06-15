@@ -1,6 +1,6 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "issue-to-merge-plan", "issue-to-merge-github", "specbridge-intake", "specbridge-doctor", "specbridge-orchestrate", "specbridge-handoff", "specbridge-review-report", "specbridge-next-task", "generate-dashboard", "generate-studio-dashboard", "lifecycle-guard", "quickstart", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "issue-to-merge-plan", "issue-to-merge-github", "specbridge-intake", "specbridge-doctor", "specbridge-orchestrate", "specbridge-handoff", "specbridge-review-report", "specbridge-next-task", "generate-dashboard", "generate-studio-dashboard", "lifecycle-guard", "quickstart", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate", "specbridge-mcp-resources")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
@@ -65,7 +65,8 @@ foreach ($specbridgeLib in @(
   "runtime.ps1",
   "github-ops.ps1",
   "intake-doctor.ps1",
-  "dashboards.ps1"
+  "dashboards.ps1",
+  "mcp-resources.ps1"
 )) {
   . (Join-Path $PSScriptRoot "lib/$specbridgeLib")
 }
@@ -115,5 +116,6 @@ switch ($Command) {
   "record-github-evidence" { Invoke-RecordGithubEvidenceCommand }
   "coordinate-executors" { Invoke-CoordinateExecutorsCommand }
   "review-gate" { Invoke-ReviewGateCommand }
+  "specbridge-mcp-resources" { Invoke-McpResourcesCommand }
   default { Fail "Unsupported command: $Command" }
 }

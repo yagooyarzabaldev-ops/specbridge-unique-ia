@@ -1,0 +1,37 @@
+{
+  "contract_id": "issue-206-mcp-resource-exports",
+  "run_id": "sb-20260615-0206abcd",
+  "status": "active",
+  "exclusive_write": [
+    ".specbridge/contracts/issue-206-mcp-resource-exports.execution.md",
+    ".specbridge/scopes/issue-206-mcp-resource-exports.scope.json",
+    ".specbridge/reports/issue-206-mcp-resource-exports.final-report.json",
+    ".specbridge/audit-packets/issue-206-mcp-resource-exports.audit-packet.json",
+    ".specbridge/audits/issue-206-mcp-resource-exports.chatgpt-audit.json",
+    ".specbridge/mcp/specbridge-operator-state-resources.md",
+    ".specbridge/mcp-resources/operator-state.catalog.json",
+    "docs/specbridge-mcp-resource-exports.md",
+    "scripts/specbridge.ps1",
+    "scripts/lib/mcp-resources.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "docs/status-dashboard.html",
+    "docs/specbridge-studio.html",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/state/current-goal.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    "docs/mcp-integration-contract.md",
+    ".specbridge/mcp-resource-contract-template.md",
+    "scripts/lib/common.ps1",
+    "scripts/lib/intake-doctor.ps1",
+    ".specbridge/orchestrations"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-206-mcp-resource-exports.final-report.json"
+}

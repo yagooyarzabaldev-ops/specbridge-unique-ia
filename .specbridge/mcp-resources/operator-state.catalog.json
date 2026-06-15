@@ -1,0 +1,136 @@
+{
+    "schema_version":  "1",
+    "catalog_id":  "specbridge-operator-state",
+    "generated_at":  "2026-06-15T03:05:18.3667643-03:00",
+    "mcp_server_status":  "not_implemented",
+    "mcp_server_note":  "No live MCP server is implemented. This catalog is a deterministic local export artifact only.",
+    "read_only_policy":  true,
+    "resources":  [
+                      {
+                          "name":  "specbridge://operator/current-goal",
+                          "uri":  "specbridge://operator/current-goal",
+                          "content_type":  "application/json",
+                          "source_paths":  [
+                                               ".specbridge/state/current-goal.json",
+                                               ".specbridge/context/CURRENT_GOAL.md"
+                                           ],
+                          "refresh_behavior":  "on_demand",
+                          "sensitivity":  "internal",
+                          "read_only":  true,
+                          "description":  "Machine-readable current SpecBridge operator goal and task status.",
+                          "data":  {
+                                       "current_task_id":  "issue-206-mcp-resource-exports",
+                                       "run_id":  "sb-20260615-0206abcd",
+                                       "title":  "Add SpecBridge MCP resource exports for operator state",
+                                       "status":  "active",
+                                       "primary_pr":  null,
+                                       "closure_pr":  null,
+                                       "last_updated":  "2026-06-15T03:05:00-03:00",
+                                       "updated_by":  "ChatGPT/Codex"
+                                   }
+                      },
+                      {
+                          "name":  "specbridge://operator/doctor-fix-plan",
+                          "uri":  "specbridge://operator/doctor-fix-plan",
+                          "content_type":  "application/json",
+                          "source_paths":  [
+                                               "scripts/lib/intake-doctor.ps1",
+                                               ".specbridge/scopes/*.scope.json",
+                                               ".specbridge/ledger/operations.ndjson",
+                                               ".specbridge/github-evidence/*.json",
+                                               ".specbridge/state/current-goal.json",
+                                               "docs/status-dashboard.html"
+                                           ],
+                          "refresh_behavior":  "on_demand",
+                          "sensitivity":  "internal",
+                          "read_only":  true,
+                          "description":  "Offline specbridge-doctor fix-plan output: detected drift classes, severity, repair commands, and safe_to_automate flags.",
+                          "data":  {
+                                       "command":  "specbridge-doctor",
+                                       "fix_plan_generated":  true,
+                                       "health":  "degraded",
+                                       "mode":  "local",
+                                       "online_checks":  {
+                                                             "enabled":  false,
+                                                             "available":  false,
+                                                             "reason":  "offline_mode"
+                                                         },
+                                       "blockers":  [
+
+                                                    ],
+                                       "warnings":  [
+                                                        "intake_run_never_started:sb-20260615-0206abcd"
+                                                    ],
+                                       "actions":  [
+                                                       {
+                                                           "id":  "intake_run_never_started",
+                                                           "severity":  "warning",
+                                                           "task_id":  "issue-206-mcp-resource-exports",
+                                                           "diagnosis":  "Run \u0027sb-20260615-0206abcd\u0027 was created by specbridge-intake for \u0027issue-206-mcp-resource-exports\u0027 but no ledger entry exists. Apply-mode has not started.",
+                                                           "recommended_action":  "run_apply_mode_from_intake_branch",
+                                                           "command":  "git checkout codex/issue-206-mcp-resource-exports \u0026\u0026 powershell -ExecutionPolicy Bypass -Command \"\u0026 \u0027.\\scripts\\specbridge.ps1\u0027 -Command issue-to-merge-github -TaskId \u0027issue-206-mcp-resource-exports\u0027 -MutationMode apply -ConfirmGithubMutation -Force\"",
+                                                           "safe_to_automate":  false
+                                                       }
+                                                   ],
+                                       "action_count":  1,
+                                       "checked_at":  "2026-06-15T03:05:18.2194382-03:00"
+                                   }
+                      },
+                      {
+                          "name":  "specbridge://operator/orchestration-summaries",
+                          "uri":  "specbridge://operator/orchestration-summaries",
+                          "content_type":  "application/json",
+                          "source_paths":  [
+                                               ".specbridge/orchestrations/*.orchestration.json"
+                                           ],
+                          "refresh_behavior":  "on_demand",
+                          "sensitivity":  "internal",
+                          "read_only":  true,
+                          "description":  "Summarized view of all SpecBridge orchestration manifests: task_id, status, run_id, and created_at per orchestration.",
+                          "data":  [
+                                       {
+                                           "task_id":  "issue-178-specbridge-multi-agent-orchestration-manifest",
+                                           "status":  "planned",
+                                           "run_id":  "sb-20260609-06e1b8e9",
+                                           "created_at":  "2026-06-09",
+                                           "source":  ".specbridge/orchestrations/issue-178-specbridge-multi-agent-orchestration-manifest.orchestration.json"
+                                       },
+                                       {
+                                           "task_id":  "issue-179-agent-handoff-protocol",
+                                           "status":  "completed",
+                                           "run_id":  "sb-20260609-78e0b3b4",
+                                           "created_at":  "2026-06-09",
+                                           "source":  ".specbridge/orchestrations/issue-179-agent-handoff-protocol.orchestration.json"
+                                       },
+                                       {
+                                           "task_id":  "issue-180-review-agent-report",
+                                           "status":  "completed",
+                                           "run_id":  "sb-20260609-f0c8fb8c",
+                                           "created_at":  "2026-06-09",
+                                           "source":  ".specbridge/orchestrations/issue-180-review-agent-report.orchestration.json"
+                                       },
+                                       {
+                                           "task_id":  "issue-181-claude-code-project-config",
+                                           "status":  "completed",
+                                           "run_id":  "sb-20260610-d3d9aafd",
+                                           "created_at":  "2026-06-10",
+                                           "source":  ".specbridge/orchestrations/issue-181-claude-code-project-config.orchestration.json"
+                                       },
+                                       {
+                                           "task_id":  "operator-queue-hygiene",
+                                           "status":  "completed",
+                                           "run_id":  "sb-20260610-f4fc2874",
+                                           "created_at":  "2026-06-10",
+                                           "source":  ".specbridge/orchestrations/operator-queue-hygiene.orchestration.json"
+                                       },
+                                       {
+                                           "task_id":  "v5-serious-live-pilot-no-coordinator-remediation",
+                                           "status":  "completed",
+                                           "run_id":  "sb-20260610-5a7cca94",
+                                           "created_at":  "2026-06-10",
+                                           "source":  ".specbridge/orchestrations/v5-serious-live-pilot-no-coordinator-remediation.orchestration.json"
+                                       }
+                                   ]
+                      }
+                  ]
+}

@@ -1,0 +1,75 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-206-mcp-resource-exports",
+  "generated_by": "Claude Code and ChatGPT/Codex",
+  "execution_contract_path": ".specbridge/contracts/issue-206-mcp-resource-exports.execution.md",
+  "changed_files": [
+    ".specbridge/audit-packets/issue-206-mcp-resource-exports.audit-packet.json",
+    ".specbridge/audits/issue-206-mcp-resource-exports.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-206-mcp-resource-exports.execution.md",
+    ".specbridge/mcp-resources/operator-state.catalog.json",
+    ".specbridge/mcp/specbridge-operator-state-resources.md",
+    ".specbridge/reports/issue-206-mcp-resource-exports.final-report.json",
+    ".specbridge/scopes/issue-206-mcp-resource-exports.scope.json",
+    ".specbridge/state/current-goal.json",
+    "docs/specbridge-mcp-resource-exports.md",
+    "docs/specbridge-studio.html",
+    "docs/status-dashboard.html",
+    "scripts/lib/mcp-resources.ps1",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "diff_summary": [
+    { "file": "scripts/specbridge.ps1", "added_lines": 3, "deleted_lines": 2 },
+    { "file": "scripts/lib/mcp-resources.ps1", "added_lines": null, "deleted_lines": 0 },
+    { "file": "scripts/test-specbridge-cli.ps1", "added_lines": null, "deleted_lines": 0 },
+    { "file": ".specbridge/mcp/specbridge-operator-state-resources.md", "added_lines": null, "deleted_lines": 0 },
+    { "file": ".specbridge/mcp-resources/operator-state.catalog.json", "added_lines": null, "deleted_lines": 0 },
+    { "file": "docs/specbridge-mcp-resource-exports.md", "added_lines": null, "deleted_lines": 0 },
+    { "file": "docs/status-dashboard.html", "added_lines": null, "deleted_lines": null },
+    { "file": "docs/specbridge-studio.html", "added_lines": null, "deleted_lines": null },
+    { "file": ".specbridge/context/CURRENT_GOAL.md", "added_lines": null, "deleted_lines": null },
+    { "file": ".specbridge/state/current-goal.json", "added_lines": null, "deleted_lines": null },
+    { "file": ".specbridge/contracts/issue-206-mcp-resource-exports.execution.md", "added_lines": null, "deleted_lines": 0 },
+    { "file": ".specbridge/scopes/issue-206-mcp-resource-exports.scope.json", "added_lines": null, "deleted_lines": 0 },
+    { "file": ".specbridge/reports/issue-206-mcp-resource-exports.final-report.json", "added_lines": null, "deleted_lines": 0 },
+    { "file": ".specbridge/audit-packets/issue-206-mcp-resource-exports.audit-packet.json", "added_lines": null, "deleted_lines": 0 },
+    { "file": ".specbridge/audits/issue-206-mcp-resource-exports.chatgpt-audit.json", "added_lines": null, "deleted_lines": 0 }
+  ],
+  "validation_commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+    "git diff --check"
+  ],
+  "validation_results": [
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1", "result": "passed" },
+    { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1", "result": "passed" },
+    { "command": "git diff --check", "result": "passed" }
+  ],
+  "final_report_path": ".specbridge/reports/issue-206-mcp-resource-exports.final-report.json",
+  "ci_status": "not_collected",
+  "pr_review_report_path": null,
+  "policy_result": "Passed. Task stays inside exclusive_write scope. No blocked scope touched. No live MCP server, network calls, secrets, production config, billing, auth, database, CI/CD, dependency, deployment, operator decision registry, issue #194, or digital twin changes.",
+  "unresolved_risks": [
+    "GitHub CI pending until PR creation.",
+    "Active issue-206 scope produces a non-blocking offline doctor warning until post-merge closure records completion."
+  ],
+  "completion_status": "complete",
+  "source_files": [
+    ".specbridge/contracts/issue-206-mcp-resource-exports.execution.md",
+    ".specbridge/scopes/issue-206-mcp-resource-exports.scope.json",
+    ".specbridge/reports/issue-206-mcp-resource-exports.final-report.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths, summaries, validation results, policy result, risks, and status only. It does not embed raw diffs, secrets, tokens, private keys, or credential values."
+}

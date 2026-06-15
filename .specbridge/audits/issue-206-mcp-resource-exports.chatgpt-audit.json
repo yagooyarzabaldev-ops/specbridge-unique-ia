@@ -1,0 +1,89 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-206-mcp-resource-exports",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-206-mcp-resource-exports.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-206-mcp-resource-exports.execution.md",
+  "final_report_path": ".specbridge/reports/issue-206-mcp-resource-exports.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Execution contract, scope manifest, allowed and blocked scope, acceptance criteria, validation commands, stop conditions, merge policy, deployment policy, final report, audit packet, and ChatGPT audit are present.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "specbridge-mcp-resources exists, returns valid JSON for current-goal, doctor-fix-plan, and orchestration-summaries, declares required resource fields, writes the governed catalog artifact through -OutputPath, documents that no live MCP server exists, and has CLI regression coverage for command shape, required resources, no-mutation, OutputPath, Force, and bad-path handling.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "No blocked scope touched. No workflows, env files, secrets, MCP config, dependency files, live MCP server, network call implementation, production config, billing, auth, database, CI/CD security, operator decision registry, issue #194, or digital twin changes.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The command is read-only without -OutputPath, invokes doctor only with -Offline, restricts writes to .specbridge/mcp-resources/operator-state.catalog.json, and requires -Force to replace an existing catalog.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "All changed files are included in the issue-206 exclusive_write list.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "CLI suite passed with the new MCP resource tests, evidence validators passed, and full specbridge-smoke.ps1 passed locally.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "Local smoke passed. GitHub CI will be collected after branch push and PR creation.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "Final report records changed files, local validations, CI pending status, policy result, deployment status, unresolved risks, and rollback notes.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "mcp_server_status",
+      "file": ".specbridge/mcp/specbridge-operator-state-resources.md",
+      "line": null,
+      "evidence": "Resource contract explicitly states no live MCP server is implemented.",
+      "recommendation": "Keep MCP server status as not_implemented until a future dedicated contract authorizes a live server runtime.",
+      "blocking": false
+    },
+    {
+      "severity": "info",
+      "category": "doctor_warning",
+      "file": ".specbridge/mcp-resources/operator-state.catalog.json",
+      "line": null,
+      "evidence": "The generated offline doctor resource reports intake_run_never_started for the active issue-206 scope because this branch was opened manually rather than through apply-mode ledger recording.",
+      "recommendation": "Do not treat this as an implementation blocker; clear it through normal PR merge and post-merge closure evidence.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub CI pending until PR creation.",
+    "Post-merge closure still required after primary merge."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-206-mcp-resource-exports.audit-packet.json",
+    ".specbridge/contracts/issue-206-mcp-resource-exports.execution.md",
+    ".specbridge/reports/issue-206-mcp-resource-exports.final-report.json"
+  ]
+}

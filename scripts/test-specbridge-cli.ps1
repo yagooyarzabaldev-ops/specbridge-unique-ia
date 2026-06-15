@@ -2396,6 +2396,154 @@ try {
       Write-Output "FAIL fix-plan-human-output: 'SpecBridge Fix Plan' header not found."
       $script:failed = $true
     }
+
+    # specbridge-mcp-resources tests
+
+    # 1. Command shape: exits 0, returns JSON with command and ok fields
+    $mcpResult = Invoke-Cli -Arguments @("specbridge-mcp-resources")
+    Assert-Success `
+      -Name "specbridge-mcp-resources" `
+      -Result $mcpResult `
+      -ExpectedPattern '"command"\s*:\s*"specbridge-mcp-resources"'
+
+    if ($mcpResult.ExitCode -eq 0) {
+      $mcpJson = $null
+      try { $mcpJson = $mcpResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      if ($null -eq $mcpJson) {
+        Write-Output "FAIL specbridge-mcp-resources: output was not valid JSON."
+        $script:failed = $true
+      } else {
+        # ok field
+        if ($mcpJson.ok -ne $true) {
+          Write-Output "FAIL specbridge-mcp-resources: ok field is not true."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-mcp-resources: ok is true."
+        }
+
+        # catalog fields
+        $requiredCatalogFields = @("schema_version","catalog_id","generated_at","mcp_server_status","mcp_server_note","read_only_policy","resources")
+        $missingCatalog = $requiredCatalogFields | Where-Object { $null -eq $mcpJson.catalog.$_ -and $mcpJson.catalog.$_ -ne $false }
+        if ($missingCatalog.Count -gt 0) {
+          Write-Output "FAIL specbridge-mcp-resources: catalog missing fields: $($missingCatalog -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-mcp-resources: catalog has all required fields."
+        }
+
+        # mcp_server_status must be not_implemented
+        if ($mcpJson.catalog.mcp_server_status -ne "not_implemented") {
+          Write-Output "FAIL specbridge-mcp-resources: mcp_server_status expected 'not_implemented'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-mcp-resources: mcp_server_status is not_implemented."
+        }
+
+        # 2. Required resources present
+        $resources = @($mcpJson.catalog.resources)
+        $requiredUris = @(
+          "specbridge://operator/current-goal",
+          "specbridge://operator/doctor-fix-plan",
+          "specbridge://operator/orchestration-summaries"
+        )
+        $actualUris = $resources | ForEach-Object { $_.uri }
+        $missingUris = $requiredUris | Where-Object { $actualUris -notcontains $_ }
+        if ($missingUris.Count -gt 0) {
+          Write-Output "FAIL specbridge-mcp-resources: missing resource URIs: $($missingUris -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-mcp-resources: all 3 required resource URIs present."
+        }
+
+        # Each resource entry must have required fields
+        $requiredResourceFields = @("name","uri","content_type","source_paths","refresh_behavior","sensitivity","read_only","description")
+        $resourceFieldFail = $false
+        foreach ($res in $resources) {
+          $missingResFields = $requiredResourceFields | Where-Object { $null -eq $res.$_ -and $res.$_ -ne $false }
+          if ($missingResFields.Count -gt 0) {
+            Write-Output "FAIL specbridge-mcp-resources: resource '$($res.uri)' missing fields: $($missingResFields -join ', ')."
+            $script:failed = $true
+            $resourceFieldFail = $true
+          }
+          if ($res.read_only -ne $true) {
+            Write-Output "FAIL specbridge-mcp-resources: resource '$($res.uri)' read_only is not true."
+            $script:failed = $true
+            $resourceFieldFail = $true
+          }
+        }
+        if (-not $resourceFieldFail) {
+          Write-Output "PASS specbridge-mcp-resources: all resource entries have required fields and read_only=true."
+        }
+      }
+    }
+
+    # 3. No mutation without OutputPath: no catalog file written when -OutputPath is omitted
+    $catalogArtifact = Join-Path (Get-Location).Path ".specbridge/mcp-resources/operator-state.catalog.json"
+    $catalogExistedBefore = Test-Path $catalogArtifact
+    $catalogOriginalRaw = $null
+    if ($catalogExistedBefore) {
+      $catalogOriginalRaw = Get-Content $catalogArtifact -Raw -Encoding UTF8
+    }
+    Remove-Item $catalogArtifact -Force -ErrorAction SilentlyContinue
+    $mcpNoPathResult = Invoke-Cli -Arguments @("specbridge-mcp-resources")
+    if (Test-Path $catalogArtifact) {
+      Write-Output "FAIL specbridge-mcp-resources-no-mutation: catalog file was written without -OutputPath."
+      $script:failed = $true
+    } else {
+      Write-Output "PASS specbridge-mcp-resources-no-mutation: no catalog file written without -OutputPath."
+    }
+
+    # 4. OutputPath behavior: writes catalog to declared path
+    $mcpOutputResult = Invoke-Cli -Arguments @("specbridge-mcp-resources", "-OutputPath", ".specbridge/mcp-resources/operator-state.catalog.json", "-Force")
+    Assert-Success `
+      -Name "specbridge-mcp-resources-output-path" `
+      -Result $mcpOutputResult `
+      -ExpectedPattern '"output_path"'
+
+    if ($mcpOutputResult.ExitCode -eq 0) {
+      if (-not (Test-Path $catalogArtifact)) {
+        Write-Output "FAIL specbridge-mcp-resources-output-path: catalog file was not written."
+        $script:failed = $true
+      } else {
+        $writtenCatalog = $null
+        try {
+          $writtenRaw = Get-Content $catalogArtifact -Raw -Encoding UTF8
+          $writtenCatalog = $writtenRaw | ConvertFrom-Json
+        } catch {}
+        if ($null -eq $writtenCatalog) {
+          Write-Output "FAIL specbridge-mcp-resources-output-path: written catalog is not valid JSON."
+          $script:failed = $true
+        } elseif ($writtenCatalog.catalog_id -ne "specbridge-operator-state") {
+          Write-Output "FAIL specbridge-mcp-resources-output-path: written catalog catalog_id mismatch."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-mcp-resources-output-path: catalog file written and valid."
+        }
+      }
+
+      # Existing catalog artifacts require -Force.
+      $mcpExistingPathResult = Invoke-Cli -Arguments @("specbridge-mcp-resources", "-OutputPath", ".specbridge/mcp-resources/operator-state.catalog.json")
+      Assert-Failure `
+        -Name "specbridge-mcp-resources-output-path-requires-force" `
+        -Result $mcpExistingPathResult `
+        -ExpectedPattern "use -Force"
+    }
+
+    # Restore the original artifact state after mutation tests.
+    if ($catalogExistedBefore) {
+      $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+      [System.IO.File]::WriteAllText($catalogArtifact, $catalogOriginalRaw, $utf8NoBom)
+    } else {
+      Remove-Item $catalogArtifact -Force -ErrorAction SilentlyContinue
+    }
+
+    # 5. OutputPath outside the contract artifact must fail
+    $mcpBadPathResult = Invoke-Cli -Arguments @("specbridge-mcp-resources", "-OutputPath", "docs/bad-catalog.json")
+    Assert-Failure `
+      -Name "specbridge-mcp-resources-bad-output-path" `
+      -Result $mcpBadPathResult `
+      -ExpectedPattern "OutputPath must be .specbridge/mcp-resources/operator-state.catalog.json"
   }
   finally {
     Pop-Location
