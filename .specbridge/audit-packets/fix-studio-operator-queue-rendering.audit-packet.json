@@ -9,13 +9,31 @@
     ".specbridge/reports/fix-studio-operator-queue-rendering.final-report.json",
     ".specbridge/audit-packets/fix-studio-operator-queue-rendering.audit-packet.json",
     ".specbridge/audits/fix-studio-operator-queue-rendering.chatgpt-audit.json",
+    ".specbridge/github-evidence/fix-studio-operator-queue-rendering.closure.json",
+    ".specbridge/ledger/operations.ndjson",
     "docs/specbridge-studio.html",
+    "docs/status-dashboard.html",
     "scripts/lib/dashboards.ps1",
     "scripts/lib/studio-queue-fix.ps1",
     "scripts/specbridge.ps1",
     "scripts/test-specbridge-cli.ps1"
   ],
   "diff_summary": [
+    {
+      "file": ".specbridge/github-evidence/fix-studio-operator-queue-rendering.closure.json",
+      "added_lines": 15,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/ledger/operations.ndjson",
+      "added_lines": 1,
+      "deleted_lines": 0
+    },
+    {
+      "file": "docs/status-dashboard.html",
+      "added_lines": 1,
+      "deleted_lines": 1
+    },
     {
       "file": ".specbridge/contracts/fix-studio-operator-queue-rendering.execution.md",
       "added_lines": 112,
@@ -76,7 +94,9 @@
     "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
     "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
     "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
-    "git diff --check"
+    "git diff --check",
+    "gh pr checks 200 --repo yagooyarzabaldev-ops/specbridge --watch --interval 15",
+    "GitHub PR #200 squash merge"
   ],
   "validation_results": [
     {
@@ -85,11 +105,11 @@
     },
     {
       "command": "gh pr checks 200 --repo yagooyarzabaldev-ops/specbridge --json name,state,bucket,link,workflow,startedAt,completedAt",
-      "result": "inspected_previous_failure"
+      "result": "passed"
     },
     {
       "command": "gh run view 27316812096 --repo yagooyarzabaldev-ops/specbridge --log",
-      "result": "inspected_previous_failure"
+      "result": "passed"
     },
     {
       "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 generate-studio-dashboard",
@@ -114,16 +134,24 @@
     {
       "command": "git diff --check",
       "result": "passed"
+    },
+    {
+      "command": "gh pr checks 200 --repo yagooyarzabaldev-ops/specbridge --watch --interval 15",
+      "result": "passed"
+    },
+    {
+      "command": "GitHub PR #200 squash merge",
+      "result": "passed"
     }
   ],
   "final_report_path": ".specbridge/reports/fix-studio-operator-queue-rendering.final-report.json",
-  "ci_status": "pending",
+  "ci_status": "passed",
   "pr_review_report_path": null,
   "policy_result": "Passed. The task stays inside declared Studio rendering, CLI loader, test, contract, scope, dashboard artifact, and evidence files.",
   "unresolved_risks": [
-    "Updated GitHub CI evidence is pending until PR #200 checks complete."
+    "Historical doctor warnings remain for older completed scopes missing closure evidence: issue-172-specbridge-trace-run-id and issue-177-repo-memory-cleanup-after-studio."
   ],
-  "completion_status": "complete_pending_ci",
+  "completion_status": "complete",
   "source_files": [
     ".specbridge/contracts/fix-studio-operator-queue-rendering.execution.md",
     ".specbridge/reports/fix-studio-operator-queue-rendering.final-report.json"

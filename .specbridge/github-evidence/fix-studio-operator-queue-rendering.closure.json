@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "task_id": "fix-studio-operator-queue-rendering",
+  "run_id": "sb-20260610-0200abcd",
+  "evidence_type": "closure_evidence",
+  "collected_by": "ChatGPT/Codex",
+  "collected_at": "2026-06-14T21:29:03.5191057-03:00",
+  "merge_commit": "1777306e430fee7cec45f27938cdab640d6d6f22",
+  "primary_pr": 200,
+  "related_issue": 200,
+  "issue_closed": true,
+  "scope_status": "completed",
+  "all_validations_passed": true,
+  "notes": "PR #200 merged after GitHub checks passed. Studio Operator Queue now renders local queue state, issue #194 remains excluded as not_planned, and regression coverage prevents the unavailable fallback."
+}

@@ -44,32 +44,32 @@
     },
     {
       "name": "ci_evidence",
-      "result": "needs_human_decision",
-      "evidence": "Updated GitHub CI evidence is pending until PR #200 checks complete.",
+      "result": "pass",
+      "evidence": "GitHub checks passed on PR #200: Foundation Validation, SpecBridge Review Gate, SpecBridge PR Review Report, and Claude Review Non Blocking.",
       "blocking": false
     },
     {
       "name": "final_report_honesty",
       "result": "pass",
-      "evidence": "The final report records pending CI risk, no deployment, rollback notes, and the generated dashboard caveat while the PR scope remains active.",
+      "evidence": "The final report records passed CI, merged PR #200, no deployment, remaining historical doctor warnings, and complete status.",
       "blocking": false
     }
   ],
   "findings": [
     {
       "severity": "info",
-      "category": "ci_evidence",
-      "file": ".specbridge/audit-packets/fix-studio-operator-queue-rendering.audit-packet.json",
+      "category": "closure_evidence",
+      "file": ".specbridge/github-evidence/fix-studio-operator-queue-rendering.closure.json",
       "line": null,
-      "evidence": "CI status is pending until the updated branch is pushed and GitHub Actions completes.",
-      "recommendation": "Use the GitHub merge gate before merging PR #200.",
+      "evidence": "PR #200 merged at 1777306e430fee7cec45f27938cdab640d6d6f22 after all GitHub checks passed.",
+      "recommendation": "Use the closure evidence file and regenerated dashboards as the post-merge state of record.",
       "blocking": false
     }
   ],
-  "outcome": "needs_human_decision",
-  "merge_allowed": false,
+  "outcome": "approved",
+  "merge_allowed": true,
   "unresolved_risks": [
-    "Updated GitHub CI evidence is pending until PR #200 checks complete."
+    "Historical doctor warnings remain for older completed scopes missing closure evidence: issue-172-specbridge-trace-run-id and issue-177-repo-memory-cleanup-after-studio."
   ],
   "source_files": [
     ".specbridge/audit-packets/fix-studio-operator-queue-rendering.audit-packet.json",
