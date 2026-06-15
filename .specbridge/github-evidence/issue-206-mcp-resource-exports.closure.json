@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-206-mcp-resource-exports",
+  "run_id": "sb-20260615-0206abcd",
+  "evidence_type": "closure_evidence",
+  "collected_by": "ChatGPT/Codex post-merge closure",
+  "collected_at": "2026-06-15",
+  "merge_commit": "58602a22697e58778399da162951e80926950b83",
+  "primary_pr": 207,
+  "issue_closed": true,
+  "scope_status": "completed",
+  "all_validations_passed": true,
+  "notes": "PR #207 merged after local smoke and GitHub checks passed. MCP resource exports are implemented as a deterministic local CLI/artifact surface with no live MCP server runtime."
+}

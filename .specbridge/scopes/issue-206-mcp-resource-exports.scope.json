@@ -1,7 +1,7 @@
 {
   "contract_id": "issue-206-mcp-resource-exports",
   "run_id": "sb-20260615-0206abcd",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/contracts/issue-206-mcp-resource-exports.execution.md",
     ".specbridge/scopes/issue-206-mcp-resource-exports.scope.json",

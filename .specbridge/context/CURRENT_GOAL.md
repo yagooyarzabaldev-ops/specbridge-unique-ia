@@ -41,6 +41,7 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | 200 | Studio Operator Queue rendering fix | 200 | Merged 2026-06-15 |
 | — | Post-merge closure: Studio queue memory and dashboards | 203 | Merged 2026-06-15 |
 | — | Historical doctor warning reconciliation | 204 | Merged 2026-06-15 |
+| 206 | MCP resource exports for operator state | 207 | Merged 2026-06-15 |
 
 ## Architecture Status
 
@@ -63,13 +64,13 @@ SpecBridge currently has:
 
 ## Next Recommended Task
 
-**Active governed operator task: issue-206 MCP resource exports**
+**Ready for next governed operator task**
 
 Immediate order:
 
-1. Implement `specbridge-mcp-resources` as a deterministic, read-only local resource catalog.
-2. Export current goal, doctor fix-plan, and orchestration summaries for external agents without introducing a live MCP server.
-3. Validate contract, scope, CLI tests, final report, audit packet, ChatGPT audit, full smoke, and diff hygiene before PR/CI.
+1. Confirm `specbridge-doctor -FixPlan -Offline` remains healthy after issue-206 closure.
+2. Select the next eligible task through `specbridge-next-task` or create a new governed contract if no task is eligible.
+3. Keep future MCP server runtime work blocked until a dedicated contract authorizes it.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;
@@ -79,4 +80,4 @@ Backlog: future governed MCP server runtime remains blocked until a dedicated
 contract explicitly authorizes it.
 
 Maintenance debt:
-- None active before issue 206. Local doctor output is rechecked during the issue 206 validation cycle.
+- None active. Local doctor output should return healthy after PR #207 post-merge closure evidence.
