@@ -9,10 +9,12 @@
     ".specbridge/reports/reconcile-historical-doctor-warnings.final-report.json",
     ".specbridge/audit-packets/reconcile-historical-doctor-warnings.audit-packet.json",
     ".specbridge/audits/reconcile-historical-doctor-warnings.chatgpt-audit.json",
+    ".specbridge/github-evidence/reconcile-historical-doctor-warnings.closure.json",
     ".specbridge/github-evidence/issue-172-specbridge-trace-run-id.closure.json",
     ".specbridge/github-evidence/issue-177-repo-memory-cleanup-after-studio.closure.json",
     ".specbridge/ledger/operations.ndjson",
     ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/state/current-goal.json",
     "docs/status-dashboard.html",
     "docs/specbridge-studio.html"
   ],
@@ -43,6 +45,11 @@
       "deleted_lines": 0
     },
     {
+      "file": ".specbridge/github-evidence/reconcile-historical-doctor-warnings.closure.json",
+      "added_lines": 15,
+      "deleted_lines": 0
+    },
+    {
       "file": ".specbridge/github-evidence/issue-172-specbridge-trace-run-id.closure.json",
       "added_lines": 16,
       "deleted_lines": 0
@@ -54,13 +61,18 @@
     },
     {
       "file": ".specbridge/ledger/operations.ndjson",
-      "added_lines": 4,
+      "added_lines": 5,
       "deleted_lines": 0
     },
     {
       "file": ".specbridge/context/CURRENT_GOAL.md",
-      "added_lines": 5,
-      "deleted_lines": 4
+      "added_lines": 6,
+      "deleted_lines": 5
+    },
+    {
+      "file": ".specbridge/state/current-goal.json",
+      "added_lines": 2,
+      "deleted_lines": 2
     },
     {
       "file": "docs/status-dashboard.html",
@@ -83,7 +95,9 @@
     "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
     "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
     "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
-    "git diff --check"
+    "git diff --check",
+    "gh pr checks 204 --repo yagooyarzabaldev-ops/specbridge --watch --interval 15",
+    "GitHub PR #204 squash merge"
   ],
   "validation_results": [
     {
@@ -125,12 +139,20 @@
     {
       "command": "git diff --check",
       "result": "passed"
+    },
+    {
+      "command": "gh pr checks 204 --repo yagooyarzabaldev-ops/specbridge --watch --interval 15",
+      "result": "passed"
+    },
+    {
+      "command": "GitHub PR #204 squash merge",
+      "result": "passed"
     }
   ],
   "final_report_path": ".specbridge/reports/reconcile-historical-doctor-warnings.final-report.json",
-  "ci_status": "not_collected",
+  "ci_status": "passed",
   "pr_review_report_path": null,
-  "policy_result": "Passed. The reconciliation is limited to declared governance and evidence paths.",
+  "policy_result": "Passed. The reconciliation and post-merge closure are limited to declared governance and evidence paths.",
   "unresolved_risks": [],
   "completion_status": "complete",
   "source_files": [

@@ -9,7 +9,7 @@
 - created_at: 2026-06-15
 - autonomy_profile: full_autopilot
 - risk_level: low
-- status: ready_for_execution
+- status: completed
 
 ## Goal
 
@@ -35,6 +35,7 @@ GitHub evidence confirms these tasks were completed through merged PRs and close
 - `.specbridge/scopes/issue-178-specbridge-multi-agent-orchestration-manifest.scope.json` - completed scope with run ID `sb-20260609-06e1b8e9`.
 - `.specbridge/github-evidence/*.closure.json` - closure evidence checked by `specbridge-doctor`.
 - `.specbridge/ledger/operations.ndjson` - append-only operation ledger checked by `specbridge-doctor`.
+- `.specbridge/state/current-goal.json` - machine-readable current goal pointer for dashboards and operators.
 - `docs/status-dashboard.html` and `docs/specbridge-studio.html` - generated health dashboards.
 
 ## Autonomy Profile
@@ -55,10 +56,12 @@ Low. The task changes governance evidence, ledger entries, repository memory, ge
 .specbridge/reports/reconcile-historical-doctor-warnings.final-report.json
 .specbridge/audit-packets/reconcile-historical-doctor-warnings.audit-packet.json
 .specbridge/audits/reconcile-historical-doctor-warnings.chatgpt-audit.json
+.specbridge/github-evidence/reconcile-historical-doctor-warnings.closure.json
 .specbridge/github-evidence/issue-172-specbridge-trace-run-id.closure.json
 .specbridge/github-evidence/issue-177-repo-memory-cleanup-after-studio.closure.json
 .specbridge/ledger/operations.ndjson
 .specbridge/context/CURRENT_GOAL.md
+.specbridge/state/current-goal.json
 docs/status-dashboard.html
 docs/specbridge-studio.html
 ```
@@ -94,6 +97,7 @@ CI/CD security changes
 4. Dashboards are regenerated from the reconciled evidence.
 5. `specbridge-doctor -FixPlan -Offline` reports healthy with zero actions, or any residual warning is recorded as an unresolved risk with evidence.
 6. Full SpecBridge smoke remains green locally and in GitHub Actions.
+7. After PR #204 merges, this scope is marked completed and closure evidence records the merge commit.
 
 ## Required Validations
 

@@ -1,17 +1,19 @@
 {
   "contract_id": "reconcile-historical-doctor-warnings",
   "run_id": "sb-20260615-0d0c70c1",
-  "status": "ready_for_execution",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/contracts/reconcile-historical-doctor-warnings.execution.md",
     ".specbridge/scopes/reconcile-historical-doctor-warnings.scope.json",
     ".specbridge/reports/reconcile-historical-doctor-warnings.final-report.json",
     ".specbridge/audit-packets/reconcile-historical-doctor-warnings.audit-packet.json",
     ".specbridge/audits/reconcile-historical-doctor-warnings.chatgpt-audit.json",
+    ".specbridge/github-evidence/reconcile-historical-doctor-warnings.closure.json",
     ".specbridge/github-evidence/issue-172-specbridge-trace-run-id.closure.json",
     ".specbridge/github-evidence/issue-177-repo-memory-cleanup-after-studio.closure.json",
     ".specbridge/ledger/operations.ndjson",
     ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/state/current-goal.json",
     "docs/status-dashboard.html",
     "docs/specbridge-studio.html"
   ],

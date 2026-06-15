@@ -40,6 +40,7 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | 199 | V5 Serious Live Pilot - no coordinator remediation | 201 | Merged 2026-06-11 |
 | 200 | Studio Operator Queue rendering fix | 200 | Merged 2026-06-15 |
 | — | Post-merge closure: Studio queue memory and dashboards | 203 | Merged 2026-06-15 |
+| — | Historical doctor warning reconciliation | 204 | Merged 2026-06-15 |
 
 ## Architecture Status
 
@@ -62,13 +63,13 @@ SpecBridge currently has:
 
 ## Next Recommended Task
 
-**Operator health cleanup before the next product expansion**
+**Next governed operator task: issue-182 MCP resources**
 
 Immediate order:
 
 1. PR #200 (`fix-studio-operator-queue-rendering`) is repaired, validated, merged, and closed through PR #203 post-merge memory.
-2. Close the remaining doctor warnings for historical completed scopes that are missing closure evidence or ledger coverage.
-3. Open a new governed operator task only after `specbridge-doctor` returns healthy or the remaining warnings are explicitly accepted.
+2. Historical doctor warnings for issues 172, 174, 177, and 178 are reconciled through PR #204 closure evidence and ledger entries.
+3. Open a governed contract and scope for issue-182 MCP resources only after confirming `specbridge-doctor -FixPlan -Offline` remains healthy.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;
@@ -78,4 +79,4 @@ Backlog: issue-182 MCP resources (current-goal, fix-plan, orchestrations
 as MCP resources for external agents).
 
 Maintenance debt:
-- Historical `specbridge-doctor` warnings for completed scopes `issue-172-specbridge-trace-run-id`, `issue-174-specbridge-studio-dashboard`, `issue-177-repo-memory-cleanup-after-studio`, and `issue-178-specbridge-multi-agent-orchestration-manifest` are reconciled through explicit closure evidence and ledger entries; local `specbridge-doctor -FixPlan -Offline` reports healthy with zero actions before PR publication.
+- None active. Local `specbridge-doctor -FixPlan -Offline` reports healthy with zero actions after PR #204 reconciliation evidence.

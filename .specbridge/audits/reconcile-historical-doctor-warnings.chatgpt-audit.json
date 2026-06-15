@@ -15,13 +15,13 @@
     {
       "name": "acceptance_criteria",
       "result": "pass",
-      "evidence": "Missing closure evidence was added for issue-172 and issue-177; ledger reconciliation entries were added for run IDs sb-20260608-abcd0172, sb-20260609-cc04eda9, sb-20260609-b3bc65dc, and sb-20260609-06e1b8e9; CURRENT_GOAL no longer says PR #200 is open or failing; dashboards were regenerated; doctor reports healthy action_count=0.",
+      "evidence": "Missing closure evidence was added for issue-172 and issue-177; ledger reconciliation entries were added for run IDs sb-20260608-abcd0172, sb-20260609-cc04eda9, sb-20260609-b3bc65dc, and sb-20260609-06e1b8e9; PR #204 merged; the reconcile scope is completed; CURRENT_GOAL no longer says PR #200 is open or failing; dashboards were regenerated; doctor reports healthy action_count=0.",
       "blocking": false
     },
     {
       "name": "policy_boundaries",
       "result": "pass",
-      "evidence": "The diff is limited to governance evidence, ledger, current goal memory, generated dashboards, and task audit artifacts; no scripts, workflows, operator decisions, issue #194 lifecycle, or digital twin implementation changed.",
+      "evidence": "The diff is limited to governance evidence, ledger, current goal memory, generated dashboards, post-merge closure evidence, and task audit artifacts; no scripts, workflows, operator decisions, issue #194 lifecycle, or digital twin implementation changed.",
       "blocking": false
     },
     {
@@ -45,13 +45,13 @@
     {
       "name": "ci_evidence",
       "result": "pass",
-      "evidence": "GitHub CI is not collected at local report creation time; merge policy still requires GitHub checks to pass before merge. Local CI parity is covered by specbridge-smoke.",
+      "evidence": "GitHub checks passed on PR #204: Foundation Validation, SpecBridge Review Gate, SpecBridge PR Review Report, and Claude Review Non Blocking. Local CI parity is covered by specbridge-smoke.",
       "blocking": false
     },
     {
       "name": "final_report_honesty",
       "result": "pass",
-      "evidence": "The final report records the reconciliation, changed files, local validation evidence, policy result, low risk result, no deployment, no unresolved risks, and pending GitHub PR/CI/merge status.",
+      "evidence": "The final report records the reconciliation, changed files, local validation evidence, GitHub CI evidence, policy result, low risk result, no deployment, no unresolved risks, and merged PR #204 status.",
       "blocking": false
     }
   ],
@@ -61,8 +61,8 @@
       "category": "doctor_health",
       "file": ".specbridge/ledger/operations.ndjson",
       "line": null,
-      "evidence": "After adding closure evidence and historical reconciliation ledger entries, specbridge-doctor -FixPlan -Offline reports health=healthy and action_count=0.",
-      "recommendation": "Require GitHub CI to pass before merging this reconciliation PR.",
+      "evidence": "After adding closure evidence, historical reconciliation ledger entries, and PR #204 post-merge memory, specbridge-doctor -FixPlan -Offline reports health=healthy and action_count=0.",
+      "recommendation": "Use issue-182 MCP resources as the next governed operator task if doctor remains healthy.",
       "blocking": false
     }
   ],

@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "task_id": "reconcile-historical-doctor-warnings",
+  "run_id": "sb-20260615-0d0c70c1",
+  "evidence_type": "closure_evidence",
+  "collected_by": "ChatGPT/Codex post-merge closure",
+  "collected_at": "2026-06-15",
+  "merge_commit": "ed504babd96e320535e9893d777e0ffc6064c2df",
+  "primary_pr": 204,
+  "issue_closed": true,
+  "scope_status": "completed",
+  "all_validations_passed": true,
+  "notes": "PR #204 merged after GitHub checks passed. Historical doctor warnings were reconciled and local specbridge-doctor reports health=healthy action_count=0."
+}
