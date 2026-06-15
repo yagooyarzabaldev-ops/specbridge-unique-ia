@@ -59,6 +59,20 @@ function Invoke-Cli {
   }
 }
 
+function Get-WorkingTreePorcelain {
+  $previousXdgConfigHome = $env:XDG_CONFIG_HOME
+  $gitConfigHome = Join-Path $tempRoot "git-config"
+  New-Item -ItemType Directory -Force -Path $gitConfigHome | Out-Null
+  $env:XDG_CONFIG_HOME = $gitConfigHome
+
+  try {
+    return (& git status --porcelain 2>$null | Out-String)
+  }
+  finally {
+    $env:XDG_CONFIG_HOME = $previousXdgConfigHome
+  }
+}
+
 function Assert-Success {
   param(
     [string] $Name,
@@ -1002,10 +1016,10 @@ try {
       }
 
       # read-only guarantee: no tracked file may change
-      $ntDiff = git status --porcelain 2>$null | Out-String
+      $ntDiff = Get-WorkingTreePorcelain
       $ntDiffBefore = $ntDiff
       $null = Invoke-Cli -Arguments @("specbridge-next-task")
-      $ntDiffAfter = git status --porcelain 2>$null | Out-String
+      $ntDiffAfter = Get-WorkingTreePorcelain
       if ($ntDiffBefore -eq $ntDiffAfter) {
         Write-Output "PASS specbridge-next-task: read-only (no working tree mutation)."
       } else {
@@ -2605,7 +2619,7 @@ try {
           "runtime_launches", "runtime_preflights", "runtime_results", "runtime_summaries",
           "runtime_runs", "runtime_executions", "orchestrations", "executor_packets",
           "github_evidence", "ledger", "mcp_resources", "artifact_inventory", "branch_inventory",
-          "branch_cleanup_policy"
+          "branch_cleanup_policy", "artifact_retention_policy"
         )
         $actualFamilyIds = $families | ForEach-Object { $_.family_id }
         $missingFamilies = $requiredFamilyIds | Where-Object { $actualFamilyIds -notcontains $_ }
@@ -3183,6 +3197,238 @@ try {
           }
         } else {
           Write-Output "FAIL specbridge-branch-cleanup-policy-artifact-family: branch_cleanup_policy family not found in artifact inventory."
+          $script:failed = $true
+        }
+      }
+    }
+
+    # specbridge-artifact-retention-policy tests
+
+    # 1. Command shape: exits 0, returns JSON with command and ok fields
+    $arpResult = Invoke-Cli -Arguments @("specbridge-artifact-retention-policy")
+    Assert-Success `
+      -Name "specbridge-artifact-retention-policy" `
+      -Result $arpResult `
+      -ExpectedPattern '"command"\s*:\s*"specbridge-artifact-retention-policy"'
+
+    # 2. Deterministic output: two read-only calls produce identical output
+    $arpRepeatResult = Invoke-Cli -Arguments @("specbridge-artifact-retention-policy")
+    if ($arpResult.ExitCode -eq 0 -and $arpRepeatResult.ExitCode -eq 0) {
+      if ($arpResult.Text.Trim() -ceq $arpRepeatResult.Text.Trim()) {
+        Write-Output "PASS specbridge-artifact-retention-policy-deterministic: repeated read-only output is stable."
+      } else {
+        Write-Output "FAIL specbridge-artifact-retention-policy-deterministic: repeated read-only output changed."
+        $script:failed = $true
+      }
+    }
+
+    if ($arpResult.ExitCode -eq 0) {
+      $arpJson = $null
+      try { $arpJson = $arpResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      if ($null -eq $arpJson) {
+        Write-Output "FAIL specbridge-artifact-retention-policy: output was not valid JSON."
+        $script:failed = $true
+      } else {
+        # ok field
+        if ($arpJson.ok -ne $true) {
+          Write-Output "FAIL specbridge-artifact-retention-policy: ok field is not true."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-artifact-retention-policy: ok is true."
+        }
+
+        # 3. Required top-level fields in evaluation
+        $requiredArpEvalFields = @(
+          "command", "policy_metadata", "enforcement_status",
+          "totals", "family_class_counts", "blocked_counts",
+          "required_future_gates", "family_evaluations", "read_only_note"
+        )
+        $arpEvalFieldNames = @($arpJson.evaluation.PSObject.Properties.Name)
+        $missingArpEvalFields = $requiredArpEvalFields | Where-Object { $arpEvalFieldNames -notcontains $_ }
+        if ($missingArpEvalFields.Count -gt 0) {
+          Write-Output "FAIL specbridge-artifact-retention-policy: evaluation missing fields: $($missingArpEvalFields -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-artifact-retention-policy: evaluation has all required fields."
+        }
+
+        # enforcement_status must be "none"
+        if ($arpJson.evaluation.enforcement_status -ne "none") {
+          Write-Output "FAIL specbridge-artifact-retention-policy: enforcement_status expected 'none', got '$($arpJson.evaluation.enforcement_status)'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-artifact-retention-policy: enforcement_status is none."
+        }
+
+        # policy_metadata fields
+        $requiredArpPmFields = @("policy_id", "schema_version", "status", "enforcement", "cleanup_permission")
+        $arpPmFieldNames = @($arpJson.evaluation.policy_metadata.PSObject.Properties.Name)
+        $missingArpPm = $requiredArpPmFields | Where-Object { $arpPmFieldNames -notcontains $_ }
+        if ($missingArpPm.Count -gt 0) {
+          Write-Output "FAIL specbridge-artifact-retention-policy: policy_metadata missing fields: $($missingArpPm -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-artifact-retention-policy: policy_metadata has all required fields."
+        }
+
+        if ($arpJson.evaluation.policy_metadata.cleanup_permission -ne "none") {
+          Write-Output "FAIL specbridge-artifact-retention-policy: policy_metadata.cleanup_permission must be 'none'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-artifact-retention-policy: policy_metadata.cleanup_permission is none."
+        }
+
+        # totals fields
+        $requiredArpTotalsFields = @("total_families", "evaluated", "blocked_count")
+        $arpTotalsFieldNames = @($arpJson.evaluation.totals.PSObject.Properties.Name)
+        $missingArpTotals = $requiredArpTotalsFields | Where-Object { $arpTotalsFieldNames -notcontains $_ }
+        if ($missingArpTotals.Count -gt 0) {
+          Write-Output "FAIL specbridge-artifact-retention-policy: totals missing fields: $($missingArpTotals -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-artifact-retention-policy: totals has all required fields."
+        }
+
+        # required_future_gates must be non-empty
+        $arpGates = @($arpJson.evaluation.required_future_gates)
+        if ($arpGates.Count -eq 0) {
+          Write-Output "FAIL specbridge-artifact-retention-policy: required_future_gates is empty."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-artifact-retention-policy: required_future_gates has $($arpGates.Count) entries."
+        }
+
+        # 4. cleanup_permission=none for all family_evaluations
+        $arpFamilyEvals = @($arpJson.evaluation.family_evaluations)
+        $arpFamilyEvalFail = $false
+        $requiredArpFamilyEvalFields = @("family_id", "repository_path", "family_class", "file_count", "total_bytes", "cleanup_permission", "retention_posture", "future_gate")
+        foreach ($fe in $arpFamilyEvals) {
+          $feFieldNames = @($fe.PSObject.Properties.Name)
+          $missingFe = $requiredArpFamilyEvalFields | Where-Object { $feFieldNames -notcontains $_ }
+          if ($missingFe.Count -gt 0) {
+            Write-Output "FAIL specbridge-artifact-retention-policy: family_evaluation '$($fe.family_id)' missing fields: $($missingFe -join ', ')."
+            $script:failed = $true
+            $arpFamilyEvalFail = $true
+          }
+          if ($fe.cleanup_permission -ne "none") {
+            Write-Output "FAIL specbridge-artifact-retention-policy: family_evaluation '$($fe.family_id)' cleanup_permission must be 'none', got '$($fe.cleanup_permission)'."
+            $script:failed = $true
+            $arpFamilyEvalFail = $true
+          }
+          if ($fe.retention_posture -ne "preserve") {
+            Write-Output "FAIL specbridge-artifact-retention-policy: family_evaluation '$($fe.family_id)' retention_posture must be 'preserve', got '$($fe.retention_posture)'."
+            $script:failed = $true
+            $arpFamilyEvalFail = $true
+          }
+          $validArpGates = @("activation_required", "blocked")
+          if ($validArpGates -notcontains $fe.future_gate) {
+            Write-Output "FAIL specbridge-artifact-retention-policy: family_evaluation '$($fe.family_id)' invalid future_gate '$($fe.future_gate)'."
+            $script:failed = $true
+            $arpFamilyEvalFail = $true
+          }
+        }
+        if (-not $arpFamilyEvalFail) {
+          Write-Output "PASS specbridge-artifact-retention-policy: all family_evaluations have required fields, cleanup_permission=none, valid posture and gate."
+        }
+
+        # totals.evaluated must match family_evaluations count
+        if ($arpJson.evaluation.totals.evaluated -ne $arpFamilyEvals.Count) {
+          Write-Output "FAIL specbridge-artifact-retention-policy: totals.evaluated expected $($arpFamilyEvals.Count), got $($arpJson.evaluation.totals.evaluated)."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-artifact-retention-policy: totals.evaluated matches family_evaluations count."
+        }
+      }
+    }
+
+    # 5. No mutation without OutputPath: no policy evaluation file written
+    $arpArtifact = Join-Path (Get-Location).Path ".specbridge/artifact-retention/current.policy-evaluation.json"
+    $arpArtifactExistedBefore = Test-Path $arpArtifact
+    $arpArtifactOriginalRaw = $null
+    if ($arpArtifactExistedBefore) {
+      $arpArtifactOriginalRaw = Get-Content $arpArtifact -Raw -Encoding UTF8
+    }
+    Remove-Item $arpArtifact -Force -ErrorAction SilentlyContinue
+    $arpNoPathResult = Invoke-Cli -Arguments @("specbridge-artifact-retention-policy")
+    if (Test-Path $arpArtifact) {
+      Write-Output "FAIL specbridge-artifact-retention-policy-no-mutation: policy evaluation file was written without -OutputPath."
+      $script:failed = $true
+    } else {
+      Write-Output "PASS specbridge-artifact-retention-policy-no-mutation: no policy evaluation file written without -OutputPath."
+    }
+
+    # 6. OutputPath behavior: writes evaluation to declared path
+    $arpOutputResult = Invoke-Cli -Arguments @("specbridge-artifact-retention-policy", "-OutputPath", ".specbridge/artifact-retention/current.policy-evaluation.json", "-Force")
+    Assert-Success `
+      -Name "specbridge-artifact-retention-policy-output-path" `
+      -Result $arpOutputResult `
+      -ExpectedPattern '"output_path"'
+
+    if ($arpOutputResult.ExitCode -eq 0) {
+      if (-not (Test-Path $arpArtifact)) {
+        Write-Output "FAIL specbridge-artifact-retention-policy-output-path: policy evaluation file was not written."
+        $script:failed = $true
+      } else {
+        $arpWrittenEval = $null
+        try {
+          $arpWrittenEval = Get-Content $arpArtifact -Raw -Encoding UTF8 | ConvertFrom-Json
+        } catch {}
+        if ($null -eq $arpWrittenEval) {
+          Write-Output "FAIL specbridge-artifact-retention-policy-output-path: written evaluation is not valid JSON."
+          $script:failed = $true
+        } elseif ($arpWrittenEval.command -ne "specbridge-artifact-retention-policy") {
+          Write-Output "FAIL specbridge-artifact-retention-policy-output-path: written evaluation command field mismatch."
+          $script:failed = $true
+        } elseif ($arpWrittenEval.policy_metadata.cleanup_permission -ne "none") {
+          Write-Output "FAIL specbridge-artifact-retention-policy-output-path: written evaluation policy_metadata.cleanup_permission must be 'none'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-artifact-retention-policy-output-path: evaluation file written, valid, cleanup_permission=none."
+        }
+      }
+
+      # 7. Force required when replacing
+      $arpExistingResult = Invoke-Cli -Arguments @("specbridge-artifact-retention-policy", "-OutputPath", ".specbridge/artifact-retention/current.policy-evaluation.json")
+      Assert-Failure `
+        -Name "specbridge-artifact-retention-policy-output-path-requires-force" `
+        -Result $arpExistingResult `
+        -ExpectedPattern "use -Force"
+    }
+
+    # Restore artifact state after mutation tests
+    if ($arpArtifactExistedBefore) {
+      $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+      [System.IO.File]::WriteAllText($arpArtifact, $arpArtifactOriginalRaw, $utf8NoBom)
+    } else {
+      Remove-Item $arpArtifact -Force -ErrorAction SilentlyContinue
+    }
+
+    # 8. OutputPath outside the contract artifact must fail
+    $arpBadPathResult = Invoke-Cli -Arguments @("specbridge-artifact-retention-policy", "-OutputPath", "docs/bad-policy-evaluation.json")
+    Assert-Failure `
+      -Name "specbridge-artifact-retention-policy-bad-output-path" `
+      -Result $arpBadPathResult `
+      -ExpectedPattern "OutputPath must be .specbridge/artifact-retention/current.policy-evaluation.json"
+
+    # 9. artifact-inventory includes artifact_retention_policy family
+    $arpAiResult = Invoke-Cli -Arguments @("specbridge-artifact-inventory")
+    if ($arpAiResult.ExitCode -eq 0) {
+      $arpAiJson = $null
+      try { $arpAiJson = $arpAiResult.Text.Trim() | ConvertFrom-Json } catch {}
+      if ($null -ne $arpAiJson) {
+        $arpFamilies = @($arpAiJson.inventory.families)
+        $arpFamilyIds = $arpFamilies | ForEach-Object { $_.family_id }
+        if ($arpFamilyIds -contains "artifact_retention_policy") {
+          $arpFamily = $arpFamilies | Where-Object { $_.family_id -eq "artifact_retention_policy" }
+          if ($arpFamily.repository_path -eq ".specbridge/artifact-retention" -and $arpFamily.cleanup_permission -eq "none") {
+            Write-Output "PASS specbridge-artifact-retention-policy-artifact-family: artifact_retention_policy family present with correct path and cleanup_permission=none."
+          } else {
+            Write-Output "FAIL specbridge-artifact-retention-policy-artifact-family: artifact_retention_policy family has unexpected path or cleanup_permission."
+            $script:failed = $true
+          }
+        } else {
+          Write-Output "FAIL specbridge-artifact-retention-policy-artifact-family: artifact_retention_policy family not found in artifact inventory."
           $script:failed = $true
         }
       }

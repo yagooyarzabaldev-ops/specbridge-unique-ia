@@ -1,6 +1,17 @@
 # SpecBridge CLI library: dashboards
 # Dot-sourced by scripts/specbridge.ps1. Do not run directly.
 
+function Write-DashboardHtmlFile {
+  param(
+    [string] $Path,
+    [string] $Value
+  )
+
+  $normalized = (($Value -split "\r?\n") | ForEach-Object { $_.TrimEnd() }) -join "`n"
+  $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+  [System.IO.File]::WriteAllText($Path, ($normalized + "`n"), $utf8NoBom)
+}
+
 function Invoke-GenerateDashboardCommand {
   $repoSlug = ($RepositoryUrl -replace "https://github\.com/", "")
 
@@ -192,8 +203,7 @@ $scopeRows
 "@
 
   $dashPath = Join-Path $repoRoot "docs/status-dashboard.html"
-  $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
-  [System.IO.File]::WriteAllText($dashPath, $html, $utf8NoBom)
+  Write-DashboardHtmlFile -Path $dashPath -Value $html
 
   Write-CliJson ([ordered]@{
     command   = "generate-dashboard"
@@ -513,8 +523,7 @@ $runsHtml
 "@
 
   $outPath = Join-Path $repoRoot "docs/specbridge-studio.html"
-  $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
-  [System.IO.File]::WriteAllText($outPath, $html, $utf8NoBom)
+  Write-DashboardHtmlFile -Path $outPath -Value $html
 
   Write-CliJson ([ordered]@{
     command        = "generate-studio-dashboard"

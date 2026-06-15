@@ -1,0 +1,40 @@
+{
+  "contract_id": "issue-218-artifact-retention-policy-draft",
+  "run_id": "sb-20260615-0218a1b2",
+  "status": "active",
+  "exclusive_write": [
+    ".specbridge/contracts/issue-218-artifact-retention-policy-draft.execution.md",
+    ".specbridge/scopes/issue-218-artifact-retention-policy-draft.scope.json",
+    ".specbridge/reports/issue-218-artifact-retention-policy-draft.final-report.json",
+    ".specbridge/audit-packets/issue-218-artifact-retention-policy-draft.audit-packet.json",
+    ".specbridge/audits/issue-218-artifact-retention-policy-draft.chatgpt-audit.json",
+    ".specbridge/policies/artifact-retention-policy.draft.json",
+    ".specbridge/artifact-retention/current.policy-evaluation.json",
+    ".specbridge/artifact-inventory/current.inventory.json",
+    "docs/specbridge-artifact-retention-policy.md",
+    "scripts/specbridge.ps1",
+    "scripts/lib/artifact-retention-policy.ps1",
+    "scripts/lib/artifact-inventory.ps1",
+    "scripts/lib/dashboards.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "scripts/test-specbridge-negative-validations.ps1",
+    "docs/specbridge-artifact-inventory.md",
+    "docs/status-dashboard.html",
+    "docs/specbridge-studio.html",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/state/current-goal.json",
+    ".specbridge/mcp-resources/operator-state.catalog.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    "scripts/lib/common.ps1",
+    ".git"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-218-artifact-retention-policy-draft.final-report.json"
+}

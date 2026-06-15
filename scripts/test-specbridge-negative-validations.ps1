@@ -5,6 +5,7 @@ Write-Output "SpecBridge negative validation tests started."
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $sourceRoot = (Resolve-Path $repoRoot).Path
 $tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("specbridge-negative-tests-" + [guid]::NewGuid().ToString("N"))
+$previousXdgConfigHome = $env:XDG_CONFIG_HOME
 $failed = $false
 
 function Copy-RepoFixture {
@@ -319,6 +320,9 @@ function Write-ChatGptAuditFixtureFiles {
 
 try {
   New-Item -ItemType Directory -Force -Path $tempRoot | Out-Null
+  $gitConfigHome = Join-Path $tempRoot "git-config"
+  New-Item -ItemType Directory -Force -Path $gitConfigHome | Out-Null
+  $env:XDG_CONFIG_HOME = $gitConfigHome
 
   Invoke-ExpectedFailure `
     -Name "foundation-missing-readme" `
@@ -1112,6 +1116,8 @@ This contract intentionally omits the Goal section.
     -ExpectedPattern "blocked path changed: src/blocked\.txt"
 }
 finally {
+  $env:XDG_CONFIG_HOME = $previousXdgConfigHome
+
   if (Test-Path $tempRoot) {
     Remove-Item -LiteralPath $tempRoot -Recurse -Force
   }

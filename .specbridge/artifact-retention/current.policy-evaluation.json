@@ -1,0 +1,266 @@
+{
+    "command":  "specbridge-artifact-retention-policy",
+    "policy_metadata":  {
+                            "policy_id":  "artifact-retention-policy",
+                            "schema_version":  1,
+                            "status":  "draft",
+                            "enforcement":  "none",
+                            "cleanup_permission":  "none"
+                        },
+    "enforcement_status":  "none",
+    "totals":  {
+                   "total_families":  20,
+                   "evaluated":  20,
+                   "blocked_count":  15
+               },
+    "family_class_counts":  [
+                                {
+                                    "class":  "evidence_derived",
+                                    "count":  5
+                                },
+                                {
+                                    "class":  "evidence_ledger",
+                                    "count":  1
+                                },
+                                {
+                                    "class":  "evidence_orchestration",
+                                    "count":  3
+                                },
+                                {
+                                    "class":  "evidence_primary",
+                                    "count":  5
+                                },
+                                {
+                                    "class":  "evidence_runtime",
+                                    "count":  6
+                                }
+                            ],
+    "blocked_counts":  [
+                           {
+                               "class":  "evidence_ledger",
+                               "count":  1
+                           },
+                           {
+                               "class":  "evidence_orchestration",
+                               "count":  3
+                           },
+                           {
+                               "class":  "evidence_primary",
+                               "count":  5
+                           },
+                           {
+                               "class":  "evidence_runtime",
+                               "count":  6
+                           }
+                       ],
+    "required_future_gates":  [
+                                  "policy_status_must_be_active",
+                                  "enforcement_must_not_be_none",
+                                  "explicit_operator_authorization",
+                                  "ci_must_pass",
+                                  "review_gate_must_pass"
+                              ],
+    "family_evaluations":  [
+                               {
+                                   "family_id":  "contracts",
+                                   "repository_path":  ".specbridge/contracts",
+                                   "family_class":  "evidence_primary",
+                                   "file_count":  107,
+                                   "total_bytes":  589470,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "family_id":  "scopes",
+                                   "repository_path":  ".specbridge/scopes",
+                                   "family_class":  "evidence_primary",
+                                   "file_count":  76,
+                                   "total_bytes":  133118,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "family_id":  "reports",
+                                   "repository_path":  ".specbridge/reports",
+                                   "family_class":  "evidence_primary",
+                                   "file_count":  78,
+                                   "total_bytes":  267671,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "family_id":  "audit_packets",
+                                   "repository_path":  ".specbridge/audit-packets",
+                                   "family_class":  "evidence_primary",
+                                   "file_count":  59,
+                                   "total_bytes":  616935,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "family_id":  "chatgpt_audits",
+                                   "repository_path":  ".specbridge/audits",
+                                   "family_class":  "evidence_primary",
+                                   "file_count":  58,
+                                   "total_bytes":  242400,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "family_id":  "runtime_launches",
+                                   "repository_path":  ".specbridge/runtime-launches",
+                                   "family_class":  "evidence_runtime",
+                                   "file_count":  22,
+                                   "total_bytes":  102052,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "family_id":  "runtime_preflights",
+                                   "repository_path":  ".specbridge/preflights",
+                                   "family_class":  "evidence_runtime",
+                                   "file_count":  5,
+                                   "total_bytes":  36452,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "family_id":  "runtime_results",
+                                   "repository_path":  ".specbridge/runtime-results",
+                                   "family_class":  "evidence_runtime",
+                                   "file_count":  21,
+                                   "total_bytes":  59862,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "family_id":  "runtime_summaries",
+                                   "repository_path":  ".specbridge/runtime-summaries",
+                                   "family_class":  "evidence_runtime",
+                                   "file_count":  21,
+                                   "total_bytes":  49223,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "family_id":  "runtime_runs",
+                                   "repository_path":  ".specbridge/runtime-runs",
+                                   "family_class":  "evidence_runtime",
+                                   "file_count":  19,
+                                   "total_bytes":  57377,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "family_id":  "runtime_executions",
+                                   "repository_path":  ".specbridge/runtime-executions",
+                                   "family_class":  "evidence_runtime",
+                                   "file_count":  21,
+                                   "total_bytes":  92329,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "family_id":  "orchestrations",
+                                   "repository_path":  ".specbridge/orchestrations",
+                                   "family_class":  "evidence_orchestration",
+                                   "file_count":  43,
+                                   "total_bytes":  58887,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "family_id":  "executor_packets",
+                                   "repository_path":  ".specbridge/executor-packets",
+                                   "family_class":  "evidence_orchestration",
+                                   "file_count":  25,
+                                   "total_bytes":  61804,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "family_id":  "github_evidence",
+                                   "repository_path":  ".specbridge/github-evidence",
+                                   "family_class":  "evidence_orchestration",
+                                   "file_count":  101,
+                                   "total_bytes":  66464,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "family_id":  "ledger",
+                                   "repository_path":  ".specbridge/ledger",
+                                   "family_class":  "evidence_ledger",
+                                   "file_count":  1,
+                                   "total_bytes":  21687,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "family_id":  "mcp_resources",
+                                   "repository_path":  ".specbridge/mcp-resources",
+                                   "family_class":  "evidence_derived",
+                                   "file_count":  1,
+                                   "total_bytes":  9964,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "activation_required"
+                               },
+                               {
+                                   "family_id":  "artifact_inventory",
+                                   "repository_path":  ".specbridge/artifact-inventory",
+                                   "family_class":  "evidence_derived",
+                                   "file_count":  1,
+                                   "total_bytes":  9867,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "activation_required"
+                               },
+                               {
+                                   "family_id":  "branch_inventory",
+                                   "repository_path":  ".specbridge/branch-inventory",
+                                   "family_class":  "evidence_derived",
+                                   "file_count":  1,
+                                   "total_bytes":  20706,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "activation_required"
+                               },
+                               {
+                                   "family_id":  "branch_cleanup_policy",
+                                   "repository_path":  ".specbridge/branch-cleanup",
+                                   "family_class":  "evidence_derived",
+                                   "file_count":  1,
+                                   "total_bytes":  18026,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "activation_required"
+                               },
+                               {
+                                   "family_id":  "artifact_retention_policy",
+                                   "repository_path":  ".specbridge/artifact-retention",
+                                   "family_class":  "evidence_derived",
+                                   "file_count":  1,
+                                   "total_bytes":  15168,
+                                   "cleanup_permission":  "none",
+                                   "retention_posture":  "preserve",
+                                   "future_gate":  "activation_required"
+                               }
+                           ],
+    "read_only_note":  "This command does not delete, archive, prune, compress, or move any artifacts. No retention enforcement or artifact cleanup is authorized."
+}

@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "policy_id": "artifact-retention-policy",
+  "status": "draft",
+  "enforcement": "none",
+  "cleanup_permission": "none",
+  "artifact_family_classes": [
+    {
+      "class_id": "evidence_primary",
+      "description": "Core governance artifacts that must be preserved as long as the task is open or under audit: contracts, scopes, reports, audit packets, ChatGPT audits.",
+      "family_ids": ["contracts", "scopes", "reports", "audit_packets", "chatgpt_audits"],
+      "retention_posture": "preserve",
+      "cleanup_gate": "blocked"
+    },
+    {
+      "class_id": "evidence_runtime",
+      "description": "Runtime execution evidence recorded during live Claude Code runs: launches, preflights, results, summaries, runs, executions.",
+      "family_ids": ["runtime_launches", "runtime_preflights", "runtime_results", "runtime_summaries", "runtime_runs", "runtime_executions"],
+      "retention_posture": "preserve",
+      "cleanup_gate": "blocked"
+    },
+    {
+      "class_id": "evidence_orchestration",
+      "description": "Multi-agent orchestration manifests, executor packets, and GitHub mutation evidence.",
+      "family_ids": ["orchestrations", "executor_packets", "github_evidence"],
+      "retention_posture": "preserve",
+      "cleanup_gate": "blocked"
+    },
+    {
+      "class_id": "evidence_ledger",
+      "description": "Operational ledger tracking all SpecBridge operations end-to-end.",
+      "family_ids": ["ledger"],
+      "retention_posture": "preserve",
+      "cleanup_gate": "blocked"
+    },
+    {
+      "class_id": "evidence_derived",
+      "description": "Derived and index artifacts that are regenerated on demand: MCP resources, artifact inventory, branch inventory, branch cleanup policy evaluation, artifact retention policy evaluation.",
+      "family_ids": ["mcp_resources", "artifact_inventory", "branch_inventory", "branch_cleanup_policy", "artifact_retention_policy"],
+      "retention_posture": "preserve",
+      "cleanup_gate": "activation_required"
+    }
+  ],
+  "hard_blocks": [
+    "artifact_deletion",
+    "artifact_movement",
+    "artifact_compression",
+    "artifact_pruning",
+    "artifact_archival_implementation",
+    "artifact_upload",
+    "artifact_remote_mutation",
+    "retention_enforcement",
+    "cleanup_apply_mode",
+    "network_calls_from_policy_command"
+  ],
+  "required_gates": [
+    "policy_status_must_be_active",
+    "enforcement_must_not_be_none",
+    "explicit_operator_authorization",
+    "ci_must_pass",
+    "review_gate_must_pass"
+  ],
+  "future_activation_requirements": [
+    "policy_status must be changed from draft to active",
+    "enforcement must be changed from none to a defined enforcement mode",
+    "explicit operator authorization must be recorded in the operator decision registry",
+    "CI must pass with the active policy in force",
+    "review gate must pass before any cleanup action is taken"
+  ],
+  "blocked_commands": [
+    "Remove-Item",
+    "Move-Item",
+    "Compress-Archive",
+    "Invoke-WebRequest",
+    "Invoke-RestMethod",
+    "git push",
+    "git rm",
+    "git clean",
+    "del",
+    "rm"
+  ],
+  "blocked_actions": [
+    "delete any artifact",
+    "move any artifact",
+    "compress any artifact",
+    "prune any artifact",
+    "archive any artifact",
+    "upload any artifact",
+    "enforce retention on any artifact",
+    "apply cleanup to any artifact",
+    "make network calls from the artifact retention policy command",
+    "enforce this policy while status is draft",
+    "enforce this policy while enforcement is none"
+  ]
+}

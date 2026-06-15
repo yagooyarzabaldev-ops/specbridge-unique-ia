@@ -56,7 +56,8 @@ function Build-ArtifactInventory {
     (Get-FamilyInventory -FamilyId "mcp_resources"       -RepoPath ".specbridge/mcp-resources"),
     (Get-FamilyInventory -FamilyId "artifact_inventory"  -RepoPath ".specbridge/artifact-inventory"),
     (Get-FamilyInventory -FamilyId "branch_inventory"    -RepoPath ".specbridge/branch-inventory"),
-    (Get-FamilyInventory -FamilyId "branch_cleanup_policy" -RepoPath ".specbridge/branch-cleanup")
+    (Get-FamilyInventory -FamilyId "branch_cleanup_policy"      -RepoPath ".specbridge/branch-cleanup"),
+    (Get-FamilyInventory -FamilyId "artifact_retention_policy"  -RepoPath ".specbridge/artifact-retention")
   )
 
   [long] $totalFileCount = 0

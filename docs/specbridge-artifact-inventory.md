@@ -34,7 +34,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 spe
     }
   ],
   "totals": {
-    "family_count": 19,
+    "family_count": 20,
     "total_file_count": 120,
     "total_bytes": 512000
   },
@@ -66,6 +66,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 spe
 | artifact_inventory   | .specbridge/artifact-inventory        |
 | branch_inventory     | .specbridge/branch-inventory          |
 | branch_cleanup_policy | .specbridge/branch-cleanup            |
+| artifact_retention_policy | .specbridge/artifact-retention    |
 
 ## Parameters
 

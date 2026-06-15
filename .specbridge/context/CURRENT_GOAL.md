@@ -70,13 +70,13 @@ SpecBridge currently has:
 
 ## Next Recommended Task
 
-**Ready for next governed operator task.**
+**Active governed operator task: issue-218 artifact retention policy draft**
 
-Recommended order:
+Immediate order:
 
-1. Keep branch cleanup enforcement disabled until a future dedicated contract explicitly authorizes cleanup activation.
-2. Use `specbridge-branch-inventory`, `specbridge-branch-cleanup-policy`, and `specbridge-artifact-inventory` as read-only repository health evidence.
-3. Prefer the next governed infrastructure-hardening issue over feature expansion unless a new execution contract says otherwise.
+1. Define a governed artifact retention policy draft with enforcement disabled.
+2. Implement a deterministic read-only evaluator over local artifact inventory.
+3. Validate contract, scope, CLI tests, final report, audit packet, ChatGPT audit, full smoke, and diff hygiene before PR/CI.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;
@@ -87,3 +87,4 @@ contract explicitly authorizes it.
 
 Maintenance debt:
 - Branch cleanup remains policy-only. Branch debt is observable through `specbridge-branch-inventory` and classified by `specbridge-branch-cleanup-policy`; no branch deletion, pruning, renaming, movement, archival, fetch, pull, force-push, cleanup apply mode, or retention enforcement is authorized.
+- Artifact retention policy draft is active through issue #218. Artifact growth is observable through `specbridge-artifact-inventory`; no artifact deletion, movement, compression, pruning, archival implementation, upload, remote mutation, cleanup apply mode, or retention enforcement is authorized.
