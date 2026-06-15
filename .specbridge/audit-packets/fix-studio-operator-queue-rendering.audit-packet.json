@@ -1,0 +1,132 @@
+{
+  "schema_version": "1",
+  "task_id": "fix-studio-operator-queue-rendering",
+  "generated_by": "ChatGPT/Codex",
+  "execution_contract_path": ".specbridge/contracts/fix-studio-operator-queue-rendering.execution.md",
+  "changed_files": [
+    ".specbridge/contracts/fix-studio-operator-queue-rendering.execution.md",
+    ".specbridge/scopes/fix-studio-operator-queue-rendering.scope.json",
+    ".specbridge/reports/fix-studio-operator-queue-rendering.final-report.json",
+    ".specbridge/audit-packets/fix-studio-operator-queue-rendering.audit-packet.json",
+    ".specbridge/audits/fix-studio-operator-queue-rendering.chatgpt-audit.json",
+    "docs/specbridge-studio.html",
+    "scripts/lib/dashboards.ps1",
+    "scripts/lib/studio-queue-fix.ps1",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "diff_summary": [
+    {
+      "file": ".specbridge/contracts/fix-studio-operator-queue-rendering.execution.md",
+      "added_lines": 112,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/scopes/fix-studio-operator-queue-rendering.scope.json",
+      "added_lines": 31,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/reports/fix-studio-operator-queue-rendering.final-report.json",
+      "added_lines": 36,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/audit-packets/fix-studio-operator-queue-rendering.audit-packet.json",
+      "added_lines": 92,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/audits/fix-studio-operator-queue-rendering.chatgpt-audit.json",
+      "added_lines": 66,
+      "deleted_lines": 0
+    },
+    {
+      "file": "docs/specbridge-studio.html",
+      "added_lines": 13,
+      "deleted_lines": 6
+    },
+    {
+      "file": "scripts/lib/dashboards.ps1",
+      "added_lines": 3,
+      "deleted_lines": 1
+    },
+    {
+      "file": "scripts/lib/studio-queue-fix.ps1",
+      "added_lines": 57,
+      "deleted_lines": 0
+    },
+    {
+      "file": "scripts/specbridge.ps1",
+      "added_lines": 5,
+      "deleted_lines": 0
+    },
+    {
+      "file": "scripts/test-specbridge-cli.ps1",
+      "added_lines": 12,
+      "deleted_lines": 1
+    }
+  ],
+  "validation_commands": [
+    "gh auth status",
+    "gh pr checks 200 --repo yagooyarzabaldev-ops/specbridge --json name,state,bucket,link,workflow,startedAt,completedAt",
+    "gh run view 27316812096 --repo yagooyarzabaldev-ops/specbridge --log",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 generate-studio-dashboard",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+    "git diff --check"
+  ],
+  "validation_results": [
+    {
+      "command": "gh auth status",
+      "result": "passed"
+    },
+    {
+      "command": "gh pr checks 200 --repo yagooyarzabaldev-ops/specbridge --json name,state,bucket,link,workflow,startedAt,completedAt",
+      "result": "inspected_previous_failure"
+    },
+    {
+      "command": "gh run view 27316812096 --repo yagooyarzabaldev-ops/specbridge --log",
+      "result": "inspected_previous_failure"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 generate-studio-dashboard",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "final_report_path": ".specbridge/reports/fix-studio-operator-queue-rendering.final-report.json",
+  "ci_status": "pending",
+  "pr_review_report_path": null,
+  "policy_result": "Passed. The task stays inside declared Studio rendering, CLI loader, test, contract, scope, dashboard artifact, and evidence files.",
+  "unresolved_risks": [
+    "Updated GitHub CI evidence is pending until PR #200 checks complete."
+  ],
+  "completion_status": "complete_pending_ci",
+  "source_files": [
+    ".specbridge/contracts/fix-studio-operator-queue-rendering.execution.md",
+    ".specbridge/reports/fix-studio-operator-queue-rendering.final-report.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

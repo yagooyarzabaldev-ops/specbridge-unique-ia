@@ -1,0 +1,79 @@
+{
+  "schema_version": "1",
+  "audit_id": "fix-studio-operator-queue-rendering",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/fix-studio-operator-queue-rendering.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/fix-studio-operator-queue-rendering.execution.md",
+  "final_report_path": ".specbridge/reports/fix-studio-operator-queue-rendering.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "The execution contract now includes the required standard sections, related_issue, run_id, allowed scope, blocked scope, validations, stop conditions, merge policy, deployment policy, final report requirements, and completion rule.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "generate-studio-dashboard now renders Operator Queue HTML containing eligible task count, excluded issue #194, decision not_planned, and a recommended action instead of the unavailable fallback.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The change does not alter operator decisions, issue #194 lifecycle, digital twin work, production, secrets, billing, auth, database, dependency installation, workflow security, or deployment automation.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The helper reads local JSON files with explicit UTF8 encoding and renders HTML from repository evidence; no secrets or external APIs are introduced.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "The scope manifest declares all changed files, including dashboards.ps1, studio-queue-fix.ps1, specbridge.ps1, tests, generated Studio dashboard, and governance evidence.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "CLI regression coverage now asserts the Operator Queue section, eligible count, #194 exclusion, not_planned decision, recommended action, and absence of the unavailable fallback.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "needs_human_decision",
+      "evidence": "Updated GitHub CI evidence is pending until PR #200 checks complete.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records pending CI risk, no deployment, rollback notes, and the generated dashboard caveat while the PR scope remains active.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "ci_evidence",
+      "file": ".specbridge/audit-packets/fix-studio-operator-queue-rendering.audit-packet.json",
+      "line": null,
+      "evidence": "CI status is pending until the updated branch is pushed and GitHub Actions completes.",
+      "recommendation": "Use the GitHub merge gate before merging PR #200.",
+      "blocking": false
+    }
+  ],
+  "outcome": "needs_human_decision",
+  "merge_allowed": false,
+  "unresolved_risks": [
+    "Updated GitHub CI evidence is pending until PR #200 checks complete."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/fix-studio-operator-queue-rendering.audit-packet.json",
+    ".specbridge/contracts/fix-studio-operator-queue-rendering.execution.md",
+    ".specbridge/reports/fix-studio-operator-queue-rendering.final-report.json"
+  ]
+}

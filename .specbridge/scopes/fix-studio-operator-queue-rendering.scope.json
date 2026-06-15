@@ -1,0 +1,31 @@
+{
+  "contract_id": "fix-studio-operator-queue-rendering",
+  "run_id": "sb-20260610-0200abcd",
+  "status": "active",
+  "exclusive_write": [
+    ".specbridge/contracts/fix-studio-operator-queue-rendering.execution.md",
+    ".specbridge/scopes/fix-studio-operator-queue-rendering.scope.json",
+    ".specbridge/reports/fix-studio-operator-queue-rendering.final-report.json",
+    ".specbridge/audit-packets/fix-studio-operator-queue-rendering.audit-packet.json",
+    ".specbridge/audits/fix-studio-operator-queue-rendering.chatgpt-audit.json",
+    "scripts/specbridge.ps1",
+    "scripts/lib/dashboards.ps1",
+    "scripts/lib/studio-queue-fix.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "docs/specbridge-studio.html"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/policies/operator-task-decisions.json",
+    ".specbridge/state/current-goal.json",
+    "scripts/lib/intake-doctor.ps1"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/fix-studio-operator-queue-rendering.final-report.json"
+}

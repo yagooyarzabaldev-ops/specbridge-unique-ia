@@ -1,0 +1,35 @@
+{
+  "summary": "Repaired Studio Operator Queue rendering so generate-studio-dashboard uses local queue state instead of the unavailable fallback when specbridge-next-task is available.",
+  "changed_files": [
+    ".specbridge/contracts/fix-studio-operator-queue-rendering.execution.md",
+    ".specbridge/scopes/fix-studio-operator-queue-rendering.scope.json",
+    ".specbridge/reports/fix-studio-operator-queue-rendering.final-report.json",
+    ".specbridge/audit-packets/fix-studio-operator-queue-rendering.audit-packet.json",
+    ".specbridge/audits/fix-studio-operator-queue-rendering.chatgpt-audit.json",
+    "docs/specbridge-studio.html",
+    "scripts/lib/dashboards.ps1",
+    "scripts/lib/studio-queue-fix.ps1",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "validations": [
+    "gh auth status: passed",
+    "gh pr checks 200 --repo yagooyarzabaldev-ops/specbridge --json name,state,bucket,link,workflow,startedAt,completedAt: inspected failing Foundation Validation",
+    "gh run view 27316812096 --repo yagooyarzabaldev-ops/specbridge --log: inspected failure log",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 generate-studio-dashboard: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "git diff --check: passed"
+  ],
+  "policy_result": "Passed. Changes are limited to the Studio queue rendering contract, scope, evidence artifacts, dashboard helper, CLI loader, Studio dashboard artifact, and CLI regression coverage.",
+  "risk_result": "Low risk. Codex reviewed the PR branch after the failing GitHub Actions log showed the original blocker was an incomplete execution contract. Additional review found the helper was not wired into dashboards.ps1 and the loader made core libraries optional; both were corrected. No secrets, production configuration, billing, authentication, authorization, database, dependency installation, CI/CD security, deployment automation, operator decision registry, issue #194 lifecycle, or digital twin implementation changes.",
+  "unresolved_risks": [
+    "GitHub CI evidence is pending until the updated PR branch checks complete.",
+    "The generated Studio dashboard reflects the active PR scope until the PR is merged and a post-merge closure refresh runs."
+  ],
+  "merge_status": "Pending updated PR checks.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete_pending_ci"
+}

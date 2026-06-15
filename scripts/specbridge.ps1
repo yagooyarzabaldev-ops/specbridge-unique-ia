@@ -70,6 +70,11 @@ foreach ($specbridgeLib in @(
   . (Join-Path $PSScriptRoot "lib/$specbridgeLib")
 }
 
+$studioQueueFixPath = Join-Path $PSScriptRoot "lib/studio-queue-fix.ps1"
+if (Test-Path -LiteralPath $studioQueueFixPath -PathType Leaf) {
+  . $studioQueueFixPath
+}
+
 switch ($Command) {
   "status" { Invoke-StatusCommand }
   "validate" { Invoke-ValidateCommand }

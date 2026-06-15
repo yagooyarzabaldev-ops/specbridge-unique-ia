@@ -392,7 +392,9 @@ $opTable
   } else { "" }
 
   # Orchestrations section
-  $queueSectionHtml = if ($null -eq $queueInfo) {
+  $queueSectionHtml = if (Get-Command Get-StudioOperatorQueueHtml -ErrorAction SilentlyContinue) {
+    Get-StudioOperatorQueueHtml -RepositoryRoot $repoRoot
+  } elseif ($null -eq $queueInfo) {
     "<p style='color:#888'>Operator queue state unavailable.</p>"
   } else {
     $qEligible = @($queueInfo.eligible_tasks).Count

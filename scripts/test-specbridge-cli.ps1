@@ -608,11 +608,16 @@ try {
         Write-Output "FAIL generate-studio-dashboard: docs/specbridge-studio.html not written."
         $script:failed = $true
       } else {
-        $studioHtml = Get-Content $studioHtmlPath -Raw
+        $studioHtml = Get-Content $studioHtmlPath -Raw -Encoding UTF8
         $studioChecks = @(
           @{ pattern = "SpecBridge Studio";                 label = "title present" },
           @{ pattern = "Current Goal";                      label = "current-goal section present" },
           @{ pattern = "Fix-Plan Alerts";                   label = "fix-plan section present" },
+          @{ pattern = "Operator Queue";                    label = "operator queue section present" },
+          @{ pattern = "Eligible tasks:";                   label = "operator queue eligible count present" },
+          @{ pattern = "#194";                              label = "operator queue excluded issue present" },
+          @{ pattern = "not_planned";                       label = "operator queue decision present" },
+          @{ pattern = "Recommended action:";               label = "operator queue recommendation present" },
           @{ pattern = "Runs \(";                           label = "runs section present" },
           @{ pattern = "Scopes \(";                         label = "scopes section present" },
           @{ pattern = "generate-studio-dashboard";         label = "footer command label present" }
@@ -624,6 +629,12 @@ try {
           } else {
             Write-Output "PASS generate-studio-dashboard: $($chk.label)."
           }
+        }
+        if ($studioHtml -match "Operator queue state unavailable") {
+          Write-Output "FAIL generate-studio-dashboard: Operator Queue fell back to unavailable state."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS generate-studio-dashboard: Operator Queue rendered from queue state."
         }
         # JSON output must include key fields
         try {
