@@ -1,0 +1,37 @@
+{
+  "contract_id": "issue-212-branch-inventory-status",
+  "run_id": "sb-20260615-0212c3d4",
+  "status": "active",
+  "exclusive_write": [
+    ".specbridge/contracts/issue-212-branch-inventory-status.execution.md",
+    ".specbridge/scopes/issue-212-branch-inventory-status.scope.json",
+    ".specbridge/reports/issue-212-branch-inventory-status.final-report.json",
+    ".specbridge/audit-packets/issue-212-branch-inventory-status.audit-packet.json",
+    ".specbridge/audits/issue-212-branch-inventory-status.chatgpt-audit.json",
+    ".specbridge/branch-inventory/current.inventory.json",
+    "docs/specbridge-branch-inventory.md",
+    "scripts/specbridge.ps1",
+    "scripts/lib/branch-inventory.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "scripts/lib/artifact-inventory.ps1",
+    "docs/specbridge-artifact-inventory.md",
+    ".specbridge/artifact-inventory/current.inventory.json",
+    "docs/status-dashboard.html",
+    "docs/specbridge-studio.html",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/state/current-goal.json",
+    ".specbridge/mcp-resources/operator-state.catalog.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    "scripts/lib/common.ps1",
+    ".git"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-212-branch-inventory-status.final-report.json"
+}

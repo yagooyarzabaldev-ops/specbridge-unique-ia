@@ -2604,7 +2604,7 @@ try {
           "contracts", "scopes", "reports", "audit_packets", "chatgpt_audits",
           "runtime_launches", "runtime_preflights", "runtime_results", "runtime_summaries",
           "runtime_runs", "runtime_executions", "orchestrations", "executor_packets",
-          "github_evidence", "ledger", "mcp_resources", "artifact_inventory"
+          "github_evidence", "ledger", "mcp_resources", "artifact_inventory", "branch_inventory"
         )
         $actualFamilyIds = $families | ForEach-Object { $_.family_id }
         $missingFamilies = $requiredFamilyIds | Where-Object { $actualFamilyIds -notcontains $_ }
@@ -2724,6 +2724,228 @@ try {
       -Name "specbridge-artifact-inventory-bad-output-path" `
       -Result $aiBadPathResult `
       -ExpectedPattern "OutputPath must be .specbridge/artifact-inventory/current.inventory.json"
+
+    # specbridge-branch-inventory tests
+
+    # 1. Command shape: exits 0, returns JSON with command and ok fields
+    $biResult = Invoke-Cli -Arguments @("specbridge-branch-inventory")
+    Assert-Success `
+      -Name "specbridge-branch-inventory" `
+      -Result $biResult `
+      -ExpectedPattern '"command"\s*:\s*"specbridge-branch-inventory"'
+
+    $biRepeatResult = Invoke-Cli -Arguments @("specbridge-branch-inventory")
+    if ($biResult.ExitCode -eq 0 -and $biRepeatResult.ExitCode -eq 0) {
+      if ($biResult.Text.Trim() -ceq $biRepeatResult.Text.Trim()) {
+        Write-Output "PASS specbridge-branch-inventory-deterministic: repeated read-only output is stable."
+      } else {
+        Write-Output "FAIL specbridge-branch-inventory-deterministic: repeated read-only output changed."
+        $script:failed = $true
+      }
+    }
+
+    if ($biResult.ExitCode -eq 0) {
+      $biJson = $null
+      try { $biJson = $biResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      if ($null -eq $biJson) {
+        Write-Output "FAIL specbridge-branch-inventory: output was not valid JSON."
+        $script:failed = $true
+      } else {
+        if ($biJson.ok -ne $true) {
+          Write-Output "FAIL specbridge-branch-inventory: ok field is not true."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-inventory: ok is true."
+        }
+
+        $requiredBranchInventoryFields = @(
+          "command",
+          "generated_at",
+          "base_ref",
+          "current_branch",
+          "branches",
+          "totals",
+          "prefix_counts",
+          "branch_mutation_policy",
+          "read_only_note"
+        )
+        $inventoryFieldNames = @($biJson.inventory.PSObject.Properties.Name)
+        $missingBranchInventoryFields = $requiredBranchInventoryFields | Where-Object { $inventoryFieldNames -notcontains $_ }
+        if ($missingBranchInventoryFields.Count -gt 0) {
+          Write-Output "FAIL specbridge-branch-inventory: inventory missing fields: $($missingBranchInventoryFields -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-inventory: inventory has all required top-level fields."
+        }
+
+        if ($biJson.inventory.branch_mutation_policy -ne "none") {
+          Write-Output "FAIL specbridge-branch-inventory: branch_mutation_policy expected 'none', got '$($biJson.inventory.branch_mutation_policy)'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-inventory: branch_mutation_policy is none."
+        }
+
+        foreach ($blockedVerb in @("delete", "prune", "rename", "move", "archive", "fetch", "pull", "force-push")) {
+          if ($biJson.inventory.read_only_note -notmatch [regex]::Escape($blockedVerb)) {
+            Write-Output "FAIL specbridge-branch-inventory: read_only_note missing '$blockedVerb'."
+            $script:failed = $true
+          }
+        }
+
+        $branches = @($biJson.inventory.branches)
+        $branchFieldFail = $false
+        $requiredBranchFields = @(
+          "ref_name",
+          "branch_name",
+          "ref_type",
+          "object_id",
+          "latest_commit_at",
+          "prefix",
+          "merged_into_main",
+          "retention_posture",
+          "cleanup_permission"
+        )
+        foreach ($branch in $branches) {
+          $branchFieldNames = @($branch.PSObject.Properties.Name)
+          $missingBranchFields = $requiredBranchFields | Where-Object { $branchFieldNames -notcontains $_ }
+          if ($missingBranchFields.Count -gt 0) {
+            Write-Output "FAIL specbridge-branch-inventory: branch '$($branch.ref_name)' missing fields: $($missingBranchFields -join ', ')."
+            $script:failed = $true
+            $branchFieldFail = $true
+          }
+          if (@("local", "origin") -notcontains $branch.ref_type) {
+            Write-Output "FAIL specbridge-branch-inventory: branch '$($branch.ref_name)' has invalid ref_type '$($branch.ref_type)'."
+            $script:failed = $true
+            $branchFieldFail = $true
+          }
+          if ($branch.cleanup_permission -ne "none") {
+            Write-Output "FAIL specbridge-branch-inventory: branch '$($branch.ref_name)' cleanup_permission must be 'none'."
+            $script:failed = $true
+            $branchFieldFail = $true
+          }
+          if ($branch.retention_posture -ne "preserve") {
+            Write-Output "FAIL specbridge-branch-inventory: branch '$($branch.ref_name)' retention_posture must be 'preserve'."
+            $script:failed = $true
+            $branchFieldFail = $true
+          }
+        }
+        if (-not $branchFieldFail) {
+          Write-Output "PASS specbridge-branch-inventory: all branch entries have required fields, cleanup_permission=none, retention_posture=preserve."
+        }
+
+        $totalsFields = @(
+          "total_refs",
+          "local_branch_count",
+          "origin_branch_count",
+          "merged_into_main_count",
+          "unmerged_into_main_count",
+          "unknown_merge_status_count"
+        )
+        $branchTotalsFieldNames = @($biJson.inventory.totals.PSObject.Properties.Name)
+        $missingBranchTotals = $totalsFields | Where-Object { $branchTotalsFieldNames -notcontains $_ }
+        if ($missingBranchTotals.Count -gt 0) {
+          Write-Output "FAIL specbridge-branch-inventory: totals missing fields: $($missingBranchTotals -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-inventory: totals has all required fields."
+        }
+
+        if ($biJson.inventory.totals.total_refs -ne $branches.Count) {
+          Write-Output "FAIL specbridge-branch-inventory: totals.total_refs expected $($branches.Count), got $($biJson.inventory.totals.total_refs)."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-inventory: totals.total_refs matches branches count."
+        }
+
+        $localCount = @($branches | Where-Object { $_.ref_type -eq "local" }).Count
+        $originCount = @($branches | Where-Object { $_.ref_type -eq "origin" }).Count
+        if ($biJson.inventory.totals.local_branch_count -ne $localCount -or $biJson.inventory.totals.origin_branch_count -ne $originCount) {
+          Write-Output "FAIL specbridge-branch-inventory: local/origin totals do not match branch entries."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-inventory: local/origin totals match branch entries."
+        }
+
+        $prefixCounts = @($biJson.inventory.prefix_counts)
+        $prefixTotal = 0
+        foreach ($prefixEntry in $prefixCounts) {
+          $prefixTotal += [int] $prefixEntry.count
+        }
+        if ($prefixTotal -ne $branches.Count) {
+          Write-Output "FAIL specbridge-branch-inventory: prefix counts expected total $($branches.Count), got $prefixTotal."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-inventory: prefix counts match branches count."
+        }
+      }
+    }
+
+    # 5. No mutation without OutputPath: no inventory file written
+    $biInventoryArtifact = Join-Path (Get-Location).Path ".specbridge/branch-inventory/current.inventory.json"
+    $biInventoryExistedBefore = Test-Path $biInventoryArtifact
+    $biInventoryOriginalRaw = $null
+    if ($biInventoryExistedBefore) {
+      $biInventoryOriginalRaw = Get-Content $biInventoryArtifact -Raw -Encoding UTF8
+    }
+    Remove-Item $biInventoryArtifact -Force -ErrorAction SilentlyContinue
+    $biNoPathResult = Invoke-Cli -Arguments @("specbridge-branch-inventory")
+    if (Test-Path $biInventoryArtifact) {
+      Write-Output "FAIL specbridge-branch-inventory-no-mutation: inventory file was written without -OutputPath."
+      $script:failed = $true
+    } else {
+      Write-Output "PASS specbridge-branch-inventory-no-mutation: no inventory file written without -OutputPath."
+    }
+
+    # 6. OutputPath behavior: writes inventory to declared path
+    $biOutputResult = Invoke-Cli -Arguments @("specbridge-branch-inventory", "-OutputPath", ".specbridge/branch-inventory/current.inventory.json", "-Force")
+    Assert-Success `
+      -Name "specbridge-branch-inventory-output-path" `
+      -Result $biOutputResult `
+      -ExpectedPattern '"output_path"'
+
+    if ($biOutputResult.ExitCode -eq 0) {
+      if (-not (Test-Path $biInventoryArtifact)) {
+        Write-Output "FAIL specbridge-branch-inventory-output-path: inventory file was not written."
+        $script:failed = $true
+      } else {
+        $writtenBranchInventory = $null
+        try {
+          $writtenBranchInventory = Get-Content $biInventoryArtifact -Raw -Encoding UTF8 | ConvertFrom-Json
+        } catch {}
+        if ($null -eq $writtenBranchInventory) {
+          Write-Output "FAIL specbridge-branch-inventory-output-path: written inventory is not valid JSON."
+          $script:failed = $true
+        } elseif ($writtenBranchInventory.command -ne "specbridge-branch-inventory") {
+          Write-Output "FAIL specbridge-branch-inventory-output-path: written inventory command field mismatch."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-inventory-output-path: inventory file written and valid."
+        }
+      }
+
+      # Force required when replacing
+      $biExistingResult = Invoke-Cli -Arguments @("specbridge-branch-inventory", "-OutputPath", ".specbridge/branch-inventory/current.inventory.json")
+      Assert-Failure `
+        -Name "specbridge-branch-inventory-output-path-requires-force" `
+        -Result $biExistingResult `
+        -ExpectedPattern "use -Force"
+    }
+
+    # Restore artifact state after mutation tests
+    if ($biInventoryExistedBefore) {
+      $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+      [System.IO.File]::WriteAllText($biInventoryArtifact, $biInventoryOriginalRaw, $utf8NoBom)
+    } else {
+      Remove-Item $biInventoryArtifact -Force -ErrorAction SilentlyContinue
+    }
+
+    # 7. OutputPath outside the contract artifact must fail
+    $biBadPathResult = Invoke-Cli -Arguments @("specbridge-branch-inventory", "-OutputPath", "docs/bad-branch-inventory.json")
+    Assert-Failure `
+      -Name "specbridge-branch-inventory-bad-output-path" `
+      -Result $biBadPathResult `
+      -ExpectedPattern "OutputPath must be .specbridge/branch-inventory/current.inventory.json"
   }
   finally {
     Pop-Location

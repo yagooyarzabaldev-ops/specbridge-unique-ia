@@ -1,0 +1,311 @@
+{
+    "command":  "specbridge-branch-inventory",
+    "generated_at":  "2026-06-15T11:05:01-03:00",
+    "base_ref":  "refs/remotes/origin/main",
+    "current_branch":  "codex/issue-212-branch-inventory-status",
+    "branches":  [
+                     {
+                         "ref_name":  "refs/remotes/origin/codex/issue-206-mcp-resource-exports",
+                         "branch_name":  "codex/issue-206-mcp-resource-exports",
+                         "ref_type":  "origin",
+                         "object_id":  "304043590ba067dee8ad39668667e0120e846214",
+                         "latest_commit_at":  "2026-06-15T03:18:36-03:00",
+                         "prefix":  "codex",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/remotes/origin/codex/issue-209-artifact-inventory-status",
+                         "branch_name":  "codex/issue-209-artifact-inventory-status",
+                         "ref_type":  "origin",
+                         "object_id":  "7977eca8c37cf9be8d8ad66823b40544c57b8578",
+                         "latest_commit_at":  "2026-06-15T10:43:51-03:00",
+                         "prefix":  "codex",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/remotes/origin/codex/v5-serious-live-pilot-no-coordinator-remediation",
+                         "branch_name":  "codex/v5-serious-live-pilot-no-coordinator-remediation",
+                         "ref_type":  "origin",
+                         "object_id":  "35d23cfd5cb8bbcc6df539a974a42856cd5f8b38",
+                         "latest_commit_at":  "2026-06-11T00:57:23-03:00",
+                         "prefix":  "codex",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/remotes/origin/chore/v5-serious-pilot-closure",
+                         "branch_name":  "chore/v5-serious-pilot-closure",
+                         "ref_type":  "origin",
+                         "object_id":  "fb79ea8c836dc1356f5a93f80a34dc922f464aad",
+                         "latest_commit_at":  "2026-06-14T20:57:32-03:00",
+                         "prefix":  "chore",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/remotes/origin/codex/close-studio-operator-queue-memory",
+                         "branch_name":  "codex/close-studio-operator-queue-memory",
+                         "ref_type":  "origin",
+                         "object_id":  "639eae0bc3696a5d3f87af0291a24c52b1eaf6ef",
+                         "latest_commit_at":  "2026-06-14T21:42:24-03:00",
+                         "prefix":  "codex",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/remotes/origin/codex/fix-studio-operator-queue-rendering",
+                         "branch_name":  "codex/fix-studio-operator-queue-rendering",
+                         "ref_type":  "origin",
+                         "object_id":  "d2d4d7d2804a60ef97085f3ca0df0c3068195d26",
+                         "latest_commit_at":  "2026-06-14T21:22:04-03:00",
+                         "prefix":  "codex",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/remotes/origin/specbridge/memory-closure-issue-209-artifact-inventory",
+                         "branch_name":  "specbridge/memory-closure-issue-209-artifact-inventory",
+                         "ref_type":  "origin",
+                         "object_id":  "84937219d3f25fc35b7b8bbb7222cd4bdc896743",
+                         "latest_commit_at":  "2026-06-15T10:58:57-03:00",
+                         "prefix":  "specbridge",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/remotes/origin/specbridge/memory-closure-reconcile-historical-doctor-warnings",
+                         "branch_name":  "specbridge/memory-closure-reconcile-historical-doctor-warnings",
+                         "ref_type":  "origin",
+                         "object_id":  "78fb377b93c264037a1b4de6a14952c1f3e7b233",
+                         "latest_commit_at":  "2026-06-14T23:08:36-03:00",
+                         "prefix":  "specbridge",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/remotes/origin/specbridge/reconcile-historical-doctor-warnings",
+                         "branch_name":  "specbridge/reconcile-historical-doctor-warnings",
+                         "ref_type":  "origin",
+                         "object_id":  "945c65f37e42c700cecf4c8beea982c43966c815",
+                         "latest_commit_at":  "2026-06-14T22:52:33-03:00",
+                         "prefix":  "specbridge",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/remotes/origin/codex/visual-digital-twin-rosario-mvp",
+                         "branch_name":  "codex/visual-digital-twin-rosario-mvp",
+                         "ref_type":  "origin",
+                         "object_id":  "8237945756f56bedfe3d75b3d7eb6dd730256e3d",
+                         "latest_commit_at":  "2026-06-10T01:16:11-03:00",
+                         "prefix":  "codex",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/remotes/origin/main",
+                         "branch_name":  "main",
+                         "ref_type":  "origin",
+                         "object_id":  "d1a22d83b3a0e81876dc307b4c9deb8f4b65de6b",
+                         "latest_commit_at":  "2026-06-15T11:05:01-03:00",
+                         "prefix":  "main",
+                         "merged_into_main":  true,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/remotes/origin/specbridge/memory-closure-issue-206-mcp-resource-exports",
+                         "branch_name":  "specbridge/memory-closure-issue-206-mcp-resource-exports",
+                         "ref_type":  "origin",
+                         "object_id":  "51ead106d34eb330b17e6eaee32451027fddffd6",
+                         "latest_commit_at":  "2026-06-15T03:33:06-03:00",
+                         "prefix":  "specbridge",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/heads/specbridge/reconcile-historical-doctor-warnings",
+                         "branch_name":  "specbridge/reconcile-historical-doctor-warnings",
+                         "ref_type":  "local",
+                         "object_id":  "945c65f37e42c700cecf4c8beea982c43966c815",
+                         "latest_commit_at":  "2026-06-14T22:52:33-03:00",
+                         "prefix":  "specbridge",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/heads/codex/issue-206-mcp-resource-exports",
+                         "branch_name":  "codex/issue-206-mcp-resource-exports",
+                         "ref_type":  "local",
+                         "object_id":  "304043590ba067dee8ad39668667e0120e846214",
+                         "latest_commit_at":  "2026-06-15T03:18:36-03:00",
+                         "prefix":  "codex",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/heads/codex/issue-209-artifact-inventory-status",
+                         "branch_name":  "codex/issue-209-artifact-inventory-status",
+                         "ref_type":  "local",
+                         "object_id":  "7977eca8c37cf9be8d8ad66823b40544c57b8578",
+                         "latest_commit_at":  "2026-06-15T10:43:51-03:00",
+                         "prefix":  "codex",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/heads/codex/issue-212-branch-inventory-status",
+                         "branch_name":  "codex/issue-212-branch-inventory-status",
+                         "ref_type":  "local",
+                         "object_id":  "d1a22d83b3a0e81876dc307b4c9deb8f4b65de6b",
+                         "latest_commit_at":  "2026-06-15T11:05:01-03:00",
+                         "prefix":  "codex",
+                         "merged_into_main":  true,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/heads/chore/v5-serious-pilot-closure",
+                         "branch_name":  "chore/v5-serious-pilot-closure",
+                         "ref_type":  "local",
+                         "object_id":  "fb79ea8c836dc1356f5a93f80a34dc922f464aad",
+                         "latest_commit_at":  "2026-06-14T20:57:32-03:00",
+                         "prefix":  "chore",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/heads/codex/close-studio-operator-queue-memory",
+                         "branch_name":  "codex/close-studio-operator-queue-memory",
+                         "ref_type":  "local",
+                         "object_id":  "639eae0bc3696a5d3f87af0291a24c52b1eaf6ef",
+                         "latest_commit_at":  "2026-06-14T21:42:24-03:00",
+                         "prefix":  "codex",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/heads/codex/fix-studio-operator-queue-rendering",
+                         "branch_name":  "codex/fix-studio-operator-queue-rendering",
+                         "ref_type":  "local",
+                         "object_id":  "d2d4d7d2804a60ef97085f3ca0df0c3068195d26",
+                         "latest_commit_at":  "2026-06-14T21:22:04-03:00",
+                         "prefix":  "codex",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/heads/specbridge/memory-closure-issue-206-mcp-resource-exports",
+                         "branch_name":  "specbridge/memory-closure-issue-206-mcp-resource-exports",
+                         "ref_type":  "local",
+                         "object_id":  "51ead106d34eb330b17e6eaee32451027fddffd6",
+                         "latest_commit_at":  "2026-06-15T03:33:06-03:00",
+                         "prefix":  "specbridge",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/heads/specbridge/memory-closure-issue-209-artifact-inventory",
+                         "branch_name":  "specbridge/memory-closure-issue-209-artifact-inventory",
+                         "ref_type":  "local",
+                         "object_id":  "84937219d3f25fc35b7b8bbb7222cd4bdc896743",
+                         "latest_commit_at":  "2026-06-15T10:58:57-03:00",
+                         "prefix":  "specbridge",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/heads/specbridge/memory-closure-reconcile-historical-doctor-warnings",
+                         "branch_name":  "specbridge/memory-closure-reconcile-historical-doctor-warnings",
+                         "ref_type":  "local",
+                         "object_id":  "78fb377b93c264037a1b4de6a14952c1f3e7b233",
+                         "latest_commit_at":  "2026-06-14T23:08:36-03:00",
+                         "prefix":  "specbridge",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/heads/codex/v5-serious-live-pilot-no-coordinator-remediation",
+                         "branch_name":  "codex/v5-serious-live-pilot-no-coordinator-remediation",
+                         "ref_type":  "local",
+                         "object_id":  "35d23cfd5cb8bbcc6df539a974a42856cd5f8b38",
+                         "latest_commit_at":  "2026-06-11T00:57:23-03:00",
+                         "prefix":  "codex",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/heads/codex/visual-digital-twin-rosario-mvp",
+                         "branch_name":  "codex/visual-digital-twin-rosario-mvp",
+                         "ref_type":  "local",
+                         "object_id":  "8237945756f56bedfe3d75b3d7eb6dd730256e3d",
+                         "latest_commit_at":  "2026-06-10T01:16:11-03:00",
+                         "prefix":  "codex",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/heads/main",
+                         "branch_name":  "main",
+                         "ref_type":  "local",
+                         "object_id":  "d1a22d83b3a0e81876dc307b4c9deb8f4b65de6b",
+                         "latest_commit_at":  "2026-06-15T11:05:01-03:00",
+                         "prefix":  "main",
+                         "merged_into_main":  true,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     }
+                 ],
+    "totals":  {
+                   "total_refs":  25,
+                   "local_branch_count":  13,
+                   "origin_branch_count":  12,
+                   "merged_into_main_count":  3,
+                   "unmerged_into_main_count":  22,
+                   "unknown_merge_status_count":  0
+               },
+    "prefix_counts":  [
+                          {
+                              "prefix":  "chore",
+                              "count":  2
+                          },
+                          {
+                              "prefix":  "codex",
+                              "count":  13
+                          },
+                          {
+                              "prefix":  "main",
+                              "count":  2
+                          },
+                          {
+                              "prefix":  "specbridge",
+                              "count":  8
+                          }
+                      ],
+    "branch_mutation_policy":  "none",
+    "read_only_note":  "This command does not delete, prune, rename, move, archive, fetch, pull, or force-push branches."
+}

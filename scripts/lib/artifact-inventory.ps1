@@ -54,7 +54,8 @@ function Build-ArtifactInventory {
     (Get-FamilyInventory -FamilyId "github_evidence"     -RepoPath ".specbridge/github-evidence"),
     (Get-FamilyInventory -FamilyId "ledger"              -RepoPath ".specbridge/ledger"),
     (Get-FamilyInventory -FamilyId "mcp_resources"       -RepoPath ".specbridge/mcp-resources"),
-    (Get-FamilyInventory -FamilyId "artifact_inventory"  -RepoPath ".specbridge/artifact-inventory")
+    (Get-FamilyInventory -FamilyId "artifact_inventory"  -RepoPath ".specbridge/artifact-inventory"),
+    (Get-FamilyInventory -FamilyId "branch_inventory"    -RepoPath ".specbridge/branch-inventory")
   )
 
   [long] $totalFileCount = 0
