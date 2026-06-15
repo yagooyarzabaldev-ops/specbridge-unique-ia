@@ -2604,7 +2604,8 @@ try {
           "contracts", "scopes", "reports", "audit_packets", "chatgpt_audits",
           "runtime_launches", "runtime_preflights", "runtime_results", "runtime_summaries",
           "runtime_runs", "runtime_executions", "orchestrations", "executor_packets",
-          "github_evidence", "ledger", "mcp_resources", "artifact_inventory", "branch_inventory"
+          "github_evidence", "ledger", "mcp_resources", "artifact_inventory", "branch_inventory",
+          "branch_cleanup_policy"
         )
         $actualFamilyIds = $families | ForEach-Object { $_.family_id }
         $missingFamilies = $requiredFamilyIds | Where-Object { $actualFamilyIds -notcontains $_ }
@@ -2946,6 +2947,246 @@ try {
       -Name "specbridge-branch-inventory-bad-output-path" `
       -Result $biBadPathResult `
       -ExpectedPattern "OutputPath must be .specbridge/branch-inventory/current.inventory.json"
+
+    # specbridge-branch-cleanup-policy tests
+
+    # 1. Command shape: exits 0, returns JSON with command and ok fields
+    $bcpResult = Invoke-Cli -Arguments @("specbridge-branch-cleanup-policy")
+    Assert-Success `
+      -Name "specbridge-branch-cleanup-policy" `
+      -Result $bcpResult `
+      -ExpectedPattern '"command"\s*:\s*"specbridge-branch-cleanup-policy"'
+
+    # 2. Deterministic output: two read-only calls produce identical output
+    $bcpRepeatResult = Invoke-Cli -Arguments @("specbridge-branch-cleanup-policy")
+    if ($bcpResult.ExitCode -eq 0 -and $bcpRepeatResult.ExitCode -eq 0) {
+      if ($bcpResult.Text.Trim() -ceq $bcpRepeatResult.Text.Trim()) {
+        Write-Output "PASS specbridge-branch-cleanup-policy-deterministic: repeated read-only output is stable."
+      } else {
+        Write-Output "FAIL specbridge-branch-cleanup-policy-deterministic: repeated read-only output changed."
+        $script:failed = $true
+      }
+    }
+
+    if ($bcpResult.ExitCode -eq 0) {
+      $bcpJson = $null
+      try { $bcpJson = $bcpResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      if ($null -eq $bcpJson) {
+        Write-Output "FAIL specbridge-branch-cleanup-policy: output was not valid JSON."
+        $script:failed = $true
+      } else {
+        # ok field
+        if ($bcpJson.ok -ne $true) {
+          Write-Output "FAIL specbridge-branch-cleanup-policy: ok field is not true."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-cleanup-policy: ok is true."
+        }
+
+        # 3. Required top-level fields in evaluation
+        $requiredEvalFields = @(
+          "command", "policy_metadata", "enforcement_status",
+          "totals", "candidate_counts", "blocked_counts",
+          "required_future_gates", "branch_evaluations", "read_only_note"
+        )
+        $evalFieldNames = @($bcpJson.evaluation.PSObject.Properties.Name)
+        $missingEvalFields = $requiredEvalFields | Where-Object { $evalFieldNames -notcontains $_ }
+        if ($missingEvalFields.Count -gt 0) {
+          Write-Output "FAIL specbridge-branch-cleanup-policy: evaluation missing fields: $($missingEvalFields -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-cleanup-policy: evaluation has all required fields."
+        }
+
+        # enforcement_status must be "none"
+        if ($bcpJson.evaluation.enforcement_status -ne "none") {
+          Write-Output "FAIL specbridge-branch-cleanup-policy: enforcement_status expected 'none', got '$($bcpJson.evaluation.enforcement_status)'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-cleanup-policy: enforcement_status is none."
+        }
+
+        foreach ($blockedVerb in @("delete", "prune", "rename", "move", "archive", "fetch", "pull", "force-push")) {
+          if ($bcpJson.evaluation.read_only_note -notmatch [regex]::Escape($blockedVerb)) {
+            Write-Output "FAIL specbridge-branch-cleanup-policy: read_only_note missing '$blockedVerb'."
+            $script:failed = $true
+          }
+        }
+
+        # policy_metadata fields
+        $requiredPmFields = @("policy_id", "schema_version", "status", "enforcement", "cleanup_permission")
+        $pmFieldNames = @($bcpJson.evaluation.policy_metadata.PSObject.Properties.Name)
+        $missingPm = $requiredPmFields | Where-Object { $pmFieldNames -notcontains $_ }
+        if ($missingPm.Count -gt 0) {
+          Write-Output "FAIL specbridge-branch-cleanup-policy: policy_metadata missing fields: $($missingPm -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-cleanup-policy: policy_metadata has all required fields."
+        }
+
+        if ($bcpJson.evaluation.policy_metadata.cleanup_permission -ne "none") {
+          Write-Output "FAIL specbridge-branch-cleanup-policy: policy_metadata.cleanup_permission must be 'none'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-cleanup-policy: policy_metadata.cleanup_permission is none."
+        }
+
+        # totals fields
+        $requiredTotalsFields = @("total_refs", "evaluated", "blocked_count")
+        $totalsFieldNames = @($bcpJson.evaluation.totals.PSObject.Properties.Name)
+        $missingTotals = $requiredTotalsFields | Where-Object { $totalsFieldNames -notcontains $_ }
+        if ($missingTotals.Count -gt 0) {
+          Write-Output "FAIL specbridge-branch-cleanup-policy: totals missing fields: $($missingTotals -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-cleanup-policy: totals has all required fields."
+        }
+
+        # required_future_gates must be non-empty
+        $gates = @($bcpJson.evaluation.required_future_gates)
+        if ($gates.Count -eq 0) {
+          Write-Output "FAIL specbridge-branch-cleanup-policy: required_future_gates is empty."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-cleanup-policy: required_future_gates has $($gates.Count) entries."
+        }
+
+        # 4. cleanup_permission=none for all branch_evaluations
+        $branchEvals = @($bcpJson.evaluation.branch_evaluations)
+        $branchEvalFail = $false
+        $requiredBranchEvalFields = @("ref_name", "branch_name", "ref_type", "candidate_class", "cleanup_permission", "future_gate")
+        foreach ($be in $branchEvals) {
+          $beFieldNames = @($be.PSObject.Properties.Name)
+          $missingBe = $requiredBranchEvalFields | Where-Object { $beFieldNames -notcontains $_ }
+          if ($missingBe.Count -gt 0) {
+            Write-Output "FAIL specbridge-branch-cleanup-policy: branch_evaluation '$($be.ref_name)' missing fields: $($missingBe -join ', ')."
+            $script:failed = $true
+            $branchEvalFail = $true
+          }
+          if ($be.cleanup_permission -ne "none") {
+            Write-Output "FAIL specbridge-branch-cleanup-policy: branch_evaluation '$($be.ref_name)' cleanup_permission must be 'none', got '$($be.cleanup_permission)'."
+            $script:failed = $true
+            $branchEvalFail = $true
+          }
+          $validClasses = @("merged_local", "merged_origin", "unmerged_local", "unmerged_origin", "unknown_merge_status")
+          if ($validClasses -notcontains $be.candidate_class) {
+            Write-Output "FAIL specbridge-branch-cleanup-policy: branch_evaluation '$($be.ref_name)' invalid candidate_class '$($be.candidate_class)'."
+            $script:failed = $true
+            $branchEvalFail = $true
+          }
+          $validGates = @("activation_required", "blocked")
+          if ($validGates -notcontains $be.future_gate) {
+            Write-Output "FAIL specbridge-branch-cleanup-policy: branch_evaluation '$($be.ref_name)' invalid future_gate '$($be.future_gate)'."
+            $script:failed = $true
+            $branchEvalFail = $true
+          }
+        }
+        if (-not $branchEvalFail) {
+          Write-Output "PASS specbridge-branch-cleanup-policy: all branch_evaluations have required fields, cleanup_permission=none, valid class and gate."
+        }
+
+        # totals.evaluated must match branch_evaluations count
+        if ($bcpJson.evaluation.totals.evaluated -ne $branchEvals.Count) {
+          Write-Output "FAIL specbridge-branch-cleanup-policy: totals.evaluated expected $($branchEvals.Count), got $($bcpJson.evaluation.totals.evaluated)."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-cleanup-policy: totals.evaluated matches branch_evaluations count."
+        }
+      }
+    }
+
+    # 5. No mutation without OutputPath: no policy evaluation file written
+    $bcpArtifact = Join-Path (Get-Location).Path ".specbridge/branch-cleanup/current.policy-evaluation.json"
+    $bcpArtifactExistedBefore = Test-Path $bcpArtifact
+    $bcpArtifactOriginalRaw = $null
+    if ($bcpArtifactExistedBefore) {
+      $bcpArtifactOriginalRaw = Get-Content $bcpArtifact -Raw -Encoding UTF8
+    }
+    Remove-Item $bcpArtifact -Force -ErrorAction SilentlyContinue
+    $bcpNoPathResult = Invoke-Cli -Arguments @("specbridge-branch-cleanup-policy")
+    if (Test-Path $bcpArtifact) {
+      Write-Output "FAIL specbridge-branch-cleanup-policy-no-mutation: policy evaluation file was written without -OutputPath."
+      $script:failed = $true
+    } else {
+      Write-Output "PASS specbridge-branch-cleanup-policy-no-mutation: no policy evaluation file written without -OutputPath."
+    }
+
+    # 6. OutputPath behavior: writes evaluation to declared path
+    $bcpOutputResult = Invoke-Cli -Arguments @("specbridge-branch-cleanup-policy", "-OutputPath", ".specbridge/branch-cleanup/current.policy-evaluation.json", "-Force")
+    Assert-Success `
+      -Name "specbridge-branch-cleanup-policy-output-path" `
+      -Result $bcpOutputResult `
+      -ExpectedPattern '"output_path"'
+
+    if ($bcpOutputResult.ExitCode -eq 0) {
+      if (-not (Test-Path $bcpArtifact)) {
+        Write-Output "FAIL specbridge-branch-cleanup-policy-output-path: policy evaluation file was not written."
+        $script:failed = $true
+      } else {
+        $writtenEval = $null
+        try {
+          $writtenEval = Get-Content $bcpArtifact -Raw -Encoding UTF8 | ConvertFrom-Json
+        } catch {}
+        if ($null -eq $writtenEval) {
+          Write-Output "FAIL specbridge-branch-cleanup-policy-output-path: written evaluation is not valid JSON."
+          $script:failed = $true
+        } elseif ($writtenEval.command -ne "specbridge-branch-cleanup-policy") {
+          Write-Output "FAIL specbridge-branch-cleanup-policy-output-path: written evaluation command field mismatch."
+          $script:failed = $true
+        } elseif ($writtenEval.policy_metadata.cleanup_permission -ne "none") {
+          Write-Output "FAIL specbridge-branch-cleanup-policy-output-path: written evaluation policy_metadata.cleanup_permission must be 'none'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-branch-cleanup-policy-output-path: evaluation file written, valid, cleanup_permission=none."
+        }
+      }
+
+      # 7. Force required when replacing
+      $bcpExistingResult = Invoke-Cli -Arguments @("specbridge-branch-cleanup-policy", "-OutputPath", ".specbridge/branch-cleanup/current.policy-evaluation.json")
+      Assert-Failure `
+        -Name "specbridge-branch-cleanup-policy-output-path-requires-force" `
+        -Result $bcpExistingResult `
+        -ExpectedPattern "use -Force"
+    }
+
+    # Restore artifact state after mutation tests
+    if ($bcpArtifactExistedBefore) {
+      $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+      [System.IO.File]::WriteAllText($bcpArtifact, $bcpArtifactOriginalRaw, $utf8NoBom)
+    } else {
+      Remove-Item $bcpArtifact -Force -ErrorAction SilentlyContinue
+    }
+
+    # 8. OutputPath outside the contract artifact must fail
+    $bcpBadPathResult = Invoke-Cli -Arguments @("specbridge-branch-cleanup-policy", "-OutputPath", "docs/bad-policy-evaluation.json")
+    Assert-Failure `
+      -Name "specbridge-branch-cleanup-policy-bad-output-path" `
+      -Result $bcpBadPathResult `
+      -ExpectedPattern "OutputPath must be .specbridge/branch-cleanup/current.policy-evaluation.json"
+
+    # 9. artifact-inventory includes branch_cleanup_policy family
+    $bcpAiResult = Invoke-Cli -Arguments @("specbridge-artifact-inventory")
+    if ($bcpAiResult.ExitCode -eq 0) {
+      $bcpAiJson = $null
+      try { $bcpAiJson = $bcpAiResult.Text.Trim() | ConvertFrom-Json } catch {}
+      if ($null -ne $bcpAiJson) {
+        $bcpFamilies = @($bcpAiJson.inventory.families)
+        $bcpFamilyIds = $bcpFamilies | ForEach-Object { $_.family_id }
+        if ($bcpFamilyIds -contains "branch_cleanup_policy") {
+          $bcpFamily = $bcpFamilies | Where-Object { $_.family_id -eq "branch_cleanup_policy" }
+          if ($bcpFamily.repository_path -eq ".specbridge/branch-cleanup" -and $bcpFamily.cleanup_permission -eq "none") {
+            Write-Output "PASS specbridge-branch-cleanup-policy-artifact-family: branch_cleanup_policy family present with correct path and cleanup_permission=none."
+          } else {
+            Write-Output "FAIL specbridge-branch-cleanup-policy-artifact-family: branch_cleanup_policy family has unexpected path or cleanup_permission."
+            $script:failed = $true
+          }
+        } else {
+          Write-Output "FAIL specbridge-branch-cleanup-policy-artifact-family: branch_cleanup_policy family not found in artifact inventory."
+          $script:failed = $true
+        }
+      }
+    }
   }
   finally {
     Pop-Location

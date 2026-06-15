@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "policy_id": "branch-cleanup-policy",
+  "status": "draft",
+  "enforcement": "none",
+  "cleanup_permission": "none",
+  "created_at": "2026-06-15",
+  "candidate_classes": [
+    {
+      "class_id": "merged_local",
+      "description": "Local branches already merged into main",
+      "match_criteria": { "ref_type": "local", "merged_into_main": true },
+      "cleanup_permission": "none",
+      "future_cleanup_gate": "activation_required"
+    },
+    {
+      "class_id": "merged_origin",
+      "description": "Origin branches already merged into main",
+      "match_criteria": { "ref_type": "origin", "merged_into_main": true },
+      "cleanup_permission": "none",
+      "future_cleanup_gate": "activation_required"
+    },
+    {
+      "class_id": "unmerged_local",
+      "description": "Local branches not yet merged into main",
+      "match_criteria": { "ref_type": "local", "merged_into_main": false },
+      "cleanup_permission": "none",
+      "future_cleanup_gate": "blocked"
+    },
+    {
+      "class_id": "unmerged_origin",
+      "description": "Origin branches not yet merged into main",
+      "match_criteria": { "ref_type": "origin", "merged_into_main": false },
+      "cleanup_permission": "none",
+      "future_cleanup_gate": "blocked"
+    },
+    {
+      "class_id": "unknown_merge_status",
+      "description": "Branches with unknown merge status relative to main",
+      "match_criteria": { "merged_into_main": null },
+      "cleanup_permission": "none",
+      "future_cleanup_gate": "blocked"
+    }
+  ],
+  "hard_blocks": [
+    "branch_deletion",
+    "branch_pruning",
+    "remote_pruning",
+    "branch_rename",
+    "branch_archival",
+    "force_push",
+    "git_fetch",
+    "git_pull",
+    "retention_enforcement"
+  ],
+  "required_gates": [
+    "policy_status_must_be_active",
+    "enforcement_must_not_be_none",
+    "explicit_operator_authorization",
+    "ci_must_pass",
+    "review_gate_must_pass"
+  ],
+  "future_activation_requirements": [
+    "Dedicated execution contract with explicit branch mutation authorization",
+    "policy status changed from draft to active via governed contract",
+    "enforcement changed from none to one of: local_only, origin_only, all",
+    "cleanup_permission changed from none to allowed via contract",
+    "All hard_blocks remain enforced unless individually overridden by a contract",
+    "CI and review gates must pass before any activation"
+  ],
+  "blocked_commands": [
+    "git branch -d",
+    "git branch -D",
+    "git push --delete",
+    "git remote prune",
+    "git fetch --prune",
+    "git push --force",
+    "git push -f"
+  ],
+  "blocked_actions": [
+    "branch_deletion",
+    "branch_pruning",
+    "remote_pruning",
+    "branch_rename",
+    "branch_movement",
+    "branch_archival",
+    "retention_enforcement",
+    "cleanup_apply_mode"
+  ]
+}

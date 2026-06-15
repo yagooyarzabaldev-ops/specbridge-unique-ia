@@ -1,0 +1,81 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-215-branch-cleanup-policy-draft",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-215-branch-cleanup-policy-draft.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-215-branch-cleanup-policy-draft.execution.md",
+  "final_report_path": ".specbridge/reports/issue-215-branch-cleanup-policy-draft.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "The implementation adds a governed branch cleanup policy draft and a deterministic specbridge-branch-cleanup-policy evaluator that classifies branch refs without authorizing cleanup.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "The policy draft declares draft status, enforcement=none, cleanup_permission=none, candidate classes, hard blocks, required gates, future activation requirements, blocked commands, and blocked actions. The CLI command emits policy metadata, totals, candidate counts, blocked counts, future gates, branch evaluations, read-only notes, and explicit output path behavior.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "All changed files are inside issue-215 exclusive_write scope. The implementation does not touch workflows, env files, secrets, dependencies, production, billing, authentication, authorization, database, CI/CD security, operator decisions, issue #194, digital twin work, or branch cleanup behavior.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The command uses repository path normalization, writes only the governed policy evaluation artifact when explicitly requested, reads local branch inventory only, performs no network calls, and performs no branch mutation.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "The changed source, docs, dashboard, state, inventory, policy, contract, scope, final report, audit packet, and ChatGPT audit files are all declared in issue-215 scope.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "The CLI regression suite includes branch cleanup policy coverage for command shape, deterministic repeated output, required fields, enforcement_status=none, required future gates, cleanup_permission=none per branch evaluation, no mutation without -OutputPath, output artifact writing, -Force replacement behavior, bad OutputPath rejection, and artifact family registration.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "Local validation evidence is tracked in the audit packet, including a passing full smoke run. GitHub CI remains the authoritative remote gate after PR creation.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records changed files, passing local validation status, policy result, risk result, unresolved CI and closure risks, merge status, deployment status, and completion status.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "cleanup_boundary",
+      "file": "docs/specbridge-branch-cleanup-policy.md",
+      "line": null,
+      "evidence": "The branch cleanup policy documentation states that no branch cleanup is authorized and that all branch entries keep cleanup_permission=none.",
+      "recommendation": "Keep cleanup permission disabled unless a future dedicated policy and execution contract authorize branch cleanup.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub CI pending until PR creation.",
+    "Post-merge closure still required after primary merge.",
+    "Actual branch cleanup remains blocked until a future dedicated policy and execution contract authorize it."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-215-branch-cleanup-policy-draft.audit-packet.json",
+    ".specbridge/contracts/issue-215-branch-cleanup-policy-draft.execution.md",
+    ".specbridge/reports/issue-215-branch-cleanup-policy-draft.final-report.json"
+  ]
+}

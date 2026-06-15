@@ -68,13 +68,13 @@ SpecBridge currently has:
 
 ## Next Recommended Task
 
-**Ready for next governed operator task**
+**Active governed operator task: issue-215 branch cleanup policy draft**
 
 Immediate order:
 
-1. Confirm `specbridge-doctor -FixPlan -Offline` remains healthy after issue-212 closure.
-2. Select the next eligible task through `specbridge-next-task` or create a new governed contract if no task is eligible.
-3. Keep future MCP server runtime, retention enforcement, and branch cleanup work blocked until dedicated contracts authorize them.
+1. Define a governed branch cleanup policy draft with enforcement disabled.
+2. Implement a deterministic read-only evaluator over local branch inventory.
+3. Validate contract, scope, CLI tests, final report, audit packet, ChatGPT audit, full smoke, and diff hygiene before PR/CI.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;
@@ -84,4 +84,4 @@ Backlog: future governed MCP server runtime remains blocked until a dedicated
 contract explicitly authorizes it.
 
 Maintenance debt:
-- None active. Artifact growth is observable through `specbridge-artifact-inventory`; branch debt is observable through `specbridge-branch-inventory`. No artifact cleanup or branch cleanup is authorized.
+- Branch cleanup policy draft is active through issue #215. Branch debt is observable through `specbridge-branch-inventory`; no branch deletion, pruning, renaming, movement, archival, fetch, pull, force-push, cleanup apply mode, or retention enforcement is authorized.
