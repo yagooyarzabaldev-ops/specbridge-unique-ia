@@ -1,13 +1,15 @@
 {
   "contract_id": "issue-221-repository-health-summary",
   "run_id": "sb-20260615-0221a1b2",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/contracts/issue-221-repository-health-summary.execution.md",
     ".specbridge/scopes/issue-221-repository-health-summary.scope.json",
     ".specbridge/reports/issue-221-repository-health-summary.final-report.json",
     ".specbridge/audit-packets/issue-221-repository-health-summary.audit-packet.json",
     ".specbridge/audits/issue-221-repository-health-summary.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-221-repository-health-summary.closure.json",
+    ".specbridge/ledger/operations.ndjson",
     ".specbridge/repository-health/current.summary.json",
     ".specbridge/artifact-inventory/current.inventory.json",
     "docs/specbridge-repository-health-summary.md",

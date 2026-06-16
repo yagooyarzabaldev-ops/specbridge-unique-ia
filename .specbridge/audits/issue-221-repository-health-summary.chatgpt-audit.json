@@ -45,13 +45,13 @@
     {
       "name": "ci_evidence",
       "result": "pass",
-      "evidence": "Local validation evidence is tracked in the audit packet, including the full CLI regression suite and contract/scope validation. GitHub Actions CI, review gate, and security gate evidence will be recorded once the PR opens; merge remains gated on those checks passing per merge policy.",
+      "evidence": "Local validation evidence is tracked in the audit packet, including the full CLI regression suite, contract/scope validation, full smoke, and diff hygiene. GitHub Actions passed for PR #222: Foundation Validation, SpecBridge Review Gate, SpecBridge PR Review Report, and Claude Review Non Blocking.",
       "blocking": false
     },
     {
       "name": "final_report_honesty",
       "result": "pass",
-      "evidence": "The final report records changed files, validation status, policy result, risk result, merge status (not yet merged), deployment status, completion status (in_progress), and the remaining future enforcement risk.",
+      "evidence": "The final report records changed files, validation status, policy result, risk result, merge status (PR #222 merged), deployment status, completion status (complete), and the remaining future enforcement risk.",
       "blocking": false
     }
   ],
@@ -74,6 +74,7 @@
   "source_files": [
     ".specbridge/audit-packets/issue-221-repository-health-summary.audit-packet.json",
     ".specbridge/contracts/issue-221-repository-health-summary.execution.md",
-    ".specbridge/reports/issue-221-repository-health-summary.final-report.json"
+    ".specbridge/reports/issue-221-repository-health-summary.final-report.json",
+    ".specbridge/github-evidence/issue-221-repository-health-summary.closure.json"
   ]
 }

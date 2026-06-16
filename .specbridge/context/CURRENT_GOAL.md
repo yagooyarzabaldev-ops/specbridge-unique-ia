@@ -46,6 +46,7 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | 212 | Branch inventory status | 213 | Merged 2026-06-15 |
 | 215 | Governed branch cleanup policy draft | 216 | Merged 2026-06-15 |
 | 218 | Governed artifact retention policy draft | 219 | Merged 2026-06-15 |
+| 221 | Repository health summary evidence | 222 | Merged 2026-06-16 |
 
 ## Architecture Status
 
@@ -69,19 +70,19 @@ SpecBridge currently has:
 - Branch inventory status (specbridge-branch-inventory: deterministic read-only local/origin branch ref counts, prefix counts, merged-into-main posture, preservation posture, cleanup_permission=none, and branch_mutation_policy=none)
 - Branch cleanup policy draft (specbridge-branch-cleanup-policy: deterministic read-only branch cleanup candidate classification with enforcement=none, cleanup_permission=none, future activation gates, and blocked cleanup commands/actions)
 - Artifact retention policy draft (specbridge-artifact-retention-policy: deterministic read-only artifact family classification with enforcement=none, cleanup_permission=none, future activation gates, and blocked cleanup commands/actions)
+- Repository health summary evidence (specbridge-repository-health-summary: deterministic read-only aggregate over branch inventory, branch cleanup policy, artifact inventory, and artifact retention policy with cleanup_permission=none and enforcement_status=none)
 
 ## Next Recommended Task
 
-**Active governed operator task: issue-221 repository health summary evidence.**
+**Ready for next governed operator task.**
 
-Primary PR: #222 (`Add repository health summary evidence`) is open against `main`.
+Issue #221 repository health summary evidence is complete. PR #222 merged on 2026-06-16 with squash commit `e0f23bd07b51c52644cff415fa56959670025abc`; issue #221 is closed as completed and post-merge closure evidence is recorded.
 
 Immediate order:
 
-1. Add a deterministic read-only repository health summary command.
-2. Aggregate branch inventory, branch cleanup policy, artifact inventory, and artifact retention policy evidence.
-3. Keep all cleanup permissions and enforcement disabled.
-4. Validate contract, scope, CLI tests, final report, audit packet, ChatGPT audit, full smoke, and diff hygiene before PR/CI. Local validations passed; GitHub CI is pending on PR #222.
+1. Run `specbridge-doctor -FixPlan` and `specbridge-next-task` before selecting the next task.
+2. Prefer the next repository-backed task recorded in operator evidence over chat-memory inference.
+3. Keep cleanup and retention enforcement disabled unless a future dedicated policy and execution contract authorize them.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;

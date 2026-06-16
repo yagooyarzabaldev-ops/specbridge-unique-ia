@@ -48,6 +48,8 @@ Medium. The task aggregates repository health evidence and policy posture. Any c
 .specbridge/reports/issue-221-repository-health-summary.final-report.json
 .specbridge/audit-packets/issue-221-repository-health-summary.audit-packet.json
 .specbridge/audits/issue-221-repository-health-summary.chatgpt-audit.json
+.specbridge/github-evidence/issue-221-repository-health-summary.closure.json
+.specbridge/ledger/operations.ndjson
 .specbridge/repository-health/current.summary.json
 .specbridge/artifact-inventory/current.inventory.json
 docs/specbridge-repository-health-summary.md

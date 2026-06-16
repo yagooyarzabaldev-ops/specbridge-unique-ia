@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-221-repository-health-summary",
+  "run_id": "sb-20260615-0221a1b2",
+  "evidence_type": "closure_evidence",
+  "collected_by": "ChatGPT/Codex post-merge closure",
+  "collected_at": "2026-06-16",
+  "merge_commit": "e0f23bd07b51c52644cff415fa56959670025abc",
+  "primary_pr": 222,
+  "issue_closed": true,
+  "scope_status": "completed",
+  "all_validations_passed": true,
+  "notes": "PR #222 merged after local smoke and GitHub checks passed. The repository health summary command aggregates branch and artifact evidence read-only and keeps cleanup_permission=none and enforcement_status=none. No branch deletion, branch pruning, remote pruning, branch rename, branch movement, branch archival, force push, fetch, pull, artifact deletion, artifact movement, artifact compression, artifact pruning, artifact archival implementation, artifact upload, artifact remote mutation, cleanup apply mode, or retention enforcement is authorized."
+}

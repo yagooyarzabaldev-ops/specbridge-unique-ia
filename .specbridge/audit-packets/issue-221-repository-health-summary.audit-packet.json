@@ -9,6 +9,8 @@
     ".specbridge/audits/issue-221-repository-health-summary.chatgpt-audit.json",
     ".specbridge/context/CURRENT_GOAL.md",
     ".specbridge/contracts/issue-221-repository-health-summary.execution.md",
+    ".specbridge/github-evidence/issue-221-repository-health-summary.closure.json",
+    ".specbridge/ledger/operations.ndjson",
     ".specbridge/mcp-resources/operator-state.catalog.json",
     ".specbridge/repository-health/current.summary.json",
     ".specbridge/reports/issue-221-repository-health-summary.final-report.json",
@@ -37,6 +39,8 @@
     { "file": "docs/specbridge-studio.html", "added_lines": null, "deleted_lines": null },
     { "file": ".specbridge/context/CURRENT_GOAL.md", "added_lines": null, "deleted_lines": null },
     { "file": ".specbridge/state/current-goal.json", "added_lines": null, "deleted_lines": null },
+    { "file": ".specbridge/github-evidence/issue-221-repository-health-summary.closure.json", "added_lines": null, "deleted_lines": 0 },
+    { "file": ".specbridge/ledger/operations.ndjson", "added_lines": null, "deleted_lines": null },
     { "file": ".specbridge/contracts/issue-221-repository-health-summary.execution.md", "added_lines": null, "deleted_lines": 0 },
     { "file": ".specbridge/scopes/issue-221-repository-health-summary.scope.json", "added_lines": null, "deleted_lines": 0 },
     { "file": ".specbridge/reports/issue-221-repository-health-summary.final-report.json", "added_lines": null, "deleted_lines": 0 },
@@ -61,20 +65,25 @@
     { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1", "result": "passed" },
     { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1", "result": "passed" },
     { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1", "result": "passed" },
-    { "command": "git diff --check", "result": "passed" }
+    { "command": "git diff --check", "result": "passed" },
+    { "command": "GitHub Actions Foundation Validation", "result": "passed" },
+    { "command": "GitHub Actions SpecBridge Review Gate", "result": "passed" },
+    { "command": "GitHub Actions SpecBridge PR Review Report", "result": "passed" },
+    { "command": "GitHub Actions Claude Review Non Blocking", "result": "passed" }
   ],
   "final_report_path": ".specbridge/reports/issue-221-repository-health-summary.final-report.json",
-  "ci_status": "not_collected",
+  "ci_status": "passed",
   "pr_review_report_path": null,
   "policy_result": "Within policy. Task stays inside exclusive_write scope. No blocked scope touched. No branch deletion, branch pruning, remote pruning, branch rename, branch movement, branch archival, force push, fetch, pull from the command, artifact deletion, artifact movement, artifact compression, artifact pruning, artifact archival, artifact upload, artifact remote mutation, retention enforcement, cleanup apply mode, network call from the command, workflow, dependency, secret, production, billing, authentication, authorization, database, CI/CD security, deployment, operator decision registry, issue #194, or digital twin changes.",
   "unresolved_risks": [
     "Actual branch cleanup and artifact retention enforcement remain blocked until a future dedicated policy and execution contract authorize them."
   ],
-  "completion_status": "in_progress",
+  "completion_status": "complete",
   "source_files": [
     ".specbridge/contracts/issue-221-repository-health-summary.execution.md",
     ".specbridge/scopes/issue-221-repository-health-summary.scope.json",
-    ".specbridge/reports/issue-221-repository-health-summary.final-report.json"
+    ".specbridge/reports/issue-221-repository-health-summary.final-report.json",
+    ".specbridge/github-evidence/issue-221-repository-health-summary.closure.json"
   ],
   "secret_omission": "This packet contains repository-relative paths, summaries, validation results, policy result, risks, and status only. It does not embed raw diffs, secrets, tokens, private keys, or credential values."
 }
