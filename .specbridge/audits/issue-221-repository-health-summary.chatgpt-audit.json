@@ -1,0 +1,79 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-221-repository-health-summary",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-221-repository-health-summary.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-221-repository-health-summary.execution.md",
+  "final_report_path": ".specbridge/reports/issue-221-repository-health-summary.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "The implementation adds a deterministic specbridge-repository-health-summary command that aggregates branch inventory, branch cleanup policy, artifact inventory, and artifact retention policy evidence without authorizing cleanup or enforcement.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "The command emits overall_health_posture, branch_posture, artifact_posture, policy_posture, cleanup_permission=none, enforcement_status=none, blocked_action_counts, required_future_gates, evidence_sources, non_enforcement_note, and read_only_note. It is read-only when -OutputPath is omitted, writes only .specbridge/repository-health/current.summary.json, and requires -Force to replace an existing artifact.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "All changed files are inside issue-221 exclusive_write scope. The implementation does not touch workflows, env files, secrets, dependencies, production, billing, authentication, authorization, database, CI/CD security, operator decisions, issue #194, digital twin work, or any branch/artifact mutation behavior.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The command writes only the governed repository health summary artifact when explicitly requested, reads local evidence builders only, performs no network calls, and performs no branch or artifact mutation.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "The changed source, docs, dashboard, state, inventory, MCP catalog, contract, scope, final report, audit packet, and ChatGPT audit files are all declared in issue-221 scope.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "The CLI regression suite includes repository health summary coverage for command shape, deterministic repeated output, required fields, cleanup_permission=none, enforcement_status=none, overall_health_posture validity, branch/artifact/policy posture fields, blocked_action_counts arithmetic, required_future_gates non-empty, evidence_sources completeness, read_only_note content, no mutation without -OutputPath, output artifact writing, -Force replacement behavior, bad OutputPath rejection, and artifact family registration. The full test-specbridge-cli.ps1 suite passed locally.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "Local validation evidence is tracked in the audit packet, including the full CLI regression suite and contract/scope validation. GitHub Actions CI, review gate, and security gate evidence will be recorded once the PR opens; merge remains gated on those checks passing per merge policy.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records changed files, validation status, policy result, risk result, merge status (not yet merged), deployment status, completion status (in_progress), and the remaining future enforcement risk.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "non_enforcement_boundary",
+      "file": "docs/specbridge-repository-health-summary.md",
+      "line": null,
+      "evidence": "The repository health summary documentation states that cleanup_permission and enforcement_status remain 'none' regardless of detected branch or artifact debt, and that the command never deletes, prunes, renames, moves, archives, compresses, uploads, fetches, pulls, or force-pushes.",
+      "recommendation": "Keep cleanup and enforcement disabled unless a future dedicated policy and execution contract authorize branch cleanup or artifact retention enforcement.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "Actual branch cleanup and artifact retention enforcement remain blocked until a future dedicated policy and execution contract authorize them."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-221-repository-health-summary.audit-packet.json",
+    ".specbridge/contracts/issue-221-repository-health-summary.execution.md",
+    ".specbridge/reports/issue-221-repository-health-summary.final-report.json"
+  ]
+}

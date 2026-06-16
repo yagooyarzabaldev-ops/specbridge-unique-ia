@@ -1,0 +1,40 @@
+{
+  "contract_id": "issue-221-repository-health-summary",
+  "run_id": "sb-20260615-0221a1b2",
+  "status": "active",
+  "exclusive_write": [
+    ".specbridge/contracts/issue-221-repository-health-summary.execution.md",
+    ".specbridge/scopes/issue-221-repository-health-summary.scope.json",
+    ".specbridge/reports/issue-221-repository-health-summary.final-report.json",
+    ".specbridge/audit-packets/issue-221-repository-health-summary.audit-packet.json",
+    ".specbridge/audits/issue-221-repository-health-summary.chatgpt-audit.json",
+    ".specbridge/repository-health/current.summary.json",
+    ".specbridge/artifact-inventory/current.inventory.json",
+    "docs/specbridge-repository-health-summary.md",
+    "docs/specbridge-artifact-inventory.md",
+    "docs/status-dashboard.html",
+    "docs/specbridge-studio.html",
+    "scripts/specbridge.ps1",
+    "scripts/lib/repository-health-summary.ps1",
+    "scripts/lib/artifact-inventory.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/state/current-goal.json",
+    ".specbridge/mcp-resources/operator-state.catalog.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    "scripts/lib/common.ps1",
+    "scripts/lib/branch-inventory.ps1",
+    "scripts/lib/branch-cleanup-policy.ps1",
+    "scripts/lib/artifact-retention-policy.ps1",
+    ".git"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-221-repository-health-summary.final-report.json"
+}

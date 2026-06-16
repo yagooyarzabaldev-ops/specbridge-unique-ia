@@ -2619,7 +2619,7 @@ try {
           "runtime_launches", "runtime_preflights", "runtime_results", "runtime_summaries",
           "runtime_runs", "runtime_executions", "orchestrations", "executor_packets",
           "github_evidence", "ledger", "mcp_resources", "artifact_inventory", "branch_inventory",
-          "branch_cleanup_policy", "artifact_retention_policy"
+          "branch_cleanup_policy", "artifact_retention_policy", "repository_health_summary"
         )
         $actualFamilyIds = $families | ForEach-Object { $_.family_id }
         $missingFamilies = $requiredFamilyIds | Where-Object { $actualFamilyIds -notcontains $_ }
@@ -3429,6 +3429,285 @@ try {
           }
         } else {
           Write-Output "FAIL specbridge-artifact-retention-policy-artifact-family: artifact_retention_policy family not found in artifact inventory."
+          $script:failed = $true
+        }
+      }
+    }
+
+    # specbridge-repository-health-summary tests
+
+    # 1. Command shape: exits 0, returns JSON with command and ok fields
+    $rhsResult = Invoke-Cli -Arguments @("specbridge-repository-health-summary")
+    Assert-Success `
+      -Name "specbridge-repository-health-summary" `
+      -Result $rhsResult `
+      -ExpectedPattern '"command"\s*:\s*"specbridge-repository-health-summary"'
+
+    # 2. Deterministic output: two read-only calls produce identical output
+    $rhsRepeatResult = Invoke-Cli -Arguments @("specbridge-repository-health-summary")
+    if ($rhsResult.ExitCode -eq 0 -and $rhsRepeatResult.ExitCode -eq 0) {
+      if ($rhsResult.Text.Trim() -ceq $rhsRepeatResult.Text.Trim()) {
+        Write-Output "PASS specbridge-repository-health-summary-deterministic: repeated read-only output is stable."
+      } else {
+        Write-Output "FAIL specbridge-repository-health-summary-deterministic: repeated read-only output changed."
+        $script:failed = $true
+      }
+    }
+
+    if ($rhsResult.ExitCode -eq 0) {
+      $rhsJson = $null
+      try { $rhsJson = $rhsResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      if ($null -eq $rhsJson) {
+        Write-Output "FAIL specbridge-repository-health-summary: output was not valid JSON."
+        $script:failed = $true
+      } else {
+        if ($rhsJson.ok -ne $true) {
+          Write-Output "FAIL specbridge-repository-health-summary: ok field is not true."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-repository-health-summary: ok is true."
+        }
+
+        # 3. Required top-level fields in summary
+        $requiredSummaryFields = @(
+          "command", "generated_at", "overall_health_posture", "branch_posture",
+          "artifact_posture", "policy_posture", "cleanup_permission", "enforcement_status",
+          "blocked_action_counts", "required_future_gates", "evidence_sources",
+          "non_enforcement_note", "read_only_note"
+        )
+        $summaryFieldNames = @($rhsJson.summary.PSObject.Properties.Name)
+        $missingSummaryFields = $requiredSummaryFields | Where-Object { $summaryFieldNames -notcontains $_ }
+        if ($missingSummaryFields.Count -gt 0) {
+          Write-Output "FAIL specbridge-repository-health-summary: summary missing fields: $($missingSummaryFields -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-repository-health-summary: summary has all required fields."
+        }
+
+        # cleanup_permission and enforcement_status must be "none"
+        if ($rhsJson.summary.cleanup_permission -ne "none") {
+          Write-Output "FAIL specbridge-repository-health-summary: cleanup_permission expected 'none', got '$($rhsJson.summary.cleanup_permission)'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-repository-health-summary: cleanup_permission is none."
+        }
+
+        if ($rhsJson.summary.enforcement_status -ne "none") {
+          Write-Output "FAIL specbridge-repository-health-summary: enforcement_status expected 'none', got '$($rhsJson.summary.enforcement_status)'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-repository-health-summary: enforcement_status is none."
+        }
+
+        # overall_health_posture must be a known value
+        $validPostures = @("stable_no_debt", "debt_present_cleanup_blocked")
+        if ($validPostures -notcontains $rhsJson.summary.overall_health_posture) {
+          Write-Output "FAIL specbridge-repository-health-summary: invalid overall_health_posture '$($rhsJson.summary.overall_health_posture)'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-repository-health-summary: overall_health_posture is valid."
+        }
+
+        # branch_posture fields
+        $requiredBranchPostureFields = @("total_refs", "local_branch_count", "origin_branch_count", "merged_into_main_count", "unmerged_into_main_count", "unknown_merge_status_count", "branch_mutation_policy")
+        $branchPostureFieldNames = @($rhsJson.summary.branch_posture.PSObject.Properties.Name)
+        $missingBranchPosture = $requiredBranchPostureFields | Where-Object { $branchPostureFieldNames -notcontains $_ }
+        if ($missingBranchPosture.Count -gt 0) {
+          Write-Output "FAIL specbridge-repository-health-summary: branch_posture missing fields: $($missingBranchPosture -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-repository-health-summary: branch_posture has all required fields."
+        }
+
+        if ($rhsJson.summary.branch_posture.branch_mutation_policy -ne "none") {
+          Write-Output "FAIL specbridge-repository-health-summary: branch_posture.branch_mutation_policy must be 'none'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-repository-health-summary: branch_posture.branch_mutation_policy is none."
+        }
+
+        # artifact_posture fields
+        $requiredArtifactPostureFields = @("family_count", "total_file_count", "total_bytes", "retention_enforcement")
+        $artifactPostureFieldNames = @($rhsJson.summary.artifact_posture.PSObject.Properties.Name)
+        $missingArtifactPosture = $requiredArtifactPostureFields | Where-Object { $artifactPostureFieldNames -notcontains $_ }
+        if ($missingArtifactPosture.Count -gt 0) {
+          Write-Output "FAIL specbridge-repository-health-summary: artifact_posture missing fields: $($missingArtifactPosture -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-repository-health-summary: artifact_posture has all required fields."
+        }
+
+        if ($rhsJson.summary.artifact_posture.retention_enforcement -ne "none") {
+          Write-Output "FAIL specbridge-repository-health-summary: artifact_posture.retention_enforcement must be 'none'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-repository-health-summary: artifact_posture.retention_enforcement is none."
+        }
+
+        # policy_posture fields
+        $requiredPolicyPostureFields = @("branch_cleanup_policy", "artifact_retention_policy")
+        $policyPostureFieldNames = @($rhsJson.summary.policy_posture.PSObject.Properties.Name)
+        $missingPolicyPosture = $requiredPolicyPostureFields | Where-Object { $policyPostureFieldNames -notcontains $_ }
+        if ($missingPolicyPosture.Count -gt 0) {
+          Write-Output "FAIL specbridge-repository-health-summary: policy_posture missing fields: $($missingPolicyPosture -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-repository-health-summary: policy_posture has all required fields."
+        }
+
+        $requiredPolicyEntryFields = @("policy_id", "status", "enforcement", "cleanup_permission")
+        foreach ($policyEntryName in @("branch_cleanup_policy", "artifact_retention_policy")) {
+          $policyEntry = $rhsJson.summary.policy_posture.$policyEntryName
+          $policyEntryFieldNames = @($policyEntry.PSObject.Properties.Name)
+          $missingPolicyEntry = $requiredPolicyEntryFields | Where-Object { $policyEntryFieldNames -notcontains $_ }
+          if ($missingPolicyEntry.Count -gt 0) {
+            Write-Output "FAIL specbridge-repository-health-summary: policy_posture.$policyEntryName missing fields: $($missingPolicyEntry -join ', ')."
+            $script:failed = $true
+          } elseif ($policyEntry.cleanup_permission -ne "none") {
+            Write-Output "FAIL specbridge-repository-health-summary: policy_posture.$policyEntryName.cleanup_permission must be 'none'."
+            $script:failed = $true
+          } else {
+            Write-Output "PASS specbridge-repository-health-summary: policy_posture.$policyEntryName has required fields and cleanup_permission=none."
+          }
+        }
+
+        # blocked_action_counts fields and arithmetic
+        $requiredBlockedFields = @("branch_cleanup_blocked", "artifact_retention_blocked", "total_blocked")
+        $blockedFieldNames = @($rhsJson.summary.blocked_action_counts.PSObject.Properties.Name)
+        $missingBlockedFields = $requiredBlockedFields | Where-Object { $blockedFieldNames -notcontains $_ }
+        if ($missingBlockedFields.Count -gt 0) {
+          Write-Output "FAIL specbridge-repository-health-summary: blocked_action_counts missing fields: $($missingBlockedFields -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-repository-health-summary: blocked_action_counts has all required fields."
+        }
+
+        $expectedTotalBlocked = [int] $rhsJson.summary.blocked_action_counts.branch_cleanup_blocked + [int] $rhsJson.summary.blocked_action_counts.artifact_retention_blocked
+        if ([int] $rhsJson.summary.blocked_action_counts.total_blocked -ne $expectedTotalBlocked) {
+          Write-Output "FAIL specbridge-repository-health-summary: blocked_action_counts.total_blocked expected $expectedTotalBlocked, got $($rhsJson.summary.blocked_action_counts.total_blocked)."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-repository-health-summary: blocked_action_counts.total_blocked matches sum of components."
+        }
+
+        # required_future_gates must be non-empty
+        $rhsGates = @($rhsJson.summary.required_future_gates)
+        if ($rhsGates.Count -eq 0) {
+          Write-Output "FAIL specbridge-repository-health-summary: required_future_gates is empty."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-repository-health-summary: required_future_gates has $($rhsGates.Count) entries."
+        }
+
+        # evidence_sources must reference the four evidence builders
+        $rhsSources = @($rhsJson.summary.evidence_sources | ForEach-Object { $_.evidence_id })
+        $expectedSources = @("branch_inventory", "branch_cleanup_policy", "artifact_inventory", "artifact_retention_policy")
+        $missingSources = $expectedSources | Where-Object { $rhsSources -notcontains $_ }
+        if ($missingSources.Count -gt 0) {
+          Write-Output "FAIL specbridge-repository-health-summary: evidence_sources missing: $($missingSources -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-repository-health-summary: evidence_sources references all four evidence builders."
+        }
+
+        # read_only_note and non_enforcement_note must mention key blocked verbs
+        foreach ($blockedVerb in @("delete", "prune", "rename", "move", "archive", "fetch", "pull", "force-push")) {
+          if ($rhsJson.summary.read_only_note -notmatch [regex]::Escape($blockedVerb)) {
+            Write-Output "FAIL specbridge-repository-health-summary: read_only_note missing '$blockedVerb'."
+            $script:failed = $true
+          }
+        }
+      }
+    }
+
+    # 4. No mutation without OutputPath: no summary file written
+    $rhsArtifact = Join-Path (Get-Location).Path ".specbridge/repository-health/current.summary.json"
+    $rhsArtifactExistedBefore = Test-Path $rhsArtifact
+    $rhsArtifactOriginalRaw = $null
+    if ($rhsArtifactExistedBefore) {
+      $rhsArtifactOriginalRaw = Get-Content $rhsArtifact -Raw -Encoding UTF8
+    }
+    Remove-Item $rhsArtifact -Force -ErrorAction SilentlyContinue
+    $rhsNoPathResult = Invoke-Cli -Arguments @("specbridge-repository-health-summary")
+    if (Test-Path $rhsArtifact) {
+      Write-Output "FAIL specbridge-repository-health-summary-no-mutation: summary file was written without -OutputPath."
+      $script:failed = $true
+    } else {
+      Write-Output "PASS specbridge-repository-health-summary-no-mutation: no summary file written without -OutputPath."
+    }
+
+    # 5. OutputPath behavior: writes summary to declared path
+    $rhsOutputResult = Invoke-Cli -Arguments @("specbridge-repository-health-summary", "-OutputPath", ".specbridge/repository-health/current.summary.json", "-Force")
+    Assert-Success `
+      -Name "specbridge-repository-health-summary-output-path" `
+      -Result $rhsOutputResult `
+      -ExpectedPattern '"output_path"'
+
+    if ($rhsOutputResult.ExitCode -eq 0) {
+      if (-not (Test-Path $rhsArtifact)) {
+        Write-Output "FAIL specbridge-repository-health-summary-output-path: summary file was not written."
+        $script:failed = $true
+      } else {
+        $rhsWrittenSummary = $null
+        try {
+          $rhsWrittenSummary = Get-Content $rhsArtifact -Raw -Encoding UTF8 | ConvertFrom-Json
+        } catch {}
+        if ($null -eq $rhsWrittenSummary) {
+          Write-Output "FAIL specbridge-repository-health-summary-output-path: written summary is not valid JSON."
+          $script:failed = $true
+        } elseif ($rhsWrittenSummary.command -ne "specbridge-repository-health-summary") {
+          Write-Output "FAIL specbridge-repository-health-summary-output-path: written summary command field mismatch."
+          $script:failed = $true
+        } elseif ($rhsWrittenSummary.cleanup_permission -ne "none") {
+          Write-Output "FAIL specbridge-repository-health-summary-output-path: written summary cleanup_permission must be 'none'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-repository-health-summary-output-path: summary file written, valid, cleanup_permission=none."
+        }
+      }
+
+      # 6. Force required when replacing
+      $rhsExistingResult = Invoke-Cli -Arguments @("specbridge-repository-health-summary", "-OutputPath", ".specbridge/repository-health/current.summary.json")
+      Assert-Failure `
+        -Name "specbridge-repository-health-summary-output-path-requires-force" `
+        -Result $rhsExistingResult `
+        -ExpectedPattern "use -Force"
+    }
+
+    # Restore artifact state after mutation tests
+    if ($rhsArtifactExistedBefore) {
+      $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+      [System.IO.File]::WriteAllText($rhsArtifact, $rhsArtifactOriginalRaw, $utf8NoBom)
+    } else {
+      Remove-Item $rhsArtifact -Force -ErrorAction SilentlyContinue
+    }
+
+    # 7. OutputPath outside the contract artifact must fail
+    $rhsBadPathResult = Invoke-Cli -Arguments @("specbridge-repository-health-summary", "-OutputPath", "docs/bad-repository-health-summary.json")
+    Assert-Failure `
+      -Name "specbridge-repository-health-summary-bad-output-path" `
+      -Result $rhsBadPathResult `
+      -ExpectedPattern "OutputPath must be .specbridge/repository-health/current.summary.json"
+
+    # 8. artifact-inventory includes repository_health_summary family
+    $rhsAiResult = Invoke-Cli -Arguments @("specbridge-artifact-inventory")
+    if ($rhsAiResult.ExitCode -eq 0) {
+      $rhsAiJson = $null
+      try { $rhsAiJson = $rhsAiResult.Text.Trim() | ConvertFrom-Json } catch {}
+      if ($null -ne $rhsAiJson) {
+        $rhsFamilies = @($rhsAiJson.inventory.families)
+        $rhsFamilyIds = $rhsFamilies | ForEach-Object { $_.family_id }
+        if ($rhsFamilyIds -contains "repository_health_summary") {
+          $rhsFamily = $rhsFamilies | Where-Object { $_.family_id -eq "repository_health_summary" }
+          if ($rhsFamily.repository_path -eq ".specbridge/repository-health" -and $rhsFamily.cleanup_permission -eq "none") {
+            Write-Output "PASS specbridge-repository-health-summary-artifact-family: repository_health_summary family present with correct path and cleanup_permission=none."
+          } else {
+            Write-Output "FAIL specbridge-repository-health-summary-artifact-family: repository_health_summary family has unexpected path or cleanup_permission."
+            $script:failed = $true
+          }
+        } else {
+          Write-Output "FAIL specbridge-repository-health-summary-artifact-family: repository_health_summary family not found in artifact inventory."
           $script:failed = $true
         }
       }

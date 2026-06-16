@@ -67,6 +67,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 spe
 | branch_inventory     | .specbridge/branch-inventory          |
 | branch_cleanup_policy | .specbridge/branch-cleanup            |
 | artifact_retention_policy | .specbridge/artifact-retention    |
+| repository_health_summary | .specbridge/repository-health     |
 
 ## Parameters
 

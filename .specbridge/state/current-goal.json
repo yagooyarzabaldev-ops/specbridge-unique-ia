@@ -1,12 +1,12 @@
 {
-  "current_task_id": "ready-for-next-task",
-  "run_id": null,
-  "title": "Ready for next governed operator task",
-  "status": "ready_for_next_task",
-  "primary_pr": 219,
+  "current_task_id": "issue-221-repository-health-summary",
+  "run_id": "sb-20260615-0221a1b2",
+  "title": "Add repository health summary evidence command",
+  "status": "active",
+  "primary_pr": 222,
   "closure_pr": null,
   "last_completed_task_id": "issue-218-artifact-retention-policy-draft",
   "last_completed_run_id": "sb-20260615-0218a1b2",
-  "last_updated": "2026-06-15T23:20:40Z",
-  "updated_by": "ChatGPT/Codex post-merge closure"
+  "last_updated": "2026-06-16T00:43:50Z",
+  "updated_by": "ChatGPT/Codex"
 }

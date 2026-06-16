@@ -72,13 +72,16 @@ SpecBridge currently has:
 
 ## Next Recommended Task
 
-**Ready for next governed operator task.**
+**Active governed operator task: issue-221 repository health summary evidence.**
 
-Recommended order:
+Primary PR: #222 (`Add repository health summary evidence`) is open against `main`.
 
-1. Keep branch cleanup and artifact retention enforcement disabled until future dedicated contracts explicitly authorize activation.
-2. Use `specbridge-branch-inventory`, `specbridge-branch-cleanup-policy`, `specbridge-artifact-inventory`, and `specbridge-artifact-retention-policy` as read-only repository health evidence.
-3. Prefer the next governed infrastructure-hardening issue over feature expansion unless a new execution contract says otherwise.
+Immediate order:
+
+1. Add a deterministic read-only repository health summary command.
+2. Aggregate branch inventory, branch cleanup policy, artifact inventory, and artifact retention policy evidence.
+3. Keep all cleanup permissions and enforcement disabled.
+4. Validate contract, scope, CLI tests, final report, audit packet, ChatGPT audit, full smoke, and diff hygiene before PR/CI. Local validations passed; GitHub CI is pending on PR #222.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;

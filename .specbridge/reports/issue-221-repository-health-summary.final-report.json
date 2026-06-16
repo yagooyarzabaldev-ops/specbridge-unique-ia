@@ -1,0 +1,41 @@
+{
+  "summary": "Implemented the specbridge-repository-health-summary read-only CLI command, which aggregates branch inventory, branch cleanup policy, artifact inventory, and artifact retention policy evidence into one deterministic summary with overall health posture, branch/artifact/policy posture, cleanup_permission=none, enforcement_status=none, blocked action counts, required future gates, evidence source paths, and explicit non-enforcement/read-only notes. The command writes only the governed repository health summary artifact when explicitly requested and performs no branch mutation, artifact mutation, cleanup apply mode, retention enforcement, or network calls.",
+  "changed_files": [
+    ".specbridge/artifact-inventory/current.inventory.json",
+    ".specbridge/audit-packets/issue-221-repository-health-summary.audit-packet.json",
+    ".specbridge/audits/issue-221-repository-health-summary.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-221-repository-health-summary.execution.md",
+    ".specbridge/mcp-resources/operator-state.catalog.json",
+    ".specbridge/repository-health/current.summary.json",
+    ".specbridge/reports/issue-221-repository-health-summary.final-report.json",
+    ".specbridge/scopes/issue-221-repository-health-summary.scope.json",
+    ".specbridge/state/current-goal.json",
+    "docs/specbridge-artifact-inventory.md",
+    "docs/specbridge-repository-health-summary.md",
+    "docs/specbridge-studio.html",
+    "docs/status-dashboard.html",
+    "scripts/lib/artifact-inventory.ps1",
+    "scripts/lib/repository-health-summary.ps1",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "git diff --check: passed"
+  ],
+  "policy_result": "Within policy. All changed files are inside the issue-221 exclusive_write scope. No protected files, secrets, production configuration, billing, authentication, authorization, database, dependency, deployment, workflow, CI/CD security, operator decision registry, issue #194, or digital twin changes are included.",
+  "risk_result": "Within bounds. The command is read-only when -OutputPath is omitted, reads local branch and artifact evidence builders only, performs no network calls, and the only allowed write path is the governed repository health summary artifact. cleanup_permission and enforcement_status remain 'none' regardless of detected branch or artifact debt. The feature performs no branch deletion, branch pruning, remote pruning, branch rename, branch movement, branch archival, force push, fetch, pull, artifact deletion, artifact movement, artifact compression, artifact pruning, artifact archival, artifact upload, artifact remote mutation, retention enforcement, or cleanup apply mode.",
+  "unresolved_risks": [
+    "Actual branch cleanup and artifact retention enforcement remain blocked until a future dedicated policy and execution contract authorize them."
+  ],
+  "merge_status": "Not yet merged. PR #222 is open and pending GitHub CI, review gate, and security gate evidence before squash merge is authorized.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "in_progress"
+}
