@@ -2559,7 +2559,177 @@ try {
       -Result $mcpBadPathResult `
       -ExpectedPattern "OutputPath must be .specbridge/mcp-resources/operator-state.catalog.json"
 
+    # specbridge-token-governance-status tests
+
+    $tgsResult = Invoke-Cli -Arguments @("specbridge-token-governance-status")
+    Assert-Success `
+      -Name "specbridge-token-governance-status" `
+      -Result $tgsResult `
+      -ExpectedPattern '"command"\s*:\s*"specbridge-token-governance-status"'
+
+    $tgsRepeatResult = Invoke-Cli -Arguments @("specbridge-token-governance-status")
+    if ($tgsResult.ExitCode -eq 0 -and $tgsRepeatResult.ExitCode -eq 0) {
+      if ($tgsResult.Text -eq $tgsRepeatResult.Text) {
+        Write-Output "PASS specbridge-token-governance-status-deterministic: repeated read-only output is stable."
+      } else {
+        Write-Output "FAIL specbridge-token-governance-status-deterministic: repeated read-only output changed."
+        $script:failed = $true
+      }
+    }
+
+    if ($tgsResult.ExitCode -eq 0) {
+      $tgsJson = $null
+      try { $tgsJson = $tgsResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      if ($null -eq $tgsJson) {
+        Write-Output "FAIL specbridge-token-governance-status: output was not valid JSON."
+        $script:failed = $true
+      } else {
+        $requiredTgsFields = @(
+          "schema_version",
+          "governance_id",
+          "provider_sources",
+          "codex_context_governance",
+          "claude_code_runtime_governance",
+          "mcp_tool_context_governance",
+          "multi_agent_slice_governance",
+          "blocked_disclosures",
+          "evidence_requirements",
+          "policy_boundary",
+          "execution_policy",
+          "evidence_sources"
+        )
+        $missingTgsFields = $requiredTgsFields | Where-Object { -not ($tgsJson.PSObject.Properties.Name -contains $_) }
+        if ($missingTgsFields.Count -gt 0) {
+          Write-Output "FAIL specbridge-token-governance-status: missing fields: $($missingTgsFields -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-token-governance-status: required fields present."
+        }
+
+        if ($tgsJson.ok -ne $true) {
+          Write-Output "FAIL specbridge-token-governance-status: ok field is not true."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-token-governance-status: ok is true."
+        }
+
+        $providerSources = @($tgsJson.provider_sources)
+        $hasAnthropic = (@($providerSources | Where-Object { $_.provider -eq "Anthropic" }).Count -gt 0)
+        $hasOpenAi = (@($providerSources | Where-Object { $_.provider -eq "OpenAI" }).Count -gt 0)
+        if ($hasAnthropic -and $hasOpenAi) {
+          Write-Output "PASS specbridge-token-governance-status: Anthropic and OpenAI sources are recorded."
+        } else {
+          Write-Output "FAIL specbridge-token-governance-status: expected Anthropic and OpenAI sources."
+          $script:failed = $true
+        }
+
+        if ($tgsJson.claude_code_runtime_governance.max_budget_usd_default -eq "2.00" -and $tgsJson.claude_code_runtime_governance.max_budget_usd_ceiling -eq "10.00") {
+          Write-Output "PASS specbridge-token-governance-status: max_budget_usd default and ceiling are recorded."
+        } else {
+          Write-Output "FAIL specbridge-token-governance-status: max_budget_usd default or ceiling mismatch."
+          $script:failed = $true
+        }
+
+        if ([int] $tgsJson.claude_code_runtime_governance.max_turns_default -eq 8 -and (@($tgsJson.claude_code_runtime_governance.conditional_flags) -contains "--max-turns")) {
+          Write-Output "PASS specbridge-token-governance-status: max_turns policy is recorded."
+        } else {
+          Write-Output "FAIL specbridge-token-governance-status: max_turns policy missing."
+          $script:failed = $true
+        }
+
+        $blockedDisclosures = @($tgsJson.blocked_disclosures)
+        $requiredBlocked = @("provider API keys", "OAuth tokens", "raw hidden prompts", "raw ChatGPT transcripts", "raw unbounded stdout", "raw unbounded stderr")
+        $missingBlocked = $requiredBlocked | Where-Object { $blockedDisclosures -notcontains $_ }
+        if ($missingBlocked.Count -eq 0) {
+          Write-Output "PASS specbridge-token-governance-status: blocked disclosures are recorded."
+        } else {
+          Write-Output "FAIL specbridge-token-governance-status: missing blocked disclosures: $($missingBlocked -join ', ')."
+          $script:failed = $true
+        }
+
+        if ($tgsJson.execution_policy.launches_claude -eq $false -and $tgsJson.execution_policy.calls_network -eq $false -and $tgsJson.execution_policy.reads_secrets -eq $false -and $tgsJson.execution_policy.changes_billing -eq $false) {
+          Write-Output "PASS specbridge-token-governance-status: read-only/no-secret/no-billing execution policy recorded."
+        } else {
+          Write-Output "FAIL specbridge-token-governance-status: execution policy boundary mismatch."
+          $script:failed = $true
+        }
+      }
+    }
+
+    $tgsStatusPath = ".specbridge/token-governance/current.status.json"
+    $tgsBefore = if (Test-Path $tgsStatusPath) { Get-Content $tgsStatusPath -Raw -Encoding UTF8 } else { $null }
+    $tgsNoPathResult = Invoke-Cli -Arguments @("specbridge-token-governance-status")
+    $tgsAfter = if (Test-Path $tgsStatusPath) { Get-Content $tgsStatusPath -Raw -Encoding UTF8 } else { $null }
+    if ($tgsNoPathResult.ExitCode -eq 0 -and $tgsBefore -eq $tgsAfter) {
+      Write-Output "PASS specbridge-token-governance-status-no-mutation: status artifact unchanged without -OutputPath."
+    } else {
+      Write-Output "FAIL specbridge-token-governance-status-no-mutation: status artifact changed without -OutputPath."
+      $script:failed = $true
+    }
+
+    $tgsTempPath = ".specbridge/token-governance/test-token-governance.status.json"
+    Remove-Item $tgsTempPath -Force -ErrorAction SilentlyContinue
+    $tgsOutputResult = Invoke-Cli -Arguments @("specbridge-token-governance-status", "-OutputPath", $tgsTempPath)
+    Assert-Success `
+      -Name "specbridge-token-governance-status-output-path" `
+      -Result $tgsOutputResult `
+      -ExpectedPattern '"writes_output_artifact"\s*:\s*true'
+
+    if ($tgsOutputResult.ExitCode -eq 0) {
+      if (-not (Test-Path $tgsTempPath)) {
+        Write-Output "FAIL specbridge-token-governance-status-output-path: status file was not written."
+        $script:failed = $true
+      } else {
+        try {
+          $tgsWritten = Get-Content $tgsTempPath -Raw -Encoding UTF8 | ConvertFrom-Json
+          if ($tgsWritten.command -eq "specbridge-token-governance-status" -and $tgsWritten.execution_policy.writes_output_artifact -eq $true) {
+            Write-Output "PASS specbridge-token-governance-status-output-path: status file written and valid."
+          } else {
+            Write-Output "FAIL specbridge-token-governance-status-output-path: written status fields mismatch."
+            $script:failed = $true
+          }
+        } catch {
+          Write-Output "FAIL specbridge-token-governance-status-output-path: written status was not valid JSON."
+          $script:failed = $true
+        }
+      }
+
+      $tgsExistingResult = Invoke-Cli -Arguments @("specbridge-token-governance-status", "-OutputPath", $tgsTempPath)
+      Assert-Failure `
+        -Name "specbridge-token-governance-status-output-path-requires-force" `
+        -Result $tgsExistingResult `
+        -ExpectedPattern "OutputPath already exists; use -Force"
+    }
+    Remove-Item $tgsTempPath -Force -ErrorAction SilentlyContinue
+
+    $tgsBadPathResult = Invoke-Cli -Arguments @("specbridge-token-governance-status", "-OutputPath", "docs/bad-token-governance.json")
+    Assert-Failure `
+      -Name "specbridge-token-governance-status-bad-output-path" `
+      -Result $tgsBadPathResult `
+      -ExpectedPattern "OutputPath must point to"
+
+    $fpMalformedBranchResult = Invoke-Cli -Arguments @("specbridge-doctor", "-FixPlan")
+    if ($fpMalformedBranchResult.ExitCode -eq 0) {
+      try {
+        $fpMalformedBranchJson = $fpMalformedBranchResult.Text | ConvertFrom-Json
+        if (@($fpMalformedBranchJson.warnings) -contains "branch_convention_violation:#") {
+          Write-Output "FAIL fix-plan-no-empty-branch-warning: malformed branch_convention_violation:# warning present."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS fix-plan-no-empty-branch-warning: malformed branch_convention_violation:# warning absent."
+        }
+      } catch {
+        Write-Output "FAIL fix-plan-no-empty-branch-warning: output was not valid JSON."
+        $script:failed = $true
+      }
+    } else {
+      Write-Output "FAIL fix-plan-no-empty-branch-warning: command failed."
+      $script:failed = $true
+    }
+
     # specbridge-artifact-inventory tests
+
 
     # 1. Command shape: exits 0, returns JSON with command and ok fields
     $aiResult = Invoke-Cli -Arguments @("specbridge-artifact-inventory")

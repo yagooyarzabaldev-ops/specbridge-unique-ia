@@ -1,0 +1,212 @@
+{
+    "command":  "specbridge-token-governance-status",
+    "ok":  true,
+    "schema_version":  "1",
+    "governance_id":  "specbridge-token-context-governance",
+    "status":  "active",
+    "retrieved_at":  "2026-06-16",
+    "policy_path":  ".specbridge/policies/token-context-governance.json",
+    "provider_sources":  [
+                             {
+                                 "provider":  "Anthropic",
+                                 "surface":  "Claude Code CLI",
+                                 "url":  "https://code.claude.com/docs/en/cli-reference",
+                                 "guidance":  [
+                                                  "Use non-interactive print mode for bounded automation.",
+                                                  "Use --max-budget-usd for dollar budget limits in print mode.",
+                                                  "Use --max-turns when the installed Claude Code CLI supports it.",
+                                                  "Use --no-session-persistence for bounded automation sessions."
+                                              ]
+                             },
+                             {
+                                 "provider":  "Anthropic",
+                                 "surface":  "Claude Code costs",
+                                 "url":  "https://code.claude.com/docs/en/costs",
+                                 "guidance":  [
+                                                  "Token cost scales with context size.",
+                                                  "Keep context small, clear between unrelated tasks, and use compaction deliberately.",
+                                                  "Use usage/status signals during interactive operation."
+                                              ]
+                             },
+                             {
+                                 "provider":  "Anthropic",
+                                 "surface":  "Claude Code settings",
+                                 "url":  "https://code.claude.com/docs/en/settings",
+                                 "guidance":  [
+                                                  "Use filesystem sandbox and permission rules to constrain file and tool access.",
+                                                  "Control reads, edits, and network domains explicitly."
+                                              ]
+                             },
+                             {
+                                 "provider":  "Anthropic",
+                                 "surface":  "Claude Code MCP",
+                                 "url":  "https://code.claude.com/docs/en/mcp",
+                                 "guidance":  [
+                                                  "Use MCP tool search or equivalent deferral so tool definitions do not consume unnecessary context.",
+                                                  "Keep MCP server instructions concise and put critical details first."
+                                              ]
+                             },
+                             {
+                                 "provider":  "Anthropic",
+                                 "surface":  "Claude API context windows",
+                                 "url":  "https://platform.claude.com/docs/en/build-with-claude/context-windows",
+                                 "guidance":  [
+                                                  "Input, output, tool, and thinking tokens count toward context and billing boundaries.",
+                                                  "Preserve required thinking/tool-use blocks when using API-level tool results."
+                                              ]
+                             },
+                             {
+                                 "provider":  "Anthropic",
+                                 "surface":  "Claude API prompt caching",
+                                 "url":  "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+                                 "guidance":  [
+                                                  "Cache stable prompt prefixes when repetitive context is unavoidable.",
+                                                  "Keep volatile task state after stable context so caches remain useful."
+                                              ]
+                             },
+                             {
+                                 "provider":  "Anthropic",
+                                 "surface":  "Claude Code GitHub Actions",
+                                 "url":  "https://code.claude.com/docs/en/github-actions",
+                                 "guidance":  [
+                                                  "Never commit API keys.",
+                                                  "Use GitHub Secrets for provider keys.",
+                                                  "Limit workflow permissions and require review before merge."
+                                              ]
+                             },
+                             {
+                                 "provider":  "OpenAI",
+                                 "surface":  "Codex manual",
+                                 "url":  "https://developers.openai.com/codex/codex-manual.md",
+                                 "guidance":  [
+                                                  "Use explicit task context and durable AGENTS.md guidance.",
+                                                  "Keep AGENTS.md practical and concise.",
+                                                  "Codex tracks context-window pressure and can compact long tasks.",
+                                                  "Structured logs can include token-count telemetry for completed responses."
+                                              ]
+                             }
+                         ],
+    "codex_context_governance":  {
+                                     "context_source":  "repository_structured_context_only",
+                                     "must_use":  [
+                                                      "README.md",
+                                                      "SPECBRIDGE.md",
+                                                      "AGENTS.md",
+                                                      ".specbridge/policy.yaml",
+                                                      ".specbridge/context/CURRENT_GOAL.md",
+                                                      "active execution contract",
+                                                      "active scope manifest"
+                                                  ],
+                                     "must_not_use":  [
+                                                          "raw ChatGPT transcript as executor prompt",
+                                                          "secrets or provider tokens",
+                                                          "irrelevant historical conversation noise",
+                                                          "hidden system or developer instructions"
+                                                      ],
+                                     "compaction_policy":  "Summaries may preserve task goal, scope, policy boundaries, validations, changed files, and blockers only.",
+                                     "audit_policy":  "Codex audit receives evidence packets, final reports, changed-file summaries, validation results, and policy status rather than raw secrets or unbounded outputs."
+                                 },
+    "claude_code_runtime_governance":  {
+                                           "required_mode":  "non_interactive_print_mode",
+                                           "required_flags":  [
+                                                                  "-p",
+                                                                  "--no-session-persistence",
+                                                                  "--max-budget-usd",
+                                                                  "--permission-mode",
+                                                                  "--tools",
+                                                                  "--allowedTools",
+                                                                  "--input-format text"
+                                                              ],
+                                           "conditional_flags":  [
+                                                                     "--max-turns"
+                                                                 ],
+                                           "max_budget_usd_default":  "2.00",
+                                           "max_budget_usd_ceiling":  "10.00",
+                                           "max_turns_default":  8,
+                                           "max_turns_policy":  "Use --max-turns for live launches only when the installed Claude Code CLI exposes the flag; otherwise record the unsupported capability and rely on max_budget_usd plus TimeoutSeconds.",
+                                           "timeout_seconds_default":  300,
+                                           "timeout_seconds_ceiling":  3600,
+                                           "permission_modes_allowed":  [
+                                                                            "acceptEdits",
+                                                                            "auto",
+                                                                            "default",
+                                                                            "dontAsk",
+                                                                            "plan"
+                                                                        ],
+                                           "tools_allowed":  [
+                                                                 "Read",
+                                                                 "Write",
+                                                                 "Edit"
+                                                             ],
+                                           "dangerous_permission_bypass_allowed":  false
+                                       },
+    "mcp_tool_context_governance":  {
+                                        "tool_loading_policy":  "Prefer deferred tool discovery/search over loading every tool schema into the executor context.",
+                                        "instruction_policy":  "Keep server instructions short, task-specific, and front-loaded with critical boundaries.",
+                                        "specbridge_policy":  "MCP resources exposed by SpecBridge remain read-only until a dedicated execution contract authorizes mutation."
+                                    },
+    "multi_agent_slice_governance":  {
+                                         "slice_prompt_policy":  "Each Claude Code slice receives only its contract, scope, read-only context, exclusive write paths, validations, stop conditions, and final report expectations.",
+                                         "parallelism_policy":  "Parallel executors require non-overlapping exclusive_write scopes and a preflight budget check before launch.",
+                                         "budget_policy":  "Budget is tracked per launch and aggregated by coordinator evidence; no slice may raise budget or widen tools after live execution starts unless the contract explicitly allows it.",
+                                         "usage_limit_policy":  "Usage-limit or budget-limit failures are runtime evidence, not proof of implementation failure. Retry only when the contract allows a bounded retry."
+                                     },
+    "blocked_disclosures":  [
+                                "provider API keys",
+                                "OAuth tokens",
+                                "private keys",
+                                "secrets",
+                                "raw hidden prompts",
+                                "raw ChatGPT transcripts",
+                                "raw unbounded stdout",
+                                "raw unbounded stderr",
+                                "billing account identifiers",
+                                "production credentials"
+                            ],
+    "evidence_requirements":  [
+                                  "execution contract",
+                                  "scope manifest",
+                                  "runtime launch plan",
+                                  "runtime execution artifact for live launches",
+                                  "runtime result or summary when applicable",
+                                  "validation results",
+                                  "final report",
+                                  "audit packet",
+                                  "ChatGPT/Codex audit"
+                              ],
+    "policy_boundary":  {
+                            "launches_claude":  false,
+                            "launches_codex":  false,
+                            "calls_network":  false,
+                            "mutates_github":  false,
+                            "reads_secrets":  false,
+                            "changes_billing":  false,
+                            "changes_ci_cd_security":  false,
+                            "deploys":  false
+                        },
+    "execution_policy":  {
+                             "launches_claude":  false,
+                             "launches_codex":  false,
+                             "calls_network":  false,
+                             "mutates_github":  false,
+                             "reads_secrets":  false,
+                             "changes_billing":  false,
+                             "changes_ci_cd_security":  false,
+                             "deploys":  false,
+                             "writes_output_artifact":  true
+                         },
+    "evidence_sources":  [
+                             ".specbridge/policies/token-context-governance.json",
+                             ".specbridge/contracts/issue-224-token-context-governance.execution.md",
+                             ".specbridge/scopes/issue-224-token-context-governance.scope.json",
+                             "docs/specbridge-token-context-governance.md",
+                             "scripts/lib/runtime.ps1",
+                             ".claude/settings.json"
+                         ],
+    "notes":  [
+                  "This command is deterministic and reads local repository policy only.",
+                  "It does not launch Claude Code or Codex.",
+                  "It does not inspect, reveal, persist, or request provider tokens.",
+                  "It does not change real billing, provider account settings, CI/CD security, cleanup enforcement, or deployment."
+              ]
+}

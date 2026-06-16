@@ -72,16 +72,25 @@ SpecBridge currently has:
 - Artifact retention policy draft (specbridge-artifact-retention-policy: deterministic read-only artifact family classification with enforcement=none, cleanup_permission=none, future activation gates, and blocked cleanup commands/actions)
 - Repository health summary evidence (specbridge-repository-health-summary: deterministic read-only aggregate over branch inventory, branch cleanup policy, artifact inventory, and artifact retention policy with cleanup_permission=none and enforcement_status=none)
 
-## Next Recommended Task
+## Active Task
 
-**Ready for next governed operator task.**
+**Issue #224: Add token and context governance standard.**
 
-Issue #221 repository health summary evidence is complete. PR #222 merged on 2026-06-16 with squash commit `e0f23bd07b51c52644cff415fa56959670025abc`; issue #221 is closed as completed and post-merge closure evidence is recorded.
+Issue #224 is the active governed operator task. The task adds repository-local token/context governance for Codex and Claude Code, aligned with current official provider guidance, and fixes the online doctor false-warning edge where no current PR exists.
+
+Active task evidence:
+
+- Contract: `.specbridge/contracts/issue-224-token-context-governance.execution.md`
+- Scope: `.specbridge/scopes/issue-224-token-context-governance.scope.json`
+- Run id: `sb-20260616-0224a11d`
+- GitHub issue: https://github.com/yagooyarzabaldev-ops/specbridge/issues/224
+- Pull request: https://github.com/yagooyarzabaldev-ops/specbridge/pull/225
+- CI status: passed 4/4 on 2026-06-16
 
 Immediate order:
 
 1. Run `specbridge-doctor -FixPlan` and `specbridge-next-task` before selecting the next task.
-2. Prefer the next repository-backed task recorded in operator evidence over chat-memory inference.
+2. Complete issue #224 inside its contract and scope.
 3. Keep cleanup and retention enforcement disabled unless a future dedicated policy and execution contract authorize them.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is

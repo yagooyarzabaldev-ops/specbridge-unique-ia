@@ -1,0 +1,82 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-224-token-context-governance",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-224-token-context-governance.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-224-token-context-governance.execution.md",
+  "final_report_path": ".specbridge/reports/issue-224-token-context-governance.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "The implementation adds a repository-local token/context governance policy, documentation, deterministic status command, file-backed status artifact, tests, and a doctor false-warning fix matching the issue-224 contract.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "The status command reports provider sources, Codex context governance, Claude Code runtime governance, MCP/tool context governance, multi-agent slice governance, blocked disclosures, evidence requirements, and read-only execution policy. CLI tests cover command shape, determinism, output path behavior, force behavior, bad paths, blocked disclosures, max budget, max turns policy, and the malformed doctor warning edge.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "Changed files are declared in issue-224 scope. No workflows, protected env files, secrets, provider keys, production configuration, billing configuration, authentication, authorization, database, dependency, deployment, cleanup enforcement, retention enforcement, issue #194, or digital twin files were changed.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The token governance command reads local repository policy only, does not launch providers, does not call the network, does not inspect secrets, and explicitly blocks provider keys, OAuth tokens, raw hidden prompts, raw ChatGPT transcripts, raw unbounded stdout, and raw unbounded stderr.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "The contract, scope, policy, status artifact, docs, CLI source, tests, ledger, current-goal memory, dashboards, MCP catalog, final report, audit packet, and audit are all listed in exclusive_write.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "Focused local validations passed: validate-contracts, validate-contract-scopes, test-specbridge-cli, git diff --check, and a bounded Claude Code auxiliary review returned no blocking findings.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "Local validation evidence is recorded in the audit packet. GitHub Actions passed on PR #225: Foundation Validation, SpecBridge Review Gate, SpecBridge PR Review Report, and Claude Review Non Blocking.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report states local validation status, pending PR/CI merge status, deployment not applicable, and unresolved risks including future --max-turns enforcement and provider-doc refresh.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "conditional_max_turns",
+      "file": "docs/specbridge-token-context-governance.md",
+      "line": null,
+      "evidence": "The standard records --max-turns as current provider guidance but keeps live runner usage conditional because the installed local Claude Code CLI help does not expose that flag.",
+      "recommendation": "Add runtime capability detection and live runner max-turns enforcement in a future governed contract after local CLI support is confirmed.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "Live runner enforcement of --max-turns remains a future governed task because the installed local Claude Code CLI help does not expose that flag in this environment.",
+    "Provider documentation may change and must be refreshed through a future governed contract."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-224-token-context-governance.audit-packet.json",
+    ".specbridge/contracts/issue-224-token-context-governance.execution.md",
+    ".specbridge/reports/issue-224-token-context-governance.final-report.json",
+    ".specbridge/policies/token-context-governance.json",
+    ".specbridge/token-governance/current.status.json"
+  ]
+}

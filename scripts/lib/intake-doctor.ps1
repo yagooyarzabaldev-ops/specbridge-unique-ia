@@ -356,7 +356,17 @@ function Invoke-DoctorFixPlanCommand {
     $ErrorActionPreference = $prevEapPrs
     if ($prExit -eq 0) {
       try {
-        $openPrs       = @($rawPrs | ConvertFrom-Json)
+        $parsedOpenPrs = $rawPrs | ConvertFrom-Json
+        $openPrs = @()
+        if ($null -ne $parsedOpenPrs) {
+          $openPrs = @($parsedOpenPrs | Where-Object {
+            $null -ne $_ -and
+            $_.PSObject.Properties.Name.Contains("number") -and
+            $_.PSObject.Properties.Name.Contains("headRefName") -and
+            -not [string]::IsNullOrWhiteSpace([string] $_.number) -and
+            -not [string]::IsNullOrWhiteSpace([string] $_.headRefName)
+          })
+        }
         $openExecPrs   = @($openPrs | Where-Object { $_.headRefName -match "^codex/" })
         $openMemoryPrs = @($openPrs | Where-Object { $_.headRefName -match "^specbridge/memory-closure-" })
         $otherOpenPrs  = @($openPrs | Where-Object { $_.headRefName -notmatch "^(codex/|specbridge/|main|feature/|fix/)" })
@@ -852,7 +862,17 @@ function Invoke-SpecbridgeDoctorCommand {
   $staleLocks      = @()
   if ($prExitCode -eq 0) {
     try {
-      $prs = $openPrs | ConvertFrom-Json
+      $parsedPrs = $openPrs | ConvertFrom-Json
+      $prs = @()
+      if ($null -ne $parsedPrs) {
+        $prs = @($parsedPrs | Where-Object {
+          $null -ne $_ -and
+          $_.PSObject.Properties.Name.Contains("number") -and
+          $_.PSObject.Properties.Name.Contains("headRefName") -and
+          -not [string]::IsNullOrWhiteSpace([string] $_.number) -and
+          -not [string]::IsNullOrWhiteSpace([string] $_.headRefName)
+        })
+      }
       $openMemoryPrs = @($prs | Where-Object { $_.headRefName -match "^specbridge/memory-closure-" })
       $openExecPrs   = @($prs | Where-Object { $_.headRefName -match "^codex/" })
       if ($openMemoryPrs.Count -gt 1) {
@@ -1359,7 +1379,18 @@ function Invoke-LifecycleGuardCommand {
 
   $openPrs = @()
   if ($prFetchExit -eq 0) {
-    try { $openPrs = @($openPrsRaw | ConvertFrom-Json) } catch {}
+    try {
+      $parsedOpenPrs = $openPrsRaw | ConvertFrom-Json
+      if ($null -ne $parsedOpenPrs) {
+        $openPrs = @($parsedOpenPrs | Where-Object {
+          $null -ne $_ -and
+          $_.PSObject.Properties.Name.Contains("number") -and
+          $_.PSObject.Properties.Name.Contains("headRefName") -and
+          -not [string]::IsNullOrWhiteSpace([string] $_.number) -and
+          -not [string]::IsNullOrWhiteSpace([string] $_.headRefName)
+        })
+      }
+    } catch {}
   }
 
   $openExecutionPrs   = @($openPrs | Where-Object { $_.headRefName -match "^codex/" })

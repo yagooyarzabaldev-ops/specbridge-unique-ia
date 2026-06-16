@@ -1,0 +1,40 @@
+{
+  "contract_id": "issue-224-token-context-governance",
+  "run_id": "sb-20260616-0224a11d",
+  "status": "active",
+  "exclusive_write": [
+    ".specbridge/contracts/issue-224-token-context-governance.execution.md",
+    ".specbridge/scopes/issue-224-token-context-governance.scope.json",
+    ".specbridge/policies/token-context-governance.json",
+    ".specbridge/reports/issue-224-token-context-governance.final-report.json",
+    ".specbridge/audit-packets/issue-224-token-context-governance.audit-packet.json",
+    ".specbridge/audits/issue-224-token-context-governance.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-224-token-context-governance.closure.json",
+    ".specbridge/ledger/operations.ndjson",
+    ".specbridge/state/current-goal.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/mcp-resources/operator-state.catalog.json",
+    ".specbridge/token-governance/current.status.json",
+    "docs/specbridge-token-context-governance.md",
+    "docs/status-dashboard.html",
+    "docs/specbridge-studio.html",
+    "scripts/specbridge.ps1",
+    "scripts/lib/token-governance.ps1",
+    "scripts/lib/intake-doctor.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".claude/settings.json",
+    ".specbridge/policy.yaml",
+    "scripts/lib/runtime.ps1",
+    "scripts/lib/common.ps1",
+    ".git"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-224-token-context-governance.final-report.json"
+}

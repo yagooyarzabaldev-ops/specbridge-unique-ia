@@ -1,0 +1,47 @@
+{
+  "summary": "Implemented a repository-local token/context governance standard for Codex and Claude Code. The change adds a deterministic specbridge-token-governance-status command, a source-backed policy artifact, operational documentation, file-backed status evidence, CLI regression coverage, and a defensive doctor fix that prevents empty gh PR results from producing a malformed branch_convention_violation:# warning.",
+  "changed_files": [
+    ".specbridge/audit-packets/issue-224-token-context-governance.audit-packet.json",
+    ".specbridge/audits/issue-224-token-context-governance.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-224-token-context-governance.execution.md",
+    ".specbridge/ledger/operations.ndjson",
+    ".specbridge/mcp-resources/operator-state.catalog.json",
+    ".specbridge/policies/token-context-governance.json",
+    ".specbridge/reports/issue-224-token-context-governance.final-report.json",
+    ".specbridge/scopes/issue-224-token-context-governance.scope.json",
+    ".specbridge/state/current-goal.json",
+    ".specbridge/token-governance/current.status.json",
+    "docs/specbridge-studio.html",
+    "docs/status-dashboard.html",
+    "docs/specbridge-token-context-governance.md",
+    "scripts/lib/intake-doctor.ps1",
+    "scripts/lib/token-governance.ps1",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "git diff --check: passed",
+    "Claude Code auxiliary review: no blocking findings",
+    "GitHub Actions Foundation Validation: passed",
+    "GitHub Actions SpecBridge Review Gate: passed",
+    "GitHub Actions SpecBridge PR Review Report: passed",
+    "GitHub Actions Claude Review Non Blocking: passed"
+  ],
+  "policy_result": "Within policy. Work stayed inside issue-224 contract and scope. The command reads local repository policy only and does not launch Claude Code, launch Codex, call the network, mutate GitHub, inspect secrets, change billing, change CI/CD security, enforce cleanup, or deploy. No protected files, provider tokens, API keys, raw hidden prompts, raw ChatGPT transcripts, production configuration, authentication, authorization, database, dependency, workflow, cleanup enforcement, artifact retention enforcement, issue #194, or digital twin changes are included.",
+  "risk_result": "Medium risk and contained. The change standardizes token/context governance and touches CLI routing, tests, and doctor diagnostics. The status command is deterministic and read-only unless OutputPath is explicitly provided. The doctor fix only filters null or empty PR objects before branch convention checks. The policy records --max-turns as a conditional current-provider standard because the installed local Claude Code CLI may not expose it yet; live runtime launches must not add it until capability detection confirms support.",
+  "unresolved_risks": [
+    "Live runner enforcement of --max-turns remains a future governed task because the installed local Claude Code CLI help does not expose that flag in this environment.",
+    "Provider documentation may change and must be refreshed through a future governed contract."
+  ],
+  "merge_status": "PR #225 open with GitHub CI passed; policy-gated merge pending.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "complete"
+}
