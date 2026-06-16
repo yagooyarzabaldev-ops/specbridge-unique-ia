@@ -1,0 +1,20 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-224-token-context-governance",
+  "run_id": "sb-20260616-0224a11d",
+  "evidence_type": "closure_evidence",
+  "collected_by": "ChatGPT/Codex post-merge closure",
+  "collected_at": "2026-06-16",
+  "merge_commit": "442c98307c53d21c814c40a9235af16e18e9c858",
+  "primary_pr": 225,
+  "primary_pr_url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/225",
+  "github_issue": 224,
+  "github_issue_url": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/224",
+  "github_ci_passed": true,
+  "issue_closed": true,
+  "scope_status": "completed",
+  "all_validations_passed": true,
+  "policy_result": "passed",
+  "deployment_status": "not_applicable",
+  "notes": "PR #225 merged after local smoke, git diff --check, GitHub Actions 4/4, and Claude Code auxiliary review passed. Issue #224 closed automatically. Token/context governance remains bounded: no provider tokens, secrets, raw hidden prompts, raw ChatGPT transcripts, billing configuration, provider account configuration, CI/CD security changes, cleanup enforcement, retention enforcement, or deployment were changed."
+}

@@ -8,6 +8,7 @@
     ".specbridge/audits/issue-224-token-context-governance.chatgpt-audit.json",
     ".specbridge/context/CURRENT_GOAL.md",
     ".specbridge/contracts/issue-224-token-context-governance.execution.md",
+    ".specbridge/github-evidence/issue-224-token-context-governance.closure.json",
     ".specbridge/ledger/operations.ndjson",
     ".specbridge/mcp-resources/operator-state.catalog.json",
     ".specbridge/policies/token-context-governance.json",
@@ -26,6 +27,7 @@
   "diff_summary": [
     { "file": ".specbridge/context/CURRENT_GOAL.md", "added_lines": null, "deleted_lines": null },
     { "file": ".specbridge/contracts/issue-224-token-context-governance.execution.md", "added_lines": null, "deleted_lines": 0 },
+    { "file": ".specbridge/github-evidence/issue-224-token-context-governance.closure.json", "added_lines": null, "deleted_lines": 0 },
     { "file": ".specbridge/scopes/issue-224-token-context-governance.scope.json", "added_lines": null, "deleted_lines": 0 },
     { "file": ".specbridge/policies/token-context-governance.json", "added_lines": null, "deleted_lines": 0 },
     { "file": ".specbridge/token-governance/current.status.json", "added_lines": null, "deleted_lines": 0 },
@@ -83,6 +85,7 @@
     ".specbridge/scopes/issue-224-token-context-governance.scope.json",
     ".specbridge/policies/token-context-governance.json",
     ".specbridge/reports/issue-224-token-context-governance.final-report.json",
+    ".specbridge/github-evidence/issue-224-token-context-governance.closure.json",
     ".specbridge/token-governance/current.status.json"
   ],
   "secret_omission": "This packet contains repository-relative paths, summaries, validation results, policy result, risks, and status only. It does not embed raw diffs, secrets, tokens, private keys, or credential values."

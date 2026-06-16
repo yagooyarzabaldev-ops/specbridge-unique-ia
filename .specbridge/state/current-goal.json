@@ -1,12 +1,12 @@
 {
-  "current_task_id": "issue-224-token-context-governance",
-  "run_id": "sb-20260616-0224a11d",
-  "title": "Add token and context governance standard",
-  "status": "active",
-  "primary_pr": 225,
+  "current_task_id": "no-active-task",
+  "run_id": null,
+  "title": "No active governed task",
+  "status": "ready_for_next_task",
+  "primary_pr": null,
   "closure_pr": null,
-  "last_completed_task_id": "issue-221-repository-health-summary",
-  "last_completed_run_id": "sb-20260615-0221a1b2",
-  "last_updated": "2026-06-16T04:26:00Z",
-  "updated_by": "ChatGPT/Codex issue-224 CI evidence"
+  "last_completed_task_id": "issue-224-token-context-governance",
+  "last_completed_run_id": "sb-20260616-0224a11d",
+  "last_updated": "2026-06-16T04:55:00Z",
+  "updated_by": "ChatGPT/Codex issue-224 post-merge closure"
 }

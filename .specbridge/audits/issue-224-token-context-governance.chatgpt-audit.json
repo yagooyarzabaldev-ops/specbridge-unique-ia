@@ -51,7 +51,7 @@
     {
       "name": "final_report_honesty",
       "result": "pass",
-      "evidence": "The final report states local validation status, pending PR/CI merge status, deployment not applicable, and unresolved risks including future --max-turns enforcement and provider-doc refresh.",
+      "evidence": "The final report states local validation status, GitHub CI status, PR #225 merge status, deployment not applicable, issue closure, post-merge closure evidence, and unresolved risks including future --max-turns enforcement and provider-doc refresh.",
       "blocking": false
     }
   ],
@@ -75,6 +75,7 @@
   "source_files": [
     ".specbridge/audit-packets/issue-224-token-context-governance.audit-packet.json",
     ".specbridge/contracts/issue-224-token-context-governance.execution.md",
+    ".specbridge/github-evidence/issue-224-token-context-governance.closure.json",
     ".specbridge/reports/issue-224-token-context-governance.final-report.json",
     ".specbridge/policies/token-context-governance.json",
     ".specbridge/token-governance/current.status.json"

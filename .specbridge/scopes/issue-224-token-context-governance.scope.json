@@ -1,7 +1,7 @@
 {
   "contract_id": "issue-224-token-context-governance",
   "run_id": "sb-20260616-0224a11d",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/contracts/issue-224-token-context-governance.execution.md",
     ".specbridge/scopes/issue-224-token-context-governance.scope.json",

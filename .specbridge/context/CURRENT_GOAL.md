@@ -47,6 +47,7 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | 215 | Governed branch cleanup policy draft | 216 | Merged 2026-06-15 |
 | 218 | Governed artifact retention policy draft | 219 | Merged 2026-06-15 |
 | 221 | Repository health summary evidence | 222 | Merged 2026-06-16 |
+| 224 | Token and context governance standard | 225 | Merged 2026-06-16 |
 
 ## Architecture Status
 
@@ -71,26 +72,27 @@ SpecBridge currently has:
 - Branch cleanup policy draft (specbridge-branch-cleanup-policy: deterministic read-only branch cleanup candidate classification with enforcement=none, cleanup_permission=none, future activation gates, and blocked cleanup commands/actions)
 - Artifact retention policy draft (specbridge-artifact-retention-policy: deterministic read-only artifact family classification with enforcement=none, cleanup_permission=none, future activation gates, and blocked cleanup commands/actions)
 - Repository health summary evidence (specbridge-repository-health-summary: deterministic read-only aggregate over branch inventory, branch cleanup policy, artifact inventory, and artifact retention policy with cleanup_permission=none and enforcement_status=none)
+- Token and context governance status (specbridge-token-governance-status: deterministic read-only status over Codex context governance, Claude Code runtime limits, MCP/tool context governance, multi-agent slice governance, blocked disclosures, evidence requirements, and provider-source references)
 
 ## Active Task
 
-**Issue #224: Add token and context governance standard.**
+No active governed task.
 
-Issue #224 is the active governed operator task. The task adds repository-local token/context governance for Codex and Claude Code, aligned with current official provider guidance, and fixes the online doctor false-warning edge where no current PR exists.
-
-Active task evidence:
+Most recent completion:
 
 - Contract: `.specbridge/contracts/issue-224-token-context-governance.execution.md`
 - Scope: `.specbridge/scopes/issue-224-token-context-governance.scope.json`
 - Run id: `sb-20260616-0224a11d`
 - GitHub issue: https://github.com/yagooyarzabaldev-ops/specbridge/issues/224
 - Pull request: https://github.com/yagooyarzabaldev-ops/specbridge/pull/225
+- Merge commit: `442c98307c53d21c814c40a9235af16e18e9c858`
 - CI status: passed 4/4 on 2026-06-16
+- Closure evidence: `.specbridge/github-evidence/issue-224-token-context-governance.closure.json`
 
 Immediate order:
 
 1. Run `specbridge-doctor -FixPlan` and `specbridge-next-task` before selecting the next task.
-2. Complete issue #224 inside its contract and scope.
+2. Select the next governed maintenance task from repository evidence, not chat-memory inference.
 3. Keep cleanup and retention enforcement disabled unless a future dedicated policy and execution contract authorize them.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
