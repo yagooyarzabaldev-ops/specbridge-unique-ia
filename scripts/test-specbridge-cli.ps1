@@ -2789,7 +2789,8 @@ try {
           "runtime_launches", "runtime_preflights", "runtime_results", "runtime_summaries",
           "runtime_runs", "runtime_executions", "orchestrations", "executor_packets",
           "github_evidence", "ledger", "mcp_resources", "artifact_inventory", "branch_inventory",
-          "branch_cleanup_policy", "artifact_retention_policy", "repository_health_summary"
+          "branch_cleanup_policy", "artifact_retention_policy", "repository_health_summary",
+          "standard_readiness"
         )
         $actualFamilyIds = $families | ForEach-Object { $_.family_id }
         $missingFamilies = $requiredFamilyIds | Where-Object { $actualFamilyIds -notcontains $_ }
@@ -3878,6 +3879,191 @@ try {
           }
         } else {
           Write-Output "FAIL specbridge-repository-health-summary-artifact-family: repository_health_summary family not found in artifact inventory."
+          $script:failed = $true
+        }
+      }
+    }
+
+    # specbridge-standard-readiness tests
+
+    # 1. Command shape: exits 0, returns JSON with command and ok fields
+    $srResult = Invoke-Cli -Arguments @("specbridge-standard-readiness")
+    Assert-Success `
+      -Name "specbridge-standard-readiness" `
+      -Result $srResult `
+      -ExpectedPattern '"command"\s*:\s*"specbridge-standard-readiness"'
+
+    # 2. Deterministic output: two read-only calls produce identical output
+    $srRepeatResult = Invoke-Cli -Arguments @("specbridge-standard-readiness")
+    if ($srResult.ExitCode -eq 0 -and $srRepeatResult.ExitCode -eq 0) {
+      if ($srResult.Text.Trim() -ceq $srRepeatResult.Text.Trim()) {
+        Write-Output "PASS specbridge-standard-readiness-deterministic: repeated read-only output is stable."
+      } else {
+        Write-Output "FAIL specbridge-standard-readiness-deterministic: repeated read-only output changed."
+        $script:failed = $true
+      }
+    }
+
+    if ($srResult.ExitCode -eq 0) {
+      $srJson = $null
+      try { $srJson = $srResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      if ($null -eq $srJson) {
+        Write-Output "FAIL specbridge-standard-readiness: output was not valid JSON."
+        $script:failed = $true
+      } else {
+        if ($srJson.ok -ne $true) {
+          Write-Output "FAIL specbridge-standard-readiness: ok field is not true."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-standard-readiness: ok is true."
+        }
+
+        $requiredSrFields = @(
+          "command", "ok", "schema_version", "readiness", "recommended_next_action",
+          "task_selection", "doctor", "repository_health", "token_context_governance",
+          "mcp_resource_surface", "standard_boundaries", "evidence_sources", "notes"
+        )
+        $srFieldNames = @($srJson.PSObject.Properties.Name)
+        $missingSrFields = $requiredSrFields | Where-Object { $srFieldNames -notcontains $_ }
+        if ($missingSrFields.Count -gt 0) {
+          Write-Output "FAIL specbridge-standard-readiness: missing fields: $($missingSrFields -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-standard-readiness: required fields present."
+        }
+
+        $validReadiness = @("ready_for_governed_task_intake", "continue_current_goal", "execute_eligible_task", "review_recommended", "blocked")
+        if ($validReadiness -notcontains $srJson.readiness) {
+          Write-Output "FAIL specbridge-standard-readiness: invalid readiness '$($srJson.readiness)'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-standard-readiness: readiness enum is valid."
+        }
+
+        $validNextActions = @("create_new_operator_task", "continue_current_goal", "execute_eligible_task")
+        if ($validNextActions -notcontains $srJson.recommended_next_action) {
+          Write-Output "FAIL specbridge-standard-readiness: invalid recommended_next_action '$($srJson.recommended_next_action)'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-standard-readiness: recommended_next_action is valid."
+        }
+
+        if ($srJson.repository_health.cleanup_permission -ne "none" -or $srJson.repository_health.enforcement_status -ne "none") {
+          Write-Output "FAIL specbridge-standard-readiness: cleanup/enforcement posture must remain none."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-standard-readiness: cleanup/enforcement posture remains none."
+        }
+
+        if ($srJson.standard_boundaries.launches_claude -eq $false -and
+            $srJson.standard_boundaries.launches_codex -eq $false -and
+            $srJson.standard_boundaries.calls_network -eq $false -and
+            $srJson.standard_boundaries.mutates_github -eq $false -and
+            $srJson.standard_boundaries.reads_secrets -eq $false -and
+            $srJson.standard_boundaries.changes_billing -eq $false -and
+            $srJson.standard_boundaries.changes_ci_cd_security -eq $false -and
+            $srJson.standard_boundaries.deploys -eq $false -and
+            $srJson.standard_boundaries.writes_output_artifact -eq $false) {
+          Write-Output "PASS specbridge-standard-readiness: read-only/no-runtime/no-secret boundaries recorded."
+        } else {
+          Write-Output "FAIL specbridge-standard-readiness: standard boundary flags mismatch."
+          $script:failed = $true
+        }
+
+        if ($srJson.mcp_resource_surface.mcp_server_status -ne "not_implemented" -or $srJson.mcp_resource_surface.read_only_policy -ne $true) {
+          Write-Output "FAIL specbridge-standard-readiness: MCP surface should remain read-only with no server runtime."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-standard-readiness: MCP surface remains read-only and local."
+        }
+      }
+    }
+
+    # 3. No mutation without OutputPath: readiness artifact unchanged
+    $srArtifact = Join-Path (Get-Location).Path ".specbridge/standard-readiness/current.status.json"
+    $srArtifactExistedBefore = Test-Path $srArtifact
+    $srArtifactOriginalRaw = $null
+    if ($srArtifactExistedBefore) {
+      $srArtifactOriginalRaw = Get-Content $srArtifact -Raw -Encoding UTF8
+    }
+    Remove-Item $srArtifact -Force -ErrorAction SilentlyContinue
+    $srNoPathResult = Invoke-Cli -Arguments @("specbridge-standard-readiness")
+    if (Test-Path $srArtifact) {
+      Write-Output "FAIL specbridge-standard-readiness-no-mutation: readiness file was written without -OutputPath."
+      $script:failed = $true
+    } else {
+      Write-Output "PASS specbridge-standard-readiness-no-mutation: no readiness file written without -OutputPath."
+    }
+
+    # 4. OutputPath behavior: writes readiness artifact to declared path
+    $srOutputResult = Invoke-Cli -Arguments @("specbridge-standard-readiness", "-OutputPath", ".specbridge/standard-readiness/current.status.json", "-Force")
+    Assert-Success `
+      -Name "specbridge-standard-readiness-output-path" `
+      -Result $srOutputResult `
+      -ExpectedPattern '"writes_output_artifact"\s*:\s*true'
+
+    if ($srOutputResult.ExitCode -eq 0) {
+      if (-not (Test-Path $srArtifact)) {
+        Write-Output "FAIL specbridge-standard-readiness-output-path: readiness file was not written."
+        $script:failed = $true
+      } else {
+        $srWritten = $null
+        try { $srWritten = Get-Content $srArtifact -Raw -Encoding UTF8 | ConvertFrom-Json } catch {}
+        if ($null -eq $srWritten) {
+          Write-Output "FAIL specbridge-standard-readiness-output-path: written readiness file is not valid JSON."
+          $script:failed = $true
+        } elseif ($srWritten.command -ne "specbridge-standard-readiness") {
+          Write-Output "FAIL specbridge-standard-readiness-output-path: written readiness command mismatch."
+          $script:failed = $true
+        } elseif ($srWritten.standard_boundaries.writes_output_artifact -ne $true) {
+          Write-Output "FAIL specbridge-standard-readiness-output-path: writes_output_artifact should be true."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-standard-readiness-output-path: readiness file written and valid."
+        }
+      }
+
+      $srExistingResult = Invoke-Cli -Arguments @("specbridge-standard-readiness", "-OutputPath", ".specbridge/standard-readiness/current.status.json")
+      Assert-Failure `
+        -Name "specbridge-standard-readiness-output-path-requires-force" `
+        -Result $srExistingResult `
+        -ExpectedPattern "use -Force"
+    }
+
+    # Restore artifact state after mutation tests
+    if ($srArtifactExistedBefore) {
+      $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+      [System.IO.File]::WriteAllText($srArtifact, $srArtifactOriginalRaw, $utf8NoBom)
+    } else {
+      Remove-Item $srArtifact -Force -ErrorAction SilentlyContinue
+    }
+
+    # 5. OutputPath outside the contract artifact must fail
+    $srBadPathResult = Invoke-Cli -Arguments @("specbridge-standard-readiness", "-OutputPath", "docs/bad-standard-readiness.json")
+    Assert-Failure `
+      -Name "specbridge-standard-readiness-bad-output-path" `
+      -Result $srBadPathResult `
+      -ExpectedPattern "OutputPath must be .specbridge/standard-readiness/current.status.json"
+
+    # 6. artifact-inventory includes standard_readiness family
+    $srAiResult = Invoke-Cli -Arguments @("specbridge-artifact-inventory")
+    if ($srAiResult.ExitCode -eq 0) {
+      $srAiJson = $null
+      try { $srAiJson = $srAiResult.Text.Trim() | ConvertFrom-Json } catch {}
+      if ($null -ne $srAiJson) {
+        $srFamilies = @($srAiJson.inventory.families)
+        $srFamilyIds = $srFamilies | ForEach-Object { $_.family_id }
+        if ($srFamilyIds -contains "standard_readiness") {
+          $srFamily = $srFamilies | Where-Object { $_.family_id -eq "standard_readiness" }
+          if ($srFamily.repository_path -eq ".specbridge/standard-readiness" -and $srFamily.cleanup_permission -eq "none") {
+            Write-Output "PASS specbridge-standard-readiness-artifact-family: standard_readiness family present with correct path and cleanup_permission=none."
+          } else {
+            Write-Output "FAIL specbridge-standard-readiness-artifact-family: standard_readiness family has unexpected path or cleanup_permission."
+            $script:failed = $true
+          }
+        } else {
+          Write-Output "FAIL specbridge-standard-readiness-artifact-family: standard_readiness family not found in artifact inventory."
           $script:failed = $true
         }
       }

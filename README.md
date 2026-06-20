@@ -168,6 +168,7 @@ SpecBridge currently has these governed status layers:
 - Independent review-agent report (issue 180 / GitHub #188): implemented as `specbridge-review-report -TaskId <task> -Verdict approve|block` writing machine-validated reports with typed findings; the reviewer handoff is hard-gated on an approve verdict with no blocker findings, enforced by `validate-agent-review-reports.ps1` in smoke.
 - Claude Code project configuration (issue 181 / GitHub #192): `.claude/settings.json` bounded permission allowlist, `/sb-intake` `/sb-handoff` `/sb-review` `/sb-close` slash commands, and the Governed Operating Model documented in CLAUDE.md. Merge authorization is enforced by allowlist omission, never by hard deny.
 - Operator queue hygiene and next-task selector (GitHub #196): an open GitHub issue is NOT automatically eligible SpecBridge work. `.specbridge/policies/operator-task-decisions.json` records authoritative operator decisions (`not_planned`, `deferred`, `superseded`, `blocked`) per issue/task; the offline, read-only `specbridge-next-task` command reports eligible tasks, excluded issues and the recommended action; `validate-operator-task-decisions.ps1` gates the registry in smoke; the Studio dashboard shows the Operator Queue. GitHub is storage; the operator decision registry is the brain that decides what runs next.
+- Standard readiness status (issue 228): `specbridge-standard-readiness` aggregates doctor health, next-task posture, repository health, token/context governance, MCP resource posture, and standard execution boundaries into one deterministic read-only operator readiness snapshot before new governed task intake.
 - Default automation: Full Autopilot is enabled for autonomous merge after required gates pass; production deployment remains disabled.
 
 See:
@@ -202,3 +203,4 @@ See:
 - `docs/specbridge-autonomy-backlog.md`
 - `docs/specbridge-v5-autonomy-status.md`
 - `docs/specbridge-v5-serious-pilot-status.md`
+- `docs/specbridge-standard-readiness-status.md`

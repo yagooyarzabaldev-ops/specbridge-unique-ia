@@ -1,0 +1,77 @@
+{
+    "command":  "specbridge-standard-readiness",
+    "ok":  true,
+    "schema_version":  "1",
+    "readiness":  "continue_current_goal",
+    "recommended_next_action":  "continue_current_goal",
+    "task_selection":  {
+                           "current_goal_status":  "active",
+                           "current_task_id":  "issue-228-standard-readiness-status",
+                           "eligible_task_count":  0,
+                           "excluded_issue_count":  1,
+                           "recommended_action":  "continue_current_goal"
+                       },
+    "doctor":  {
+                   "health":  "healthy",
+                   "mode":  "local",
+                   "action_count":  0,
+                   "blocker_count":  0,
+                   "warning_count":  0,
+                   "online_checks_enabled":  false,
+                   "online_checks_available":  false
+               },
+    "repository_health":  {
+                              "overall_health_posture":  "debt_present_cleanup_blocked",
+                              "cleanup_permission":  "none",
+                              "enforcement_status":  "none",
+                              "branch_cleanup_blocked":  41,
+                              "artifact_retention_blocked":  17,
+                              "total_blocked_actions":  58
+                          },
+    "token_context_governance":  {
+                                     "governance_id":  "specbridge-token-context-governance",
+                                     "status":  "active",
+                                     "provider_source_count":  8,
+                                     "max_budget_usd_default":  "2.00",
+                                     "max_budget_usd_ceiling":  "10.00",
+                                     "max_turns_default":  8,
+                                     "blocked_disclosure_count":  10
+                                 },
+    "mcp_resource_surface":  {
+                                 "mcp_server_status":  "not_implemented",
+                                 "read_only_policy":  true,
+                                 "resource_count":  3,
+                                 "resource_uris":  [
+                                                       "specbridge://operator/current-goal",
+                                                       "specbridge://operator/doctor-fix-plan",
+                                                       "specbridge://operator/orchestration-summaries"
+                                                   ]
+                             },
+    "standard_boundaries":  {
+                                "launches_claude":  false,
+                                "launches_codex":  false,
+                                "calls_network":  false,
+                                "mutates_github":  false,
+                                "reads_secrets":  false,
+                                "changes_billing":  false,
+                                "changes_ci_cd_security":  false,
+                                "deploys":  false,
+                                "cleanup_permission":  "none",
+                                "retention_enforcement":  "none",
+                                "writes_output_artifact":  true
+                            },
+    "evidence_sources":  [
+                             "scripts/lib/intake-doctor.ps1",
+                             "scripts/lib/repository-health-summary.ps1",
+                             "scripts/lib/token-governance.ps1",
+                             "scripts/lib/mcp-resources.ps1",
+                             ".specbridge/state/current-goal.json",
+                             ".specbridge/policies/operator-task-decisions.json",
+                             ".specbridge/policies/token-context-governance.json"
+                         ],
+    "notes":  [
+                  "This command is a read-only operator readiness snapshot when OutputPath is omitted.",
+                  "Repository branch cleanup and artifact retention remain disabled even when debt is visible.",
+                  "A blocked readiness value means an existing policy or health gate must be resolved before new governed execution."
+              ]
+}

@@ -1,0 +1,43 @@
+{
+  "contract_id": "issue-228-standard-readiness-status",
+  "run_id": "sb-20260620-0228a1b2",
+  "status": "active",
+  "exclusive_write": [
+    ".specbridge/contracts/issue-228-standard-readiness-status.execution.md",
+    ".specbridge/scopes/issue-228-standard-readiness-status.scope.json",
+    ".specbridge/reports/issue-228-standard-readiness-status.final-report.json",
+    ".specbridge/audit-packets/issue-228-standard-readiness-status.audit-packet.json",
+    ".specbridge/audits/issue-228-standard-readiness-status.chatgpt-audit.json",
+    ".specbridge/ledger/operations.ndjson",
+    ".specbridge/state/current-goal.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/standard-readiness/current.status.json",
+    ".specbridge/artifact-inventory/current.inventory.json",
+    ".specbridge/mcp-resources/operator-state.catalog.json",
+    "README.md",
+    "docs/specbridge-standard-readiness-status.md",
+    "docs/status-dashboard.html",
+    "docs/specbridge-studio.html",
+    "scripts/specbridge.ps1",
+    "scripts/lib/standard-readiness.ps1",
+    "scripts/lib/artifact-inventory.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/policies/operator-task-decisions.json",
+    ".specbridge/policies/token-context-governance.json",
+    "scripts/lib/common.ps1",
+    "scripts/lib/intake-doctor.ps1",
+    "scripts/lib/repository-health-summary.ps1",
+    "scripts/lib/token-governance.ps1",
+    "scripts/lib/mcp-resources.ps1",
+    ".git"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-228-standard-readiness-status.final-report.json"
+}

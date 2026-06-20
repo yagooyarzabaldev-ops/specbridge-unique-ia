@@ -1,0 +1,84 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-228-standard-readiness-status",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-228-standard-readiness-status.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-228-standard-readiness-status.execution.md",
+  "final_report_path": ".specbridge/reports/issue-228-standard-readiness-status.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "The implementation adds specbridge-standard-readiness, a standard readiness artifact, artifact inventory family coverage, documentation, dashboards, final report, audit packet, and audit evidence under issue-228 scope.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "CLI coverage validates command shape, stable read-only output, required fields, readiness enum, recommended action enum, cleanup/enforcement posture, no-runtime/no-secret boundaries, MCP read-only posture, output path behavior, force behavior, bad path behavior, and standard_readiness artifact family coverage.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The command does not call the network, mutate GitHub, launch Claude Code, launch Codex, read secrets, change billing, change CI/CD security, enforce cleanup, enforce retention, or deploy. Work stayed inside the issue-228 allowed scope.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The readiness output records explicit false boundary flags for runtime launches, network, GitHub mutation, secret access, billing, CI/CD security changes, and deployment, with cleanup_permission and retention_enforcement both none.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed files are declared in the issue-228 contract and scope manifest, including CLI, tests, docs, dashboards, artifacts, and evidence files.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "validate-contracts, validate-contract-scopes, test-specbridge-cli, validate-final-reports, validate-audit-packets, validate-chatgpt-audits, specbridge-smoke, and git diff --check passed locally.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "CI is recorded as not_collected in the audit packet because the PR has not been opened yet. Final policy merge remains blocked until GitHub Actions pass on the PR.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records local validation status, pending PR/CI state, deployment not applicable, and unresolved risks about CI collection and cleanup/retention remaining blocked.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "ci_pending_until_pr",
+      "file": ".specbridge/reports/issue-228-standard-readiness-status.final-report.json",
+      "line": null,
+      "evidence": "The task is locally complete but GitHub Actions cannot be recorded before the PR exists.",
+      "recommendation": "Open the PR and collect CI before merge.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub Actions CI has not been collected until the PR is opened.",
+    "The command reports existing branch/artifact debt but intentionally does not authorize cleanup or retention enforcement."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-228-standard-readiness-status.audit-packet.json",
+    ".specbridge/contracts/issue-228-standard-readiness-status.execution.md",
+    ".specbridge/reports/issue-228-standard-readiness-status.final-report.json",
+    ".specbridge/scopes/issue-228-standard-readiness-status.scope.json",
+    ".specbridge/standard-readiness/current.status.json",
+    "docs/specbridge-standard-readiness-status.md",
+    "scripts/lib/standard-readiness.ps1"
+  ]
+}

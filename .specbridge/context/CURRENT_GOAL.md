@@ -76,24 +76,24 @@ SpecBridge currently has:
 
 ## Active Task
 
-No active governed task.
+Active governed task:
 
-Most recent completion:
+- Contract: `.specbridge/contracts/issue-228-standard-readiness-status.execution.md`
+- Scope: `.specbridge/scopes/issue-228-standard-readiness-status.scope.json`
+- Run id: `sb-20260620-0228a1b2`
+- GitHub issue: https://github.com/yagooyarzabaldev-ops/specbridge/issues/228
+- Branch: `codex/issue-228-standard-readiness-status`
 
-- Contract: `.specbridge/contracts/issue-224-token-context-governance.execution.md`
-- Scope: `.specbridge/scopes/issue-224-token-context-governance.scope.json`
-- Run id: `sb-20260616-0224a11d`
-- GitHub issue: https://github.com/yagooyarzabaldev-ops/specbridge/issues/224
-- Pull request: https://github.com/yagooyarzabaldev-ops/specbridge/pull/225
-- Merge commit: `442c98307c53d21c814c40a9235af16e18e9c858`
-- CI status: passed 4/4 on 2026-06-16
-- Closure evidence: `.specbridge/github-evidence/issue-224-token-context-governance.closure.json`
+Goal:
+
+Add a deterministic, read-only `specbridge-standard-readiness` command that aggregates doctor health, next-task posture, repository health, token/context governance, MCP resource posture, and standard policy boundaries before a new governed task starts.
 
 Immediate order:
 
-1. Run `specbridge-doctor -FixPlan` and `specbridge-next-task` before selecting the next task.
-2. Select the next governed maintenance task from repository evidence, not chat-memory inference.
-3. Keep cleanup and retention enforcement disabled unless a future dedicated policy and execution contract authorize them.
+1. Implement the CLI command and read-only output artifact.
+2. Add CLI regression coverage and artifact inventory family coverage.
+3. Update documentation, dashboards, final report, audit packet, and ChatGPT/Codex audit evidence.
+4. Run required local validations and open the governed PR for issue #228.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;
