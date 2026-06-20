@@ -9,6 +9,7 @@
     ".specbridge/audits/issue-228-standard-readiness-status.chatgpt-audit.json",
     ".specbridge/context/CURRENT_GOAL.md",
     ".specbridge/contracts/issue-228-standard-readiness-status.execution.md",
+    ".specbridge/github-evidence/issue-228-standard-readiness-status.closure.json",
     ".specbridge/ledger/operations.ndjson",
     ".specbridge/mcp-resources/operator-state.catalog.json",
     ".specbridge/reports/issue-228-standard-readiness-status.final-report.json",
@@ -35,6 +36,7 @@
     { "file": ".specbridge/mcp-resources/operator-state.catalog.json", "added_lines": null, "deleted_lines": null },
     { "file": ".specbridge/contracts/issue-228-standard-readiness-status.execution.md", "added_lines": null, "deleted_lines": 0 },
     { "file": ".specbridge/scopes/issue-228-standard-readiness-status.scope.json", "added_lines": null, "deleted_lines": 0 },
+    { "file": ".specbridge/github-evidence/issue-228-standard-readiness-status.closure.json", "added_lines": null, "deleted_lines": 0 },
     { "file": ".specbridge/context/CURRENT_GOAL.md", "added_lines": null, "deleted_lines": null },
     { "file": ".specbridge/state/current-goal.json", "added_lines": null, "deleted_lines": null },
     { "file": ".specbridge/ledger/operations.ndjson", "added_lines": null, "deleted_lines": null },
@@ -63,22 +65,27 @@
     { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1", "result": "passed" },
     { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1", "result": "passed" },
     { "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1", "result": "passed" },
-    { "command": "git diff --check", "result": "passed" }
+    { "command": "git diff --check", "result": "passed" },
+    { "command": "GitHub Actions Foundation Validation", "result": "passed" },
+    { "command": "GitHub Actions SpecBridge Review Gate", "result": "passed" },
+    { "command": "GitHub Actions SpecBridge PR Review Report", "result": "passed" },
+    { "command": "GitHub Actions Claude Review Non Blocking", "result": "passed" }
   ],
   "final_report_path": ".specbridge/reports/issue-228-standard-readiness-status.final-report.json",
-  "ci_status": "not_collected",
+  "ci_status": "passed",
   "pr_review_report_path": null,
-  "policy_result": "Within policy. The readiness command aggregates existing local evidence and records no-runtime, no-network, no-GitHub-mutation, no-secret, no-billing, no-CI/CD-security, no-cleanup, no-retention, and no-deployment boundaries.",
+  "policy_result": "Within policy. The readiness command aggregates existing local evidence and records no-runtime, no-network, no-GitHub-mutation, no-secret, no-billing, no-CI/CD-security, no-cleanup, no-retention, and no-deployment boundaries. Post-merge closure updated only repository memory and evidence.",
   "unresolved_risks": [
-    "GitHub Actions CI has not been collected until the PR is opened.",
-    "Branch cleanup and artifact retention remain blocked even when the readiness output reports visible debt."
+    "Branch cleanup and artifact retention remain blocked even when the readiness output reports visible debt.",
+    "Future governed tasks must keep using doctor and next-task evidence before selecting runtime-expansion work."
   ],
-  "completion_status": "local_complete_pending_pr_ci",
+  "completion_status": "complete",
   "source_files": [
     ".specbridge/contracts/issue-228-standard-readiness-status.execution.md",
     ".specbridge/scopes/issue-228-standard-readiness-status.scope.json",
     ".specbridge/reports/issue-228-standard-readiness-status.final-report.json",
     ".specbridge/standard-readiness/current.status.json",
+    ".specbridge/github-evidence/issue-228-standard-readiness-status.closure.json",
     "docs/specbridge-standard-readiness-status.md",
     "scripts/lib/standard-readiness.ps1"
   ],

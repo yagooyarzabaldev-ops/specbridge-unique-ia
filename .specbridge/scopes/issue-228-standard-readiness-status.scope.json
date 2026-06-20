@@ -1,7 +1,7 @@
 {
   "contract_id": "issue-228-standard-readiness-status",
   "run_id": "sb-20260620-0228a1b2",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/contracts/issue-228-standard-readiness-status.execution.md",
     ".specbridge/scopes/issue-228-standard-readiness-status.scope.json",

@@ -9,7 +9,7 @@
     {
       "name": "spec_compliance",
       "result": "pass",
-      "evidence": "The implementation adds specbridge-standard-readiness, a standard readiness artifact, artifact inventory family coverage, documentation, dashboards, final report, audit packet, and audit evidence under issue-228 scope.",
+      "evidence": "The implementation adds specbridge-standard-readiness, a standard readiness artifact, artifact inventory family coverage, documentation, dashboards, final report, audit packet, audit evidence, and post-merge closure evidence under issue-228 scope.",
       "blocking": false
     },
     {
@@ -21,7 +21,7 @@
     {
       "name": "policy_boundaries",
       "result": "pass",
-      "evidence": "The command does not call the network, mutate GitHub, launch Claude Code, launch Codex, read secrets, change billing, change CI/CD security, enforce cleanup, enforce retention, or deploy. Work stayed inside the issue-228 allowed scope.",
+      "evidence": "The command does not call the network, mutate GitHub, launch Claude Code, launch Codex, read secrets, change billing, change CI/CD security, enforce cleanup, enforce retention, or deploy. Work stayed inside the issue-228 allowed scope; post-merge closure changed only memory and evidence files.",
       "blocking": false
     },
     {
@@ -45,36 +45,37 @@
     {
       "name": "ci_evidence",
       "result": "pass",
-      "evidence": "CI is recorded as not_collected in the audit packet because the PR has not been opened yet. Final policy merge remains blocked until GitHub Actions pass on the PR.",
+      "evidence": "GitHub Actions passed on PR #229: Foundation Validation, SpecBridge Review Gate, SpecBridge PR Review Report, and Claude Review Non Blocking. The deterministic PR review report passed with zero blocking findings.",
       "blocking": false
     },
     {
       "name": "final_report_honesty",
       "result": "pass",
-      "evidence": "The final report records local validation status, pending PR/CI state, deployment not applicable, and unresolved risks about CI collection and cleanup/retention remaining blocked.",
+      "evidence": "The final report records local validation status, GitHub CI status, PR #229 merge status, deployment not applicable, issue closure, post-merge closure evidence, and unresolved risks about cleanup/retention remaining blocked and future task selection requiring doctor plus next-task evidence.",
       "blocking": false
     }
   ],
   "findings": [
     {
       "severity": "info",
-      "category": "ci_pending_until_pr",
-      "file": ".specbridge/reports/issue-228-standard-readiness-status.final-report.json",
+      "category": "cleanup_retention_still_blocked",
+      "file": ".specbridge/standard-readiness/current.status.json",
       "line": null,
-      "evidence": "The task is locally complete but GitHub Actions cannot be recorded before the PR exists.",
-      "recommendation": "Open the PR and collect CI before merge.",
+      "evidence": "The readiness status reports repository branch and artifact debt while retaining cleanup_permission=none and retention_enforcement=none.",
+      "recommendation": "Keep cleanup and retention enforcement blocked unless a future dedicated policy and execution contract explicitly authorize them.",
       "blocking": false
     }
   ],
   "outcome": "approved",
   "merge_allowed": true,
   "unresolved_risks": [
-    "GitHub Actions CI has not been collected until the PR is opened.",
-    "The command reports existing branch/artifact debt but intentionally does not authorize cleanup or retention enforcement."
+    "Branch cleanup and artifact retention remain blocked even when the readiness output reports visible debt.",
+    "Future governed tasks must keep using doctor and next-task evidence before selecting runtime-expansion work."
   ],
   "source_files": [
     ".specbridge/audit-packets/issue-228-standard-readiness-status.audit-packet.json",
     ".specbridge/contracts/issue-228-standard-readiness-status.execution.md",
+    ".specbridge/github-evidence/issue-228-standard-readiness-status.closure.json",
     ".specbridge/reports/issue-228-standard-readiness-status.final-report.json",
     ".specbridge/scopes/issue-228-standard-readiness-status.scope.json",
     ".specbridge/standard-readiness/current.status.json",

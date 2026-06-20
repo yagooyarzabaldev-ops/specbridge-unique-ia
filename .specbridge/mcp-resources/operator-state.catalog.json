@@ -1,7 +1,7 @@
 {
     "schema_version":  "1",
     "catalog_id":  "specbridge-operator-state",
-    "generated_at":  "2026-06-20T17:18:34.3508295-03:00",
+    "generated_at":  "2026-06-20T18:10:53.6406840-03:00",
     "mcp_server_status":  "not_implemented",
     "mcp_server_note":  "No live MCP server is implemented. This catalog is a deterministic local export artifact only.",
     "read_only_policy":  true,
@@ -19,16 +19,16 @@
                           "read_only":  true,
                           "description":  "Machine-readable current SpecBridge operator goal and task status.",
                           "data":  {
-                                       "current_task_id":  "issue-228-standard-readiness-status",
-                                       "run_id":  "sb-20260620-0228a1b2",
-                                       "title":  "Add SpecBridge standard readiness status",
-                                       "status":  "active",
-                                       "primary_pr":  0,
+                                       "current_task_id":  "no-active-task",
+                                       "run_id":  null,
+                                       "title":  "No active governed task",
+                                       "status":  "ready_for_next_task",
+                                       "primary_pr":  null,
                                        "closure_pr":  null,
-                                       "last_completed_task_id":  "issue-224-token-context-governance",
-                                       "last_completed_run_id":  "sb-20260616-0224a11d",
-                                       "last_updated":  "2026-06-20T20:08:15Z",
-                                       "updated_by":  "ChatGPT/Codex issue-228 standard readiness intake"
+                                       "last_completed_task_id":  "issue-228-standard-readiness-status",
+                                       "last_completed_run_id":  "sb-20260620-0228a1b2",
+                                       "last_updated":  "2026-06-20T21:04:13Z",
+                                       "updated_by":  "ChatGPT/Codex issue-228 post-merge closure"
                                    }
                       },
                       {
@@ -67,7 +67,7 @@
 
                                                    ],
                                        "action_count":  0,
-                                       "checked_at":  "2026-06-20T17:18:34.1696733-03:00"
+                                       "checked_at":  "2026-06-20T18:10:53.5121389-03:00"
                                    }
                       },
                       {
