@@ -2,14 +2,14 @@
     "command":  "specbridge-standard-readiness",
     "ok":  true,
     "schema_version":  "1",
-    "readiness":  "continue_current_goal",
-    "recommended_next_action":  "continue_current_goal",
+    "readiness":  "ready_for_governed_task_intake",
+    "recommended_next_action":  "create_new_operator_task",
     "task_selection":  {
-                           "current_goal_status":  "active",
-                           "current_task_id":  "issue-234-readonly-mcp-runtime",
+                           "current_goal_status":  "ready_for_next_task",
+                           "current_task_id":  "unknown",
                            "eligible_task_count":  0,
                            "excluded_issue_count":  1,
-                           "recommended_action":  "continue_current_goal"
+                           "recommended_action":  "create_new_operator_task"
                        },
     "doctor":  {
                    "health":  "healthy",
@@ -24,9 +24,9 @@
                               "overall_health_posture":  "debt_present_cleanup_blocked",
                               "cleanup_permission":  "none",
                               "enforcement_status":  "none",
-                              "branch_cleanup_blocked":  47,
+                              "branch_cleanup_blocked":  49,
                               "artifact_retention_blocked":  17,
-                              "total_blocked_actions":  64
+                              "total_blocked_actions":  66
                           },
     "token_context_governance":  {
                                      "governance_id":  "specbridge-token-context-governance",

@@ -9,6 +9,7 @@
     ".specbridge/audits/issue-234-readonly-mcp-runtime.chatgpt-audit.json",
     ".specbridge/context/CURRENT_GOAL.md",
     ".specbridge/contracts/issue-234-readonly-mcp-runtime.execution.md",
+    ".specbridge/github-evidence/issue-234-readonly-mcp-runtime.closure.json",
     ".specbridge/github-evidence/issue-234-readonly-mcp-runtime.pr-227-reconciliation.json",
     ".specbridge/ledger/operations.ndjson",
     ".specbridge/mcp-resources/operator-state.catalog.json",
@@ -33,6 +34,7 @@
     { "file": "docs/specbridge-mcp-readonly-runtime.md", "added_lines": null, "deleted_lines": 0 },
     { "file": "docs/specbridge-mcp-resource-exports.md", "added_lines": null, "deleted_lines": null },
     { "file": "docs/mcp-server-implementation-plan.md", "added_lines": null, "deleted_lines": null },
+    { "file": ".specbridge/github-evidence/issue-234-readonly-mcp-runtime.closure.json", "added_lines": null, "deleted_lines": 0 },
     { "file": ".specbridge/github-evidence/issue-234-readonly-mcp-runtime.pr-227-reconciliation.json", "added_lines": null, "deleted_lines": 0 },
     { "file": ".specbridge/contracts/issue-234-readonly-mcp-runtime.execution.md", "added_lines": null, "deleted_lines": 0 },
     { "file": ".specbridge/scopes/issue-234-readonly-mcp-runtime.scope.json", "added_lines": null, "deleted_lines": 0 },
@@ -85,9 +87,10 @@
     "Mutation-capable MCP tools remain intentionally blocked.",
     "Branch cleanup and artifact retention debt remain observable but unenforced by policy."
   ],
-  "completion_status": "ready_for_merge",
+  "completion_status": "complete",
   "source_files": [
     ".specbridge/contracts/issue-234-readonly-mcp-runtime.execution.md",
+    ".specbridge/github-evidence/issue-234-readonly-mcp-runtime.closure.json",
     ".specbridge/github-evidence/issue-234-readonly-mcp-runtime.pr-227-reconciliation.json",
     ".specbridge/scopes/issue-234-readonly-mcp-runtime.scope.json",
     ".specbridge/reports/issue-234-readonly-mcp-runtime.final-report.json",

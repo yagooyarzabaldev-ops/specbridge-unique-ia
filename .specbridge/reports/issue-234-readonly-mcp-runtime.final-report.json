@@ -6,6 +6,7 @@
     ".specbridge/audits/issue-234-readonly-mcp-runtime.chatgpt-audit.json",
     ".specbridge/context/CURRENT_GOAL.md",
     ".specbridge/contracts/issue-234-readonly-mcp-runtime.execution.md",
+    ".specbridge/github-evidence/issue-234-readonly-mcp-runtime.closure.json",
     ".specbridge/github-evidence/issue-234-readonly-mcp-runtime.pr-227-reconciliation.json",
     ".specbridge/ledger/operations.ndjson",
     ".specbridge/mcp-resources/operator-state.catalog.json",
@@ -47,7 +48,7 @@
     "Mutation-capable MCP tools remain intentionally blocked.",
     "Branch cleanup and artifact retention debt remain observable but unenforced by policy."
   ],
-  "merge_status": "PR #235 is open, mergeable, and all required GitHub Actions checks passed on head 49063f68279d9bd53b29fe88fa6c90a33c5058ea. Autonomous merge is allowed by the issue-234 contract once this evidence commit is validated.",
+  "merge_status": "PR #235 merged on 2026-06-21T21:01:16Z at merge commit 363091babcebdced9205f89b95d7745b88d8d940. Issue #234 closed automatically as completed and post-merge closure evidence was recorded.",
   "deployment_status": "Not applicable.",
-  "completion_status": "ready_for_merge"
+  "completion_status": "complete"
 }

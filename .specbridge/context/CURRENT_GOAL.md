@@ -50,6 +50,7 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | 224 | Token and context governance standard | 225 | Merged 2026-06-16 |
 | 228 | Standard readiness status | 229 | Merged 2026-06-20 |
 | 231 | Claude runtime capability negotiation | 232 | Merged 2026-06-21 UTC |
+| 234 | Read-only MCP runtime and backlog hygiene closure | 235 | Merged 2026-06-21 UTC |
 
 ## Architecture Status
 
@@ -81,9 +82,9 @@ SpecBridge currently has:
 
 ## Next Recommended Task
 
-Active governed task: issue #234 (`issue-234-readonly-mcp-runtime`) implements the bounded read-only MCP runtime and stale PR #227 backlog hygiene closure under contract `issue-234-readonly-mcp-runtime`.
+Issue #234 (`issue-234-readonly-mcp-runtime`) is complete. PR #235 merged the bounded read-only MCP runtime, closed issue #234, and recorded post-merge closure evidence.
 
-Run `specbridge-standard-readiness` and `specbridge-next-task` after issue #234 closes to select the next issue.
+Run `specbridge-standard-readiness` and `specbridge-next-task` to select the next governed task from repository evidence.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;

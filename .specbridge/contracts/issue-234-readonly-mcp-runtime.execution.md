@@ -9,7 +9,7 @@
 - created_at: 2026-06-21
 - autonomy_profile: full_autopilot
 - risk_level: medium
-- status: ready_for_execution
+- status: completed
 
 ## Goal
 
@@ -56,6 +56,7 @@ Medium. The task introduces a local MCP-style runtime/read harness and updates r
 .specbridge/reports/issue-234-readonly-mcp-runtime.final-report.json
 .specbridge/audit-packets/issue-234-readonly-mcp-runtime.audit-packet.json
 .specbridge/audits/issue-234-readonly-mcp-runtime.chatgpt-audit.json
+.specbridge/github-evidence/issue-234-readonly-mcp-runtime.closure.json
 .specbridge/github-evidence/issue-234-readonly-mcp-runtime.pr-227-reconciliation.json
 .specbridge/ledger/operations.ndjson
 .specbridge/state/current-goal.json

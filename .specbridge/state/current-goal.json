@@ -1,12 +1,15 @@
 {
-  "current_task_id": "issue-234-readonly-mcp-runtime",
-  "run_id": "sb-20260621-0234a1b2",
-  "title": "Implement read-only MCP runtime and backlog hygiene closure",
-  "status": "active",
-  "primary_pr": 232,
-  "closure_pr": null,
-  "last_completed_task_id": "issue-231-claude-runtime-capability-negotiation",
-  "last_completed_run_id": "sb-20260620-0231c1d2",
-  "last_updated": "2026-06-21T18:38:10Z",
-  "updated_by": "ChatGPT/Codex issue-234 contract intake"
+  "current_task_id": null,
+  "run_id": null,
+  "title": null,
+  "status": "ready_for_next_task",
+  "primary_pr": null,
+  "closure_pr": 235,
+  "last_completed_task_id": "issue-234-readonly-mcp-runtime",
+  "last_completed_run_id": "sb-20260621-0234a1b2",
+  "last_completed_pr": 235,
+  "last_completed_merge_commit": "363091babcebdced9205f89b95d7745b88d8d940",
+  "last_completed_at": "2026-06-21T21:01:17Z",
+  "last_updated": "2026-06-21T21:01:17Z",
+  "updated_by": "ChatGPT/Codex issue-234 post-merge closure"
 }

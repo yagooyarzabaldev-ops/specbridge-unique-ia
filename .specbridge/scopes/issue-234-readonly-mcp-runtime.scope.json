@@ -1,13 +1,14 @@
 {
   "contract_id": "issue-234-readonly-mcp-runtime",
   "run_id": "sb-20260621-0234a1b2",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/contracts/issue-234-readonly-mcp-runtime.execution.md",
     ".specbridge/scopes/issue-234-readonly-mcp-runtime.scope.json",
     ".specbridge/reports/issue-234-readonly-mcp-runtime.final-report.json",
     ".specbridge/audit-packets/issue-234-readonly-mcp-runtime.audit-packet.json",
     ".specbridge/audits/issue-234-readonly-mcp-runtime.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-234-readonly-mcp-runtime.closure.json",
     ".specbridge/github-evidence/issue-234-readonly-mcp-runtime.pr-227-reconciliation.json",
     ".specbridge/ledger/operations.ndjson",
     ".specbridge/state/current-goal.json",

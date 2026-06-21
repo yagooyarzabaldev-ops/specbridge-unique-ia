@@ -1,0 +1,46 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-234-readonly-mcp-runtime",
+  "run_id": "sb-20260621-0234a1b2",
+  "closure_type": "post_merge_memory",
+  "pr": {
+    "number": 235,
+    "url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/235",
+    "title": "Implement read-only MCP runtime",
+    "merged": true,
+    "merged_at": "2026-06-21T21:01:16Z",
+    "head_sha": "788147ab544bc9b98273cfe4910110f5bcd5c605",
+    "merge_commit_sha": "363091babcebdced9205f89b95d7745b88d8d940"
+  },
+  "issue": {
+    "number": 234,
+    "url": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/234",
+    "state": "closed",
+    "state_reason": "completed",
+    "closed_at": "2026-06-21T21:01:17Z"
+  },
+  "github_actions": [
+    {
+      "name": "Foundation Validation",
+      "run_id": 27916770668,
+      "conclusion": "success"
+    },
+    {
+      "name": "SpecBridge Review Gate",
+      "run_id": 27916770687,
+      "conclusion": "success"
+    },
+    {
+      "name": "SpecBridge PR Review Report",
+      "run_id": 27916770669,
+      "conclusion": "success"
+    },
+    {
+      "name": "Claude Review Non Blocking",
+      "run_id": 27916770672,
+      "conclusion": "success"
+    }
+  ],
+  "policy_result": "Within policy. No deployment, secrets, production, billing, auth, database, dependency installation, CI/CD security change, branch cleanup, artifact cleanup, mutation-capable MCP tools, network MCP transport, or issue #194 lifecycle change occurred.",
+  "post_merge_memory_status": "recorded"
+}

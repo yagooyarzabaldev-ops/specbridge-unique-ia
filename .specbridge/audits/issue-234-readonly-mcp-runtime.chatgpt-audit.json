@@ -51,7 +51,7 @@
     {
       "name": "final_report_honesty",
       "result": "pass",
-      "evidence": "The final report states ready_for_merge status, records local validations and passed GitHub Actions, does not claim deployment, and does not claim post-merge closure before merge occurs.",
+      "evidence": "The final report states complete status, records local validations, passed GitHub Actions, PR #235 merge, issue #234 closure, post-merge closure evidence, and no deployment.",
       "blocking": false
     }
   ],
@@ -85,6 +85,7 @@
   "source_files": [
     ".specbridge/audit-packets/issue-234-readonly-mcp-runtime.audit-packet.json",
     ".specbridge/contracts/issue-234-readonly-mcp-runtime.execution.md",
+    ".specbridge/github-evidence/issue-234-readonly-mcp-runtime.closure.json",
     ".specbridge/github-evidence/issue-234-readonly-mcp-runtime.pr-227-reconciliation.json",
     ".specbridge/reports/issue-234-readonly-mcp-runtime.final-report.json",
     ".specbridge/scopes/issue-234-readonly-mcp-runtime.scope.json",
