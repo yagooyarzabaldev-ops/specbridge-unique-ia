@@ -39,10 +39,10 @@ Each resource entry includes:
 ## MCP Server Status
 
 ```
-not_implemented
+readonly_local_runtime
 ```
 
-No live MCP server runtime exists. This command is the first step toward a governed MCP resource surface. A future dedicated contract is required before any server runtime is introduced.
+A bounded local read-only MCP-style runtime is now available through the `specbridge-mcp-runtime` CLI command. It supports `resources/list` and `resources/read` only. No live server process, no network transport, no mutation tools. See `docs/specbridge-mcp-readonly-runtime.md` for the full runtime contract.
 
 ## Output Path Behavior
 

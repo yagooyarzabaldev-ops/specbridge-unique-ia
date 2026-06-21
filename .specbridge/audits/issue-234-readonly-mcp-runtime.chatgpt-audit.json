@@ -1,0 +1,98 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-234-readonly-mcp-runtime",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-234-readonly-mcp-runtime.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-234-readonly-mcp-runtime.execution.md",
+  "final_report_path": ".specbridge/reports/issue-234-readonly-mcp-runtime.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "The implementation adds a bounded local read-only MCP-style runtime under issue #234, updates catalog/readiness surfaces, adds tests and documentation, and records stale PR #227 reconciliation evidence.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "specbridge-mcp-runtime lists three resources, reads each known resource URI, rejects mutation-like methods such as tools/call and resources/write, rejects unknown URIs, and reports readonly_local_runtime through specbridge-mcp-resources and standard readiness.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The change does not add network MCP transport, mutation-capable tools, dependency installation, .mcp config, CI workflow changes, secrets, production, billing, auth, database, deployment, cleanup enforcement, artifact retention enforcement, issue #194 changes, or digital twin implementation.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The runtime only calls existing repository-local resource builders and returns deterministic JSON. Unsupported and mutation-capable methods return ok=false with deterministic errors.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed files are declared in the issue-234 execution contract and scope manifest.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "validate-contracts, validate-contract-scopes, test-specbridge-cli, validate-final-reports, validate-audit-packets, validate-chatgpt-audits, specbridge-smoke, git diff --check, and manual runtime probes passed locally before PR creation.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub Actions passed on PR #235 head 49063f68279d9bd53b29fe88fa6c90a33c5058ea: Foundation Validation, SpecBridge Review Gate, SpecBridge PR Review Report, and Claude Review Non Blocking.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report states ready_for_merge status, records local validations and passed GitHub Actions, does not claim deployment, and does not claim post-merge closure before merge occurs.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "local_runtime_not_network_server",
+      "file": "docs/specbridge-mcp-readonly-runtime.md",
+      "line": null,
+      "evidence": "The runtime is intentionally a local MCP-style CLI harness, not a network MCP server transport.",
+      "recommendation": "Keep full MCP server transport blocked until a future dedicated contract authorizes it.",
+      "blocking": false
+    },
+    {
+      "severity": "info",
+      "category": "cleanup_retention_still_blocked",
+      "file": ".specbridge/standard-readiness/current.status.json",
+      "line": null,
+      "evidence": "Repository health still reports branch and artifact debt with cleanup_permission=none and retention_enforcement=none.",
+      "recommendation": "Do not delete, prune, archive, compress, or move branches/artifacts without a future active cleanup contract.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "This is a local MCP-style harness, not a network MCP server transport.",
+    "Mutation-capable MCP tools remain intentionally blocked.",
+    "Branch cleanup and artifact retention debt remain observable but unenforced by policy."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-234-readonly-mcp-runtime.audit-packet.json",
+    ".specbridge/contracts/issue-234-readonly-mcp-runtime.execution.md",
+    ".specbridge/github-evidence/issue-234-readonly-mcp-runtime.pr-227-reconciliation.json",
+    ".specbridge/reports/issue-234-readonly-mcp-runtime.final-report.json",
+    ".specbridge/scopes/issue-234-readonly-mcp-runtime.scope.json",
+    "docs/specbridge-mcp-readonly-runtime.md",
+    "docs/specbridge-mcp-resource-exports.md",
+    "docs/mcp-server-implementation-plan.md",
+    "scripts/lib/mcp-resources.ps1",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ]
+}

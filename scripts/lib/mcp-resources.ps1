@@ -127,11 +127,129 @@ function Build-McpResourceCatalog {
     schema_version      = "1"
     catalog_id          = "specbridge-operator-state"
     generated_at        = (Get-Date -Format "o")
-    mcp_server_status   = "not_implemented"
-    mcp_server_note     = "No live MCP server is implemented. This catalog is a deterministic local export artifact only."
+    mcp_server_status   = "readonly_local_runtime"
+    mcp_server_note     = "Bounded local read-only MCP-style runtime: resources/list and resources/read only. No network transport, no mutation, no secrets, no server process."
     read_only_policy    = $true
     resources           = $resources
   }
+}
+
+$script:McpSupportedMethods = @("resources/list", "resources/read")
+
+$script:McpBlockedMethods = @(
+  "tools/call", "tools/list",
+  "resources/create", "resources/update", "resources/delete", "resources/write",
+  "resources/subscribe", "resources/unsubscribe",
+  "prompts/get", "prompts/list",
+  "sampling/createMessage",
+  "logging/setLevel",
+  "completion/complete",
+  "initialize", "initialized", "shutdown", "exit",
+  "ping"
+)
+
+$script:McpKnownUris = @(
+  "specbridge://operator/current-goal",
+  "specbridge://operator/doctor-fix-plan",
+  "specbridge://operator/orchestration-summaries"
+)
+
+function Invoke-McpRuntimeCommand {
+  if ([string]::IsNullOrWhiteSpace($Method)) {
+    Fail "Method is required for specbridge-mcp-runtime. Supported: $($script:McpSupportedMethods -join ', ')"
+  }
+
+  if ($script:McpBlockedMethods -contains $Method) {
+    Write-CliJson ([ordered]@{
+      command         = "specbridge-mcp-runtime"
+      ok              = $false
+      error           = "method_not_allowed"
+      method          = $Method
+      detail          = "This method is blocked by the read-only MCP runtime policy."
+      allowed_methods = $script:McpSupportedMethods
+    })
+    exit 1
+  }
+
+  if ($Method -eq "resources/list") {
+    $resources = @(
+      [ordered]@{
+        uri         = "specbridge://operator/current-goal"
+        name        = "specbridge://operator/current-goal"
+        description = "Machine-readable current SpecBridge operator goal and task status."
+        mimeType    = "application/json"
+      },
+      [ordered]@{
+        uri         = "specbridge://operator/doctor-fix-plan"
+        name        = "specbridge://operator/doctor-fix-plan"
+        description = "Offline specbridge-doctor fix-plan output: detected drift classes, severity, repair commands, and safe_to_automate flags."
+        mimeType    = "application/json"
+      },
+      [ordered]@{
+        uri         = "specbridge://operator/orchestration-summaries"
+        name        = "specbridge://operator/orchestration-summaries"
+        description = "Summarized view of all SpecBridge orchestration manifests: task_id, status, run_id, and created_at."
+        mimeType    = "application/json"
+      }
+    )
+    Write-CliJson ([ordered]@{
+      command = "specbridge-mcp-runtime"
+      ok      = $true
+      method  = "resources/list"
+      result  = [ordered]@{
+        resources = $resources
+      }
+    }) -Depth 8
+    return
+  }
+
+  if ($Method -eq "resources/read") {
+    if ([string]::IsNullOrWhiteSpace($Uri)) {
+      Fail "Uri is required for resources/read"
+    }
+    $normalizedUri = $Uri.Trim()
+    if ($script:McpKnownUris -notcontains $normalizedUri) {
+      Write-CliJson ([ordered]@{
+        command    = "specbridge-mcp-runtime"
+        ok         = $false
+        error      = "resource_not_found"
+        uri        = $normalizedUri
+        detail     = "Unknown resource URI. Use resources/list to see available URIs."
+        known_uris = $script:McpKnownUris
+      })
+      exit 1
+    }
+    $resource = switch ($normalizedUri) {
+      "specbridge://operator/current-goal"            { Get-McpCurrentGoalResource }
+      "specbridge://operator/doctor-fix-plan"         { Get-McpDoctorFixPlanResource }
+      "specbridge://operator/orchestration-summaries" { Get-McpOrchestrationSummariesResource }
+    }
+    Write-CliJson ([ordered]@{
+      command = "specbridge-mcp-runtime"
+      ok      = $true
+      method  = "resources/read"
+      uri     = $normalizedUri
+      result  = [ordered]@{
+        contents = @([ordered]@{
+          uri      = $resource.uri
+          mimeType = $resource.content_type
+          text     = ($resource.data | ConvertTo-Json -Depth 10 -Compress)
+        })
+      }
+    }) -Depth 10
+    return
+  }
+
+  # Unrecognised method that is not in the blocked list
+  Write-CliJson ([ordered]@{
+    command         = "specbridge-mcp-runtime"
+    ok              = $false
+    error           = "method_not_found"
+    method          = $Method
+    detail          = "Unknown MCP method."
+    allowed_methods = $script:McpSupportedMethods
+  })
+  exit 1
 }
 
 function Invoke-McpResourcesCommand {

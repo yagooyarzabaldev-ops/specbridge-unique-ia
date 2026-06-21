@@ -75,4 +75,4 @@ Tools with side effects must be explicitly marked and auditable.
 
 ## Current Status
 
-Planning only.
+A bounded local read-only MCP-style runtime is implemented as `specbridge-mcp-runtime` (issue #234). It supports `resources/list` and `resources/read` for the three existing operator-state resources only. All mutation-capable methods and network transport remain blocked. Full MCP server runtime (network, tools, GitHub resources) remains future-planned and requires a dedicated contract.

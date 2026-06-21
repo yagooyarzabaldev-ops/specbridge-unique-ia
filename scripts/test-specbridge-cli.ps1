@@ -1228,6 +1228,92 @@ try {
       }
     }
 
+    # specbridge-mcp-runtime: resources/list
+    $mcpListResult = Invoke-Cli -Arguments @("specbridge-mcp-runtime", "-Method", "resources/list")
+    Assert-Success `
+      -Name "specbridge-mcp-runtime resources/list" `
+      -Result $mcpListResult `
+      -ExpectedPattern '"method"\s*:\s*"resources/list"'
+    if ($mcpListResult.ExitCode -eq 0) {
+      $mcpListJson = $null
+      try { $mcpListJson = $mcpListResult.Text.Trim() | ConvertFrom-Json } catch {}
+      if ($null -eq $mcpListJson) {
+        Write-Output "FAIL specbridge-mcp-runtime resources/list: output not valid JSON."
+        $script:failed = $true
+      } elseif (@($mcpListJson.result.resources).Count -ne 3) {
+        Write-Output "FAIL specbridge-mcp-runtime resources/list: expected 3 resources, got $(@($mcpListJson.result.resources).Count)."
+        $script:failed = $true
+      } else {
+        $uris = @($mcpListJson.result.resources | ForEach-Object { $_.uri })
+        $expectedUris = @("specbridge://operator/current-goal","specbridge://operator/doctor-fix-plan","specbridge://operator/orchestration-summaries")
+        $missingUris = $expectedUris | Where-Object { $uris -notcontains $_ }
+        if ($missingUris.Count -gt 0) {
+          Write-Output "FAIL specbridge-mcp-runtime resources/list: missing URIs: $($missingUris -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-mcp-runtime resources/list: 3 expected URIs present."
+        }
+      }
+    }
+
+    # specbridge-mcp-runtime: resources/read each known URI
+    foreach ($mcpUri in @("specbridge://operator/current-goal","specbridge://operator/doctor-fix-plan","specbridge://operator/orchestration-summaries")) {
+      $mcpReadResult = Invoke-Cli -Arguments @("specbridge-mcp-runtime", "-Method", "resources/read", "-Uri", $mcpUri)
+      Assert-Success `
+        -Name "specbridge-mcp-runtime resources/read $mcpUri" `
+        -Result $mcpReadResult `
+        -ExpectedPattern '"method"\s*:\s*"resources/read"'
+      if ($mcpReadResult.ExitCode -eq 0) {
+        $mcpReadJson = $null
+        try { $mcpReadJson = $mcpReadResult.Text.Trim() | ConvertFrom-Json } catch {}
+        if ($null -eq $mcpReadJson -or $mcpReadJson.ok -ne $true) {
+          Write-Output "FAIL specbridge-mcp-runtime resources/read $mcpUri`: not ok or not valid JSON."
+          $script:failed = $true
+        } elseif ($mcpReadJson.uri -ne $mcpUri) {
+          Write-Output "FAIL specbridge-mcp-runtime resources/read $mcpUri`: uri mismatch in response."
+          $script:failed = $true
+        } elseif (@($mcpReadJson.result.contents).Count -ne 1) {
+          Write-Output "FAIL specbridge-mcp-runtime resources/read $mcpUri`: expected 1 content item."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-mcp-runtime resources/read $mcpUri`: ok=true, 1 content item."
+        }
+      }
+    }
+
+    # specbridge-mcp-runtime: unsupported mutation method is rejected
+    $mcpToolsCallResult = Invoke-Cli -Arguments @("specbridge-mcp-runtime", "-Method", "tools/call")
+    if ($mcpToolsCallResult.ExitCode -ne 0 -and $mcpToolsCallResult.Text -match "method_not_allowed") {
+      Write-Output "PASS CLI failure: specbridge-mcp-runtime-tools-call-rejected"
+    } else {
+      Write-Output "FAIL specbridge-mcp-runtime-tools-call-rejected: expected failure with method_not_allowed."
+      $script:failed = $true
+    }
+
+    $mcpWriteResult = Invoke-Cli -Arguments @("specbridge-mcp-runtime", "-Method", "resources/write")
+    if ($mcpWriteResult.ExitCode -ne 0 -and $mcpWriteResult.Text -match "method_not_allowed") {
+      Write-Output "PASS CLI failure: specbridge-mcp-runtime-resources-write-rejected"
+    } else {
+      Write-Output "FAIL specbridge-mcp-runtime-resources-write-rejected: expected failure with method_not_allowed."
+      $script:failed = $true
+    }
+
+    # specbridge-mcp-runtime: unknown URI returns resource_not_found
+    $mcpUnknownUriResult = Invoke-Cli -Arguments @("specbridge-mcp-runtime", "-Method", "resources/read", "-Uri", "specbridge://operator/nonexistent")
+    if ($mcpUnknownUriResult.ExitCode -ne 0 -and $mcpUnknownUriResult.Text -match "resource_not_found") {
+      Write-Output "PASS CLI failure: specbridge-mcp-runtime-unknown-uri-rejected"
+    } else {
+      Write-Output "FAIL specbridge-mcp-runtime-unknown-uri-rejected: expected failure with resource_not_found."
+      $script:failed = $true
+    }
+
+    # specbridge-mcp-resources catalog now reports readonly_local_runtime
+    $mcpResourcesResult = Invoke-Cli -Arguments @("specbridge-mcp-resources")
+    Assert-Success `
+      -Name "specbridge-mcp-resources-readonly-runtime-status" `
+      -Result $mcpResourcesResult `
+      -ExpectedPattern '"mcp_server_status"\s*:\s*"readonly_local_runtime"'
+
     Assert-Success `
       -Name "runtime-capability-status" `
       -Result (Invoke-Cli -Arguments @("runtime-capability-status")) `
@@ -2569,12 +2655,12 @@ try {
           Write-Output "PASS specbridge-mcp-resources: catalog has all required fields."
         }
 
-        # mcp_server_status must be not_implemented
-        if ($mcpJson.catalog.mcp_server_status -ne "not_implemented") {
-          Write-Output "FAIL specbridge-mcp-resources: mcp_server_status expected 'not_implemented'."
+        # mcp_server_status records the bounded read-only runtime.
+        if ($mcpJson.catalog.mcp_server_status -ne "readonly_local_runtime") {
+          Write-Output "FAIL specbridge-mcp-resources: mcp_server_status expected 'readonly_local_runtime'."
           $script:failed = $true
         } else {
-          Write-Output "PASS specbridge-mcp-resources: mcp_server_status is not_implemented."
+          Write-Output "PASS specbridge-mcp-resources: mcp_server_status is readonly_local_runtime."
         }
 
         # 2. Required resources present
@@ -4094,11 +4180,12 @@ try {
           $script:failed = $true
         }
 
-        if ($srJson.mcp_resource_surface.mcp_server_status -ne "not_implemented" -or $srJson.mcp_resource_surface.read_only_policy -ne $true) {
-          Write-Output "FAIL specbridge-standard-readiness: MCP surface should remain read-only with no server runtime."
+        $validMcpStatuses = @("not_implemented", "readonly_local_runtime")
+        if ($validMcpStatuses -notcontains $srJson.mcp_resource_surface.mcp_server_status -or $srJson.mcp_resource_surface.read_only_policy -ne $true) {
+          Write-Output "FAIL specbridge-standard-readiness: MCP surface should remain read-only (got mcp_server_status=$($srJson.mcp_resource_surface.mcp_server_status))."
           $script:failed = $true
         } else {
-          Write-Output "PASS specbridge-standard-readiness: MCP surface remains read-only and local."
+          Write-Output "PASS specbridge-standard-readiness: MCP surface is read-only (mcp_server_status=$($srJson.mcp_resource_surface.mcp_server_status))."
         }
       }
     }

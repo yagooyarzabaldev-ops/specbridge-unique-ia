@@ -2,14 +2,14 @@
     "command":  "specbridge-standard-readiness",
     "ok":  true,
     "schema_version":  "1",
-    "readiness":  "ready_for_governed_task_intake",
-    "recommended_next_action":  "create_new_operator_task",
+    "readiness":  "continue_current_goal",
+    "recommended_next_action":  "continue_current_goal",
     "task_selection":  {
-                           "current_goal_status":  "ready_for_next_task",
-                           "current_task_id":  "unknown",
+                           "current_goal_status":  "active",
+                           "current_task_id":  "issue-234-readonly-mcp-runtime",
                            "eligible_task_count":  0,
                            "excluded_issue_count":  1,
-                           "recommended_action":  "create_new_operator_task"
+                           "recommended_action":  "continue_current_goal"
                        },
     "doctor":  {
                    "health":  "healthy",
@@ -24,9 +24,9 @@
                               "overall_health_posture":  "debt_present_cleanup_blocked",
                               "cleanup_permission":  "none",
                               "enforcement_status":  "none",
-                              "branch_cleanup_blocked":  46,
+                              "branch_cleanup_blocked":  47,
                               "artifact_retention_blocked":  17,
-                              "total_blocked_actions":  63
+                              "total_blocked_actions":  64
                           },
     "token_context_governance":  {
                                      "governance_id":  "specbridge-token-context-governance",
@@ -38,7 +38,7 @@
                                      "blocked_disclosure_count":  10
                                  },
     "mcp_resource_surface":  {
-                                 "mcp_server_status":  "not_implemented",
+                                 "mcp_server_status":  "readonly_local_runtime",
                                  "read_only_policy":  true,
                                  "resource_count":  3,
                                  "resource_uris":  [

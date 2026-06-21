@@ -1,0 +1,20 @@
+{
+  "task_id": "issue-234-readonly-mcp-runtime",
+  "run_id": "sb-20260621-0234a1b2",
+  "reconciliation_type": "research_backlog_hygiene",
+  "stale_pr": 227,
+  "stale_pr_title": "Tango 70B research note",
+  "decision": "closed_without_merge",
+  "reason": "PR #227 is a research-only backlog note from an old base branch. It is not an active governed task and has no current execution contract. Merging stale branch content without a valid contract would violate the governed operating model. The content is preserved on its branch for future reference if a dedicated contract is created.",
+  "action_taken": "commented_and_closed_without_merge",
+  "comment_id": 4763032107,
+  "pr_closed": true,
+  "pr_closed_at": "2026-06-21T19:21:42Z",
+  "branch_deleted": false,
+  "branch_pruned": false,
+  "merge_performed": false,
+  "cleanup_performed": false,
+  "policy_boundary": "branch_deletion_and_cleanup_blocked_per_scope",
+  "recorded_at": "2026-06-21T18:58:00Z",
+  "recorded_by": "Claude Code implementation, ChatGPT/Codex audit"
+}

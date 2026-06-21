@@ -1,11 +1,13 @@
 param(
   [Parameter(Position = 0)]
-  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "issue-to-merge-plan", "issue-to-merge-github", "specbridge-intake", "specbridge-doctor", "specbridge-orchestrate", "specbridge-handoff", "specbridge-review-report", "specbridge-next-task", "generate-dashboard", "generate-studio-dashboard", "lifecycle-guard", "quickstart", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate", "specbridge-mcp-resources", "specbridge-artifact-inventory", "specbridge-branch-inventory", "specbridge-branch-cleanup-policy", "specbridge-artifact-retention-policy", "specbridge-repository-health-summary", "specbridge-token-governance-status", "specbridge-standard-readiness")]
+  [ValidateSet("status", "validate", "create-contract", "create-report", "audit-packet", "detect-conflicts", "decompose-task", "prepare-executors", "prepare-runtime-launch", "preflight-runtime-launches", "execute-runtime-launch", "run-runtime-launch", "record-runtime-result", "summarize-runtime", "summarize-autonomy-metrics", "standard-loop-status", "standard-loop-orchestrate", "issue-to-merge-plan", "issue-to-merge-github", "specbridge-intake", "specbridge-doctor", "specbridge-orchestrate", "specbridge-handoff", "specbridge-review-report", "specbridge-next-task", "generate-dashboard", "generate-studio-dashboard", "lifecycle-guard", "quickstart", "v5-pilot-status", "v5-live-status", "v5-autonomy-status", "v5-serious-pilot-status", "runtime-capability-status", "bounded-live-pilot-status", "plan-executor-branches", "record-github-evidence", "coordinate-executors", "review-gate", "specbridge-mcp-resources", "specbridge-mcp-runtime", "specbridge-artifact-inventory", "specbridge-branch-inventory", "specbridge-branch-cleanup-policy", "specbridge-artifact-retention-policy", "specbridge-repository-health-summary", "specbridge-token-governance-status", "specbridge-standard-readiness")]
   [string] $Command = "status",
 
   [string] $TaskId = "",
   [string] $Agent = "",
   [string] $Verdict = "",
+  [string] $Method = "",
+  [string] $Uri = "",
   [string] $Title = "",
   [string] $Goal = "",
   [string] $RelatedIssue = "",
@@ -125,6 +127,7 @@ switch ($Command) {
   "coordinate-executors" { Invoke-CoordinateExecutorsCommand }
   "review-gate" { Invoke-ReviewGateCommand }
   "specbridge-mcp-resources" { Invoke-McpResourcesCommand }
+  "specbridge-mcp-runtime" { Invoke-McpRuntimeCommand }
   "specbridge-artifact-inventory" { Invoke-ArtifactInventoryCommand }
   "specbridge-branch-inventory" { Invoke-BranchInventoryCommand }
   "specbridge-branch-cleanup-policy" { Invoke-BranchCleanupPolicyCommand }

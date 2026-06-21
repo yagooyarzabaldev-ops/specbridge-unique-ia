@@ -77,17 +77,19 @@ SpecBridge currently has:
 - Token and context governance status (specbridge-token-governance-status: deterministic read-only status over Codex context governance, Claude Code runtime limits, MCP/tool context governance, multi-agent slice governance, blocked disclosures, evidence requirements, and provider-source references)
 - Standard readiness status (specbridge-standard-readiness: deterministic read-only operator readiness snapshot over doctor health, next-task posture, repository health, token/context governance, MCP resource posture, and blocked execution boundaries before new governed task intake)
 - Claude runtime capability negotiation (runtime-capability-status: probes installed Claude CLI help to detect --max-turns support; execute-runtime-launch applies --max-turns only when supported and records `claude_capabilities.max_turns` plus the effective `command_summary` in runtime execution evidence)
+- Read-only MCP runtime (specbridge-mcp-runtime: local MCP-style harness for `resources/list` and `resources/read` over current-goal, doctor-fix-plan, and orchestration summaries; mutation-capable methods, network transport, hosted server deployment, secrets, and cleanup enforcement remain blocked)
 
 ## Next Recommended Task
 
-No active governed task. Run `specbridge-standard-readiness` and `specbridge-next-task` to select the next issue.
+Active governed task: issue #234 (`issue-234-readonly-mcp-runtime`) implements the bounded read-only MCP runtime and stale PR #227 backlog hygiene closure under contract `issue-234-readonly-mcp-runtime`.
+
+Run `specbridge-standard-readiness` and `specbridge-next-task` after issue #234 closes to select the next issue.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;
 `specbridge-next-task` will not select it.
 
-Backlog: future governed MCP server runtime remains blocked until a dedicated
-contract explicitly authorizes it.
+Backlog: future mutation-capable MCP tools, network MCP transport, hosted MCP server deployment, and GitHub/resource mutation surfaces remain blocked until a dedicated contract explicitly authorizes them.
 
 Maintenance debt:
 - Branch cleanup remains policy-only. Branch debt is observable through `specbridge-branch-inventory` and classified by `specbridge-branch-cleanup-policy`; no branch deletion, pruning, renaming, movement, archival, fetch, pull, force-push, cleanup apply mode, or retention enforcement is authorized.

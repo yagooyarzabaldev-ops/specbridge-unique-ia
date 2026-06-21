@@ -170,6 +170,7 @@ SpecBridge currently has these governed status layers:
 - Operator queue hygiene and next-task selector (GitHub #196): an open GitHub issue is NOT automatically eligible SpecBridge work. `.specbridge/policies/operator-task-decisions.json` records authoritative operator decisions (`not_planned`, `deferred`, `superseded`, `blocked`) per issue/task; the offline, read-only `specbridge-next-task` command reports eligible tasks, excluded issues and the recommended action; `validate-operator-task-decisions.ps1` gates the registry in smoke; the Studio dashboard shows the Operator Queue. GitHub is storage; the operator decision registry is the brain that decides what runs next.
 - Standard readiness status (issue 228): `specbridge-standard-readiness` aggregates doctor health, next-task posture, repository health, token/context governance, MCP resource posture, and standard execution boundaries into one deterministic read-only operator readiness snapshot before new governed task intake.
 - Claude runtime capability negotiation (issue 231): `runtime-capability-status` and `execute-runtime-launch` now record whether the installed Claude CLI supports `--max-turns`; live launch command assembly applies the flag only when supported and keeps max budget, timeout, no-session, allowed-tool, and redacted-evidence boundaries intact.
+- Read-only MCP runtime (issue 234): `specbridge-mcp-runtime` exposes the existing operator-state resources through local `resources/list` and `resources/read` methods only, rejects mutation-capable methods deterministically, and keeps network transport, secrets, deployment, and cleanup enforcement blocked.
 - Default automation: Full Autopilot is enabled for autonomous merge after required gates pass; production deployment remains disabled.
 
 See:
@@ -206,3 +207,4 @@ See:
 - `docs/specbridge-v5-serious-pilot-status.md`
 - `docs/specbridge-standard-readiness-status.md`
 - `docs/specbridge-claude-runtime-capability-negotiation.md`
+- `docs/specbridge-mcp-readonly-runtime.md`

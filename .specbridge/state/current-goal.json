@@ -1,12 +1,12 @@
 {
-  "current_task_id": null,
-  "run_id": null,
-  "title": null,
-  "status": "ready_for_next_task",
+  "current_task_id": "issue-234-readonly-mcp-runtime",
+  "run_id": "sb-20260621-0234a1b2",
+  "title": "Implement read-only MCP runtime and backlog hygiene closure",
+  "status": "active",
   "primary_pr": 232,
   "closure_pr": null,
   "last_completed_task_id": "issue-231-claude-runtime-capability-negotiation",
   "last_completed_run_id": "sb-20260620-0231c1d2",
-  "last_updated": "2026-06-21T00:18:10Z",
-  "updated_by": "ChatGPT/Codex post-merge closure issue-231"
+  "last_updated": "2026-06-21T18:38:10Z",
+  "updated_by": "ChatGPT/Codex issue-234 contract intake"
 }
