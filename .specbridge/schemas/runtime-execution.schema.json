@@ -45,6 +45,8 @@
     "allowed_tools": { "type": "array", "items": { "type": "string" } },
     "permission_mode": { "type": "string" },
     "max_budget_usd": { "type": "string" },
+    "max_turns": { "type": "integer" },
+    "claude_capabilities": { "type": "object" },
     "command_summary": { "type": "string" },
     "prompt_sections": { "type": "array", "items": { "type": "string" } },
     "execution_status": { "type": "string" },

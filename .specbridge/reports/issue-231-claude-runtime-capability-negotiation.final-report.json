@@ -1,0 +1,52 @@
+{
+  "summary": "Implemented bounded Claude runtime capability negotiation so SpecBridge records a desired max-turns value, probes Claude help only during live execution, applies --max-turns only when the installed CLI exposes support, and records the decision in runtime execution evidence. The change preserves budget, timeout, no-session-persistence, allowed-tools, redaction, dry-run determinism, and no-secret boundaries while adding validator, CLI regression, documentation, and audit evidence coverage.",
+  "changed_files": [
+    ".specbridge/artifact-inventory/current.inventory.json",
+    ".specbridge/audit-packets/issue-231-claude-runtime-capability-negotiation.audit-packet.json",
+    ".specbridge/audits/issue-231-claude-runtime-capability-negotiation.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-231-claude-runtime-capability-negotiation.execution.md",
+    ".specbridge/ledger/operations.ndjson",
+    ".specbridge/mcp-resources/operator-state.catalog.json",
+    ".specbridge/reports/issue-231-claude-runtime-capability-negotiation.final-report.json",
+    ".specbridge/scopes/issue-231-claude-runtime-capability-negotiation.scope.json",
+    ".specbridge/schemas/runtime-execution.schema.json",
+    ".specbridge/schemas/runtime-launch.schema.json",
+    ".specbridge/standard-readiness/current.status.json",
+    ".specbridge/state/current-goal.json",
+    "README.md",
+    "docs/specbridge-claude-runtime-capability-negotiation.md",
+    "docs/specbridge-runtime-runner.md",
+    "docs/specbridge-studio.html",
+    "docs/status-dashboard.html",
+    "scripts/lib/runtime.ps1",
+    "scripts/lib/status.ps1",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "scripts/validate-runtime-executions.ps1",
+    "scripts/validate-runtime-launches.ps1"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-launches.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-runtime-executions.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "git diff --check: passed",
+    "GitHub Actions: not_collected"
+  ],
+  "policy_result": "Within policy. The implementation does not authorize unbounded Claude Code token spending, does not raise runtime budget ceilings, does not access secrets, does not change billing, production, authentication, authorization, database, dependency, deployment, or CI/CD security configuration, and keeps live Claude launches behind existing execute-runtime-launch -Force gates.",
+  "risk_result": "Medium risk and contained. The change touches runtime command assembly, runtime status probing, schemas, validators, tests, and documentation, but it narrows provider flag behavior by only applying --max-turns when support is detected.",
+  "unresolved_risks": [
+    "The installed local Claude CLI currently reports no --max-turns support, so live launches rely on max_budget_usd and TimeoutSeconds until a supporting CLI version is installed.",
+    "GitHub Actions evidence is pending until the pull request is opened and checks complete.",
+    "Post-merge closure evidence is pending until CI passes and the PR merges."
+  ],
+  "merge_status": "Not merged. Local implementation is complete pending final validation, PR, GitHub CI, and post-merge closure.",
+  "deployment_status": "Not applicable.",
+  "completion_status": "local_complete_pending_pr_ci"
+}

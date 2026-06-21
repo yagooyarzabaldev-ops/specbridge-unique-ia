@@ -1502,13 +1502,136 @@ try {
     $fakeBin = Join-Path $caseDir "fake-bin"
     New-Item -ItemType Directory -Force -Path $fakeBin | Out-Null
     $fakeClaudePath = Join-Path $fakeBin "claude.cmd"
+    $previousPath = $env:PATH
+
+    Set-Content -LiteralPath $fakeClaudePath -Encoding ASCII -Value @(
+      "@echo off",
+      "echo %* | findstr /C:""--version"" > nul && echo Fake Claude 1.0 && exit /b 0",
+      "echo %* | findstr /C:""--help"" > nul && echo Usage: claude -p --max-turns 8 --max-budget-usd 2.00 && exit /b 0",
+      "echo Fake Claude success",
+      "exit /b 0"
+    )
+
+    try {
+      $env:PATH = "$fakeBin;$previousPath"
+
+      $fakeCapabilityResult = Invoke-Cli -Arguments @("runtime-capability-status")
+      $fakeMaxTurnsResult = Invoke-Cli -Arguments @(
+        "execute-runtime-launch",
+        "-InputPath",
+        ".specbridge/runtime-launches/cli-fixture.runtime-launch.json",
+        "-OutputPath",
+        ".specbridge/runtime-executions/cli-fake-max-turns-supported.runtime-execution.json",
+        "-TimeoutSeconds",
+        "30",
+        "-Force"
+      )
+    }
+    finally {
+      $env:PATH = $previousPath
+    }
+
+    if ($fakeCapabilityResult.ExitCode -ne 0) {
+      Write-Output "FAIL fake Claude capability status did not succeed."
+      Write-Output $fakeCapabilityResult.Text
+      $failed = $true
+    }
+    else {
+      try {
+        $fakeCapabilityJson = $fakeCapabilityResult.Text.Trim() | ConvertFrom-Json
+
+        if ($fakeCapabilityJson.claude.supports_max_turns -ne $true) {
+          Write-Output "FAIL runtime-capability-status did not detect fake Claude --max-turns support."
+          Write-Output ($fakeCapabilityJson.claude | ConvertTo-Json -Depth 8)
+          $failed = $true
+        }
+        else {
+          Write-Output "PASS runtime-capability-status detects fake Claude --max-turns support."
+        }
+      }
+      catch {
+        Write-Output "FAIL fake Claude capability status output was not valid JSON."
+        $failed = $true
+      }
+    }
+
+    if ($fakeMaxTurnsResult.ExitCode -ne 0) {
+      Write-Output "FAIL fake Claude max-turns supported execution did not succeed."
+      Write-Output $fakeMaxTurnsResult.Text
+      $failed = $true
+    }
+    else {
+      $maxTurnsExecution = Get-Content -LiteralPath ".specbridge/runtime-executions/cli-fake-max-turns-supported.runtime-execution.json" -Raw | ConvertFrom-Json
+
+      if (
+        $maxTurnsExecution.execution_status -ne "succeeded" -or
+        $maxTurnsExecution.claude_capabilities.max_turns.supported -ne $true -or
+        $maxTurnsExecution.claude_capabilities.max_turns.applied -ne $true -or
+        $maxTurnsExecution.command_summary -notmatch "--max-turns\s+8"
+      ) {
+        Write-Output "FAIL execute-runtime-launch did not apply --max-turns when fake Claude supports it."
+        Write-Output ($maxTurnsExecution | ConvertTo-Json -Depth 10)
+        $failed = $true
+      }
+      else {
+        Write-Output "PASS execute-runtime-launch applies --max-turns when fake Claude supports it."
+      }
+    }
+
+    Set-Content -LiteralPath $fakeClaudePath -Encoding ASCII -Value @(
+      "@echo off",
+      "echo %* | findstr /C:""--version"" > nul && echo Fake Claude 1.0 && exit /b 0",
+      "echo %* | findstr /C:""--help"" > nul && echo Usage: claude -p --max-budget-usd 2.00 && exit /b 0",
+      "echo Fake Claude success",
+      "exit /b 0"
+    )
+
+    try {
+      $env:PATH = "$fakeBin;$previousPath"
+
+      $fakeNoMaxTurnsResult = Invoke-Cli -Arguments @(
+        "execute-runtime-launch",
+        "-InputPath",
+        ".specbridge/runtime-launches/cli-fixture.runtime-launch.json",
+        "-OutputPath",
+        ".specbridge/runtime-executions/cli-fake-max-turns-unsupported.runtime-execution.json",
+        "-TimeoutSeconds",
+        "30",
+        "-Force"
+      )
+    }
+    finally {
+      $env:PATH = $previousPath
+    }
+
+    if ($fakeNoMaxTurnsResult.ExitCode -ne 0) {
+      Write-Output "FAIL fake Claude max-turns unsupported execution did not succeed."
+      Write-Output $fakeNoMaxTurnsResult.Text
+      $failed = $true
+    }
+    else {
+      $noMaxTurnsExecution = Get-Content -LiteralPath ".specbridge/runtime-executions/cli-fake-max-turns-unsupported.runtime-execution.json" -Raw | ConvertFrom-Json
+
+      if (
+        $noMaxTurnsExecution.execution_status -ne "succeeded" -or
+        $noMaxTurnsExecution.claude_capabilities.max_turns.supported -ne $false -or
+        $noMaxTurnsExecution.claude_capabilities.max_turns.applied -ne $false -or
+        $noMaxTurnsExecution.command_summary -match "--max-turns\s+8"
+      ) {
+        Write-Output "FAIL execute-runtime-launch applied --max-turns when fake Claude does not support it."
+        Write-Output ($noMaxTurnsExecution | ConvertTo-Json -Depth 10)
+        $failed = $true
+      }
+      else {
+        Write-Output "PASS execute-runtime-launch omits --max-turns when fake Claude does not support it."
+      }
+    }
+
     Set-Content -LiteralPath $fakeClaudePath -Encoding ASCII -Value @(
       "@echo off",
       'powershell -NoProfile -ExecutionPolicy Bypass -Command "[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false); $s = ''Fake Claude failure with unicode: '' + [char]0x00E1 + '' '' + [char]0x00F1 + '' '' + [char]0x2713 + '' repeated 1234567890 1234567890 1234567890 1234567890 1234567890''; Write-Output $s"',
       "exit /b 1"
     )
-
-    $previousPath = $env:PATH
 
     try {
       $env:PATH = "$fakeBin;$previousPath"

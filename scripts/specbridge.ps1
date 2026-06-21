@@ -30,6 +30,7 @@ param(
   [ValidateSet("acceptEdits", "auto", "default", "dontAsk", "plan")]
   [string] $PermissionMode = "acceptEdits",
   [string] $MaxBudgetUsd = "2.00",
+  [int] $MaxTurns = 8,
   [int] $RuntimeExitCode = 0,
   [int] $TimeoutSeconds = 300,
   [string[]] $WrittenFile = @(),

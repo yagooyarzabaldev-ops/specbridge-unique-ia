@@ -35,7 +35,7 @@ $requiredFields = @(
   "source_files"
 )
 
-$allowedFields = $requiredFields + @("failure_diagnostics")
+$allowedFields = $requiredFields + @("failure_diagnostics", "max_turns", "claude_capabilities")
 $allowedExecutionStatuses = @("dry_run", "succeeded", "failed", "timed_out")
 $allowedTools = @("Read", "Write", "Edit")
 $allowedDiagnosticStatuses = @("not_applicable", "recorded")
@@ -400,6 +400,42 @@ foreach ($file in $executionFiles) {
     }
     elseif ($execution.timeout_seconds -lt 30 -or $execution.timeout_seconds -gt 3600) {
       Write-Failure "timeout_seconds must be between 30 and 3600 in $($file.FullName)"
+    }
+  }
+
+  if ($propertyNames -contains "max_turns") {
+    if ($execution.max_turns -isnot [int] -and $execution.max_turns -isnot [long]) {
+      Write-Failure "max_turns must be an integer in $($file.FullName)"
+    }
+    elseif ($execution.max_turns -lt 1 -or $execution.max_turns -gt 100) {
+      Write-Failure "max_turns must be between 1 and 100 in $($file.FullName)"
+    }
+  }
+
+  if ($propertyNames -contains "claude_capabilities") {
+    if ($null -eq $execution.claude_capabilities -or $execution.claude_capabilities.GetType().Name -notmatch "Object") {
+      Write-Failure "claude_capabilities must be an object in $($file.FullName)"
+    }
+    elseif ($execution.claude_capabilities.PSObject.Properties.Name.Contains("max_turns")) {
+      $maxTurnsCapability = $execution.claude_capabilities.max_turns
+
+      foreach ($requiredMaxTurnsCapabilityField in @("flag", "desired_value", "supported", "applied", "probe_source", "probe_status", "reason")) {
+        if (-not $maxTurnsCapability.PSObject.Properties.Name.Contains($requiredMaxTurnsCapabilityField)) {
+          Write-Failure "claude_capabilities.max_turns missing $requiredMaxTurnsCapabilityField in $($file.FullName)"
+        }
+      }
+
+      if ($maxTurnsCapability.PSObject.Properties.Name.Contains("supported") -and $maxTurnsCapability.supported -isnot [bool]) {
+        Write-Failure "claude_capabilities.max_turns.supported must be boolean in $($file.FullName)"
+      }
+
+      if ($maxTurnsCapability.PSObject.Properties.Name.Contains("applied") -and $maxTurnsCapability.applied -isnot [bool]) {
+        Write-Failure "claude_capabilities.max_turns.applied must be boolean in $($file.FullName)"
+      }
+
+      if ($maxTurnsCapability.PSObject.Properties.Name.Contains("flag") -and $maxTurnsCapability.flag -ne "--max-turns") {
+        Write-Failure "claude_capabilities.max_turns.flag must be --max-turns in $($file.FullName)"
+      }
     }
   }
 

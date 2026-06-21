@@ -117,8 +117,13 @@ function Invoke-PrepareRuntimeLaunchCommand {
     Fail "MaxBudgetUsd must be greater than 0 and no more than 10"
   }
 
+  if ($MaxTurns -lt 1 -or $MaxTurns -gt 100) {
+    Fail "MaxTurns must be between 1 and 100"
+  }
+
   $safeLaunchId = Convert-ToSafeName -Value ($packet.packet_id + "-runtime-launch") -FieldName "launch_id"
   $allowedToolsText = ($normalizedAllowedTools -join ",")
+  $maxTurnsText = $MaxTurns.ToString([System.Globalization.CultureInfo]::InvariantCulture)
 
   $promptSections = @(
     "Read README.md, SPECBRIDGE.md, AGENTS.md, CLAUDE.md, .specbridge/policy.yaml, the execution contract, and the executor packet before writing.",
@@ -148,7 +153,15 @@ function Invoke-PrepareRuntimeLaunchCommand {
     allowed_tools = @($normalizedAllowedTools)
     permission_mode = $PermissionMode
     max_budget_usd = $MaxBudgetUsd
-    command_summary = "claude -p --no-session-persistence --max-budget-usd $MaxBudgetUsd --permission-mode $PermissionMode --tools `"$allowedToolsText`" --allowedTools `"$allowedToolsText`" <bounded prompt>"
+    max_turns = $MaxTurns
+    conditional_flags = [ordered]@{
+      max_turns = [ordered]@{
+        flag = "--max-turns"
+        desired_value = $MaxTurns
+        apply_when = "claude_help_exposes_flag"
+      }
+    }
+    command_summary = "claude -p --no-session-persistence --max-budget-usd $MaxBudgetUsd [--max-turns $maxTurnsText if supported] --permission-mode $PermissionMode --tools `"$allowedToolsText`" --allowedTools `"$allowedToolsText`" <bounded prompt>"
     prompt_sections = @($promptSections)
     stop_conditions = @($stopConditions)
     launch_status = "ready_for_operator_launch"
@@ -1289,6 +1302,61 @@ function New-RuntimeExecutionPrompt {
   return ($lines -join "`n")
 }
 
+function Get-RuntimeDesiredMaxTurns {
+  param(
+    [object] $Launch
+  )
+
+  $desiredMaxTurns = 8
+
+  if ($Launch.PSObject.Properties.Name.Contains("max_turns") -and $null -ne $Launch.max_turns) {
+    $desiredMaxTurns = [int] $Launch.max_turns
+  }
+
+  if ($desiredMaxTurns -lt 1 -or $desiredMaxTurns -gt 100) {
+    Fail "max_turns must be between 1 and 100"
+  }
+
+  return $desiredMaxTurns
+}
+
+function New-ClaudeMaxTurnsNegotiation {
+  param(
+    [bool] $DryRun,
+    [int] $DesiredMaxTurns,
+    [AllowNull()]
+    [object] $ClaudeCapability
+  )
+
+  $supported = $false
+  $probeStatus = "not_run_dry_run"
+  $reason = "dry_run_no_probe"
+
+  if (-not $DryRun) {
+    if ($null -eq $ClaudeCapability) {
+      $probeStatus = "not_available"
+      $reason = "claude_capability_unavailable"
+    }
+    else {
+      $supported = [bool] $ClaudeCapability.supports_max_turns
+      $probeStatus = $ClaudeCapability.help_probe_status
+      $reason = $(if ($supported) { "supported_by_claude_help" } else { "not_reported_by_claude_help" })
+    }
+  }
+
+  return [ordered]@{
+    max_turns = [ordered]@{
+      flag = "--max-turns"
+      desired_value = $DesiredMaxTurns
+      supported = $supported
+      applied = (-not $DryRun -and $supported)
+      probe_source = $(if ($DryRun) { "not_run" } else { "claude --help" })
+      probe_status = $probeStatus
+      reason = $reason
+    }
+  }
+}
+
 function Invoke-ExecuteRuntimeLaunchCommand {
   $launchPath = Normalize-RepoPath -Path $InputPath -FieldName "InputPath"
   $output = Assert-OutputPath `
@@ -1339,20 +1407,19 @@ function Invoke-ExecuteRuntimeLaunchCommand {
 
   $prompt = New-RuntimeExecutionPrompt -Launch $launch
   $toolCsv = ($allowedTools -join ",")
+  $desiredMaxTurns = Get-RuntimeDesiredMaxTurns -Launch $launch
+  $claudeCapability = $null
+  $claudeCapabilities = New-ClaudeMaxTurnsNegotiation `
+    -DryRun ([bool] $DryRun) `
+    -DesiredMaxTurns $desiredMaxTurns `
+    -ClaudeCapability $null
+
   $commandParts = @(
     "claude",
     "-p",
     "--no-session-persistence",
     "--max-budget-usd",
-    $launch.max_budget_usd,
-    "--permission-mode",
-    $launch.permission_mode,
-    "--tools",
-    $toolCsv,
-    "--allowedTools",
-    $toolCsv,
-    "--input-format",
-    "text"
+    $launch.max_budget_usd
   )
 
   $executionStatus = "dry_run"
@@ -1384,19 +1451,17 @@ function Invoke-ExecuteRuntimeLaunchCommand {
       $claudeExecutable = "claude"
     }
 
-    $psi = New-Object System.Diagnostics.ProcessStartInfo
-    $psi.FileName = $claudeExecutable
-    $psi.UseShellExecute = $false
-    $psi.RedirectStandardInput = $true
-    $psi.RedirectStandardOutput = $true
-    $psi.RedirectStandardError = $true
-    $psi.CreateNoWindow = $true
+    $claudeCapability = Get-ClaudeCapability
+    $claudeCapabilities = New-ClaudeMaxTurnsNegotiation `
+      -DryRun $false `
+      -DesiredMaxTurns $desiredMaxTurns `
+      -ClaudeCapability $claudeCapability
 
-    $arguments = @(
-      "-p",
-      "--no-session-persistence",
-      "--max-budget-usd",
-      $launch.max_budget_usd,
+    if ($claudeCapabilities.max_turns.applied) {
+      $commandParts += @("--max-turns", $desiredMaxTurns.ToString([System.Globalization.CultureInfo]::InvariantCulture))
+    }
+
+    $commandParts += @(
       "--permission-mode",
       $launch.permission_mode,
       "--tools",
@@ -1407,7 +1472,15 @@ function Invoke-ExecuteRuntimeLaunchCommand {
       "text"
     )
 
-    $psi.Arguments = (($arguments | ForEach-Object { '"' + ($_.ToString().Replace('"', '\"')) + '"' }) -join " ")
+    $psi = New-Object System.Diagnostics.ProcessStartInfo
+    $psi.FileName = $claudeExecutable
+    $psi.UseShellExecute = $false
+    $psi.RedirectStandardInput = $true
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.CreateNoWindow = $true
+
+    $psi.Arguments = (($commandParts | Select-Object -Skip 1 | ForEach-Object { '"' + ($_.ToString().Replace('"', '\"')) + '"' }) -join " ")
     $process = [System.Diagnostics.Process]::Start($psi)
     $stdoutTask = $process.StandardOutput.ReadToEndAsync()
     $stderrTask = $process.StandardError.ReadToEndAsync()
@@ -1453,6 +1526,22 @@ function Invoke-ExecuteRuntimeLaunchCommand {
     $policyResult = "Controlled Claude Code launch executed with bounded tools, budget, timeout, and repository-scoped launch plan."
   }
 
+  if ($DryRun) {
+    $commandParts += @(
+      "[--max-turns",
+      $desiredMaxTurns.ToString([System.Globalization.CultureInfo]::InvariantCulture),
+      "if-supported]",
+      "--permission-mode",
+      $launch.permission_mode,
+      "--tools",
+      $toolCsv,
+      "--allowedTools",
+      $toolCsv,
+      "--input-format",
+      "text"
+    )
+  }
+
   $execution = [ordered]@{
     schema_version = "1"
     execution_id = $safeExecutionId
@@ -1468,6 +1557,8 @@ function Invoke-ExecuteRuntimeLaunchCommand {
     allowed_tools = @($allowedTools)
     permission_mode = $launch.permission_mode
     max_budget_usd = $launch.max_budget_usd
+    max_turns = $desiredMaxTurns
+    claude_capabilities = $claudeCapabilities
     command_summary = ($commandParts -join " ")
     prompt_sections = @($launch.prompt_sections)
     execution_status = $executionStatus

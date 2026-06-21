@@ -35,7 +35,7 @@ $requiredFields = @(
   "source_files"
 )
 
-$allowedFields = $requiredFields
+$allowedFields = $requiredFields + @("max_turns", "conditional_flags")
 $allowedTools = @("Read", "Write", "Edit")
 $allowedPermissionModes = @("acceptEdits", "auto", "default", "dontAsk", "plan")
 
@@ -194,6 +194,34 @@ foreach ($file in $launchFiles) {
 
       if ($budget -le 0 -or $budget -gt 10) {
         Write-Failure "max_budget_usd must be greater than 0 and no more than 10 in $($file.FullName)"
+      }
+    }
+  }
+
+  if ($propertyNames -contains "max_turns") {
+    if ($launch.max_turns -isnot [int] -and $launch.max_turns -isnot [long]) {
+      Write-Failure "max_turns must be an integer in $($file.FullName)"
+    }
+    elseif ($launch.max_turns -lt 1 -or $launch.max_turns -gt 100) {
+      Write-Failure "max_turns must be between 1 and 100 in $($file.FullName)"
+    }
+  }
+
+  if ($propertyNames -contains "conditional_flags") {
+    if ($null -eq $launch.conditional_flags -or $launch.conditional_flags.GetType().Name -notmatch "Object") {
+      Write-Failure "conditional_flags must be an object in $($file.FullName)"
+    }
+    elseif ($launch.conditional_flags.PSObject.Properties.Name.Contains("max_turns")) {
+      $maxTurnsFlag = $launch.conditional_flags.max_turns
+
+      foreach ($requiredMaxTurnsField in @("flag", "desired_value", "apply_when")) {
+        if (-not $maxTurnsFlag.PSObject.Properties.Name.Contains($requiredMaxTurnsField)) {
+          Write-Failure "conditional_flags.max_turns missing $requiredMaxTurnsField in $($file.FullName)"
+        }
+      }
+
+      if ($maxTurnsFlag.PSObject.Properties.Name.Contains("flag") -and $maxTurnsFlag.flag -ne "--max-turns") {
+        Write-Failure "conditional_flags.max_turns.flag must be --max-turns in $($file.FullName)"
       }
     }
   }

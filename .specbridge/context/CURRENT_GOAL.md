@@ -78,24 +78,25 @@ SpecBridge currently has:
 
 ## Active Task
 
-No active governed task.
+Active governed task:
 
-Most recent completed task:
+- Contract: `.specbridge/contracts/issue-231-claude-runtime-capability-negotiation.execution.md`
+- Scope: `.specbridge/scopes/issue-231-claude-runtime-capability-negotiation.scope.json`
+- Run id: `sb-20260620-0231c1d2`
+- GitHub issue: https://github.com/yagooyarzabaldev-ops/specbridge/issues/231
+- Branch: `codex/issue-231-claude-runtime-capability-negotiation`
 
-- Contract: `.specbridge/contracts/issue-228-standard-readiness-status.execution.md`
-- Scope: `.specbridge/scopes/issue-228-standard-readiness-status.scope.json`
-- Run id: `sb-20260620-0228a1b2`
-- GitHub issue: https://github.com/yagooyarzabaldev-ops/specbridge/issues/228
-- Primary PR: https://github.com/yagooyarzabaldev-ops/specbridge/pull/229
-- Merge commit: `4eef5a3e012ecc00057668fb1f746edadc3d8c8e`
-- CI: 4/4 GitHub Actions passed on 2026-06-20.
-- Closure evidence: `.specbridge/github-evidence/issue-228-standard-readiness-status.closure.json`
+Goal:
+
+Add bounded Claude Code runtime capability negotiation so SpecBridge only passes conditional Claude CLI flags, especially `--max-turns`, when the installed CLI exposes support.
 
 Immediate order:
 
-1. Run `specbridge-doctor -FixPlan` and `specbridge-next-task` before selecting the next task.
-2. Select the next governed maintenance or runtime-expansion task from repository evidence.
-3. Keep cleanup and retention disabled unless a future dedicated policy and execution contract explicitly authorize enforcement.
+1. Implement local Claude capability probing for `--max-turns`.
+2. Update runtime launch/execution evidence to record the negotiated max-turns decision.
+3. Add deterministic fake-Claude CLI tests for supported and unsupported `--max-turns` cases.
+4. Update documentation, dashboards, final report, audit packet, and ChatGPT/Codex audit evidence.
+5. Run required local validations and open the governed PR for issue #231.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;

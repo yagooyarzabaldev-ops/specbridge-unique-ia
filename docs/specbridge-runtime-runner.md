@@ -39,6 +39,17 @@ dependencies, touch secrets, touch production, or deploy.
 
 New runtime execution artifacts include `failure_diagnostics`.
 
+They also include Claude capability negotiation evidence for conditional runtime
+flags. `execute-runtime-launch` records the desired `max_turns` value and a
+`claude_capabilities.max_turns` object showing whether `--max-turns` was
+supported by `claude --help`, whether it was applied, the probe status, and the
+reason for the decision.
+
+Dry runs do not probe or launch Claude. Live runs probe `claude --help` with a
+short timeout and include `--max-turns <value>` only when the installed CLI
+reports support for that flag. If unsupported, the runner omits the flag and
+continues to rely on `max_budget_usd` plus `TimeoutSeconds`.
+
 The diagnostics object records:
 
 - status
@@ -100,6 +111,7 @@ Each artifact records:
 - tool restriction
 - permission mode
 - max budget
+- max turns, when present
 - policy result
 - stop conditions
 - completion status

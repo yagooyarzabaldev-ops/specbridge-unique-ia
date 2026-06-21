@@ -55,31 +55,94 @@ function Invoke-StatusCommand {
   exit 0
 }
 
+function Invoke-ClaudeCliProbe {
+  param(
+    [string] $ClaudePath,
+    [string[]] $Arguments,
+    [int] $TimeoutSeconds = 5
+  )
+
+  $stdout = ""
+  $stderr = ""
+  $exitCode = $null
+  $timedOut = $false
+  $probeStatus = "not_run"
+
+  if ([string]::IsNullOrWhiteSpace($ClaudePath)) {
+    return [ordered]@{
+      status = "not_available"
+      exit_code = $null
+      timed_out = $false
+      output_text = ""
+    }
+  }
+
+  try {
+    $psi = New-Object System.Diagnostics.ProcessStartInfo
+    $psi.FileName = $ClaudePath
+    $psi.UseShellExecute = $false
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.CreateNoWindow = $true
+    $psi.Arguments = (($Arguments | ForEach-Object { '"' + ($_.ToString().Replace('"', '\"')) + '"' }) -join " ")
+
+    $process = [System.Diagnostics.Process]::Start($psi)
+    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+    $stderrTask = $process.StandardError.ReadToEndAsync()
+
+    if (-not $process.WaitForExit($TimeoutSeconds * 1000)) {
+      $timedOut = $true
+      $probeStatus = "timed_out"
+      $process.Kill()
+      $process.WaitForExit()
+    }
+    else {
+      $probeStatus = "completed"
+    }
+
+    $stdout = $stdoutTask.Result
+    $stderr = $stderrTask.Result
+    $exitCode = $process.ExitCode
+
+    if ($timedOut -and ($exitCode -lt 0 -or $exitCode -gt 255)) {
+      $exitCode = 255
+    }
+  }
+  catch {
+    $probeStatus = "failed"
+  }
+
+  return [ordered]@{
+    status = $probeStatus
+    exit_code = $exitCode
+    timed_out = $timedOut
+    output_text = (($stdout + "`n" + $stderr).Trim())
+  }
+}
+
 function Get-ClaudeCapability {
   $claudeCommand = Get-Command claude -ErrorAction SilentlyContinue
   $claudePath = $null
   $claudeVersion = $null
+  $helpProbeStatus = "not_available"
+  $supportsMaxTurns = $false
 
   if ($null -ne $claudeCommand) {
     $claudePath = $claudeCommand.Source
   }
 
   if (-not [string]::IsNullOrWhiteSpace($claudePath)) {
-    $previousErrorActionPreference = $ErrorActionPreference
-    $ErrorActionPreference = "Continue"
+    $versionProbe = Invoke-ClaudeCliProbe -ClaudePath $claudePath -Arguments @("--version") -TimeoutSeconds 5
 
-    try {
-      $versionOutput = & $claudePath --version 2>$null
+    if ($versionProbe.status -eq "completed" -and -not [string]::IsNullOrWhiteSpace($versionProbe.output_text)) {
+      $claudeVersion = (($versionProbe.output_text -split "(`r`n|`n|`r)") | Select-Object -First 1).Trim()
+    }
 
-      if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace(($versionOutput | Out-String))) {
-        $claudeVersion = (($versionOutput | Select-Object -First 1) | Out-String).Trim()
-      }
-    }
-    catch {
-      $claudeVersion = $null
-    }
-    finally {
-      $ErrorActionPreference = $previousErrorActionPreference
+    $helpProbe = Invoke-ClaudeCliProbe -ClaudePath $claudePath -Arguments @("--help") -TimeoutSeconds 5
+    $helpProbeStatus = $helpProbe.status
+
+    if (-not [string]::IsNullOrWhiteSpace($helpProbe.output_text) -and $helpProbe.output_text -match "(^|\s)--max-turns(\s|,|$)") {
+      $supportsMaxTurns = $true
     }
   }
 
@@ -87,6 +150,15 @@ function Get-ClaudeCapability {
     available = (-not [string]::IsNullOrWhiteSpace($claudePath))
     path = $claudePath
     version = $claudeVersion
+    help_probe_status = $helpProbeStatus
+    supports_max_turns = $supportsMaxTurns
+    conditional_flags = [ordered]@{
+      max_turns = [ordered]@{
+        flag = "--max-turns"
+        supported = $supportsMaxTurns
+        probe = "claude --help"
+      }
+    }
   }
 }
 

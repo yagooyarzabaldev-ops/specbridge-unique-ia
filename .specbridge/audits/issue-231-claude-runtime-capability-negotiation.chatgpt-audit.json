@@ -1,0 +1,89 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-231-claude-runtime-capability-negotiation",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-231-claude-runtime-capability-negotiation.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-231-claude-runtime-capability-negotiation.execution.md",
+  "final_report_path": ".specbridge/reports/issue-231-claude-runtime-capability-negotiation.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "The implementation adds Claude max-turns capability negotiation to runtime status, launch planning, execution evidence, schemas, validators, tests, and documentation under the issue-231 contract.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "Runtime status reports supports_max_turns, launch planning records desired max_turns and conditional metadata, execute-runtime-launch applies --max-turns only when fake Claude help exposes it, dry-run remains deterministic, and validators accept optional evidence fields.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The change does not authorize unbounded Claude token spending, does not raise the runtime budget ceiling, does not expose raw help output, and does not change protected secret, billing, production, auth, database, dependency, deployment, or CI/CD security areas.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "Live execution remains gated by execute-runtime-launch -Force, budget, timeout, no-session-persistence, allowed tools, redacted diagnostics, and repository-scoped launch artifacts. Capability probing is short-lived and stores only status and support booleans.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed files are declared in the issue-231 contract and scope manifest, covering runtime code, status code, validators, schemas, tests, documentation, and evidence files.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "validate-contracts, validate-contract-scopes, test-specbridge-cli, validate-runtime-launches, validate-runtime-executions, validate-final-reports, validate-audit-packets, validate-chatgpt-audits, specbridge-smoke, and git diff --check passed locally.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub Actions evidence is not collected yet because the PR has not been opened. Merge remains pending CI.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records local-complete pending PR/CI status, passed local validation lines, no deployment, not-merged status, and unresolved risks for local Claude CLI --max-turns support and pending CI.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "local_claude_cli_flag_support",
+      "file": "scripts/lib/status.ps1",
+      "line": null,
+      "evidence": "runtime-capability-status reports the installed local Claude CLI is available but does not expose --max-turns in help output.",
+      "recommendation": "Keep relying on max_budget_usd and TimeoutSeconds locally until the installed Claude CLI exposes --max-turns; do not force unsupported flags.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "The installed local Claude CLI currently reports no --max-turns support, so live launches rely on max_budget_usd and TimeoutSeconds until a supporting CLI version is installed.",
+    "GitHub Actions evidence is pending until the pull request is opened and checks complete.",
+    "Post-merge closure evidence is pending until CI passes and the PR merges."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-231-claude-runtime-capability-negotiation.audit-packet.json",
+    ".specbridge/contracts/issue-231-claude-runtime-capability-negotiation.execution.md",
+    ".specbridge/reports/issue-231-claude-runtime-capability-negotiation.final-report.json",
+    ".specbridge/scopes/issue-231-claude-runtime-capability-negotiation.scope.json",
+    "docs/specbridge-claude-runtime-capability-negotiation.md",
+    "docs/specbridge-runtime-runner.md",
+    "scripts/lib/runtime.ps1",
+    "scripts/lib/status.ps1",
+    "scripts/test-specbridge-cli.ps1",
+    "scripts/validate-runtime-executions.ps1",
+    "scripts/validate-runtime-launches.ps1"
+  ]
+}
