@@ -33,7 +33,7 @@
     {
       "name": "changed_file_scope",
       "result": "pass",
-      "evidence": "Changed files are declared in the issue-231 contract and scope manifest, covering runtime code, status code, validators, schemas, tests, documentation, and evidence files.",
+      "evidence": "Changed files are declared in the issue-231 evidence set, covering runtime code, status code, validators, schemas, tests, documentation, dashboards, idle Studio dashboard output hardening, and closure evidence files.",
       "blocking": false
     },
     {
@@ -45,13 +45,13 @@
     {
       "name": "ci_evidence",
       "result": "pass",
-      "evidence": "GitHub Actions evidence is not collected yet because the PR has not been opened. Merge remains pending CI.",
+      "evidence": "GitHub Actions passed on PR #232 head ef8826958a0c233b439bfb24b4d2155fce634946: Foundation Validation, SpecBridge Review Gate, SpecBridge PR Review Report, and Claude Review Non Blocking.",
       "blocking": false
     },
     {
       "name": "final_report_honesty",
       "result": "pass",
-      "evidence": "The final report records local-complete pending PR/CI status, passed local validation lines, no deployment, not-merged status, and unresolved risks for local Claude CLI --max-turns support and pending CI.",
+      "evidence": "The final report records completed status, passed local validation, passed GitHub Actions, no deployment, PR #232 merge status, closure evidence, and the remaining local Claude CLI --max-turns support risk.",
       "blocking": false
     }
   ],
@@ -69,17 +69,17 @@
   "outcome": "approved",
   "merge_allowed": true,
   "unresolved_risks": [
-    "The installed local Claude CLI currently reports no --max-turns support, so live launches rely on max_budget_usd and TimeoutSeconds until a supporting CLI version is installed.",
-    "GitHub Actions evidence is pending until the pull request is opened and checks complete.",
-    "Post-merge closure evidence is pending until CI passes and the PR merges."
+    "The installed local Claude CLI currently reports no --max-turns support, so live launches rely on max_budget_usd and TimeoutSeconds until a supporting CLI version is installed."
   ],
   "source_files": [
     ".specbridge/audit-packets/issue-231-claude-runtime-capability-negotiation.audit-packet.json",
     ".specbridge/contracts/issue-231-claude-runtime-capability-negotiation.execution.md",
+    ".specbridge/github-evidence/issue-231-claude-runtime-capability-negotiation.closure.json",
     ".specbridge/reports/issue-231-claude-runtime-capability-negotiation.final-report.json",
     ".specbridge/scopes/issue-231-claude-runtime-capability-negotiation.scope.json",
     "docs/specbridge-claude-runtime-capability-negotiation.md",
     "docs/specbridge-runtime-runner.md",
+    "scripts/lib/dashboards.ps1",
     "scripts/lib/runtime.ps1",
     "scripts/lib/status.ps1",
     "scripts/test-specbridge-cli.ps1",

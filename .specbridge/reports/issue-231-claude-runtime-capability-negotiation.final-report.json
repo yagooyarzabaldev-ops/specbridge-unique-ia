@@ -6,6 +6,7 @@
     ".specbridge/audits/issue-231-claude-runtime-capability-negotiation.chatgpt-audit.json",
     ".specbridge/context/CURRENT_GOAL.md",
     ".specbridge/contracts/issue-231-claude-runtime-capability-negotiation.execution.md",
+    ".specbridge/github-evidence/issue-231-claude-runtime-capability-negotiation.closure.json",
     ".specbridge/ledger/operations.ndjson",
     ".specbridge/mcp-resources/operator-state.catalog.json",
     ".specbridge/reports/issue-231-claude-runtime-capability-negotiation.final-report.json",
@@ -19,6 +20,7 @@
     "docs/specbridge-runtime-runner.md",
     "docs/specbridge-studio.html",
     "docs/status-dashboard.html",
+    "scripts/lib/dashboards.ps1",
     "scripts/lib/runtime.ps1",
     "scripts/lib/status.ps1",
     "scripts/specbridge.ps1",
@@ -37,16 +39,17 @@
     "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
     "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
     "git diff --check: passed",
-    "GitHub Actions: not_collected"
+    "GitHub Actions Foundation Validation: passed",
+    "GitHub Actions SpecBridge Review Gate: passed",
+    "GitHub Actions SpecBridge PR Review Report: passed",
+    "GitHub Actions Claude Review Non Blocking: passed"
   ],
   "policy_result": "Within policy. The implementation does not authorize unbounded Claude Code token spending, does not raise runtime budget ceilings, does not access secrets, does not change billing, production, authentication, authorization, database, dependency, deployment, or CI/CD security configuration, and keeps live Claude launches behind existing execute-runtime-launch -Force gates.",
   "risk_result": "Medium risk and contained. The change touches runtime command assembly, runtime status probing, schemas, validators, tests, and documentation, but it narrows provider flag behavior by only applying --max-turns when support is detected.",
   "unresolved_risks": [
-    "The installed local Claude CLI currently reports no --max-turns support, so live launches rely on max_budget_usd and TimeoutSeconds until a supporting CLI version is installed.",
-    "GitHub Actions evidence is pending until the pull request is opened and checks complete.",
-    "Post-merge closure evidence is pending until CI passes and the PR merges."
+    "The installed local Claude CLI currently reports no --max-turns support, so live launches rely on max_budget_usd and TimeoutSeconds until a supporting CLI version is installed."
   ],
-  "merge_status": "Not merged. Local implementation is complete pending final validation, PR, GitHub CI, and post-merge closure.",
+  "merge_status": "PR #232 merged on 2026-06-21T00:17:50Z at merge commit a4a7568a64c13a3a710e0f3f57dafd68116809e7. Issue #231 closed automatically and post-merge closure evidence was recorded.",
   "deployment_status": "Not applicable.",
-  "completion_status": "local_complete_pending_pr_ci"
+  "completion_status": "complete"
 }

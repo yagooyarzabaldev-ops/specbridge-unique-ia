@@ -49,6 +49,7 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | 221 | Repository health summary evidence | 222 | Merged 2026-06-16 |
 | 224 | Token and context governance standard | 225 | Merged 2026-06-16 |
 | 228 | Standard readiness status | 229 | Merged 2026-06-20 |
+| 231 | Claude runtime capability negotiation | 232 | Merged 2026-06-21 UTC |
 
 ## Architecture Status
 
@@ -75,28 +76,11 @@ SpecBridge currently has:
 - Repository health summary evidence (specbridge-repository-health-summary: deterministic read-only aggregate over branch inventory, branch cleanup policy, artifact inventory, and artifact retention policy with cleanup_permission=none and enforcement_status=none)
 - Token and context governance status (specbridge-token-governance-status: deterministic read-only status over Codex context governance, Claude Code runtime limits, MCP/tool context governance, multi-agent slice governance, blocked disclosures, evidence requirements, and provider-source references)
 - Standard readiness status (specbridge-standard-readiness: deterministic read-only operator readiness snapshot over doctor health, next-task posture, repository health, token/context governance, MCP resource posture, and blocked execution boundaries before new governed task intake)
+- Claude runtime capability negotiation (runtime-capability-status: probes installed Claude CLI help to detect --max-turns support; execute-runtime-launch applies --max-turns only when supported and records `claude_capabilities.max_turns` plus the effective `command_summary` in runtime execution evidence)
 
-## Active Task
+## Next Recommended Task
 
-Active governed task:
-
-- Contract: `.specbridge/contracts/issue-231-claude-runtime-capability-negotiation.execution.md`
-- Scope: `.specbridge/scopes/issue-231-claude-runtime-capability-negotiation.scope.json`
-- Run id: `sb-20260620-0231c1d2`
-- GitHub issue: https://github.com/yagooyarzabaldev-ops/specbridge/issues/231
-- Branch: `codex/issue-231-claude-runtime-capability-negotiation`
-
-Goal:
-
-Add bounded Claude Code runtime capability negotiation so SpecBridge only passes conditional Claude CLI flags, especially `--max-turns`, when the installed CLI exposes support.
-
-Immediate order:
-
-1. Implement local Claude capability probing for `--max-turns`.
-2. Update runtime launch/execution evidence to record the negotiated max-turns decision.
-3. Add deterministic fake-Claude CLI tests for supported and unsupported `--max-turns` cases.
-4. Update documentation, dashboards, final report, audit packet, and ChatGPT/Codex audit evidence.
-5. Run required local validations and open the governed PR for issue #231.
+No active governed task. Run `specbridge-standard-readiness` and `specbridge-next-task` to select the next issue.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;

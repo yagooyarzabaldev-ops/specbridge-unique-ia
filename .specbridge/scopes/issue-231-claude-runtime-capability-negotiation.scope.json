@@ -1,7 +1,7 @@
 {
   "contract_id": "issue-231-claude-runtime-capability-negotiation",
   "run_id": "sb-20260620-0231c1d2",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/contracts/issue-231-claude-runtime-capability-negotiation.execution.md",
     ".specbridge/scopes/issue-231-claude-runtime-capability-negotiation.scope.json",
@@ -22,6 +22,7 @@
     "docs/status-dashboard.html",
     "docs/specbridge-studio.html",
     "scripts/specbridge.ps1",
+    "scripts/lib/dashboards.ps1",
     "scripts/lib/status.ps1",
     "scripts/lib/runtime.ps1",
     "scripts/test-specbridge-cli.ps1",

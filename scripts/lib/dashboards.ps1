@@ -224,7 +224,7 @@ function Invoke-GenerateStudioDashboardCommand {
   if (Test-Path $cgPath) {
     try { $cg = Get-Content $cgPath -Raw -Encoding UTF8 | ConvertFrom-Json } catch {}
   }
-  $cgTaskId  = if ($cg) { $cg.current_task_id } else { "unknown" }
+  $cgTaskId  = if ($cg -and $cg.current_task_id) { $cg.current_task_id } else { "none" }
   $cgTitle   = if ($cg -and $cg.title)    { $cg.title }    else { "" }
   $cgStatus  = if ($cg -and $cg.status)   { $cg.status }   else { "unknown" }
   $cgRunId   = if ($cg -and $cg.run_id)   { $cg.run_id }   else { "" }

@@ -1,0 +1,24 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-231-claude-runtime-capability-negotiation",
+  "run_id": "sb-20260620-0231c1d2",
+  "evidence_type": "closure_evidence",
+  "collected_by": "ChatGPT/Codex post-merge closure",
+  "collected_at": "2026-06-21T00:18:10Z",
+  "merge_commit": "a4a7568a64c13a3a710e0f3f57dafd68116809e7",
+  "head_sha": "ef8826958a0c233b439bfb24b4d2155fce634946",
+  "primary_pr": 232,
+  "related_issue": 231,
+  "issue_closed": true,
+  "issue_closed_at": "2026-06-21T00:17:50Z",
+  "scope_status": "completed",
+  "ci_status": "passed",
+  "ci_checks": [
+    "Foundation Validation",
+    "SpecBridge Review Gate",
+    "SpecBridge PR Review Report",
+    "Claude Review Non Blocking"
+  ],
+  "all_validations_passed": true,
+  "notes": "PR #232 merged on 2026-06-21T00:17:50Z. Claude runtime capability negotiation implemented: --max-turns applied only when installed CLI exposes support and the decision is recorded in runtime execution evidence."
+}

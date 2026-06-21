@@ -70,6 +70,7 @@ docs/specbridge-runtime-runner.md
 docs/status-dashboard.html
 docs/specbridge-studio.html
 scripts/specbridge.ps1
+scripts/lib/dashboards.ps1
 scripts/lib/status.ps1
 scripts/lib/runtime.ps1
 scripts/test-specbridge-cli.ps1
@@ -164,3 +165,7 @@ Write `.specbridge/reports/issue-231-claude-runtime-capability-negotiation.final
 ## Completion Rule
 
 Task is complete when capability negotiation is implemented, required local validations pass, GitHub checks pass, PR closes issue #231, and post-merge closure evidence is recorded.
+
+## Post-Merge Closure Amendment
+
+PR #233 added a narrow CI fix to `scripts/lib/dashboards.ps1` so `generate-studio-dashboard` emits a stable `current_goal` field when the repository is idle after closure. This keeps the existing Studio dashboard JSON contract valid for `ready_for_next_task` state and is included in the closure evidence.
