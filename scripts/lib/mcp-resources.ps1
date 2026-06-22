@@ -128,16 +128,15 @@ function Build-McpResourceCatalog {
     catalog_id          = "specbridge-operator-state"
     generated_at        = (Get-Date -Format "o")
     mcp_server_status   = "readonly_local_runtime"
-    mcp_server_note     = "Bounded local read-only MCP-style runtime: resources/list and resources/read only. No network transport, no mutation, no secrets, no server process."
+    mcp_server_note     = "Bounded local MCP-style runtime: resources/list, resources/read, tools/list, and tools/call (specbridge.operator.status only). No network transport, no mutation, no secrets, no server process."
     read_only_policy    = $true
     resources           = $resources
   }
 }
 
-$script:McpSupportedMethods = @("resources/list", "resources/read")
+$script:McpSupportedMethods = @("resources/list", "resources/read", "tools/list", "tools/call")
 
 $script:McpBlockedMethods = @(
-  "tools/call", "tools/list",
   "resources/create", "resources/update", "resources/delete", "resources/write",
   "resources/subscribe", "resources/unsubscribe",
   "prompts/get", "prompts/list",
@@ -237,6 +236,16 @@ function Invoke-McpRuntimeCommand {
         })
       }
     }) -Depth 10
+    return
+  }
+
+  if ($Method -eq "tools/list") {
+    Invoke-McpToolsListMethod
+    return
+  }
+
+  if ($Method -eq "tools/call") {
+    Invoke-McpToolsCallMethod
     return
   }
 

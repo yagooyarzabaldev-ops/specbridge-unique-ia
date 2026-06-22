@@ -79,12 +79,12 @@ SpecBridge currently has:
 - Token and context governance status (specbridge-token-governance-status: deterministic read-only status over Codex context governance, Claude Code runtime limits, MCP/tool context governance, multi-agent slice governance, blocked disclosures, evidence requirements, and provider-source references)
 - Standard readiness status (specbridge-standard-readiness: deterministic read-only operator readiness snapshot over doctor health, next-task posture, repository health, token/context governance, MCP resource posture, and blocked execution boundaries before new governed task intake)
 - Claude runtime capability negotiation (runtime-capability-status: probes installed Claude CLI help to detect --max-turns support; execute-runtime-launch applies --max-turns only when supported and records `claude_capabilities.max_turns` plus the effective `command_summary` in runtime execution evidence)
-- Read-only MCP runtime (specbridge-mcp-runtime: local MCP-style harness for `resources/list` and `resources/read` over current-goal, doctor-fix-plan, and orchestration summaries; mutation-capable methods, network transport, hosted server deployment, secrets, and cleanup enforcement remain blocked)
+- Bounded local MCP runtime (specbridge-mcp-runtime: local MCP-style harness for `resources/list`, `resources/read`, `tools/list`, and allowlisted read-only `tools/call` over current-goal, doctor-fix-plan, and readiness summaries; network transport, hosted server deployment, secrets, GitHub/resource mutation, and cleanup enforcement remain blocked)
 - Project starter standard (specbridge-project-starter: deterministic local starter artifacts for new product ideas before implementation, dependencies, secrets, billing, deployment, or external repository mutation)
 
 ## Next Recommended Task
 
-No active governed task. SpecBridge is ready for the next governed task intake.
+Active governed task: issue #240 (`issue-240-bounded-local-mcp-tools`) implements a bounded local MCP tools surface with `tools/list` and allowlisted read-only `tools/call` while preserving blocked network, hosted server, GitHub/resource mutation, secrets, deployment, and cleanup enforcement boundaries.
 
 Issue #237 (`issue-237-project-starter-standard`) is complete. PR #238 merged the deterministic local project starter standard, closed issue #237, recorded post-merge closure evidence, and the GitHub repository visibility is private.
 

@@ -1,9 +1,9 @@
 {
     "schema_version":  "1",
     "catalog_id":  "specbridge-operator-state",
-    "generated_at":  "2026-06-22T11:31:17.6566274-03:00",
+    "generated_at":  "2026-06-22T13:42:33.4697915-03:00",
     "mcp_server_status":  "readonly_local_runtime",
-    "mcp_server_note":  "Bounded local read-only MCP-style runtime: resources/list and resources/read only. No network transport, no mutation, no secrets, no server process.",
+    "mcp_server_note":  "Bounded local MCP-style runtime: resources/list, resources/read, tools/list, and tools/call (specbridge.operator.status only). No network transport, no mutation, no secrets, no server process.",
     "read_only_policy":  true,
     "resources":  [
                       {
@@ -19,10 +19,10 @@
                           "read_only":  true,
                           "description":  "Machine-readable current SpecBridge operator goal and task status.",
                           "data":  {
-                                       "current_task_id":  null,
-                                       "run_id":  null,
-                                       "title":  null,
-                                       "status":  "ready_for_next_task",
+                                       "current_task_id":  "issue-240-bounded-local-mcp-tools",
+                                       "run_id":  "sb-20260622-0240a1b2",
+                                       "title":  "Add bounded local MCP tools runtime",
+                                       "status":  "active",
                                        "primary_pr":  null,
                                        "closure_pr":  238,
                                        "last_completed_task_id":  "issue-237-project-starter-standard",
@@ -30,8 +30,8 @@
                                        "last_completed_pr":  238,
                                        "last_completed_merge_commit":  "57e8fa822fb456f6de79196ea8a11f17c56778af",
                                        "last_completed_at":  "2026-06-22T14:26:25Z",
-                                       "last_updated":  "2026-06-22T14:26:25Z",
-                                       "updated_by":  "ChatGPT/Codex issue-237 post-merge closure"
+                                       "last_updated":  "2026-06-22T15:49:02Z",
+                                       "updated_by":  "ChatGPT/Codex issue-240 intake"
                                    }
                       },
                       {
@@ -70,7 +70,7 @@
 
                                                    ],
                                        "action_count":  0,
-                                       "checked_at":  "2026-06-22T11:31:17.5238756-03:00"
+                                       "checked_at":  "2026-06-22T13:42:33.1124731-03:00"
                                    }
                       },
                       {

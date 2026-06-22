@@ -1281,12 +1281,56 @@ try {
       }
     }
 
-    # specbridge-mcp-runtime: unsupported mutation method is rejected
-    $mcpToolsCallResult = Invoke-Cli -Arguments @("specbridge-mcp-runtime", "-Method", "tools/call")
-    if ($mcpToolsCallResult.ExitCode -ne 0 -and $mcpToolsCallResult.Text -match "method_not_allowed") {
-      Write-Output "PASS CLI failure: specbridge-mcp-runtime-tools-call-rejected"
+    # specbridge-mcp-runtime: tools/list returns the bounded local allowlist
+    $mcpToolsListResult = Invoke-Cli -Arguments @("specbridge-mcp-runtime", "-Method", "tools/list")
+    Assert-Success `
+      -Name "specbridge-mcp-runtime tools/list" `
+      -Result $mcpToolsListResult `
+      -ExpectedPattern '"method"\s*:\s*"tools/list"'
+    if ($mcpToolsListResult.ExitCode -eq 0) {
+      $mcpToolsListJson = $null
+      try { $mcpToolsListJson = $mcpToolsListResult.Text.Trim() | ConvertFrom-Json } catch {}
+      $toolNames = @($mcpToolsListJson.result.tools | ForEach-Object { $_.name })
+      if ($null -eq $mcpToolsListJson -or $toolNames -notcontains "specbridge.operator.status") {
+        Write-Output "FAIL specbridge-mcp-runtime tools/list: missing specbridge.operator.status."
+        $script:failed = $true
+      } else {
+        Write-Output "PASS specbridge-mcp-runtime tools/list: bounded tool allowlist present."
+      }
+    }
+
+    # specbridge-mcp-runtime: tools/call allows only the read-only local status helper
+    $mcpToolsCallAllowedResult = Invoke-Cli -Arguments @("specbridge-mcp-runtime", "-Method", "tools/call", "-ToolName", "specbridge.operator.status")
+    Assert-Success `
+      -Name "specbridge-mcp-runtime tools/call specbridge.operator.status" `
+      -Result $mcpToolsCallAllowedResult `
+      -ExpectedPattern '"tool"\s*:\s*"specbridge.operator.status"'
+    if ($mcpToolsCallAllowedResult.ExitCode -eq 0) {
+      $mcpToolsCallAllowedJson = $null
+      try { $mcpToolsCallAllowedJson = $mcpToolsCallAllowedResult.Text.Trim() | ConvertFrom-Json } catch {}
+      if ($null -eq $mcpToolsCallAllowedJson -or $mcpToolsCallAllowedJson.ok -ne $true -or @($mcpToolsCallAllowedJson.result.content).Count -ne 1) {
+        Write-Output "FAIL specbridge-mcp-runtime tools/call allowed: invalid response shape."
+        $script:failed = $true
+      } else {
+        Write-Output "PASS specbridge-mcp-runtime tools/call allowed: operator status returned."
+      }
+    }
+
+    # specbridge-mcp-runtime: tools/call blocks anything outside the allowlist
+    $mcpToolsCallBlockedResult = Invoke-Cli -Arguments @("specbridge-mcp-runtime", "-Method", "tools/call", "-ToolName", "specbridge.github.mutate")
+    if ($mcpToolsCallBlockedResult.ExitCode -ne 0 -and $mcpToolsCallBlockedResult.Text -match "tool_not_allowed") {
+      Write-Output "PASS CLI failure: specbridge-mcp-runtime-tools-call-blocked"
     } else {
-      Write-Output "FAIL specbridge-mcp-runtime-tools-call-rejected: expected failure with method_not_allowed."
+      Write-Output "FAIL specbridge-mcp-runtime-tools-call-blocked: expected failure with tool_not_allowed."
+      $script:failed = $true
+    }
+
+    # specbridge-mcp-runtime: tools/call requires an explicit tool name
+    $mcpToolsCallMissingNameResult = Invoke-Cli -Arguments @("specbridge-mcp-runtime", "-Method", "tools/call")
+    if ($mcpToolsCallMissingNameResult.ExitCode -ne 0 -and $mcpToolsCallMissingNameResult.Text -match "tool_name_required") {
+      Write-Output "PASS CLI failure: specbridge-mcp-runtime-tools-call-tool-name-required"
+    } else {
+      Write-Output "FAIL specbridge-mcp-runtime-tools-call-tool-name-required: expected failure with tool_name_required."
       $script:failed = $true
     }
 
