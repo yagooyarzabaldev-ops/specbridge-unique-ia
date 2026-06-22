@@ -10,6 +10,9 @@ $script:McpAllowedTools = @(
       properties = [ordered]@{}
       required   = @()
     }
+    annotations = [ordered]@{
+      readOnlyHint = $true
+    }
   },
   [ordered]@{
     name = "specbridge.next-task"
@@ -18,6 +21,9 @@ $script:McpAllowedTools = @(
       type       = "object"
       properties = [ordered]@{}
       required   = @()
+    }
+    annotations = [ordered]@{
+      readOnlyHint = $true
     }
   }
 )

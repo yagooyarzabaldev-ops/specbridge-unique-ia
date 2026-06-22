@@ -82,6 +82,25 @@ SpecBridge should prefer deferred tool discovery and read-only MCP resources ove
 
 SpecBridge MCP resources remain read-only unless a future dedicated contract authorizes mutation.
 
+## Agent SDK Loop Lightweight Practices
+
+Issue #246 adopts the Agent SDK loop practices that fit the current local runtime without adding a hosted SDK app:
+
+- bounded MCP tools declare `annotations.readOnlyHint: true` so SDK-style consumers can identify read-only tools for safe parallel read execution
+- `CLAUDE.md` contains compaction and summary preservation instructions so long-running executor context keeps objective, contract, scope, acceptance criteria, files, validations, decisions, evidence pointers, risks, and rollback notes
+- result handling expectations are recorded as future evidence fields: result subtype, stop reason, total cost, usage, turn count, and session id
+- budget and turn limits remain governed by existing SpecBridge runtime policy, with `--max-turns` used only when the installed Claude CLI advertises support
+
+Still blocked until a dedicated contract authorizes them:
+
+- dependency installation or importing `claude_agent_sdk`
+- hosted Agent SDK runtime or external storage
+- Agent SDK hooks implementation
+- SDK session resume, fork, or persistence implementation
+- mutation-capable MCP tools
+- network MCP transport or hosted MCP server deployment
+- OpenTelemetry, deployment, production, billing, auth, database, cleanup, or CI/CD security changes
+
 ## Multi-Agent Slice Rules
 
 Each Claude Code executor slice receives only:

@@ -86,7 +86,9 @@ SpecBridge currently has:
 
 ## Next Recommended Task
 
-Ready for next governed task. Issue #243 (`issue-243-mcp-next-task-tool`) is complete: PR #244 merged the `specbridge.next-task` bounded local MCP tool, closed issue #243, and recorded post-merge closure evidence.
+Active governed task: issue #246 (`issue-246-agent-sdk-light-practices`) adopts low-effort Claude Agent SDK loop practices that fit the current SpecBridge runtime: read-only MCP tool annotations, compaction/summary preservation instructions, and documentation for future result/cost/session evidence. The task explicitly blocks dependency installation, SDK hosting, hooks implementation, session persistence, network MCP transport, mutation-capable MCP tools, secrets, production, billing, auth, databases, CI/CD security changes, cleanup enforcement, and deployment.
+
+Issue #243 (`issue-243-mcp-next-task-tool`) is complete: PR #244 merged the `specbridge.next-task` bounded local MCP tool, closed issue #243, and recorded post-merge closure evidence.
 
 Issue #240 (`issue-240-bounded-local-mcp-tools`) is complete: PR #241 merged the bounded local MCP tools surface with `tools/list` and allowlisted read-only `tools/call`, closed issue #240, and recorded post-merge closure evidence.
 

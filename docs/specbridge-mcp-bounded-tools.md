@@ -4,6 +4,8 @@ Issues #240 and #243 extend the local MCP-style runtime with a bounded tools sur
 
 The runtime remains local-only and read-only in effect. It does not start a network transport, hosted server, GitHub mutation path, external resource mutation path, secret reader, billing integration, auth system, deployment workflow, branch cleanup, or artifact retention enforcement.
 
+Issue #246 marks every allowlisted bounded tool with MCP `annotations.readOnlyHint: true`. This follows the Claude Agent SDK loop guidance for read-only MCP tools: the metadata lets SDK consumers treat these tools as safe candidates for parallel read execution while preserving SpecBridge's local-only, non-mutating policy boundary.
+
 ## Commands
 
 List available tools:
@@ -41,6 +43,18 @@ The next-task tool returns a JSON content item containing:
 - recommended action
 
 The tools write no files and perform no external calls.
+
+Each listed tool advertises:
+
+```json
+{
+  "annotations": {
+    "readOnlyHint": true
+  }
+}
+```
+
+This annotation is metadata, not new authority. It does not permit writes, GitHub mutation, external resource mutation, network transport, hosted deployment, cleanup enforcement, or secret access.
 
 ## Allowlist
 

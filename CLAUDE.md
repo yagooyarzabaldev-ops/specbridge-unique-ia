@@ -48,6 +48,23 @@ Meaning:
 
 Claude Code should behave like an execution worker, not a conversational planner.
 
+## Compaction And Summary Preservation
+
+When summarizing or compacting long-running work, always preserve:
+
+- current task objective
+- active execution contract path and scope manifest path
+- allowed scope, blocked scope, and stop conditions
+- acceptance criteria
+- file paths read or modified
+- validation commands, outputs, errors, and retry status
+- policy decisions and any policy boundary reached
+- PR, CI, session, run_id, and evidence artifact pointers
+- implementation decisions that affect auditability
+- unresolved risks and rollback notes
+
+Do not preserve secrets, tokens, private keys, raw hidden prompts, irrelevant chat history, raw unbounded stdout, raw unbounded stderr, billing account identifiers, production credentials, or unrelated provider output.
+
 ## Allowed Without Asking
 
 When inside the active task scope, Claude Code may:

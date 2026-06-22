@@ -1,0 +1,96 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-246-agent-sdk-light-practices",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-246-agent-sdk-light-practices.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-246-agent-sdk-light-practices.execution.md",
+  "final_report_path": ".specbridge/reports/issue-246-agent-sdk-light-practices.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "The implementation adopts only the low-effort Agent SDK loop practices authorized by the contract: readOnlyHint annotations, compaction guidance, and documentation of future result/cost/session evidence.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "tools/list now exposes annotations.readOnlyHint true for both bounded MCP tools, the CLI regression suite checks that metadata, CLAUDE.md preserves compaction-critical task evidence, and docs separate adopted practices from blocked future SDK runtime work.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "No dependency installation, SDK import, hosted runtime, hooks, session persistence, network MCP transport, mutation-capable tools, GitHub/resource mutation through MCP, protected files, production, billing, auth, database, CI/CD security, cleanup enforcement, or deployment changes were made.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The task adds metadata and documentation only. It does not read or store credentials, widen tool authority, weaken security checks, or enable mutation surfaces.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "All changed files are declared in the issue-246 execution contract and scope manifest exclusive_write list.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "validate-contracts, validate-contract-scopes, the full CLI regression suite, evidence validators, specbridge-smoke, and git diff --check passed locally. The CLI suite includes the new readOnlyHint assertion.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "CI is pending until PR publication; merge remains gated on GitHub Actions before completion.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report marks the task as implemented with local gates passed and PR CI pending, records validations that actually passed, records CI as pending, states no deployment, and preserves unresolved future SDK risks.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "claude_audit",
+      "file": ".specbridge/reports/issue-246-agent-sdk-light-practices.final-report.json",
+      "line": null,
+      "evidence": "Claude Code bounded audit returned PASS for scope, policy, readOnlyHint structure, compaction docs, and blocked SDK/dependency/runtime boundaries.",
+      "recommendation": "Keep future Agent SDK runtime work behind a dedicated contract before adding dependencies, hooks, sessions, telemetry, or hosted execution.",
+      "blocking": false
+    },
+    {
+      "severity": "info",
+      "category": "future_runtime_boundary",
+      "file": "docs/specbridge-token-context-governance.md",
+      "line": null,
+      "evidence": "The documentation records result subtype, stop reason, cost, usage, turn count, and session id as future evidence fields without implementing session persistence or SDK hosting.",
+      "recommendation": "When the SDK host is authorized, add machine-validated evidence schemas before enabling runtime execution.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub Actions evidence remains pending until PR publication.",
+    "Future SDK runtime, hooks, sessions, telemetry, network MCP transport, and mutation-capable tools require dedicated contracts."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-246-agent-sdk-light-practices.audit-packet.json",
+    ".specbridge/audits/issue-246-agent-sdk-light-practices.chatgpt-audit.json",
+    ".specbridge/contracts/issue-246-agent-sdk-light-practices.execution.md",
+    ".specbridge/reports/issue-246-agent-sdk-light-practices.final-report.json",
+    ".specbridge/scopes/issue-246-agent-sdk-light-practices.scope.json",
+    "CLAUDE.md",
+    "docs/specbridge-mcp-bounded-tools.md",
+    "docs/specbridge-token-context-governance.md",
+    "scripts/lib/mcp-tools.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ]
+}

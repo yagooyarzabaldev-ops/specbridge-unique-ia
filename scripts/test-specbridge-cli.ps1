@@ -1290,12 +1290,14 @@ try {
     if ($mcpToolsListResult.ExitCode -eq 0) {
       $mcpToolsListJson = $null
       try { $mcpToolsListJson = $mcpToolsListResult.Text.Trim() | ConvertFrom-Json } catch {}
-      $toolNames = @($mcpToolsListJson.result.tools | ForEach-Object { $_.name })
-      if ($null -eq $mcpToolsListJson -or $toolNames -notcontains "specbridge.operator.status" -or $toolNames -notcontains "specbridge.next-task" -or $toolNames.Count -ne 2) {
-        Write-Output "FAIL specbridge-mcp-runtime tools/list: expected exactly specbridge.operator.status and specbridge.next-task."
+      $toolItems = if ($null -ne $mcpToolsListJson -and $null -ne $mcpToolsListJson.result) { @($mcpToolsListJson.result.tools) } else { @() }
+      $toolNames = @($toolItems | ForEach-Object { $_.name })
+      $missingReadOnlyHint = @($toolItems | Where-Object { $null -eq $_.annotations -or $_.annotations.readOnlyHint -ne $true })
+      if ($null -eq $mcpToolsListJson -or $toolNames -notcontains "specbridge.operator.status" -or $toolNames -notcontains "specbridge.next-task" -or $toolNames.Count -ne 2 -or $missingReadOnlyHint.Count -ne 0) {
+        Write-Output "FAIL specbridge-mcp-runtime tools/list: expected exactly specbridge.operator.status and specbridge.next-task with annotations.readOnlyHint true."
         $script:failed = $true
       } else {
-        Write-Output "PASS specbridge-mcp-runtime tools/list: bounded tool allowlist present."
+        Write-Output "PASS specbridge-mcp-runtime tools/list: bounded read-only tool allowlist present."
       }
     }
 

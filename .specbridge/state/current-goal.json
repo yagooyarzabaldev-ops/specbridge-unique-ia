@@ -1,8 +1,8 @@
 {
-  "current_task_id": null,
-  "run_id": null,
-  "title": "Ready for next governed task",
-  "status": "ready_for_next_task",
+  "current_task_id": "issue-246-agent-sdk-light-practices",
+  "run_id": "sb-20260622-0246a7c9",
+  "title": "Adopt lightweight Agent SDK loop practices",
+  "status": "active",
   "primary_pr": null,
   "closure_pr": null,
   "last_completed_task_id": "issue-243-mcp-next-task-tool",
@@ -10,6 +10,6 @@
   "last_completed_pr": 244,
   "last_completed_merge_commit": "8afdf0f310fc554c25cbd42a51f4e8d4561b5323",
   "last_completed_at": "2026-06-22T20:07:25Z",
-  "last_updated": "2026-06-22T20:38:12Z",
-  "updated_by": "ChatGPT/Codex post-merge memory closure issue-243"
+  "last_updated": "2026-06-22T21:05:00Z",
+  "updated_by": "ChatGPT/Codex issue-246 intake"
 }
