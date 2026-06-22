@@ -1,15 +1,15 @@
 {
-  "current_task_id": "issue-240-bounded-local-mcp-tools",
-  "run_id": "sb-20260622-0240a1b2",
-  "title": "Add bounded local MCP tools runtime",
-  "status": "active",
+  "current_task_id": null,
+  "run_id": null,
+  "title": "Ready for next governed task",
+  "status": "ready_for_next_task",
   "primary_pr": null,
-  "closure_pr": 238,
-  "last_completed_task_id": "issue-237-project-starter-standard",
-  "last_completed_run_id": "sb-20260622-0237a1b2",
-  "last_completed_pr": 238,
-  "last_completed_merge_commit": "57e8fa822fb456f6de79196ea8a11f17c56778af",
-  "last_completed_at": "2026-06-22T14:26:25Z",
-  "last_updated": "2026-06-22T15:49:02Z",
-  "updated_by": "ChatGPT/Codex issue-240 intake"
+  "closure_pr": null,
+  "last_completed_task_id": "issue-240-bounded-local-mcp-tools",
+  "last_completed_run_id": "sb-20260622-0240a1b2",
+  "last_completed_pr": 241,
+  "last_completed_merge_commit": "c796f05e688682500ee1ec70b9c77f24e1a7924f",
+  "last_completed_at": "2026-06-22T17:55:04Z",
+  "last_updated": "2026-06-22T17:57:02Z",
+  "updated_by": "ChatGPT/Codex post-merge memory closure issue-240"
 }

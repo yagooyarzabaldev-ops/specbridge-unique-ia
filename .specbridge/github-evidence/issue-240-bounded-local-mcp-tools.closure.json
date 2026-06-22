@@ -1,0 +1,47 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-240-bounded-local-mcp-tools",
+  "run_id": "sb-20260622-0240a1b2",
+  "closure_type": "post_merge_memory",
+  "repository_visibility": "private",
+  "pr": {
+    "number": 241,
+    "url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/241",
+    "title": "Add bounded local MCP tools runtime",
+    "merged": true,
+    "merged_at": "2026-06-22T17:55:03Z",
+    "head_sha": "085cb5966df674b572df6aa664eeb74af5f641ca",
+    "merge_commit_sha": "c796f05e688682500ee1ec70b9c77f24e1a7924f"
+  },
+  "issue": {
+    "number": 240,
+    "url": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/240",
+    "state": "closed",
+    "state_reason": "completed",
+    "closed_at": "2026-06-22T17:55:04Z"
+  },
+  "github_actions": [
+    {
+      "name": "Foundation Validation",
+      "run_id": 27969846376,
+      "conclusion": "success"
+    },
+    {
+      "name": "SpecBridge Review Gate",
+      "run_id": 27969846344,
+      "conclusion": "success"
+    },
+    {
+      "name": "SpecBridge PR Review Report",
+      "run_id": 27969846393,
+      "conclusion": "success"
+    },
+    {
+      "name": "Claude Review Non Blocking",
+      "run_id": 27969846399,
+      "conclusion": "success"
+    }
+  ],
+  "policy_result": "Within policy. The bounded local MCP tools runtime stayed local-only and read-only in effect. No network MCP transport, hosted server, GitHub mutation through MCP, external resource mutation, deployment, secrets, production, billing, authentication, authorization, database, dependency installation, CI/CD security change, cleanup enforcement, artifact retention enforcement, branch cleanup, issue #194 lifecycle change, or digital twin work occurred.",
+  "post_merge_memory_status": "recorded"
+}

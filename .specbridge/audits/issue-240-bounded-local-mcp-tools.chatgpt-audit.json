@@ -45,13 +45,13 @@
     {
       "name": "ci_evidence",
       "result": "pass",
-      "evidence": "GitHub Actions evidence is not collected before PR creation. Merge remains blocked until required GitHub checks pass.",
+      "evidence": "GitHub Actions passed on PR #241 head 085cb5966df674b572df6aa664eeb74af5f641ca: Foundation Validation, SpecBridge Review Gate, SpecBridge PR Review Report, and Claude Review Non Blocking.",
       "blocking": false
     },
     {
       "name": "final_report_honesty",
       "result": "pass",
-      "evidence": "The final report marks completion_status as ready_for_pr, records GitHub Actions as not_collected, states no deployment, and preserves unresolved risks for future MCP and cleanup work.",
+      "evidence": "The final report marks completion_status as complete, records GitHub Actions passed, PR #241 merge, issue #240 closure, no deployment, and remaining future MCP and cleanup risks.",
       "blocking": false
     }
   ],
@@ -67,18 +67,17 @@
     },
     {
       "severity": "info",
-      "category": "ci_pending",
+      "category": "ci_passed",
       "file": ".specbridge/audit-packets/issue-240-bounded-local-mcp-tools.audit-packet.json",
       "line": null,
-      "evidence": "GitHub Actions are not collected until the PR is opened.",
-      "recommendation": "Do not merge until Foundation Validation, SpecBridge Review Gate, SpecBridge PR Review Report, and Claude Review Non Blocking pass.",
+      "evidence": "GitHub Actions passed on PR #241 before merge.",
+      "recommendation": "Keep post-merge memory evidence aligned with PR and issue closure state.",
       "blocking": false
     }
   ],
   "outcome": "approved",
   "merge_allowed": true,
   "unresolved_risks": [
-    "GitHub Actions evidence is pending until PR creation.",
     "Future MCP tools must receive dedicated execution contracts and tests.",
     "Network MCP, hosted server, GitHub mutation, cleanup enforcement, and artifact retention enforcement remain blocked future work."
   ],
@@ -86,6 +85,7 @@
     ".specbridge/audit-packets/issue-240-bounded-local-mcp-tools.audit-packet.json",
     ".specbridge/audits/issue-240-bounded-local-mcp-tools.chatgpt-audit.json",
     ".specbridge/contracts/issue-240-bounded-local-mcp-tools.execution.md",
+    ".specbridge/github-evidence/issue-240-bounded-local-mcp-tools.closure.json",
     ".specbridge/reports/issue-240-bounded-local-mcp-tools.final-report.json",
     ".specbridge/scopes/issue-240-bounded-local-mcp-tools.scope.json",
     "docs/specbridge-mcp-bounded-tools.md",

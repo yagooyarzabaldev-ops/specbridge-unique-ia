@@ -6,6 +6,7 @@
     ".specbridge/audits/issue-240-bounded-local-mcp-tools.chatgpt-audit.json",
     ".specbridge/context/CURRENT_GOAL.md",
     ".specbridge/contracts/issue-240-bounded-local-mcp-tools.execution.md",
+    ".specbridge/github-evidence/issue-240-bounded-local-mcp-tools.closure.json",
     ".specbridge/ledger/operations.ndjson",
     ".specbridge/mcp-resources/operator-state.catalog.json",
     ".specbridge/reports/issue-240-bounded-local-mcp-tools.final-report.json",
@@ -32,19 +33,18 @@
     "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
     "git diff --check: passed",
     "Claude Code bounded audit: passed with no remaining code blocker after evidence artifacts were added",
-    "GitHub Actions Foundation Validation: not_collected",
-    "GitHub Actions SpecBridge Review Gate: not_collected",
-    "GitHub Actions SpecBridge PR Review Report: not_collected",
-    "GitHub Actions Claude Review Non Blocking: not_collected"
+    "GitHub Actions Foundation Validation: passed",
+    "GitHub Actions SpecBridge Review Gate: passed",
+    "GitHub Actions SpecBridge PR Review Report: passed",
+    "GitHub Actions Claude Review Non Blocking: passed"
   ],
   "policy_result": "Within policy. The implementation is local, deterministic, and read-only in effect. It does not install dependencies, call networks, access secrets, create hosted MCP transport, mutate GitHub through MCP, mutate external resources, change production, billing, authentication, authorization, database, CI/CD security, deployment, cleanup enforcement, artifact retention enforcement, branch cleanup, issue #194, or digital twin scope.",
   "risk_result": "Medium risk and contained. The change adds a new local MCP-style command surface, but it is bounded by an explicit allowlist, covered by CLI regression tests, documented as local-only, and keeps all mutation and protected scopes blocked.",
   "unresolved_risks": [
-    "GitHub Actions evidence is not collected until the PR is pushed.",
     "Network MCP transport, hosted MCP server deployment, GitHub mutation tools, external resource mutation, cleanup enforcement, and artifact retention enforcement remain future blocked work requiring dedicated contracts.",
     "The initial long Claude Code implementation attempt timed out; the final implementation was completed and audited under bounded local scope."
   ],
-  "merge_status": "Not merged yet. PR and GitHub Actions evidence are pending.",
+  "merge_status": "PR #241 merged on 2026-06-22T17:55:03Z at merge commit c796f05e688682500ee1ec70b9c77f24e1a7924f. Issue #240 closed automatically as completed and post-merge closure evidence was recorded.",
   "deployment_status": "Not applicable. No deployment is allowed by this contract.",
-  "completion_status": "ready_for_pr"
+  "completion_status": "complete"
 }

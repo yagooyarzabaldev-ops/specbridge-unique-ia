@@ -1,7 +1,7 @@
 {
   "contract_id": "issue-240-bounded-local-mcp-tools",
   "run_id": "sb-20260622-0240a1b2",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/contracts/issue-240-bounded-local-mcp-tools.execution.md",
     ".specbridge/scopes/issue-240-bounded-local-mcp-tools.scope.json",

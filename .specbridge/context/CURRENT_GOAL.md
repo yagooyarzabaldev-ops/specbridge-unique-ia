@@ -52,6 +52,7 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | 231 | Claude runtime capability negotiation | 232 | Merged 2026-06-21 UTC |
 | 234 | Read-only MCP runtime and backlog hygiene closure | 235 | Merged 2026-06-21 UTC |
 | 237 | Governed project starter standard | 238 | Merged 2026-06-22 UTC |
+| 240 | Bounded local MCP tools runtime | 241 | Merged 2026-06-22 UTC |
 
 ## Architecture Status
 
@@ -84,7 +85,7 @@ SpecBridge currently has:
 
 ## Next Recommended Task
 
-Active governed task: issue #240 (`issue-240-bounded-local-mcp-tools`) implements a bounded local MCP tools surface with `tools/list` and allowlisted read-only `tools/call` while preserving blocked network, hosted server, GitHub/resource mutation, secrets, deployment, and cleanup enforcement boundaries.
+Ready for next governed task. Issue #240 (`issue-240-bounded-local-mcp-tools`) is complete: PR #241 merged the bounded local MCP tools surface with `tools/list` and allowlisted read-only `tools/call`, closed issue #240, and recorded post-merge closure evidence.
 
 Issue #237 (`issue-237-project-starter-standard`) is complete. PR #238 merged the deterministic local project starter standard, closed issue #237, recorded post-merge closure evidence, and the GitHub repository visibility is private.
 
