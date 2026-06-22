@@ -6,6 +6,7 @@
     ".specbridge/audits/issue-243-mcp-next-task-tool.chatgpt-audit.json",
     ".specbridge/context/CURRENT_GOAL.md",
     ".specbridge/contracts/issue-243-mcp-next-task-tool.execution.md",
+    ".specbridge/github-evidence/issue-243-mcp-next-task-tool.closure.json",
     ".specbridge/ledger/operations.ndjson",
     ".specbridge/mcp-resources/operator-state.catalog.json",
     ".specbridge/reports/issue-243-mcp-next-task-tool.final-report.json",
@@ -32,18 +33,17 @@
     "git diff --check: passed",
     "Claude Code next-task planning: passed",
     "Claude Code bounded implementation audit: passed",
-    "GitHub Actions Foundation Validation: not_collected",
-    "GitHub Actions SpecBridge Review Gate: not_collected",
-    "GitHub Actions SpecBridge PR Review Report: not_collected",
-    "GitHub Actions Claude Review Non Blocking: not_collected"
+    "GitHub Actions Foundation Validation: passed",
+    "GitHub Actions SpecBridge Review Gate: passed",
+    "GitHub Actions SpecBridge PR Review Report: passed",
+    "GitHub Actions Claude Review Non Blocking: passed"
   ],
   "policy_result": "Within policy. The new tool is local-only and read-only in effect, wraps existing next-task selector data, writes no files, performs no external calls, installs no dependencies, and does not access secrets, production, billing, authentication, authorization, database, CI/CD security, deployment, cleanup enforcement, branch cleanup, artifact retention enforcement, issue #194 lifecycle, network MCP transport, hosted MCP server, or GitHub/resource mutation through MCP.",
   "risk_result": "Low risk and contained. The change extends an existing local allowlist with one read-only tool and test coverage, with no new data sources or mutation authority.",
   "unresolved_risks": [
-    "GitHub Actions evidence is not collected until the PR is pushed.",
     "Future mutation-capable MCP tools, network MCP transport, hosted MCP server deployment, GitHub/resource mutation, cleanup enforcement, and artifact retention enforcement remain blocked future work requiring dedicated contracts."
   ],
-  "merge_status": "Not merged yet. PR and GitHub Actions evidence are pending.",
+  "merge_status": "PR #244 merged on 2026-06-22T20:07:24Z at merge commit 8afdf0f310fc554c25cbd42a51f4e8d4561b5323. Issue #243 closed automatically as completed and post-merge closure evidence was recorded.",
   "deployment_status": "Not applicable. No deployment is allowed by this contract.",
-  "completion_status": "ready_for_pr"
+  "completion_status": "complete"
 }

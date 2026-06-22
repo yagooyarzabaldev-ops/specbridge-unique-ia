@@ -45,13 +45,13 @@
     {
       "name": "ci_evidence",
       "result": "pass",
-      "evidence": "GitHub Actions evidence is not collected before PR creation. Merge remains blocked until required GitHub checks pass.",
+      "evidence": "GitHub Actions for PR #244 passed: Foundation Validation, SpecBridge Review Gate, SpecBridge PR Review Report, and Claude Review Non Blocking.",
       "blocking": false
     },
     {
       "name": "final_report_honesty",
       "result": "pass",
-      "evidence": "The final report marks completion_status as ready_for_pr, records GitHub Actions as not_collected, records the Claude Code bounded implementation audit as passed, states no deployment, and preserves unresolved risks for future MCP and cleanup work.",
+      "evidence": "The final report marks completion_status as complete, records GitHub Actions as passed, records the Claude Code bounded implementation audit as passed, states no deployment, and preserves unresolved risks for future MCP and cleanup work.",
       "blocking": false
     }
   ],
@@ -67,24 +67,24 @@
     },
     {
       "severity": "info",
-      "category": "ci_pending",
+      "category": "github_ci_passed",
       "file": ".specbridge/audit-packets/issue-243-mcp-next-task-tool.audit-packet.json",
       "line": null,
-      "evidence": "GitHub Actions are not collected until the PR is opened.",
-      "recommendation": "Do not merge until Foundation Validation, SpecBridge Review Gate, SpecBridge PR Review Report, and Claude Review Non Blocking pass.",
+      "evidence": "PR #244 GitHub Actions passed and the PR was merged at 8afdf0f310fc554c25cbd42a51f4e8d4561b5323.",
+      "recommendation": "Keep CI-gated merge evidence in closure artifacts for future tasks.",
       "blocking": false
     }
   ],
   "outcome": "approved",
   "merge_allowed": true,
   "unresolved_risks": [
-    "GitHub Actions evidence is pending until PR creation.",
     "Future MCP tools must receive dedicated execution contracts and tests."
   ],
   "source_files": [
     ".specbridge/audit-packets/issue-243-mcp-next-task-tool.audit-packet.json",
     ".specbridge/audits/issue-243-mcp-next-task-tool.chatgpt-audit.json",
     ".specbridge/contracts/issue-243-mcp-next-task-tool.execution.md",
+    ".specbridge/github-evidence/issue-243-mcp-next-task-tool.closure.json",
     ".specbridge/reports/issue-243-mcp-next-task-tool.final-report.json",
     ".specbridge/scopes/issue-243-mcp-next-task-tool.scope.json",
     "docs/specbridge-mcp-bounded-tools.md",

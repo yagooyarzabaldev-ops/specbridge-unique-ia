@@ -53,6 +53,7 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | 234 | Read-only MCP runtime and backlog hygiene closure | 235 | Merged 2026-06-21 UTC |
 | 237 | Governed project starter standard | 238 | Merged 2026-06-22 UTC |
 | 240 | Bounded local MCP tools runtime | 241 | Merged 2026-06-22 UTC |
+| 243 | specbridge.next-task bounded MCP tool | 244 | Merged 2026-06-22 UTC |
 
 ## Architecture Status
 
@@ -85,7 +86,7 @@ SpecBridge currently has:
 
 ## Next Recommended Task
 
-Active governed task: issue #243 (`issue-243-mcp-next-task-tool`) adds `specbridge.next-task` as a second bounded local MCP tool so MCP consumers can inspect the full existing next-task selector snapshot without running `specbridge-next-task` out-of-band.
+Ready for next governed task. Issue #243 (`issue-243-mcp-next-task-tool`) is complete: PR #244 merged the `specbridge.next-task` bounded local MCP tool, closed issue #243, and recorded post-merge closure evidence.
 
 Issue #240 (`issue-240-bounded-local-mcp-tools`) is complete: PR #241 merged the bounded local MCP tools surface with `tools/list` and allowlisted read-only `tools/call`, closed issue #240, and recorded post-merge closure evidence.
 
@@ -95,7 +96,7 @@ Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;
 `specbridge-next-task` will not select it.
 
-Backlog: future mutation-capable MCP tools, network MCP transport, hosted MCP server deployment, and GitHub/resource mutation surfaces remain blocked until a dedicated contract explicitly authorizes them. Issue #243 is read-only/local and does not authorize those blocked surfaces.
+Backlog: future mutation-capable MCP tools, network MCP transport, hosted MCP server deployment, and GitHub/resource mutation surfaces remain blocked until a dedicated contract explicitly authorizes them.
 
 Maintenance debt:
 - Branch cleanup remains policy-only. Branch debt is observable through `specbridge-branch-inventory` and classified by `specbridge-branch-cleanup-policy`; no branch deletion, pruning, renaming, movement, archival, fetch, pull, force-push, cleanup apply mode, or retention enforcement is authorized.

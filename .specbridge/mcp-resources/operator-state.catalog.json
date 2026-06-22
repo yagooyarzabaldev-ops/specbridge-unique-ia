@@ -1,7 +1,7 @@
 {
     "schema_version":  "1",
     "catalog_id":  "specbridge-operator-state",
-    "generated_at":  "2026-06-22T16:50:56.7004037-03:00",
+    "generated_at":  "2026-06-22T17:40:31.9847046-03:00",
     "mcp_server_status":  "readonly_local_runtime",
     "mcp_server_note":  "Bounded local MCP-style runtime: resources/list, resources/read, tools/list, and tools/call for explicitly allowlisted read-only local tools. No network transport, no mutation, no secrets, no server process.",
     "read_only_policy":  true,
@@ -19,19 +19,19 @@
                           "read_only":  true,
                           "description":  "Machine-readable current SpecBridge operator goal and task status.",
                           "data":  {
-                                       "current_task_id":  "issue-243-mcp-next-task-tool",
-                                       "run_id":  "sb-20260622-0243a1b2",
-                                       "title":  "Add specbridge.next-task bounded MCP tool",
-                                       "status":  "active",
+                                       "current_task_id":  null,
+                                       "run_id":  null,
+                                       "title":  "Ready for next governed task",
+                                       "status":  "ready_for_next_task",
                                        "primary_pr":  null,
                                        "closure_pr":  null,
-                                       "last_completed_task_id":  "issue-240-bounded-local-mcp-tools",
-                                       "last_completed_run_id":  "sb-20260622-0240a1b2",
-                                       "last_completed_pr":  241,
-                                       "last_completed_merge_commit":  "c796f05e688682500ee1ec70b9c77f24e1a7924f",
-                                       "last_completed_at":  "2026-06-22T17:55:04Z",
-                                       "last_updated":  "2026-06-22T19:17:04Z",
-                                       "updated_by":  "ChatGPT/Codex issue-243 intake"
+                                       "last_completed_task_id":  "issue-243-mcp-next-task-tool",
+                                       "last_completed_run_id":  "sb-20260622-0243a1b2",
+                                       "last_completed_pr":  244,
+                                       "last_completed_merge_commit":  "8afdf0f310fc554c25cbd42a51f4e8d4561b5323",
+                                       "last_completed_at":  "2026-06-22T20:07:25Z",
+                                       "last_updated":  "2026-06-22T20:38:12Z",
+                                       "updated_by":  "ChatGPT/Codex post-merge memory closure issue-243"
                                    }
                       },
                       {
@@ -70,7 +70,7 @@
 
                                                    ],
                                        "action_count":  0,
-                                       "checked_at":  "2026-06-22T16:50:56.5273211-03:00"
+                                       "checked_at":  "2026-06-22T17:40:31.8246947-03:00"
                                    }
                       },
                       {

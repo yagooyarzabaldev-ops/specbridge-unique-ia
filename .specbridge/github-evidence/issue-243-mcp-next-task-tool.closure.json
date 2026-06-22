@@ -1,0 +1,47 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-243-mcp-next-task-tool",
+  "run_id": "sb-20260622-0243a1b2",
+  "closure_type": "post_merge_memory",
+  "repository_visibility": "private",
+  "pr": {
+    "number": 244,
+    "url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/244",
+    "title": "Add specbridge.next-task bounded MCP tool",
+    "merged": true,
+    "merged_at": "2026-06-22T20:07:24Z",
+    "head_sha": "48f1351fc489773da5e01346f1d9dec64dc63a3a",
+    "merge_commit_sha": "8afdf0f310fc554c25cbd42a51f4e8d4561b5323"
+  },
+  "issue": {
+    "number": 243,
+    "url": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/243",
+    "state": "closed",
+    "state_reason": "completed",
+    "closed_at": "2026-06-22T20:07:25Z"
+  },
+  "github_actions": [
+    {
+      "name": "Foundation Validation",
+      "run_id": 27980156701,
+      "conclusion": "success"
+    },
+    {
+      "name": "SpecBridge Review Gate",
+      "run_id": 27980156702,
+      "conclusion": "success"
+    },
+    {
+      "name": "SpecBridge PR Review Report",
+      "run_id": 27980156691,
+      "conclusion": "success"
+    },
+    {
+      "name": "Claude Review Non Blocking",
+      "run_id": 27980156705,
+      "conclusion": "success"
+    }
+  ],
+  "policy_result": "Within policy. The specbridge.next-task MCP tool stayed local-only and read-only in effect. No network MCP transport, hosted server, GitHub mutation through MCP, external resource mutation, deployment, secrets, production, billing, authentication, authorization, database, dependency installation, CI/CD security change, cleanup enforcement, artifact retention enforcement, branch cleanup, issue #194 lifecycle change, or digital twin work occurred.",
+  "post_merge_memory_status": "recorded"
+}

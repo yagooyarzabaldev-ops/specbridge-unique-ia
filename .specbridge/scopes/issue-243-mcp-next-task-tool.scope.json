@@ -1,7 +1,7 @@
 {
   "contract_id": "issue-243-mcp-next-task-tool",
   "run_id": "sb-20260622-0243a1b2",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/contracts/issue-243-mcp-next-task-tool.execution.md",
     ".specbridge/scopes/issue-243-mcp-next-task-tool.scope.json",
