@@ -1291,8 +1291,8 @@ try {
       $mcpToolsListJson = $null
       try { $mcpToolsListJson = $mcpToolsListResult.Text.Trim() | ConvertFrom-Json } catch {}
       $toolNames = @($mcpToolsListJson.result.tools | ForEach-Object { $_.name })
-      if ($null -eq $mcpToolsListJson -or $toolNames -notcontains "specbridge.operator.status") {
-        Write-Output "FAIL specbridge-mcp-runtime tools/list: missing specbridge.operator.status."
+      if ($null -eq $mcpToolsListJson -or $toolNames -notcontains "specbridge.operator.status" -or $toolNames -notcontains "specbridge.next-task" -or $toolNames.Count -ne 2) {
+        Write-Output "FAIL specbridge-mcp-runtime tools/list: expected exactly specbridge.operator.status and specbridge.next-task."
         $script:failed = $true
       } else {
         Write-Output "PASS specbridge-mcp-runtime tools/list: bounded tool allowlist present."
@@ -1313,6 +1313,34 @@ try {
         $script:failed = $true
       } else {
         Write-Output "PASS specbridge-mcp-runtime tools/call allowed: operator status returned."
+      }
+    }
+
+    # specbridge-mcp-runtime: tools/call exposes the read-only local next-task selector
+    $mcpToolsCallNextTaskResult = Invoke-Cli -Arguments @("specbridge-mcp-runtime", "-Method", "tools/call", "-ToolName", "specbridge.next-task")
+    Assert-Success `
+      -Name "specbridge-mcp-runtime tools/call specbridge.next-task" `
+      -Result $mcpToolsCallNextTaskResult `
+      -ExpectedPattern '"tool"\s*:\s*"specbridge.next-task"'
+    if ($mcpToolsCallNextTaskResult.ExitCode -eq 0) {
+      $mcpToolsCallNextTaskJson = $null
+      $mcpToolsCallNextTaskPayload = $null
+      try {
+        $mcpToolsCallNextTaskJson = $mcpToolsCallNextTaskResult.Text.Trim() | ConvertFrom-Json
+        $mcpToolsCallNextTaskPayload = $mcpToolsCallNextTaskJson.result.content[0].text | ConvertFrom-Json
+      } catch {}
+      $payloadFields = if ($null -ne $mcpToolsCallNextTaskPayload) { @($mcpToolsCallNextTaskPayload.PSObject.Properties.Name) } else { @() }
+      $missingPayloadField = $false
+      foreach ($requiredPayloadField in @("current_goal_status", "current_task_id", "eligible_tasks", "excluded_issues", "recommended_action")) {
+        if ($payloadFields -notcontains $requiredPayloadField) {
+          $missingPayloadField = $true
+        }
+      }
+      if ($null -eq $mcpToolsCallNextTaskJson -or $mcpToolsCallNextTaskJson.ok -ne $true -or @($mcpToolsCallNextTaskJson.result.content).Count -ne 1 -or $missingPayloadField) {
+        Write-Output "FAIL specbridge-mcp-runtime tools/call specbridge.next-task: invalid next-task payload."
+        $script:failed = $true
+      } else {
+        Write-Output "PASS specbridge-mcp-runtime tools/call specbridge.next-task: next-task selector returned."
       }
     }
 

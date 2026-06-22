@@ -10,6 +10,15 @@ $script:McpAllowedTools = @(
       properties = [ordered]@{}
       required   = @()
     }
+  },
+  [ordered]@{
+    name = "specbridge.next-task"
+    description = "Returns the full read-only local next-task selector snapshot: current goal status, current task id, eligible tasks, excluded issues, and recommended action. Does not write files or mutate state."
+    inputSchema = [ordered]@{
+      type       = "object"
+      properties = [ordered]@{}
+      required   = @()
+    }
   }
 )
 
@@ -47,6 +56,20 @@ function Get-McpOperatorStatusToolResult {
       excluded_issue_count = @($nextTask.excluded_issues).Count
     }
     note = "Read-only local operator status snapshot. No files were written."
+  }
+}
+
+function Get-McpNextTaskToolResult {
+  $nextTask = Get-StandardReadinessNextTaskSnapshot
+
+  return [ordered]@{
+    tool                = "specbridge.next-task"
+    current_goal_status = [string] $nextTask.current_goal_status
+    current_task_id     = [string] $nextTask.current_task_id
+    eligible_tasks      = @($nextTask.eligible_tasks)
+    excluded_issues     = @($nextTask.excluded_issues)
+    recommended_action  = [string] $nextTask.recommended_action
+    note                = "Read-only local next-task selector snapshot. No files were written."
   }
 }
 
@@ -92,6 +115,25 @@ function Invoke-McpToolsCallMethod {
 
   if ($normalizedToolName -eq "specbridge.operator.status") {
     $toolResult = Get-McpOperatorStatusToolResult
+    Write-CliJson ([ordered]@{
+      command = "specbridge-mcp-runtime"
+      ok      = $true
+      method  = "tools/call"
+      tool    = $normalizedToolName
+      result  = [ordered]@{
+        content = @(
+          [ordered]@{
+            type = "text"
+            text = ($toolResult | ConvertTo-Json -Depth 10 -Compress)
+          }
+        )
+      }
+    }) -Depth 10
+    return
+  }
+
+  if ($normalizedToolName -eq "specbridge.next-task") {
+    $toolResult = Get-McpNextTaskToolResult
     Write-CliJson ([ordered]@{
       command = "specbridge-mcp-runtime"
       ok      = $true

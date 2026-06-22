@@ -1,0 +1,49 @@
+{
+  "summary": "Implemented issue #243 by adding the second bounded local MCP tool, specbridge.next-task. The tool is listed by tools/list, can be called through tools/call, returns a text content item containing the full existing next-task selector snapshot, and keeps unknown tool and missing tool-name failures deterministic. Existing specbridge.operator.status and resource read behavior remain compatible. Claude Code was used for next-task planning and a bounded implementation audit; ChatGPT/Codex completed implementation and local validation inside the active contract.",
+  "changed_files": [
+    ".specbridge/artifact-inventory/current.inventory.json",
+    ".specbridge/audit-packets/issue-243-mcp-next-task-tool.audit-packet.json",
+    ".specbridge/audits/issue-243-mcp-next-task-tool.chatgpt-audit.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-243-mcp-next-task-tool.execution.md",
+    ".specbridge/ledger/operations.ndjson",
+    ".specbridge/mcp-resources/operator-state.catalog.json",
+    ".specbridge/reports/issue-243-mcp-next-task-tool.final-report.json",
+    ".specbridge/scopes/issue-243-mcp-next-task-tool.scope.json",
+    ".specbridge/standard-readiness/current.status.json",
+    ".specbridge/state/current-goal.json",
+    "README.md",
+    "docs/specbridge-mcp-bounded-tools.md",
+    "docs/specbridge-mcp-readonly-runtime.md",
+    "docs/specbridge-studio.html",
+    "docs/status-dashboard.html",
+    "scripts/lib/mcp-resources.ps1",
+    "scripts/lib/mcp-tools.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-specbridge-cli.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "git diff --check: passed",
+    "Claude Code next-task planning: passed",
+    "Claude Code bounded implementation audit: passed",
+    "GitHub Actions Foundation Validation: not_collected",
+    "GitHub Actions SpecBridge Review Gate: not_collected",
+    "GitHub Actions SpecBridge PR Review Report: not_collected",
+    "GitHub Actions Claude Review Non Blocking: not_collected"
+  ],
+  "policy_result": "Within policy. The new tool is local-only and read-only in effect, wraps existing next-task selector data, writes no files, performs no external calls, installs no dependencies, and does not access secrets, production, billing, authentication, authorization, database, CI/CD security, deployment, cleanup enforcement, branch cleanup, artifact retention enforcement, issue #194 lifecycle, network MCP transport, hosted MCP server, or GitHub/resource mutation through MCP.",
+  "risk_result": "Low risk and contained. The change extends an existing local allowlist with one read-only tool and test coverage, with no new data sources or mutation authority.",
+  "unresolved_risks": [
+    "GitHub Actions evidence is not collected until the PR is pushed.",
+    "Future mutation-capable MCP tools, network MCP transport, hosted MCP server deployment, GitHub/resource mutation, cleanup enforcement, and artifact retention enforcement remain blocked future work requiring dedicated contracts."
+  ],
+  "merge_status": "Not merged yet. PR and GitHub Actions evidence are pending.",
+  "deployment_status": "Not applicable. No deployment is allowed by this contract.",
+  "completion_status": "ready_for_pr"
+}

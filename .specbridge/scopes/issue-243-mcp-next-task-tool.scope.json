@@ -1,0 +1,43 @@
+{
+  "contract_id": "issue-243-mcp-next-task-tool",
+  "run_id": "sb-20260622-0243a1b2",
+  "status": "active",
+  "exclusive_write": [
+    ".specbridge/contracts/issue-243-mcp-next-task-tool.execution.md",
+    ".specbridge/scopes/issue-243-mcp-next-task-tool.scope.json",
+    ".specbridge/reports/issue-243-mcp-next-task-tool.final-report.json",
+    ".specbridge/audit-packets/issue-243-mcp-next-task-tool.audit-packet.json",
+    ".specbridge/audits/issue-243-mcp-next-task-tool.chatgpt-audit.json",
+    ".specbridge/github-evidence/issue-243-mcp-next-task-tool.closure.json",
+    ".specbridge/ledger/operations.ndjson",
+    ".specbridge/state/current-goal.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/artifact-inventory/current.inventory.json",
+    ".specbridge/mcp-resources/operator-state.catalog.json",
+    ".specbridge/standard-readiness/current.status.json",
+    "README.md",
+    "docs/specbridge-mcp-bounded-tools.md",
+    "docs/specbridge-mcp-readonly-runtime.md",
+    "docs/status-dashboard.html",
+    "docs/specbridge-studio.html",
+    "scripts/lib/mcp-resources.ps1",
+    "scripts/lib/mcp-tools.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/policies/operator-task-decisions.json",
+    ".specbridge/policies/token-context-governance.json",
+    "scripts/specbridge.ps1",
+    "scripts/lib/common.ps1",
+    "scripts/lib/standard-readiness.ps1",
+    ".claude/settings.json",
+    ".git"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-243-mcp-next-task-tool.final-report.json"
+}

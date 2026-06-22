@@ -18,6 +18,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 spe
 # List and call bounded local tools
 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 specbridge-mcp-runtime -Method tools/list
 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 specbridge-mcp-runtime -Method tools/call -ToolName specbridge.operator.status
+powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 specbridge-mcp-runtime -Method tools/call -ToolName specbridge.next-task
 ```
 
 ## Available Resources
@@ -36,6 +37,13 @@ powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 spe
 | `resources/read` | Returns the resource content for a known URI as a `contents` array |
 | `tools/list` | Returns the local read-only tool allowlist |
 | `tools/call` | Calls an allowlisted local read-only tool by `-ToolName` |
+
+The current bounded tool allowlist is:
+
+| Tool | Description |
+|------|-------------|
+| `specbridge.operator.status` | Returns current goal, doctor fix-plan, and readiness summary counts |
+| `specbridge.next-task` | Returns the full next-task selector snapshot: current goal status, current task id, eligible tasks, excluded issues, and recommended action |
 
 Unlisted tools are rejected with `tool_not_allowed` and exit code 1. Mutation-like MCP methods (`resources/write`, `resources/create`, `resources/delete`, `resources/update`, `resources/subscribe`, `sampling/createMessage`, `prompts/get`, etc.) are rejected with `method_not_allowed` and exit code 1.
 

@@ -1,0 +1,96 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-243-mcp-next-task-tool",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-243-mcp-next-task-tool.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-243-mcp-next-task-tool.execution.md",
+  "final_report_path": ".specbridge/reports/issue-243-mcp-next-task-tool.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "The implementation adds specbridge.next-task to the bounded local MCP tools allowlist and handles it through tools/call by wrapping the existing Get-StandardReadinessNextTaskSnapshot helper.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "tools/list returns specbridge.operator.status and specbridge.next-task, tools/call specbridge.next-task returns a text JSON payload with current_goal_status, current_task_id, eligible_tasks, excluded_issues, and recommended_action, and existing blocked tool and missing tool-name errors are preserved.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The change stays inside the issue-243 contract and scope. It does not add network transport, hosted server behavior, GitHub mutation through MCP, external resource mutation, cleanup enforcement, dependency installation, deployment, secrets, production, billing, auth, database, CI/CD security, or issue #194 lifecycle work.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The new tool only returns existing local selector state and writes no files. It does not read protected files, credentials, provider accounts, billing configuration, authentication, authorization, production, databases, or CI/CD security state.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "All changed files are declared in the issue-243 execution contract and scope manifest exclusive_write list.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "validate-contracts, validate-contract-scopes, test-specbridge-cli, validate-final-reports, validate-audit-packets, validate-chatgpt-audits, specbridge-smoke, and git diff --check passed locally before PR publication.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub Actions evidence is not collected before PR creation. Merge remains blocked until required GitHub checks pass.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report marks completion_status as ready_for_pr, records GitHub Actions as not_collected, records the Claude Code bounded implementation audit as passed, states no deployment, and preserves unresolved risks for future MCP and cleanup work.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "claude_audit",
+      "file": ".specbridge/reports/issue-243-mcp-next-task-tool.final-report.json",
+      "line": null,
+      "evidence": "Claude Code bounded implementation audit passed after provider capacity reset, confirming the implementation stays read-only, local, scoped, and non-mutating.",
+      "recommendation": "Use the same bounded audit pattern for future MCP tool expansions.",
+      "blocking": false
+    },
+    {
+      "severity": "info",
+      "category": "ci_pending",
+      "file": ".specbridge/audit-packets/issue-243-mcp-next-task-tool.audit-packet.json",
+      "line": null,
+      "evidence": "GitHub Actions are not collected until the PR is opened.",
+      "recommendation": "Do not merge until Foundation Validation, SpecBridge Review Gate, SpecBridge PR Review Report, and Claude Review Non Blocking pass.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "GitHub Actions evidence is pending until PR creation.",
+    "Future MCP tools must receive dedicated execution contracts and tests."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-243-mcp-next-task-tool.audit-packet.json",
+    ".specbridge/audits/issue-243-mcp-next-task-tool.chatgpt-audit.json",
+    ".specbridge/contracts/issue-243-mcp-next-task-tool.execution.md",
+    ".specbridge/reports/issue-243-mcp-next-task-tool.final-report.json",
+    ".specbridge/scopes/issue-243-mcp-next-task-tool.scope.json",
+    "docs/specbridge-mcp-bounded-tools.md",
+    "docs/specbridge-mcp-readonly-runtime.md",
+    "scripts/lib/mcp-resources.ps1",
+    "scripts/lib/mcp-tools.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ]
+}

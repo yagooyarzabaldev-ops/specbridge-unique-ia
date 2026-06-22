@@ -1,6 +1,6 @@
 # SpecBridge MCP Bounded Tools Runtime
 
-Issue #240 extends the local MCP-style runtime with a bounded tools surface.
+Issues #240 and #243 extend the local MCP-style runtime with a bounded tools surface.
 
 The runtime remains local-only and read-only in effect. It does not start a network transport, hosted server, GitHub mutation path, external resource mutation path, secret reader, billing integration, auth system, deployment workflow, branch cleanup, or artifact retention enforcement.
 
@@ -18,7 +18,13 @@ Call the allowed local status tool:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\specbridge.ps1 specbridge-mcp-runtime -Method tools/call -ToolName specbridge.operator.status
 ```
 
-The allowed tool returns a JSON content item containing:
+Call the allowed local next-task selector tool:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\specbridge.ps1 specbridge-mcp-runtime -Method tools/call -ToolName specbridge.next-task
+```
+
+The operator status tool returns a JSON content item containing:
 
 - current goal status
 - last completed task
@@ -26,14 +32,23 @@ The allowed tool returns a JSON content item containing:
 - readiness next action
 - eligible and excluded task counts
 
-The tool writes no files and performs no external calls.
+The next-task tool returns a JSON content item containing:
+
+- current goal status
+- current task id
+- eligible tasks
+- excluded issues
+- recommended action
+
+The tools write no files and perform no external calls.
 
 ## Allowlist
 
-The initial allowlist contains one local helper:
+The allowlist contains these local helpers:
 
 ```text
 specbridge.operator.status
+specbridge.next-task
 ```
 
 Any other `tools/call` request returns deterministic JSON with `tool_not_allowed` and exits nonzero.

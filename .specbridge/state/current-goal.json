@@ -1,8 +1,8 @@
 {
-  "current_task_id": null,
-  "run_id": null,
-  "title": "Ready for next governed task",
-  "status": "ready_for_next_task",
+  "current_task_id": "issue-243-mcp-next-task-tool",
+  "run_id": "sb-20260622-0243a1b2",
+  "title": "Add specbridge.next-task bounded MCP tool",
+  "status": "active",
   "primary_pr": null,
   "closure_pr": null,
   "last_completed_task_id": "issue-240-bounded-local-mcp-tools",
@@ -10,6 +10,6 @@
   "last_completed_pr": 241,
   "last_completed_merge_commit": "c796f05e688682500ee1ec70b9c77f24e1a7924f",
   "last_completed_at": "2026-06-22T17:55:04Z",
-  "last_updated": "2026-06-22T17:57:02Z",
-  "updated_by": "ChatGPT/Codex post-merge memory closure issue-240"
+  "last_updated": "2026-06-22T19:17:04Z",
+  "updated_by": "ChatGPT/Codex issue-243 intake"
 }

@@ -85,7 +85,9 @@ SpecBridge currently has:
 
 ## Next Recommended Task
 
-Ready for next governed task. Issue #240 (`issue-240-bounded-local-mcp-tools`) is complete: PR #241 merged the bounded local MCP tools surface with `tools/list` and allowlisted read-only `tools/call`, closed issue #240, and recorded post-merge closure evidence.
+Active governed task: issue #243 (`issue-243-mcp-next-task-tool`) adds `specbridge.next-task` as a second bounded local MCP tool so MCP consumers can inspect the full existing next-task selector snapshot without running `specbridge-next-task` out-of-band.
+
+Issue #240 (`issue-240-bounded-local-mcp-tools`) is complete: PR #241 merged the bounded local MCP tools surface with `tools/list` and allowlisted read-only `tools/call`, closed issue #240, and recorded post-merge closure evidence.
 
 Issue #237 (`issue-237-project-starter-standard`) is complete. PR #238 merged the deterministic local project starter standard, closed issue #237, recorded post-merge closure evidence, and the GitHub repository visibility is private.
 
@@ -93,7 +95,7 @@ Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;
 `specbridge-next-task` will not select it.
 
-Backlog: future mutation-capable MCP tools, network MCP transport, hosted MCP server deployment, and GitHub/resource mutation surfaces remain blocked until a dedicated contract explicitly authorizes them.
+Backlog: future mutation-capable MCP tools, network MCP transport, hosted MCP server deployment, and GitHub/resource mutation surfaces remain blocked until a dedicated contract explicitly authorizes them. Issue #243 is read-only/local and does not authorize those blocked surfaces.
 
 Maintenance debt:
 - Branch cleanup remains policy-only. Branch debt is observable through `specbridge-branch-inventory` and classified by `specbridge-branch-cleanup-policy`; no branch deletion, pruning, renaming, movement, archival, fetch, pull, force-push, cleanup apply mode, or retention enforcement is authorized.
