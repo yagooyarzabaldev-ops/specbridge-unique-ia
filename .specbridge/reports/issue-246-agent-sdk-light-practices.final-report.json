@@ -6,6 +6,7 @@
     ".specbridge/audits/issue-246-agent-sdk-light-practices.chatgpt-audit.json",
     ".specbridge/context/CURRENT_GOAL.md",
     ".specbridge/contracts/issue-246-agent-sdk-light-practices.execution.md",
+    ".specbridge/github-evidence/issue-246-agent-sdk-light-practices.closure.json",
     ".specbridge/ledger/operations.ndjson",
     ".specbridge/mcp-resources/operator-state.catalog.json",
     ".specbridge/reports/issue-246-agent-sdk-light-practices.final-report.json",
@@ -31,15 +32,17 @@
     "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
     "git diff --check: passed",
     "claude -p issue-246 bounded implementation audit: passed",
-    "GitHub Actions: pending until PR publication"
+    "GitHub Actions Foundation Validation: passed",
+    "GitHub Actions SpecBridge Review Gate: passed",
+    "GitHub Actions SpecBridge PR Review Report: passed",
+    "GitHub Actions Claude Review Non Blocking: passed"
   ],
   "policy_result": "Within policy. The implementation only adds local read-only MCP metadata, regression coverage, and documentation. It does not install dependencies, import or host the Agent SDK, implement hooks, persist SDK sessions, add network MCP transport, add mutation-capable MCP tools, mutate GitHub through MCP, access secrets, configure billing, change production, implement auth, change databases, change CI/CD security, enforce cleanup, or deploy.",
   "risk_result": "Low risk and contained. The change narrows ambiguity around existing read-only tools and context preservation without expanding runtime authority.",
   "unresolved_risks": [
-    "Hosted Agent SDK runtime, hooks, session resume or fork, structured output retries, telemetry, network MCP transport, and mutation-capable tools remain blocked future work requiring dedicated contracts.",
-    "GitHub Actions evidence is pending until the PR is opened."
+    "Hosted Agent SDK runtime, hooks, session resume or fork, structured output retries, telemetry, network MCP transport, and mutation-capable tools remain blocked future work requiring dedicated contracts."
   ],
-  "merge_status": "Not merged yet. Merge is allowed only after required local validations, GitHub Actions, review gate, policy gate, and no protected-file changes pass.",
+  "merge_status": "PR #247 merged on 2026-06-22T22:33:30Z at merge commit f7dbdc520dbd68d779b2ec6b9ff9ddd0271788da. Issue #246 closed automatically as completed and post-merge closure evidence was recorded.",
   "deployment_status": "Not applicable. No deployment is allowed by this contract.",
-  "completion_status": "implemented_local_gates_passed_pr_ci_pending"
+  "completion_status": "complete"
 }

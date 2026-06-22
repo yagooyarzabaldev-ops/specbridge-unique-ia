@@ -45,13 +45,13 @@
     {
       "name": "ci_evidence",
       "result": "pass",
-      "evidence": "CI is pending until PR publication; merge remains gated on GitHub Actions before completion.",
+      "evidence": "GitHub Actions passed on PR #247: Foundation Validation, SpecBridge Review Gate, SpecBridge PR Review Report, and Claude Review Non Blocking.",
       "blocking": false
     },
     {
       "name": "final_report_honesty",
       "result": "pass",
-      "evidence": "The final report marks the task as implemented with local gates passed and PR CI pending, records validations that actually passed, records CI as pending, states no deployment, and preserves unresolved future SDK risks.",
+      "evidence": "The final report marks the task complete, records local validations and GitHub Actions as passed, records PR #247 merge, states no deployment, and preserves unresolved future SDK risks.",
       "blocking": false
     }
   ],
@@ -78,13 +78,13 @@
   "outcome": "approved",
   "merge_allowed": true,
   "unresolved_risks": [
-    "GitHub Actions evidence remains pending until PR publication.",
     "Future SDK runtime, hooks, sessions, telemetry, network MCP transport, and mutation-capable tools require dedicated contracts."
   ],
   "source_files": [
     ".specbridge/audit-packets/issue-246-agent-sdk-light-practices.audit-packet.json",
     ".specbridge/audits/issue-246-agent-sdk-light-practices.chatgpt-audit.json",
     ".specbridge/contracts/issue-246-agent-sdk-light-practices.execution.md",
+    ".specbridge/github-evidence/issue-246-agent-sdk-light-practices.closure.json",
     ".specbridge/reports/issue-246-agent-sdk-light-practices.final-report.json",
     ".specbridge/scopes/issue-246-agent-sdk-light-practices.scope.json",
     "CLAUDE.md",

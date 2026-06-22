@@ -2,14 +2,14 @@
     "command":  "specbridge-standard-readiness",
     "ok":  true,
     "schema_version":  "1",
-    "readiness":  "continue_current_goal",
-    "recommended_next_action":  "continue_current_goal",
+    "readiness":  "ready_for_governed_task_intake",
+    "recommended_next_action":  "create_new_operator_task",
     "task_selection":  {
-                           "current_goal_status":  "active",
-                           "current_task_id":  "issue-246-agent-sdk-light-practices",
+                           "current_goal_status":  "ready_for_next_task",
+                           "current_task_id":  "unknown",
                            "eligible_task_count":  0,
                            "excluded_issue_count":  1,
-                           "recommended_action":  "continue_current_goal"
+                           "recommended_action":  "create_new_operator_task"
                        },
     "doctor":  {
                    "health":  "healthy",
@@ -24,9 +24,9 @@
                               "overall_health_posture":  "debt_present_cleanup_blocked",
                               "cleanup_permission":  "none",
                               "enforcement_status":  "none",
-                              "branch_cleanup_blocked":  63,
+                              "branch_cleanup_blocked":  65,
                               "artifact_retention_blocked":  18,
-                              "total_blocked_actions":  81
+                              "total_blocked_actions":  83
                           },
     "token_context_governance":  {
                                      "governance_id":  "specbridge-token-context-governance",

@@ -1,7 +1,7 @@
 {
   "contract_id": "issue-246-agent-sdk-light-practices",
   "run_id": "sb-20260622-0246a7c9",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/contracts/issue-246-agent-sdk-light-practices.execution.md",
     ".specbridge/scopes/issue-246-agent-sdk-light-practices.scope.json",

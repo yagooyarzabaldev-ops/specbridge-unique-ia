@@ -54,6 +54,7 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | 237 | Governed project starter standard | 238 | Merged 2026-06-22 UTC |
 | 240 | Bounded local MCP tools runtime | 241 | Merged 2026-06-22 UTC |
 | 243 | specbridge.next-task bounded MCP tool | 244 | Merged 2026-06-22 UTC |
+| 246 | Agent SDK lightweight practices | 247 | Merged 2026-06-22 UTC |
 
 ## Architecture Status
 
@@ -86,7 +87,7 @@ SpecBridge currently has:
 
 ## Next Recommended Task
 
-Active governed task: issue #246 (`issue-246-agent-sdk-light-practices`) adopts low-effort Claude Agent SDK loop practices that fit the current SpecBridge runtime: read-only MCP tool annotations, compaction/summary preservation instructions, and documentation for future result/cost/session evidence. The task explicitly blocks dependency installation, SDK hosting, hooks implementation, session persistence, network MCP transport, mutation-capable MCP tools, secrets, production, billing, auth, databases, CI/CD security changes, cleanup enforcement, and deployment.
+Ready for next governed task. Issue #246 (`issue-246-agent-sdk-light-practices`) is complete: PR #247 merged lightweight Claude Agent SDK loop practices for read-only MCP tool annotations, compaction/summary preservation instructions, and future result/cost/session evidence documentation; issue #246 closed as completed and post-merge closure evidence was recorded.
 
 Issue #243 (`issue-243-mcp-next-task-tool`) is complete: PR #244 merged the `specbridge.next-task` bounded local MCP tool, closed issue #243, and recorded post-merge closure evidence.
 
