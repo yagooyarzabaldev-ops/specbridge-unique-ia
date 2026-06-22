@@ -51,6 +51,7 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | 228 | Standard readiness status | 229 | Merged 2026-06-20 |
 | 231 | Claude runtime capability negotiation | 232 | Merged 2026-06-21 UTC |
 | 234 | Read-only MCP runtime and backlog hygiene closure | 235 | Merged 2026-06-21 UTC |
+| 237 | Governed project starter standard | 238 | Merged 2026-06-22 UTC |
 
 ## Architecture Status
 
@@ -83,9 +84,9 @@ SpecBridge currently has:
 
 ## Next Recommended Task
 
-Active governed task: issue #237 (`issue-237-project-starter-standard`) implements a deterministic local project starter standard so new product ideas can become auditable starter packages before real implementation.
+No active governed task. SpecBridge is ready for the next governed task intake.
 
-Issue #234 (`issue-234-readonly-mcp-runtime`) is complete. PR #235 merged the bounded read-only MCP runtime, closed issue #234, and recorded post-merge closure evidence.
+Issue #237 (`issue-237-project-starter-standard`) is complete. PR #238 merged the deterministic local project starter standard, closed issue #237, recorded post-merge closure evidence, and the GitHub repository visibility is private.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;

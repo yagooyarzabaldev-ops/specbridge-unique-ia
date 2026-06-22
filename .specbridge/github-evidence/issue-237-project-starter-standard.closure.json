@@ -1,0 +1,47 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-237-project-starter-standard",
+  "run_id": "sb-20260622-0237a1b2",
+  "closure_type": "post_merge_memory",
+  "repository_visibility": "private",
+  "pr": {
+    "number": 238,
+    "url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/238",
+    "title": "Add governed project starter standard",
+    "merged": true,
+    "merged_at": "2026-06-22T14:26:24Z",
+    "head_sha": "bec7196a506a54b6fae1e988f4c76df8ce7961ea",
+    "merge_commit_sha": "57e8fa822fb456f6de79196ea8a11f17c56778af"
+  },
+  "issue": {
+    "number": 237,
+    "url": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/237",
+    "state": "closed",
+    "state_reason": "completed",
+    "closed_at": "2026-06-22T14:26:25Z"
+  },
+  "github_actions": [
+    {
+      "name": "Foundation Validation",
+      "run_id": 27925354087,
+      "conclusion": "success"
+    },
+    {
+      "name": "SpecBridge Review Gate",
+      "run_id": 27925354101,
+      "conclusion": "success"
+    },
+    {
+      "name": "SpecBridge PR Review Report",
+      "run_id": 27925354092,
+      "conclusion": "success"
+    },
+    {
+      "name": "Claude Review Non Blocking",
+      "run_id": 27925354084,
+      "conclusion": "success"
+    }
+  ],
+  "policy_result": "Within policy. Repository visibility was changed from public to private by explicit user request before merge. No deployment, secrets, production, billing, auth, database, dependency installation, CI/CD security change, branch cleanup, artifact cleanup, mutation-capable MCP tools, network MCP transport, or issue #194 lifecycle change occurred.",
+  "post_merge_memory_status": "recorded"
+}

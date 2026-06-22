@@ -51,7 +51,7 @@
     {
       "name": "final_report_honesty",
       "result": "pass",
-      "evidence": "The final report marks completion as ready_for_merge, records GitHub CI passed, and states that merge was not performed because repository agent rules forbid PR merge by agents.",
+      "evidence": "The final report marks completion as complete, records GitHub CI passed, PR #238 merge, issue #237 closure, and no deployment.",
       "blocking": false
     }
   ],
@@ -67,15 +67,6 @@
     },
     {
       "severity": "info",
-      "category": "merge_requires_allowed_actor",
-      "file": ".claude/rules/specbridge-autonomous-execution.md",
-      "line": null,
-      "evidence": "Repository agent rules say agents must never merge a PR.",
-      "recommendation": "An allowed human/operator should merge PR #238 after reviewing the passed gates.",
-      "blocking": false
-    },
-    {
-      "severity": "info",
       "category": "starter_not_implementation",
       "file": "docs/specbridge-project-starter-standard.md",
       "line": null,
@@ -87,13 +78,13 @@
   "outcome": "approved",
   "merge_allowed": true,
   "unresolved_risks": [
-    "PR merge remains unperformed by this agent because .claude/rules/specbridge-autonomous-execution.md forbids agents from merging PRs.",
     "Claude Code provider execution was attempted but did not complete in this run; Codex completed local implementation under the same contract.",
     "Future product builds still need dedicated contracts before implementation."
   ],
   "source_files": [
     ".specbridge/audit-packets/issue-237-project-starter-standard.audit-packet.json",
     ".specbridge/contracts/issue-237-project-starter-standard.execution.md",
+    ".specbridge/github-evidence/issue-237-project-starter-standard.closure.json",
     ".specbridge/project-starters/issue-237-project-starter-standard.project-starter.json",
     ".specbridge/reports/issue-237-project-starter-standard.final-report.json",
     ".specbridge/scopes/issue-237-project-starter-standard.scope.json",

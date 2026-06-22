@@ -6,6 +6,7 @@
     ".specbridge/audits/issue-237-project-starter-standard.chatgpt-audit.json",
     ".specbridge/context/CURRENT_GOAL.md",
     ".specbridge/contracts/issue-237-project-starter-standard.execution.md",
+    ".specbridge/github-evidence/issue-237-project-starter-standard.closure.json",
     ".specbridge/ledger/operations.ndjson",
     ".specbridge/mcp-resources/operator-state.catalog.json",
     ".specbridge/project-starters/issue-237-project-starter-standard.project-starter.json",
@@ -39,11 +40,10 @@
   "policy_result": "Within policy. The command is local and deterministic, writes only to the declared .specbridge/project-starters/<safe-task-id>.project-starter.json path when OutputPath is supplied, emits JSON only when OutputPath is omitted, installs no dependencies, calls no network, reads no secrets, creates or mutates no external repositories, touches no production, billing, authentication, authorization, database, CI/CD security, deployment, MCP mutation, cleanup enforcement, issue #194, or digital twin implementation.",
   "risk_result": "Medium risk and contained. The change adds a CLI surface and artifact family, but it is bounded to repository-local specification evidence and validation coverage.",
   "unresolved_risks": [
-    "PR merge remains unperformed by this agent because .claude/rules/specbridge-autonomous-execution.md forbids agents from merging PRs.",
     "Claude Code provider execution was attempted but did not complete in this run; Codex completed the local implementation under the same contract.",
     "The starter standard intentionally does not create repositories, install dependencies, deploy, connect wallets, configure billing, or implement external product integrations."
   ],
-  "merge_status": "PR #238 is open with GitHub CI 4/4 passed and local gates passed. Merge is not performed by this agent because .claude/rules/specbridge-autonomous-execution.md forbids agents from merging PRs.",
+  "merge_status": "PR #238 merged on 2026-06-22T14:26:24Z at merge commit 57e8fa822fb456f6de79196ea8a11f17c56778af. Issue #237 closed automatically as completed and post-merge closure evidence was recorded.",
   "deployment_status": "Not applicable. No deployment is allowed by this contract.",
-  "completion_status": "ready_for_merge"
+  "completion_status": "complete"
 }
