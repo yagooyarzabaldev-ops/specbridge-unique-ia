@@ -79,12 +79,13 @@ SpecBridge currently has:
 - Standard readiness status (specbridge-standard-readiness: deterministic read-only operator readiness snapshot over doctor health, next-task posture, repository health, token/context governance, MCP resource posture, and blocked execution boundaries before new governed task intake)
 - Claude runtime capability negotiation (runtime-capability-status: probes installed Claude CLI help to detect --max-turns support; execute-runtime-launch applies --max-turns only when supported and records `claude_capabilities.max_turns` plus the effective `command_summary` in runtime execution evidence)
 - Read-only MCP runtime (specbridge-mcp-runtime: local MCP-style harness for `resources/list` and `resources/read` over current-goal, doctor-fix-plan, and orchestration summaries; mutation-capable methods, network transport, hosted server deployment, secrets, and cleanup enforcement remain blocked)
+- Project starter standard (specbridge-project-starter: deterministic local starter artifacts for new product ideas before implementation, dependencies, secrets, billing, deployment, or external repository mutation)
 
 ## Next Recommended Task
 
-Issue #234 (`issue-234-readonly-mcp-runtime`) is complete. PR #235 merged the bounded read-only MCP runtime, closed issue #234, and recorded post-merge closure evidence.
+Active governed task: issue #237 (`issue-237-project-starter-standard`) implements a deterministic local project starter standard so new product ideas can become auditable starter packages before real implementation.
 
-Run `specbridge-standard-readiness` and `specbridge-next-task` to select the next governed task from repository evidence.
+Issue #234 (`issue-234-readonly-mcp-runtime`) is complete. PR #235 merged the bounded read-only MCP runtime, closed issue #234, and recorded post-merge closure evidence.
 
 Queue note: issue #194 (digital twin) stays open on GitHub but is
 excluded as `not_planned` by the operator decision registry;

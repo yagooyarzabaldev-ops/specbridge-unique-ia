@@ -1,15 +1,15 @@
 {
-  "current_task_id": null,
-  "run_id": null,
-  "title": null,
-  "status": "ready_for_next_task",
-  "primary_pr": null,
-  "closure_pr": 235,
+  "current_task_id": "issue-237-project-starter-standard",
+  "run_id": "sb-20260622-0237a1b2",
+  "title": "Implement governed project starter standard",
+  "status": "active",
+  "primary_pr": 238,
+  "closure_pr": null,
   "last_completed_task_id": "issue-234-readonly-mcp-runtime",
   "last_completed_run_id": "sb-20260621-0234a1b2",
   "last_completed_pr": 235,
   "last_completed_merge_commit": "363091babcebdced9205f89b95d7745b88d8d940",
   "last_completed_at": "2026-06-21T21:01:17Z",
-  "last_updated": "2026-06-21T21:01:17Z",
-  "updated_by": "ChatGPT/Codex issue-234 post-merge closure"
+  "last_updated": "2026-06-22T02:11:00Z",
+  "updated_by": "ChatGPT/Codex issue-237 CI passed evidence"
 }

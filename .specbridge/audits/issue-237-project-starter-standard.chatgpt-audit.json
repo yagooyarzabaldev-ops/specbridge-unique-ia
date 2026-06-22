@@ -1,0 +1,106 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-237-project-starter-standard",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-237-project-starter-standard.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-237-project-starter-standard.execution.md",
+  "final_report_path": ".specbridge/reports/issue-237-project-starter-standard.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "The implementation adds the governed specbridge-project-starter command, project starter artifact family, documentation, tests, inventory/readiness evidence, and the issue #237 starter artifact inside the active contract.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "The command validates required inputs, writes only to the declared project-starters path, emits JSON without mutation when OutputPath is omitted, records blocked scope, future spec package, agent architecture, validation plan, security prompts, and standard boundaries, and has CLI regression coverage.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "No protected files, dependencies, network calls, external repositories, billing, secrets, auth, database, CI/CD security, deployment, MCP mutation, cleanup enforcement, issue #194, or digital twin scope were changed.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The artifact explicitly blocks secrets, production, billing, auth, database destructive changes, dependency installation, deployment, MCP mutation, and cleanup enforcement until future contracts authorize them.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "All changed files are declared in the issue-237 execution contract and scope manifest.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "validate-contracts, validate-contract-scopes, test-specbridge-cli, validate-final-reports, validate-audit-packets, validate-chatgpt-audits, specbridge-smoke, and git diff --check passed locally after the PS 5.1 array-binding fix.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub Actions passed on PR #238 head 1559dc29b9e5d07a4ac60a1cc326554458dc1c30: Foundation Validation, SpecBridge Review Gate, SpecBridge PR Review Report, and Claude Review Non Blocking.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report marks completion as ready_for_merge, records GitHub CI passed, and states that merge was not performed because repository agent rules forbid PR merge by agents.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "provider_availability",
+      "file": ".specbridge/reports/issue-237-project-starter-standard.final-report.json",
+      "line": null,
+      "evidence": "Claude Code delegation was attempted but did not complete due provider timeout/availability; Codex completed implementation locally under the same contract.",
+      "recommendation": "Keep Claude Code delegation bounded and retry only inside active contracts when provider availability is healthy.",
+      "blocking": false
+    },
+    {
+      "severity": "info",
+      "category": "merge_requires_allowed_actor",
+      "file": ".claude/rules/specbridge-autonomous-execution.md",
+      "line": null,
+      "evidence": "Repository agent rules say agents must never merge a PR.",
+      "recommendation": "An allowed human/operator should merge PR #238 after reviewing the passed gates.",
+      "blocking": false
+    },
+    {
+      "severity": "info",
+      "category": "starter_not_implementation",
+      "file": "docs/specbridge-project-starter-standard.md",
+      "line": null,
+      "evidence": "The project starter records future product scope and safety boundaries but intentionally does not build, deploy, connect accounts, or create external repositories.",
+      "recommendation": "Use future dedicated contracts for each real product implementation slice.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "PR merge remains unperformed by this agent because .claude/rules/specbridge-autonomous-execution.md forbids agents from merging PRs.",
+    "Claude Code provider execution was attempted but did not complete in this run; Codex completed local implementation under the same contract.",
+    "Future product builds still need dedicated contracts before implementation."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-237-project-starter-standard.audit-packet.json",
+    ".specbridge/contracts/issue-237-project-starter-standard.execution.md",
+    ".specbridge/project-starters/issue-237-project-starter-standard.project-starter.json",
+    ".specbridge/reports/issue-237-project-starter-standard.final-report.json",
+    ".specbridge/scopes/issue-237-project-starter-standard.scope.json",
+    "docs/specbridge-project-starter-standard.md",
+    "scripts/lib/project-starter.ps1",
+    "scripts/lib/artifact-inventory.ps1",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ]
+}

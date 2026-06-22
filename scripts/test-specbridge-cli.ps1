@@ -2937,6 +2937,166 @@ try {
       $script:failed = $true
     }
 
+    # specbridge-project-starter tests
+
+    $psTaskId = "cli-project-starter"
+    $psOutputPath = ".specbridge/project-starters/$psTaskId.project-starter.json"
+    $psArtifact = Join-Path (Get-Location).Path $psOutputPath
+    Remove-Item $psArtifact -Force -ErrorAction SilentlyContinue
+
+    $psArgs = @(
+      "specbridge-project-starter",
+      "-TaskId", $psTaskId,
+      "-Title", "CLI Project Starter",
+      "-Goal", "Define a governed starter package before implementation.",
+      "-TargetUser", "founder,operator",
+      "-MvpScope", "starter artifact,validation plan",
+      "-NonGoal", "deployment,dependency installation"
+    )
+
+    $psResult = Invoke-Cli -Arguments $psArgs
+    Assert-Success `
+      -Name "specbridge-project-starter" `
+      -Result $psResult `
+      -ExpectedPattern '"command"\s*:\s*"specbridge-project-starter"'
+
+    if ($psResult.ExitCode -eq 0) {
+      $psJson = $null
+      try { $psJson = $psResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      if ($null -eq $psJson) {
+        Write-Output "FAIL specbridge-project-starter: output was not valid JSON."
+        $script:failed = $true
+      } else {
+        $missingStarterFields = @(
+          "schema_version", "command", "starter_id", "title", "goal", "target_users",
+          "mvp_scope", "non_goals", "blocked_scope", "future_spec_package",
+          "agent_architecture", "validation_plan", "security_boundaries",
+          "security_review_prompts", "next_steps", "standard_boundaries"
+        ) | Where-Object { @($psJson.starter.PSObject.Properties.Name) -notcontains $_ }
+
+        if ($psJson.ok -ne $true) {
+          Write-Output "FAIL specbridge-project-starter: ok field is not true."
+          $script:failed = $true
+        } elseif ($missingStarterFields.Count -gt 0) {
+          Write-Output "FAIL specbridge-project-starter: starter missing fields: $($missingStarterFields -join ', ')."
+          $script:failed = $true
+        } elseif ($psJson.starter.starter_id -ne $psTaskId) {
+          Write-Output "FAIL specbridge-project-starter: starter_id mismatch."
+          $script:failed = $true
+        } elseif (@($psJson.starter.target_users).Count -ne 2 -or @($psJson.starter.mvp_scope).Count -ne 2 -or @($psJson.starter.non_goals).Count -ne 2) {
+          Write-Output "FAIL specbridge-project-starter: expected target_users, mvp_scope, and non_goals arrays to preserve two values each."
+          $script:failed = $true
+        } elseif (@($psJson.starter.blocked_scope) -notcontains "network_calls") {
+          Write-Output "FAIL specbridge-project-starter: blocked_scope must include network_calls."
+          $script:failed = $true
+        } elseif (@($psJson.starter.security_review_prompts).Count -lt 1) {
+          Write-Output "FAIL specbridge-project-starter: security_review_prompts must not be empty."
+          $script:failed = $true
+        } elseif ($psJson.starter.standard_boundaries.calls_network -ne $false -or
+                  $psJson.starter.standard_boundaries.installs_dependencies -ne $false -or
+                  $psJson.starter.standard_boundaries.deploys -ne $false -or
+                  $psJson.starter.standard_boundaries.cleanup_enforcement -ne "none") {
+          Write-Output "FAIL specbridge-project-starter: standard boundaries must block network, dependencies, deploy, and cleanup enforcement."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-project-starter: artifact shape and boundaries are valid."
+        }
+      }
+    }
+
+    if (Test-Path $psArtifact) {
+      Write-Output "FAIL specbridge-project-starter-no-mutation: artifact file was written without -OutputPath."
+      $script:failed = $true
+    } else {
+      Write-Output "PASS specbridge-project-starter-no-mutation: no artifact written without -OutputPath."
+    }
+
+    $psOutputResult = Invoke-Cli -Arguments ($psArgs + @("-OutputPath", $psOutputPath, "-Force"))
+    Assert-Success `
+      -Name "specbridge-project-starter-output-path" `
+      -Result $psOutputResult `
+      -ExpectedPattern '"output_path"'
+
+    if ($psOutputResult.ExitCode -eq 0) {
+      if (-not (Test-Path $psArtifact)) {
+        Write-Output "FAIL specbridge-project-starter-output-path: artifact file was not written."
+        $script:failed = $true
+      } else {
+        $psWritten = $null
+        try { $psWritten = Get-Content $psArtifact -Raw -Encoding UTF8 | ConvertFrom-Json } catch {}
+        if ($null -eq $psWritten) {
+          Write-Output "FAIL specbridge-project-starter-output-path: written artifact is not valid JSON."
+          $script:failed = $true
+        } elseif ($psWritten.command -ne "specbridge-project-starter" -or $psWritten.starter_id -ne $psTaskId) {
+          Write-Output "FAIL specbridge-project-starter-output-path: written artifact fields mismatch."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-project-starter-output-path: artifact file written and valid."
+        }
+      }
+
+      $psExistingResult = Invoke-Cli -Arguments ($psArgs + @("-OutputPath", $psOutputPath))
+      Assert-Failure `
+        -Name "specbridge-project-starter-output-path-requires-force" `
+        -Result $psExistingResult `
+        -ExpectedPattern "use -Force"
+    }
+
+    $psMissingGoalResult = Invoke-Cli -Arguments @(
+      "specbridge-project-starter",
+      "-TaskId", "missing-goal",
+      "-Title", "Missing goal",
+      "-TargetUser", "operator",
+      "-MvpScope", "starter artifact",
+      "-NonGoal", "deployment"
+    )
+    Assert-Failure `
+      -Name "specbridge-project-starter-missing-goal" `
+      -Result $psMissingGoalResult `
+      -ExpectedPattern "Goal is required"
+
+    $psMissingTargetUserResult = Invoke-Cli -Arguments @(
+      "specbridge-project-starter",
+      "-TaskId", "missing-target-user",
+      "-Title", "Missing target user",
+      "-Goal", "Validate missing target user.",
+      "-MvpScope", "starter artifact",
+      "-NonGoal", "deployment"
+    )
+    Assert-Failure `
+      -Name "specbridge-project-starter-missing-target-user" `
+      -Result $psMissingTargetUserResult `
+      -ExpectedPattern "TargetUser must include at least one value"
+
+    $psBadPathResult = Invoke-Cli -Arguments ($psArgs + @("-OutputPath", "docs/bad-project-starter.json"))
+    Assert-Failure `
+      -Name "specbridge-project-starter-bad-output-path" `
+      -Result $psBadPathResult `
+      -ExpectedPattern "OutputPath must be .specbridge/project-starters/$psTaskId.project-starter.json"
+
+    $psAiResult = Invoke-Cli -Arguments @("specbridge-artifact-inventory")
+    if ($psAiResult.ExitCode -eq 0) {
+      $psAiJson = $null
+      try { $psAiJson = $psAiResult.Text.Trim() | ConvertFrom-Json } catch {}
+      if ($null -ne $psAiJson) {
+        $psFamilies = @($psAiJson.inventory.families)
+        $psFamilyIds = $psFamilies | ForEach-Object { $_.family_id }
+        if ($psFamilyIds -contains "project_starters") {
+          $psFamily = $psFamilies | Where-Object { $_.family_id -eq "project_starters" }
+          if ($psFamily.repository_path -eq ".specbridge/project-starters" -and $psFamily.cleanup_permission -eq "none") {
+            Write-Output "PASS specbridge-project-starter-artifact-family: project_starters family present with correct path and cleanup_permission=none."
+          } else {
+            Write-Output "FAIL specbridge-project-starter-artifact-family: project_starters family has unexpected path or cleanup_permission."
+            $script:failed = $true
+          }
+        } else {
+          Write-Output "FAIL specbridge-project-starter-artifact-family: project_starters family not found in artifact inventory."
+          $script:failed = $true
+        }
+      }
+    }
+
     # specbridge-artifact-inventory tests
 
 
@@ -2999,7 +3159,7 @@ try {
           "runtime_runs", "runtime_executions", "orchestrations", "executor_packets",
           "github_evidence", "ledger", "mcp_resources", "artifact_inventory", "branch_inventory",
           "branch_cleanup_policy", "artifact_retention_policy", "repository_health_summary",
-          "standard_readiness"
+          "standard_readiness", "project_starters"
         )
         $actualFamilyIds = $families | ForEach-Object { $_.family_id }
         $missingFamilies = $requiredFamilyIds | Where-Object { $actualFamilyIds -notcontains $_ }

@@ -1,49 +1,49 @@
 {
     "command":  "specbridge-artifact-inventory",
-    "generated_at":  "2026-06-21T21:05:39.5168169Z",
+    "generated_at":  "2026-06-22T02:11:41.6972240Z",
     "families":  [
                      {
                          "family_id":  "contracts",
                          "repository_path":  ".specbridge/contracts",
-                         "file_count":  112,
-                         "total_bytes":  632315,
-                         "latest_modified":  "2026-06-21T21:03:40.6905407Z",
+                         "file_count":  113,
+                         "total_bytes":  640134,
+                         "latest_modified":  "2026-06-22T01:29:05.7482851Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
                      {
                          "family_id":  "scopes",
                          "repository_path":  ".specbridge/scopes",
-                         "file_count":  81,
-                         "total_bytes":  142197,
-                         "latest_modified":  "2026-06-21T21:03:38.1883859Z",
+                         "file_count":  82,
+                         "total_bytes":  143827,
+                         "latest_modified":  "2026-06-22T01:29:08.2104825Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
                      {
                          "family_id":  "reports",
                          "repository_path":  ".specbridge/reports",
-                         "file_count":  84,
-                         "total_bytes":  292962,
-                         "latest_modified":  "2026-06-21T21:03:43.1418945Z",
+                         "file_count":  85,
+                         "total_bytes":  297203,
+                         "latest_modified":  "2026-06-22T02:11:35.2790180Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
                      {
                          "family_id":  "audit_packets",
                          "repository_path":  ".specbridge/audit-packets",
-                         "file_count":  65,
-                         "total_bytes":  662925,
-                         "latest_modified":  "2026-06-21T21:03:45.1395033Z",
+                         "file_count":  66,
+                         "total_bytes":  670454,
+                         "latest_modified":  "2026-06-22T02:11:36.8920135Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
                      {
                          "family_id":  "chatgpt_audits",
                          "repository_path":  ".specbridge/audits",
-                         "file_count":  64,
-                         "total_bytes":  271473,
-                         "latest_modified":  "2026-06-21T21:03:47.1630570Z",
+                         "file_count":  65,
+                         "total_bytes":  276982,
+                         "latest_modified":  "2026-06-22T02:11:38.4883449Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
@@ -132,8 +132,8 @@
                          "family_id":  "ledger",
                          "repository_path":  ".specbridge/ledger",
                          "file_count":  1,
-                         "total_bytes":  25340,
-                         "latest_modified":  "2026-06-21T21:05:39.5168169Z",
+                         "total_bytes":  26664,
+                         "latest_modified":  "2026-06-22T02:11:41.6972240Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
@@ -141,8 +141,8 @@
                          "family_id":  "mcp_resources",
                          "repository_path":  ".specbridge/mcp-resources",
                          "file_count":  1,
-                         "total_bytes":  8865,
-                         "latest_modified":  "2026-06-21T21:05:03.0935738Z",
+                         "total_bytes":  8955,
+                         "latest_modified":  "2026-06-22T02:02:45.5322657Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
@@ -150,8 +150,8 @@
                          "family_id":  "artifact_inventory",
                          "repository_path":  ".specbridge/artifact-inventory",
                          "file_count":  1,
-                         "total_bytes":  10828,
-                         "latest_modified":  "2026-06-21T21:05:23.0055887Z",
+                         "total_bytes":  11301,
+                         "latest_modified":  "2026-06-22T02:02:27.8694228Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
@@ -195,16 +195,25 @@
                          "family_id":  "standard_readiness",
                          "repository_path":  ".specbridge/standard-readiness",
                          "file_count":  1,
-                         "total_bytes":  4319,
-                         "latest_modified":  "2026-06-21T21:05:15.3560054Z",
+                         "total_bytes":  4318,
+                         "latest_modified":  "2026-06-22T02:02:56.8355330Z",
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "family_id":  "project_starters",
+                         "repository_path":  ".specbridge/project-starters",
+                         "file_count":  1,
+                         "total_bytes":  7292,
+                         "latest_modified":  "2026-06-22T01:37:45.4723290Z",
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      }
                  ],
     "totals":  {
-                   "family_count":  22,
-                   "total_file_count":  699,
-                   "total_bytes":  2701498
+                   "family_count":  23,
+                   "total_file_count":  705,
+                   "total_bytes":  2737404
                },
     "retention_enforcement":  "none",
     "read_only_note":  "This command does not delete, archive, prune, compress, or move any artifacts."

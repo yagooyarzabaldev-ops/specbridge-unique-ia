@@ -1,0 +1,41 @@
+{
+  "contract_id": "issue-237-project-starter-standard",
+  "run_id": "sb-20260622-0237a1b2",
+  "status": "active",
+  "exclusive_write": [
+    ".specbridge/contracts/issue-237-project-starter-standard.execution.md",
+    ".specbridge/scopes/issue-237-project-starter-standard.scope.json",
+    ".specbridge/reports/issue-237-project-starter-standard.final-report.json",
+    ".specbridge/audit-packets/issue-237-project-starter-standard.audit-packet.json",
+    ".specbridge/audits/issue-237-project-starter-standard.chatgpt-audit.json",
+    ".specbridge/ledger/operations.ndjson",
+    ".specbridge/state/current-goal.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/artifact-inventory/current.inventory.json",
+    ".specbridge/mcp-resources/operator-state.catalog.json",
+    ".specbridge/standard-readiness/current.status.json",
+    ".specbridge/project-starters/*.project-starter.json",
+    "README.md",
+    "docs/specbridge-project-starter-standard.md",
+    "docs/status-dashboard.html",
+    "docs/specbridge-studio.html",
+    "scripts/specbridge.ps1",
+    "scripts/lib/artifact-inventory.ps1",
+    "scripts/lib/project-starter.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/policies/operator-task-decisions.json",
+    ".specbridge/policies/token-context-governance.json",
+    "scripts/lib/common.ps1",
+    ".claude/settings.json",
+    ".git"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-237-project-starter-standard.final-report.json"
+}
