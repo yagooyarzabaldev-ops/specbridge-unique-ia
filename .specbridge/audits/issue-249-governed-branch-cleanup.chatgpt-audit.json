@@ -1,0 +1,102 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-249-governed-branch-cleanup",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-249-governed-branch-cleanup.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-249-governed-branch-cleanup.execution.md",
+  "final_report_path": ".specbridge/reports/issue-249-governed-branch-cleanup.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue #249 created a dedicated contract, scope, one-time authorization artifact, and cleanup evidence before branch deletion.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "The exact branch list was authorized, Claude Code read-only review returned PASS, 30 local branches were deleted, 30 origin branches were deleted, 4 stale remote-tracking refs were removed, and protected/preserved branches remain.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "Only exact listed merged-PR branches were cleaned. General cleanup remains disabled; no fetch, pull, prune, force push, artifact cleanup, protected files, production, secrets, billing, auth, database, CI/CD security, dependency, deployment, issue #194 lifecycle, or digital twin work occurred.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The task did not access credentials, provider accounts, private keys, protected environment files, production config, billing config, auth/security code, databases, or CI/CD security controls.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "All current changed files are declared in the issue #249 scope manifest exclusive_write list.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "validate-contracts, validate-contract-scopes, validate-final-reports, validate-audit-packets, validate-chatgpt-audits, specbridge-smoke, specbridge-doctor, specbridge-standard-readiness, and git diff --check passed locally.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "GitHub Actions for PR #250 passed 4/4 checks on the latest checked PR head before merge: claude-review, validate-foundation, generate-pr-review-report, and review-gate.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report marks completion_status as ready_for_merge, records PR #250 CI passed, and preserves remaining risks for the active issue branch and intentionally preserved unmerged branches.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "branch_cleanup",
+      "file": ".specbridge/branch-cleanup/issue-249-governed-branch-cleanup.evidence.json",
+      "line": null,
+      "evidence": "Post-cleanup branch inventory reports 3 local branches and 3 origin branches, excluding the origin symbolic ref shown by git branch -r.",
+      "recommendation": "Keep future branch cleanup behind dedicated exact-list contracts unless a broader cleanup apply mode is separately approved.",
+      "blocking": false
+    },
+    {
+      "severity": "info",
+      "category": "ci",
+      "file": ".specbridge/audit-packets/issue-249-governed-branch-cleanup.audit-packet.json",
+      "line": null,
+      "evidence": "PR #250 GitHub Actions passed all required checks before merge readiness was recorded. The exact head is verified externally at merge time to avoid self-referential evidence churn.",
+      "recommendation": "Merge only while PR #250 remains green and mergeable.",
+      "blocking": false
+    },
+    {
+      "severity": "info",
+      "category": "preserved_branch",
+      "file": ".specbridge/policies/branch-cleanup-authorization.issue-249.json",
+      "line": null,
+      "evidence": "codex/visual-digital-twin-rosario-mvp and docs/tango-70b-research-20260617 were preserved because they lack confirmed merged PR evidence.",
+      "recommendation": "Resolve those branches only through a future dedicated decision: merge, close as abandoned and delete, or keep explicitly.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "The active issue #249 branch and matching origin PR branch remain until PR completion.",
+    "Unmerged or closed-without-merge branches remain preserved by design."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-249-governed-branch-cleanup.audit-packet.json",
+    ".specbridge/audits/issue-249-governed-branch-cleanup.chatgpt-audit.json",
+    ".specbridge/branch-cleanup/issue-249-governed-branch-cleanup.evidence.json",
+    ".specbridge/contracts/issue-249-governed-branch-cleanup.execution.md",
+    ".specbridge/policies/branch-cleanup-authorization.issue-249.json",
+    ".specbridge/reports/issue-249-governed-branch-cleanup.final-report.json",
+    ".specbridge/scopes/issue-249-governed-branch-cleanup.scope.json"
+  ]
+}

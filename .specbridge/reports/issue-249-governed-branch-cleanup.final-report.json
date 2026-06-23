@@ -1,0 +1,53 @@
+{
+  "summary": "Executed issue #249 governed branch cleanup with an exact one-time authorization. Claude Code reviewed the branch classification in read-only mode and returned PASS. The cleanup deleted 30 stale local branches, deleted 30 confirmed merged branches from origin, removed 4 stale remote-tracking refs whose remote refs were already absent, preserved main, the active issue #249 branch, the digital-twin branch with no merged PR, and the Tango research branch whose PR was closed without merge. After PR publication, branch inventory reports 7 refs, including the expected active PR branch on origin, instead of the stale 29-ref artifact from June 15 and the live 33-local/38-remote pre-cleanup state.",
+  "changed_files": [
+    ".specbridge/audit-packets/issue-249-governed-branch-cleanup.audit-packet.json",
+    ".specbridge/audits/issue-249-governed-branch-cleanup.chatgpt-audit.json",
+    ".specbridge/artifact-inventory/current.inventory.json",
+    ".specbridge/branch-cleanup/current.policy-evaluation.json",
+    ".specbridge/branch-cleanup/issue-249-governed-branch-cleanup.evidence.json",
+    ".specbridge/branch-inventory/current.inventory.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-249-governed-branch-cleanup.execution.md",
+    ".specbridge/ledger/operations.ndjson",
+    ".specbridge/mcp-resources/operator-state.catalog.json",
+    ".specbridge/policies/branch-cleanup-authorization.issue-249.json",
+    ".specbridge/reports/issue-249-governed-branch-cleanup.final-report.json",
+    ".specbridge/repository-health/current.summary.json",
+    ".specbridge/scopes/issue-249-governed-branch-cleanup.scope.json",
+    ".specbridge/standard-readiness/current.status.json",
+    ".specbridge/state/current-goal.json",
+    "README.md",
+    "docs/specbridge-studio.html",
+    "docs/status-dashboard.html"
+  ],
+  "validations": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed before cleanup",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed before cleanup",
+    "claude -p compact branch cleanup read-only review: passed",
+    "branch cleanup execution: passed with no remaining failed refs",
+    "specbridge-branch-inventory: regenerated after cleanup",
+    "specbridge-branch-cleanup-policy: regenerated after cleanup",
+    "remaining local branches: codex/issue249-governed-branch-cleanup, codex/visual-digital-twin-rosario-mvp, main",
+    "remaining origin refs after PR publication: origin, origin/codex/issue249-governed-branch-cleanup, origin/codex/visual-digital-twin-rosario-mvp, origin/docs/tango-70b-research-20260617, origin/main",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 -Command specbridge-doctor -FixPlan -OutputFormat json -Offline: healthy",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge.ps1 -Command specbridge-standard-readiness: execute_eligible_task",
+    "git diff --check: passed",
+    "GitHub Actions PR #250: 4/4 checks passed on the latest checked PR head before merge"
+  ],
+  "policy_result": "Within the dedicated issue #249 policy. The task used only the exact branch cleanup authorization for merged PR branches. General branch cleanup remains disabled with cleanup_permission=none. No fetch, pull, prune, force push, branch rename, branch movement, branch archival, artifact cleanup, secrets, production, billing, auth, database, CI/CD security, dependency installation, deployment, issue #194 lifecycle change, or digital twin implementation occurred.",
+  "risk_result": "High-risk branch ref mutation was contained by exact branch names, merged PR evidence, Claude Code read-only review, preserve rules, and post-cleanup inventory. Rollback for deleted branch refs would require recreating branches from the PR head SHAs recorded in GitHub PR history; no production or runtime behavior changed.",
+  "unresolved_risks": [
+    "The active issue #249 work branch and matching origin PR branch are intentionally preserved until PR completion.",
+    "codex/visual-digital-twin-rosario-mvp remains preserved because it has no confirmed merged PR and issue #194 is not_planned.",
+    "docs/tango-70b-research-20260617 remains preserved because PR #227 was closed without merge.",
+    "General cleanup apply mode remains disabled and future cleanup still requires a dedicated contract."
+  ],
+  "merge_status": "PR #250 is open, mergeable, and GitHub Actions passed; ready for merge under policy.",
+  "deployment_status": "Not applicable. No deployment is allowed.",
+  "completion_status": "ready_for_merge"
+}

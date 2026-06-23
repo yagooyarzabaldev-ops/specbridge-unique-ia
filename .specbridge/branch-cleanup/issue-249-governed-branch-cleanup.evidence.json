@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "task_id": "issue-249-governed-branch-cleanup",
+  "run_id": "sb-20260622-0249bc01",
+  "related_issue": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/249",
+  "status": "cleanup_executed_pr_ci_passed",
+  "created_at": "2026-06-22T23:12:00Z",
+  "authorization_path": ".specbridge/policies/branch-cleanup-authorization.issue-249.json",
+  "base_policy_path": ".specbridge/policies/branch-cleanup-policy.draft.json",
+  "classification_inputs": {
+    "current_branch": "codex/issue249-governed-branch-cleanup",
+    "git_status_before": "main...origin/main clean before issue branch creation; issue branch created for governed cleanup",
+    "github_pr_state_source": "gh pr list --repo yagooyarzabaldev-ops/specbridge --state all --limit 300 --json number,state,mergedAt,headRefName,headRefOid,baseRefName,title,url,updatedAt",
+    "git_branch_source": "git branch --format and git branch -r --format",
+    "policy_evaluator_note": "Previous current.policy-evaluation.json was stale and reflected 2026-06-15 branch state; this task refreshes it after cleanup."
+  },
+  "claude_code_read_only_review": {
+    "attempts": [
+      {
+        "command": "claude -p branch cleanup read-only review",
+        "result": "timed_out",
+        "timeout_seconds": 60
+      },
+      {
+        "command": "claude -p compact branch cleanup read-only review",
+        "result": "passed",
+        "timeout_seconds": 180,
+        "summary": "Claude Code returned PASS. It confirmed all 34 proposed safe-delete branches have merged PRs and confirmed preserve branches: codex/visual-digital-twin-rosario-mvp, docs/tango-70b-research-20260617, main, and origin/main."
+      }
+    ]
+  },
+  "authorized_counts": {
+    "safe_delete_branch_names": 34,
+    "preserve_branch_names": 5
+  },
+  "execution_results": [
+    {
+      "phase": "local_branch_delete",
+      "authorized_branches": 34,
+      "deleted": [
+        "chore/v5-serious-pilot-closure",
+        "codex/close-studio-operator-queue-memory",
+        "codex/fix-studio-operator-queue-rendering",
+        "codex/issue-206-mcp-resource-exports",
+        "codex/issue-209-artifact-inventory-status",
+        "codex/issue-212-branch-inventory-status",
+        "codex/issue-215-branch-cleanup-policy-draft",
+        "codex/issue-218-artifact-retention-policy-draft",
+        "codex/issue-221-repository-health-summary",
+        "codex/issue-228-standard-readiness-closure",
+        "codex/issue-228-standard-readiness-status",
+        "codex/issue-234-post-merge-closure",
+        "codex/issue-234-readonly-mcp-runtime",
+        "codex/issue-237-project-starter-standard",
+        "codex/issue218-post-merge-memory-closure",
+        "codex/issue224-token-context-governance",
+        "codex/issue240-bounded-local-mcp-tools",
+        "codex/issue243-mcp-next-task-tool",
+        "codex/issue246-agent-sdk-light-practices",
+        "codex/issue246-post-merge-memory-closure",
+        "codex/v5-serious-live-pilot-no-coordinator-remediation",
+        "specbridge/memory-closure-issue-206-mcp-resource-exports",
+        "specbridge/memory-closure-issue-209-artifact-inventory",
+        "specbridge/memory-closure-issue-212-branch-inventory-status",
+        "specbridge/memory-closure-issue-221-repository-health-summary",
+        "specbridge/memory-closure-issue-224-token-context-governance",
+        "specbridge/memory-closure-issue-237",
+        "specbridge/memory-closure-issue-240",
+        "specbridge/memory-closure-issue-243",
+        "specbridge/reconcile-historical-doctor-warnings"
+      ],
+      "skipped_missing_local_ref": [
+        "chore/issue-231-claude-runtime-capability-negotiation-closure",
+        "codex/issue-231-claude-runtime-capability-negotiation",
+        "specbridge/memory-closure-issue-215-branch-cleanup-policy-draft",
+        "specbridge/memory-closure-reconcile-historical-doctor-warnings"
+      ],
+      "failed": []
+    },
+    {
+      "phase": "origin_branch_delete",
+      "authorized_branches": 34,
+      "deleted_on_origin": [
+        "chore/v5-serious-pilot-closure",
+        "codex/close-studio-operator-queue-memory",
+        "codex/fix-studio-operator-queue-rendering",
+        "codex/issue-206-mcp-resource-exports",
+        "codex/issue-209-artifact-inventory-status",
+        "codex/issue-212-branch-inventory-status",
+        "codex/issue-215-branch-cleanup-policy-draft",
+        "codex/issue-218-artifact-retention-policy-draft",
+        "codex/issue-221-repository-health-summary",
+        "codex/issue-228-standard-readiness-closure",
+        "codex/issue-228-standard-readiness-status",
+        "codex/issue-234-post-merge-closure",
+        "codex/issue-234-readonly-mcp-runtime",
+        "codex/issue-237-project-starter-standard",
+        "codex/issue218-post-merge-memory-closure",
+        "codex/issue240-bounded-local-mcp-tools",
+        "codex/issue243-mcp-next-task-tool",
+        "codex/issue246-agent-sdk-light-practices",
+        "codex/issue246-post-merge-memory-closure",
+        "codex/v5-serious-live-pilot-no-coordinator-remediation",
+        "specbridge/memory-closure-issue-206-mcp-resource-exports",
+        "specbridge/memory-closure-issue-209-artifact-inventory",
+        "specbridge/memory-closure-issue-212-branch-inventory-status",
+        "specbridge/memory-closure-issue-215-branch-cleanup-policy-draft",
+        "specbridge/memory-closure-issue-221-repository-health-summary",
+        "specbridge/memory-closure-issue-237",
+        "specbridge/memory-closure-issue-240",
+        "specbridge/memory-closure-issue-243",
+        "specbridge/memory-closure-reconcile-historical-doctor-warnings",
+        "specbridge/reconcile-historical-doctor-warnings"
+      ],
+      "already_absent_on_origin_tracking_ref_deleted": [
+        "chore/issue-231-claude-runtime-capability-negotiation-closure",
+        "codex/issue-231-claude-runtime-capability-negotiation",
+        "codex/issue224-token-context-governance",
+        "specbridge/memory-closure-issue-224-token-context-governance"
+      ],
+      "failed_remaining_refs": []
+    }
+  ],
+  "after_state": {
+    "local_branch_count": 3,
+    "origin_ref_count": 5,
+    "branch_inventory_total_refs": 7,
+    "local_branches": [
+      "codex/issue249-governed-branch-cleanup",
+      "codex/visual-digital-twin-rosario-mvp",
+      "main"
+    ],
+    "origin_refs": [
+      "origin",
+      "origin/codex/issue249-governed-branch-cleanup",
+      "origin/codex/visual-digital-twin-rosario-mvp",
+      "origin/docs/tango-70b-research-20260617",
+      "origin/main"
+    ],
+    "preserved_branches": [
+      "main",
+      "origin/main",
+      "codex/issue249-governed-branch-cleanup",
+      "origin/codex/issue249-governed-branch-cleanup",
+      "codex/visual-digital-twin-rosario-mvp",
+      "origin/codex/visual-digital-twin-rosario-mvp",
+      "origin/docs/tango-70b-research-20260617"
+    ],
+    "policy_evaluation_after": {
+      "total_refs": 7,
+      "blocked_count": 5,
+      "cleanup_permission": "none",
+      "enforcement_status": "none"
+    }
+  },
+  "pr_ci_evidence": {
+    "primary_pr": 250,
+    "head_policy": "latest PR head must be verified externally before merge; exact head is not embedded to avoid self-referential evidence churn",
+    "checks_passed": 4,
+    "checks_failed": 0,
+    "checks": [
+      "claude-review",
+      "validate-foundation",
+      "generate-pr-review-report",
+      "review-gate"
+    ]
+  },
+  "policy_result": "One-time exact cleanup authorization was used for issue #249 only. General branch cleanup policy remains draft with cleanup_permission=none. No force push, fetch, pull, prune, protected file, artifact cleanup, production, secret, billing, auth, database, CI/CD security, dependency, or deployment change was performed."
+}

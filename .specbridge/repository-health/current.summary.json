@@ -1,20 +1,20 @@
 {
     "command":  "specbridge-repository-health-summary",
-    "generated_at":  "2026-06-16T02:16:33.7789754Z",
+    "generated_at":  "2026-06-23T01:45:43.9528847Z",
     "overall_health_posture":  "debt_present_cleanup_blocked",
     "branch_posture":  {
-                           "total_refs":  37,
-                           "local_branch_count":  19,
-                           "origin_branch_count":  18,
-                           "merged_into_main_count":  3,
-                           "unmerged_into_main_count":  34,
+                           "total_refs":  7,
+                           "local_branch_count":  3,
+                           "origin_branch_count":  4,
+                           "merged_into_main_count":  2,
+                           "unmerged_into_main_count":  5,
                            "unknown_merge_status_count":  0,
                            "branch_mutation_policy":  "none"
                        },
     "artifact_posture":  {
-                             "family_count":  21,
-                             "total_file_count":  673,
-                             "total_bytes":  2578022,
+                             "family_count":  23,
+                             "total_file_count":  730,
+                             "total_bytes":  2837412,
                              "retention_enforcement":  "none"
                          },
     "policy_posture":  {
@@ -34,9 +34,9 @@
     "cleanup_permission":  "none",
     "enforcement_status":  "none",
     "blocked_action_counts":  {
-                                  "branch_cleanup_blocked":  34,
-                                  "artifact_retention_blocked":  16,
-                                  "total_blocked":  50
+                                  "branch_cleanup_blocked":  5,
+                                  "artifact_retention_blocked":  18,
+                                  "total_blocked":  23
                               },
     "required_future_gates":  [
                                   "ci_must_pass",

@@ -1,7 +1,7 @@
 {
     "schema_version":  "1",
     "catalog_id":  "specbridge-operator-state",
-    "generated_at":  "2026-06-22T19:39:43.1438692-03:00",
+    "generated_at":  "2026-06-22T22:45:43.8738684-03:00",
     "mcp_server_status":  "readonly_local_runtime",
     "mcp_server_note":  "Bounded local MCP-style runtime: resources/list, resources/read, tools/list, and tools/call for explicitly allowlisted read-only local tools. No network transport, no mutation, no secrets, no server process.",
     "read_only_policy":  true,
@@ -19,19 +19,19 @@
                           "read_only":  true,
                           "description":  "Machine-readable current SpecBridge operator goal and task status.",
                           "data":  {
-                                       "current_task_id":  null,
-                                       "run_id":  null,
-                                       "title":  "Ready for next governed task",
-                                       "status":  "ready_for_next_task",
-                                       "primary_pr":  null,
+                                       "current_task_id":  "issue-249-governed-branch-cleanup",
+                                       "run_id":  "sb-20260622-0249bc01",
+                                       "title":  "Governed branch cleanup for merged stale branches",
+                                       "status":  "ready_for_merge",
+                                       "primary_pr":  250,
                                        "closure_pr":  null,
                                        "last_completed_task_id":  "issue-246-agent-sdk-light-practices",
                                        "last_completed_run_id":  "sb-20260622-0246a7c9",
                                        "last_completed_pr":  247,
                                        "last_completed_merge_commit":  "f7dbdc520dbd68d779b2ec6b9ff9ddd0271788da",
                                        "last_completed_at":  "2026-06-22T22:33:31Z",
-                                       "last_updated":  "2026-06-22T22:40:00Z",
-                                       "updated_by":  "ChatGPT/Codex post-merge memory closure issue-246"
+                                       "last_updated":  "2026-06-23T01:23:41Z",
+                                       "updated_by":  "ChatGPT/Codex issue-249 PR CI reconciliation"
                                    }
                       },
                       {
@@ -70,7 +70,7 @@
 
                                                    ],
                                        "action_count":  0,
-                                       "checked_at":  "2026-06-22T19:39:42.9763326-03:00"
+                                       "checked_at":  "2026-06-22T22:45:43.6975931-03:00"
                                    }
                       },
                       {

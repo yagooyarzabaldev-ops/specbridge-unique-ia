@@ -87,7 +87,9 @@ SpecBridge currently has:
 
 ## Next Recommended Task
 
-Ready for next governed task. Issue #246 (`issue-246-agent-sdk-light-practices`) is complete: PR #247 merged lightweight Claude Agent SDK loop practices for read-only MCP tool annotations, compaction/summary preservation instructions, and future result/cost/session evidence documentation; issue #246 closed as completed and post-merge closure evidence was recorded.
+Issue #249 (`issue-249-governed-branch-cleanup`) is active and ready for merge through PR #250. A dedicated one-time cleanup authorization was created, Claude Code reviewed the branch classification in read-only mode, and the exact cleanup executed: 30 local stale branches deleted, 30 origin branches deleted, and 4 stale remote-tracking refs removed because the remote refs were already absent. PR #250 passed 4/4 GitHub Actions checks; the active PR branch remains preserved until merge/post-merge closure.
+
+Issue #246 (`issue-246-agent-sdk-light-practices`) is complete: PR #247 merged lightweight Claude Agent SDK loop practices for read-only MCP tool annotations, compaction/summary preservation instructions, and future result/cost/session evidence documentation; issue #246 closed as completed and post-merge closure evidence was recorded.
 
 Issue #243 (`issue-243-mcp-next-task-tool`) is complete: PR #244 merged the `specbridge.next-task` bounded local MCP tool, closed issue #243, and recorded post-merge closure evidence.
 
@@ -102,5 +104,5 @@ excluded as `not_planned` by the operator decision registry;
 Backlog: future mutation-capable MCP tools, network MCP transport, hosted MCP server deployment, and GitHub/resource mutation surfaces remain blocked until a dedicated contract explicitly authorizes them.
 
 Maintenance debt:
-- Branch cleanup remains policy-only. Branch debt is observable through `specbridge-branch-inventory` and classified by `specbridge-branch-cleanup-policy`; no branch deletion, pruning, renaming, movement, archival, fetch, pull, force-push, cleanup apply mode, or retention enforcement is authorized.
+- Branch cleanup was executed once under issue #249's exact authorization for merged PR branches only. General cleanup remains policy-only after the task: no branch deletion, pruning, renaming, movement, archival, fetch, pull, force-push, cleanup apply mode, or retention enforcement is authorized outside a dedicated contract.
 - Artifact retention remains policy-only. Artifact growth is observable through `specbridge-artifact-inventory` and classified by `specbridge-artifact-retention-policy`; no artifact deletion, movement, compression, pruning, archival implementation, upload, remote mutation, cleanup apply mode, or retention enforcement is authorized.

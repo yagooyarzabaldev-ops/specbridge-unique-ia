@@ -9,14 +9,14 @@
                         },
     "enforcement_status":  "none",
     "totals":  {
-                   "total_refs":  29,
-                   "evaluated":  29,
-                   "blocked_count":  26
+                   "total_refs":  7,
+                   "evaluated":  7,
+                   "blocked_count":  5
                },
     "candidate_counts":  [
                              {
                                  "class":  "merged_local",
-                                 "count":  2
+                                 "count":  1
                              },
                              {
                                  "class":  "merged_origin",
@@ -24,21 +24,21 @@
                              },
                              {
                                  "class":  "unmerged_local",
-                                 "count":  13
+                                 "count":  2
                              },
                              {
                                  "class":  "unmerged_origin",
-                                 "count":  13
+                                 "count":  3
                              }
                          ],
     "blocked_counts":  [
                            {
                                "class":  "unmerged_local",
-                               "count":  13
+                               "count":  2
                            },
                            {
                                "class":  "unmerged_origin",
-                               "count":  13
+                               "count":  3
                            }
                        ],
     "required_future_gates":  [
@@ -50,96 +50,16 @@
                               ],
     "branch_evaluations":  [
                                {
-                                   "ref_name":  "refs/remotes/origin/codex/issue-209-artifact-inventory-status",
-                                   "branch_name":  "codex/issue-209-artifact-inventory-status",
-                                   "ref_type":  "origin",
-                                   "candidate_class":  "unmerged_origin",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/remotes/origin/codex/issue-212-branch-inventory-status",
-                                   "branch_name":  "codex/issue-212-branch-inventory-status",
-                                   "ref_type":  "origin",
-                                   "candidate_class":  "unmerged_origin",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/remotes/origin/codex/v5-serious-live-pilot-no-coordinator-remediation",
-                                   "branch_name":  "codex/v5-serious-live-pilot-no-coordinator-remediation",
-                                   "ref_type":  "origin",
-                                   "candidate_class":  "unmerged_origin",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/remotes/origin/codex/issue-206-mcp-resource-exports",
-                                   "branch_name":  "codex/issue-206-mcp-resource-exports",
-                                   "ref_type":  "origin",
-                                   "candidate_class":  "unmerged_origin",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/remotes/origin/chore/v5-serious-pilot-closure",
-                                   "branch_name":  "chore/v5-serious-pilot-closure",
-                                   "ref_type":  "origin",
-                                   "candidate_class":  "unmerged_origin",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/remotes/origin/codex/close-studio-operator-queue-memory",
-                                   "branch_name":  "codex/close-studio-operator-queue-memory",
-                                   "ref_type":  "origin",
-                                   "candidate_class":  "unmerged_origin",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/remotes/origin/codex/fix-studio-operator-queue-rendering",
-                                   "branch_name":  "codex/fix-studio-operator-queue-rendering",
-                                   "ref_type":  "origin",
-                                   "candidate_class":  "unmerged_origin",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/remotes/origin/specbridge/memory-closure-issue-212-branch-inventory-status",
-                                   "branch_name":  "specbridge/memory-closure-issue-212-branch-inventory-status",
-                                   "ref_type":  "origin",
-                                   "candidate_class":  "unmerged_origin",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/remotes/origin/specbridge/memory-closure-reconcile-historical-doctor-warnings",
-                                   "branch_name":  "specbridge/memory-closure-reconcile-historical-doctor-warnings",
-                                   "ref_type":  "origin",
-                                   "candidate_class":  "unmerged_origin",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/remotes/origin/specbridge/reconcile-historical-doctor-warnings",
-                                   "branch_name":  "specbridge/reconcile-historical-doctor-warnings",
-                                   "ref_type":  "origin",
-                                   "candidate_class":  "unmerged_origin",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/remotes/origin/specbridge/memory-closure-issue-209-artifact-inventory",
-                                   "branch_name":  "specbridge/memory-closure-issue-209-artifact-inventory",
-                                   "ref_type":  "origin",
-                                   "candidate_class":  "unmerged_origin",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
                                    "ref_name":  "refs/remotes/origin/codex/visual-digital-twin-rosario-mvp",
                                    "branch_name":  "codex/visual-digital-twin-rosario-mvp",
+                                   "ref_type":  "origin",
+                                   "candidate_class":  "unmerged_origin",
+                                   "cleanup_permission":  "none",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "ref_name":  "refs/remotes/origin/docs/tango-70b-research-20260617",
+                                   "branch_name":  "docs/tango-70b-research-20260617",
                                    "ref_type":  "origin",
                                    "candidate_class":  "unmerged_origin",
                                    "cleanup_permission":  "none",
@@ -154,112 +74,16 @@
                                    "future_gate":  "activation_required"
                                },
                                {
-                                   "ref_name":  "refs/remotes/origin/specbridge/memory-closure-issue-206-mcp-resource-exports",
-                                   "branch_name":  "specbridge/memory-closure-issue-206-mcp-resource-exports",
+                                   "ref_name":  "refs/remotes/origin/codex/issue249-governed-branch-cleanup",
+                                   "branch_name":  "codex/issue249-governed-branch-cleanup",
                                    "ref_type":  "origin",
                                    "candidate_class":  "unmerged_origin",
                                    "cleanup_permission":  "none",
                                    "future_gate":  "blocked"
                                },
                                {
-                                   "ref_name":  "refs/heads/specbridge/reconcile-historical-doctor-warnings",
-                                   "branch_name":  "specbridge/reconcile-historical-doctor-warnings",
-                                   "ref_type":  "local",
-                                   "candidate_class":  "unmerged_local",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/heads/codex/issue-209-artifact-inventory-status",
-                                   "branch_name":  "codex/issue-209-artifact-inventory-status",
-                                   "ref_type":  "local",
-                                   "candidate_class":  "unmerged_local",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/heads/codex/issue-212-branch-inventory-status",
-                                   "branch_name":  "codex/issue-212-branch-inventory-status",
-                                   "ref_type":  "local",
-                                   "candidate_class":  "unmerged_local",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/heads/codex/issue-215-branch-cleanup-policy-draft",
-                                   "branch_name":  "codex/issue-215-branch-cleanup-policy-draft",
-                                   "ref_type":  "local",
-                                   "candidate_class":  "merged_local",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "activation_required"
-                               },
-                               {
-                                   "ref_name":  "refs/heads/codex/issue-206-mcp-resource-exports",
-                                   "branch_name":  "codex/issue-206-mcp-resource-exports",
-                                   "ref_type":  "local",
-                                   "candidate_class":  "unmerged_local",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/heads/chore/v5-serious-pilot-closure",
-                                   "branch_name":  "chore/v5-serious-pilot-closure",
-                                   "ref_type":  "local",
-                                   "candidate_class":  "unmerged_local",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/heads/codex/close-studio-operator-queue-memory",
-                                   "branch_name":  "codex/close-studio-operator-queue-memory",
-                                   "ref_type":  "local",
-                                   "candidate_class":  "unmerged_local",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/heads/codex/fix-studio-operator-queue-rendering",
-                                   "branch_name":  "codex/fix-studio-operator-queue-rendering",
-                                   "ref_type":  "local",
-                                   "candidate_class":  "unmerged_local",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/heads/specbridge/memory-closure-issue-209-artifact-inventory",
-                                   "branch_name":  "specbridge/memory-closure-issue-209-artifact-inventory",
-                                   "ref_type":  "local",
-                                   "candidate_class":  "unmerged_local",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/heads/specbridge/memory-closure-issue-212-branch-inventory-status",
-                                   "branch_name":  "specbridge/memory-closure-issue-212-branch-inventory-status",
-                                   "ref_type":  "local",
-                                   "candidate_class":  "unmerged_local",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/heads/specbridge/memory-closure-reconcile-historical-doctor-warnings",
-                                   "branch_name":  "specbridge/memory-closure-reconcile-historical-doctor-warnings",
-                                   "ref_type":  "local",
-                                   "candidate_class":  "unmerged_local",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/heads/specbridge/memory-closure-issue-206-mcp-resource-exports",
-                                   "branch_name":  "specbridge/memory-closure-issue-206-mcp-resource-exports",
-                                   "ref_type":  "local",
-                                   "candidate_class":  "unmerged_local",
-                                   "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
-                               },
-                               {
-                                   "ref_name":  "refs/heads/codex/v5-serious-live-pilot-no-coordinator-remediation",
-                                   "branch_name":  "codex/v5-serious-live-pilot-no-coordinator-remediation",
+                                   "ref_name":  "refs/heads/codex/issue249-governed-branch-cleanup",
+                                   "branch_name":  "codex/issue249-governed-branch-cleanup",
                                    "ref_type":  "local",
                                    "candidate_class":  "unmerged_local",
                                    "cleanup_permission":  "none",
