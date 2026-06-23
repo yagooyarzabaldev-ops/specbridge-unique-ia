@@ -9,14 +9,14 @@
                         },
     "enforcement_status":  "none",
     "totals":  {
-                   "total_refs":  7,
-                   "evaluated":  7,
+                   "total_refs":  8,
+                   "evaluated":  8,
                    "blocked_count":  5
                },
     "candidate_counts":  [
                              {
                                  "class":  "merged_local",
-                                 "count":  1
+                                 "count":  2
                              },
                              {
                                  "class":  "merged_origin",
@@ -58,8 +58,8 @@
                                    "future_gate":  "blocked"
                                },
                                {
-                                   "ref_name":  "refs/remotes/origin/docs/tango-70b-research-20260617",
-                                   "branch_name":  "docs/tango-70b-research-20260617",
+                                   "ref_name":  "refs/remotes/origin/codex/issue249-governed-branch-cleanup",
+                                   "branch_name":  "codex/issue249-governed-branch-cleanup",
                                    "ref_type":  "origin",
                                    "candidate_class":  "unmerged_origin",
                                    "cleanup_permission":  "none",
@@ -74,10 +74,18 @@
                                    "future_gate":  "activation_required"
                                },
                                {
-                                   "ref_name":  "refs/remotes/origin/codex/issue249-governed-branch-cleanup",
-                                   "branch_name":  "codex/issue249-governed-branch-cleanup",
+                                   "ref_name":  "refs/remotes/origin/docs/tango-70b-research-20260617",
+                                   "branch_name":  "docs/tango-70b-research-20260617",
                                    "ref_type":  "origin",
                                    "candidate_class":  "unmerged_origin",
+                                   "cleanup_permission":  "none",
+                                   "future_gate":  "blocked"
+                               },
+                               {
+                                   "ref_name":  "refs/heads/codex/visual-digital-twin-rosario-mvp",
+                                   "branch_name":  "codex/visual-digital-twin-rosario-mvp",
+                                   "ref_type":  "local",
+                                   "candidate_class":  "unmerged_local",
                                    "cleanup_permission":  "none",
                                    "future_gate":  "blocked"
                                },
@@ -90,12 +98,12 @@
                                    "future_gate":  "blocked"
                                },
                                {
-                                   "ref_name":  "refs/heads/codex/visual-digital-twin-rosario-mvp",
-                                   "branch_name":  "codex/visual-digital-twin-rosario-mvp",
+                                   "ref_name":  "refs/heads/specbridge/memory-closure-issue-249-governed-branch-cleanup",
+                                   "branch_name":  "specbridge/memory-closure-issue-249-governed-branch-cleanup",
                                    "ref_type":  "local",
-                                   "candidate_class":  "unmerged_local",
+                                   "candidate_class":  "merged_local",
                                    "cleanup_permission":  "none",
-                                   "future_gate":  "blocked"
+                                   "future_gate":  "activation_required"
                                },
                                {
                                    "ref_name":  "refs/heads/main",

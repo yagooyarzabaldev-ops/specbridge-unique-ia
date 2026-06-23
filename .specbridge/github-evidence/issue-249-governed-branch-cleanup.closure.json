@@ -1,0 +1,51 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-249-governed-branch-cleanup",
+  "run_id": "sb-20260622-0249bc01",
+  "primary_pr": 250,
+  "primary_pr_url": "https://github.com/yagooyarzabaldev-ops/specbridge/pull/250",
+  "primary_pr_state": "MERGED",
+  "primary_pr_merged_at": "2026-06-23T01:55:47Z",
+  "primary_pr_head_sha": "dfb5419d9de62eeae082d19717440042d9d2af6a",
+  "primary_pr_base_sha": "6cf7f952a648a85b365d17d0203617c00ec1f844",
+  "primary_pr_merge_commit": "30f0660ce6118cace0e1dc6022ca5376d3647e91",
+  "issue": 249,
+  "issue_url": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/249",
+  "issue_state": "CLOSED",
+  "issue_state_reason": "COMPLETED",
+  "issue_closed_at": "2026-06-23T01:55:48Z",
+  "github_actions": [
+    {
+      "name": "Foundation Validation",
+      "status": "passed"
+    },
+    {
+      "name": "SpecBridge Review Gate",
+      "status": "passed"
+    },
+    {
+      "name": "SpecBridge PR Review Report",
+      "status": "passed"
+    },
+    {
+      "name": "Claude Review Non Blocking",
+      "status": "passed"
+    }
+  ],
+  "local_validations": [
+    "validate-contracts: passed",
+    "validate-contract-scopes: passed",
+    "validate-final-reports: passed",
+    "validate-audit-packets: passed",
+    "validate-chatgpt-audits: passed",
+    "specbridge-doctor -FixPlan -OutputFormat json -Offline: healthy",
+    "specbridge-standard-readiness: execute_eligible_task before merge",
+    "specbridge-smoke: passed",
+    "git diff --check: passed",
+    "Claude Code read-only branch classification review: passed"
+  ],
+  "policy_result": "passed",
+  "deployment_status": "not_applicable",
+  "closure_status": "complete",
+  "recorded_at": "2026-06-23T01:58:00Z"
+}

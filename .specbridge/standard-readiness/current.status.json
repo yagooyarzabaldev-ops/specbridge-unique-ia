@@ -2,14 +2,14 @@
     "command":  "specbridge-standard-readiness",
     "ok":  true,
     "schema_version":  "1",
-    "readiness":  "execute_eligible_task",
-    "recommended_next_action":  "execute_eligible_task",
+    "readiness":  "ready_for_governed_task_intake",
+    "recommended_next_action":  "create_new_operator_task",
     "task_selection":  {
-                           "current_goal_status":  "ready_for_merge",
-                           "current_task_id":  "issue-249-governed-branch-cleanup",
-                           "eligible_task_count":  1,
+                           "current_goal_status":  "ready_for_next_task",
+                           "current_task_id":  "unknown",
+                           "eligible_task_count":  0,
                            "excluded_issue_count":  1,
-                           "recommended_action":  "execute_eligible_task"
+                           "recommended_action":  "create_new_operator_task"
                        },
     "doctor":  {
                    "health":  "healthy",

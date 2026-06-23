@@ -1,7 +1,7 @@
 {
   "contract_id": "issue-249-governed-branch-cleanup",
   "run_id": "sb-20260622-0249bc01",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/contracts/issue-249-governed-branch-cleanup.execution.md",
     ".specbridge/scopes/issue-249-governed-branch-cleanup.scope.json",

@@ -1,8 +1,8 @@
 {
     "command":  "specbridge-branch-inventory",
-    "generated_at":  "2026-06-22T22:14:36-03:00",
+    "generated_at":  "2026-06-22T22:55:46-03:00",
     "base_ref":  "refs/remotes/origin/main",
-    "current_branch":  "codex/issue249-governed-branch-cleanup",
+    "current_branch":  "specbridge/memory-closure-issue-249-governed-branch-cleanup",
     "branches":  [
                      {
                          "ref_name":  "refs/remotes/origin/codex/visual-digital-twin-rosario-mvp",
@@ -16,12 +16,12 @@
                          "cleanup_permission":  "none"
                      },
                      {
-                         "ref_name":  "refs/remotes/origin/docs/tango-70b-research-20260617",
-                         "branch_name":  "docs/tango-70b-research-20260617",
+                         "ref_name":  "refs/remotes/origin/codex/issue249-governed-branch-cleanup",
+                         "branch_name":  "codex/issue249-governed-branch-cleanup",
                          "ref_type":  "origin",
-                         "object_id":  "04115f9e74da1708e5ee55074cdce9a89352c00d",
-                         "latest_commit_at":  "2026-06-17T18:40:27-03:00",
-                         "prefix":  "docs",
+                         "object_id":  "dfb5419d9de62eeae082d19717440042d9d2af6a",
+                         "latest_commit_at":  "2026-06-22T22:46:32-03:00",
+                         "prefix":  "codex",
                          "merged_into_main":  false,
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
@@ -30,31 +30,20 @@
                          "ref_name":  "refs/remotes/origin/main",
                          "branch_name":  "main",
                          "ref_type":  "origin",
-                         "object_id":  "6cf7f952a648a85b365d17d0203617c00ec1f844",
-                         "latest_commit_at":  "2026-06-22T19:49:35-03:00",
+                         "object_id":  "30f0660ce6118cace0e1dc6022ca5376d3647e91",
+                         "latest_commit_at":  "2026-06-22T22:55:46-03:00",
                          "prefix":  "main",
                          "merged_into_main":  true,
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
                      },
                      {
-                         "ref_name":  "refs/remotes/origin/codex/issue249-governed-branch-cleanup",
-                         "branch_name":  "codex/issue249-governed-branch-cleanup",
+                         "ref_name":  "refs/remotes/origin/docs/tango-70b-research-20260617",
+                         "branch_name":  "docs/tango-70b-research-20260617",
                          "ref_type":  "origin",
-                         "object_id":  "817fa420350ad8d438963dd1589c8c4ff4069a82",
-                         "latest_commit_at":  "2026-06-22T22:14:36-03:00",
-                         "prefix":  "codex",
-                         "merged_into_main":  false,
-                         "retention_posture":  "preserve",
-                         "cleanup_permission":  "none"
-                     },
-                     {
-                         "ref_name":  "refs/heads/codex/issue249-governed-branch-cleanup",
-                         "branch_name":  "codex/issue249-governed-branch-cleanup",
-                         "ref_type":  "local",
-                         "object_id":  "817fa420350ad8d438963dd1589c8c4ff4069a82",
-                         "latest_commit_at":  "2026-06-22T22:14:36-03:00",
-                         "prefix":  "codex",
+                         "object_id":  "04115f9e74da1708e5ee55074cdce9a89352c00d",
+                         "latest_commit_at":  "2026-06-17T18:40:27-03:00",
+                         "prefix":  "docs",
                          "merged_into_main":  false,
                          "retention_posture":  "preserve",
                          "cleanup_permission":  "none"
@@ -71,11 +60,33 @@
                          "cleanup_permission":  "none"
                      },
                      {
+                         "ref_name":  "refs/heads/codex/issue249-governed-branch-cleanup",
+                         "branch_name":  "codex/issue249-governed-branch-cleanup",
+                         "ref_type":  "local",
+                         "object_id":  "dfb5419d9de62eeae082d19717440042d9d2af6a",
+                         "latest_commit_at":  "2026-06-22T22:46:32-03:00",
+                         "prefix":  "codex",
+                         "merged_into_main":  false,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
+                         "ref_name":  "refs/heads/specbridge/memory-closure-issue-249-governed-branch-cleanup",
+                         "branch_name":  "specbridge/memory-closure-issue-249-governed-branch-cleanup",
+                         "ref_type":  "local",
+                         "object_id":  "30f0660ce6118cace0e1dc6022ca5376d3647e91",
+                         "latest_commit_at":  "2026-06-22T22:55:46-03:00",
+                         "prefix":  "specbridge",
+                         "merged_into_main":  true,
+                         "retention_posture":  "preserve",
+                         "cleanup_permission":  "none"
+                     },
+                     {
                          "ref_name":  "refs/heads/main",
                          "branch_name":  "main",
                          "ref_type":  "local",
-                         "object_id":  "6cf7f952a648a85b365d17d0203617c00ec1f844",
-                         "latest_commit_at":  "2026-06-22T19:49:35-03:00",
+                         "object_id":  "30f0660ce6118cace0e1dc6022ca5376d3647e91",
+                         "latest_commit_at":  "2026-06-22T22:55:46-03:00",
                          "prefix":  "main",
                          "merged_into_main":  true,
                          "retention_posture":  "preserve",
@@ -83,10 +94,10 @@
                      }
                  ],
     "totals":  {
-                   "total_refs":  7,
-                   "local_branch_count":  3,
+                   "total_refs":  8,
+                   "local_branch_count":  4,
                    "origin_branch_count":  4,
-                   "merged_into_main_count":  2,
+                   "merged_into_main_count":  3,
                    "unmerged_into_main_count":  5,
                    "unknown_merge_status_count":  0
                },
@@ -102,6 +113,10 @@
                           {
                               "prefix":  "main",
                               "count":  2
+                          },
+                          {
+                              "prefix":  "specbridge",
+                              "count":  1
                           }
                       ],
     "branch_mutation_policy":  "none",
