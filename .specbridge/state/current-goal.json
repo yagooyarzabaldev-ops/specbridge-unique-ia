@@ -1,15 +1,15 @@
 {
-  "current_task_id": "issue-252-final-standardization-status",
-  "run_id": "sb-20260623-0252f1a0",
-  "title": "Complete final SpecBridge standardization status",
-  "status": "active",
+  "current_task_id": "serious-product-build-pilot",
+  "run_id": null,
+  "title": "Run the first serious product-build pilot from final standardization status",
+  "status": "ready_for_next_task",
   "primary_pr": null,
   "closure_pr": null,
-  "last_completed_task_id": "issue-249-governed-branch-cleanup",
-  "last_completed_run_id": "sb-20260622-0249bc01",
-  "last_completed_pr": 250,
-  "last_completed_merge_commit": "30f0660ce6118cace0e1dc6022ca5376d3647e91",
-  "last_completed_at": "2026-06-23T01:55:48Z",
-  "last_updated": "2026-06-23T18:06:01Z",
-  "updated_by": "ChatGPT/Codex issue-252 task intake"
+  "last_completed_task_id": "issue-252-final-standardization-status",
+  "last_completed_run_id": "sb-20260623-0252f1a0",
+  "last_completed_pr": 253,
+  "last_completed_merge_commit": "29f6db43b8aa9232a492c949d9a8957d97d79888",
+  "last_completed_at": "2026-06-24T06:20:07Z",
+  "last_updated": "2026-06-24T06:21:38Z",
+  "updated_by": "ChatGPT/Codex issue-252 post-merge memory closure"
 }

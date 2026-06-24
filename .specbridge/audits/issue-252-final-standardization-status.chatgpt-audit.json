@@ -51,7 +51,7 @@
     {
       "name": "final_report_honesty",
       "result": "pass",
-      "evidence": "The final report marks completion_status=ready_for_human_merge, records GitHub CI as passed, records agent-side merge as blocked by .claude/rules/specbridge-autonomous-execution.md, and lists unresolved policy-gated future work instead of claiming cleanup, retention, MCP mutation, hosted runtime, or serious pilot execution are complete.",
+      "evidence": "The final report marks completion_status=completed, records GitHub CI as passed, records PR #253 merged after explicit user/operator authorization, and lists unresolved policy-gated future work instead of claiming cleanup, retention, MCP mutation, hosted runtime, or serious pilot execution are complete.",
       "blocking": false
     }
   ],
@@ -79,21 +79,21 @@
       "category": "merge_policy",
       "file": ".claude/rules/specbridge-autonomous-execution.md",
       "line": null,
-      "evidence": "GitHub PR #253 is mergeable and checks passed, but repository rules explicitly forbid agents from merging PRs.",
-      "recommendation": "Have the human/operator merge PR #253, then run the normal post-merge memory closure contract.",
+      "evidence": "GitHub PR #253 was merged only after explicit user/operator authorization, with checks passed before merge.",
+      "recommendation": "Record post-merge memory closure and use serious-product-build-pilot as the next governed task.",
       "blocking": false
     }
   ],
   "outcome": "approved",
   "merge_allowed": true,
   "unresolved_risks": [
-    "Agent-side merge is blocked by repository policy even though CI passed.",
     "Remaining future work is policy-gated or pilot-gated and requires dedicated contracts."
   ],
   "source_files": [
     ".specbridge/audit-packets/issue-252-final-standardization-status.audit-packet.json",
     ".specbridge/audits/issue-252-final-standardization-status.chatgpt-audit.json",
     ".specbridge/contracts/issue-252-final-standardization-status.execution.md",
+    ".specbridge/github-evidence/issue-252-final-standardization-status.closure.json",
     ".specbridge/reports/issue-252-final-standardization-status.final-report.json",
     ".specbridge/scopes/issue-252-final-standardization-status.scope.json",
     ".specbridge/standard-readiness/final-standardization.status.json",

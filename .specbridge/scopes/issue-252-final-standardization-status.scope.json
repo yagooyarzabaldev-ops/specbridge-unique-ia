@@ -1,7 +1,7 @@
 {
   "contract_id": "issue-252-final-standardization-status",
   "run_id": "sb-20260623-0252f1a0",
-  "status": "active",
+  "status": "completed",
   "exclusive_write": [
     ".specbridge/contracts/issue-252-final-standardization-status.execution.md",
     ".specbridge/scopes/issue-252-final-standardization-status.scope.json",

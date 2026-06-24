@@ -1,20 +1,20 @@
 {
     "command":  "specbridge-repository-health-summary",
-    "generated_at":  "2026-06-23T19:13:40.9900047Z",
+    "generated_at":  "2026-06-24T06:34:49.6157598Z",
     "overall_health_posture":  "debt_present_cleanup_blocked",
     "branch_posture":  {
-                           "total_refs":  10,
-                           "local_branch_count":  5,
-                           "origin_branch_count":  5,
+                           "total_refs":  12,
+                           "local_branch_count":  6,
+                           "origin_branch_count":  6,
                            "merged_into_main_count":  3,
-                           "unmerged_into_main_count":  7,
+                           "unmerged_into_main_count":  9,
                            "unknown_merge_status_count":  0,
                            "branch_mutation_policy":  "none"
                        },
     "artifact_posture":  {
                              "family_count":  23,
-                             "total_file_count":  737,
-                             "total_bytes":  2873381,
+                             "total_file_count":  738,
+                             "total_bytes":  2882532,
                              "retention_enforcement":  "none"
                          },
     "policy_posture":  {
@@ -34,9 +34,9 @@
     "cleanup_permission":  "none",
     "enforcement_status":  "none",
     "blocked_action_counts":  {
-                                  "branch_cleanup_blocked":  7,
+                                  "branch_cleanup_blocked":  9,
                                   "artifact_retention_blocked":  18,
-                                  "total_blocked":  25
+                                  "total_blocked":  27
                               },
     "required_future_gates":  [
                                   "ci_must_pass",

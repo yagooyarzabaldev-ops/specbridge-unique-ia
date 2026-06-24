@@ -56,6 +56,7 @@ Foundation complete. V5 live parallel pilot complete and merged. Full autonomous
 | 243 | specbridge.next-task bounded MCP tool | 244 | Merged 2026-06-22 UTC |
 | 246 | Agent SDK lightweight practices | 247 | Merged 2026-06-22 UTC |
 | 249 | Governed branch cleanup for merged stale branches | 250 | Merged 2026-06-23 UTC |
+| 252 | Final standardization status | 253 | Merged 2026-06-24 UTC |
 
 ## Architecture Status
 
@@ -85,10 +86,13 @@ SpecBridge currently has:
 - Claude runtime capability negotiation (runtime-capability-status: probes installed Claude CLI help to detect --max-turns support; execute-runtime-launch applies --max-turns only when supported and records `claude_capabilities.max_turns` plus the effective `command_summary` in runtime execution evidence)
 - Bounded local MCP runtime (specbridge-mcp-runtime: local MCP-style harness for `resources/list`, `resources/read`, `tools/list`, and allowlisted read-only `tools/call` over current-goal, doctor-fix-plan, and readiness summaries; network transport, hosted server deployment, secrets, GitHub/resource mutation, and cleanup enforcement remain blocked)
 - Project starter standard (specbridge-project-starter: deterministic local starter artifacts for new product ideas before implementation, dependencies, secrets, billing, deployment, or external repository mutation)
+- Final standardization status (specbridge-final-standardization-status: deterministic read-only completion posture showing 95 percent standardization complete, 5 percent remaining policy-gated or pilot-gated work, remaining gaps, blocked boundaries, recommended next contracts, validation expectations, and evidence sources)
 
 ## Next Recommended Task
 
-Issue #252 (`issue-252-final-standardization-status`) is active. The task creates a deterministic read-only final standardization status surface so the remaining standardization gap is visible as auditable evidence before the next serious product-build pilot.
+Issue #252 (`issue-252-final-standardization-status`) is complete: PR #253 merged the deterministic read-only final standardization status surface, GitHub CI passed, issue #252 closed as completed, scope status is completed, and post-merge closure evidence is recorded.
+
+The next recommended governed task is `serious-product-build-pilot`: use the final standardization status to run a real product-build pilot where ChatGPT/Codex defines the spec, Claude Code implements within contract, CI validates, and ChatGPT/Codex audits against the spec and security standards.
 
 Issue #249 (`issue-249-governed-branch-cleanup`) is complete: PR #250 merged the dedicated one-time cleanup authorization, Claude Code read-only classification review, exact cleanup evidence, refreshed branch/repository health artifacts, and dashboards. Issue #249 closed as completed and post-merge closure evidence was recorded.
 
