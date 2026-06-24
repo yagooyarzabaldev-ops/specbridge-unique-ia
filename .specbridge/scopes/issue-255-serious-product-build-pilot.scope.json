@@ -1,0 +1,34 @@
+{
+  "contract_id": "issue-255-serious-product-build-pilot",
+  "run_id": "sb-20260624-0255c0de",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/project-starters/serious-product-build-pilot.project-starter.json",
+    ".specbridge/contracts/issue-255-serious-product-build-pilot.execution.md",
+    ".specbridge/scopes/issue-255-serious-product-build-pilot.scope.json",
+    ".specbridge/github-evidence/issue-255-serious-product-build-pilot.issue.json",
+    ".specbridge/runtime-evidence/issue-255-specbridge-v2-claude-output.md",
+    ".specbridge/reports/issue-255-serious-product-build-pilot.final-report.json",
+    ".specbridge/audit-packets/issue-255-serious-product-build-pilot.audit-packet.json",
+    ".specbridge/audits/issue-255-serious-product-build-pilot.chatgpt-audit.json",
+    "docs/specbridge-v2-product-build-pilot.md"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/context/CURRENT_GOAL.md",
+    "docs/specbridge-project-starter-standard.md",
+    "scripts/specbridge.ps1",
+    "scripts/specbridge-smoke.ps1",
+    "scripts/validate-contracts.ps1",
+    "scripts/validate-contract-scopes.ps1",
+    "scripts/validate-final-reports.ps1",
+    "scripts/validate-audit-packets.ps1",
+    "scripts/validate-chatgpt-audits.ps1"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-255-serious-product-build-pilot.final-report.json"
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-255-serious-product-build-pilot",
+  "run_id": "sb-20260624-0255c0de",
+  "collected_by": "ChatGPT/Codex",
+  "collected_at": "2026-06-24",
+  "repository": "yagooyarzabaldev-ops/specbridge",
+  "issue": {
+    "number": 255,
+    "url": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/255",
+    "title": "SpecBridge v2 serious product-build pilot",
+    "state": "open"
+  },
+  "mutation_summary": "Created GitHub issue #255 as the governed v1 anchor for the local SpecBridge v2 serious product-build pilot.",
+  "policy_result": "Allowed by user request and bounded to v1 issue tracking. No specbridge-v2 GitHub repository was created, no external v2 repository was mutated, and no secrets, production, billing, dependency installation, deployment, or CI/CD security changes were involved."
+}

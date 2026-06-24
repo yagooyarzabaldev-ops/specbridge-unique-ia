@@ -1,0 +1,120 @@
+{
+    "schema_version":  "1",
+    "command":  "specbridge-project-starter",
+    "starter_id":  "serious-product-build-pilot",
+    "title":  "SpecBridge v2 serious product-build pilot",
+    "goal":  "Use SpecBridge v1 as the control plane to build a separate SpecBridge v2 repository with a small auditable MVP, delegate the first implementation pass to Claude Code, then complete verification with Codex without mutating production, secrets, billing, deployment, CI/CD security, or external GitHub state.",
+    "target_users":  [
+                         "SpecBridge operator",
+                         "Claude Code executor",
+                         "Codex reviewer"
+                     ],
+    "mvp_scope":  [
+                      "separate local repository scaffold",
+                      "execution contract model",
+                      "scope manifest model",
+                      "validation command",
+                      "final report artifact",
+                      "local tests",
+                      "operator README"
+                  ],
+    "non_goals":  [
+                      "GitHub repository creation",
+                      "dependency installation",
+                      "hosted runtime",
+                      "production deployment",
+                      "billing",
+                      "secrets",
+                      "authentication",
+                      "authorization",
+                      "database changes",
+                      "CI/CD workflow changes",
+                      "Qwen-AgentWorld integration"
+                  ],
+    "blocked_scope":  [
+                          "external_repository_creation",
+                          "external_repository_mutation",
+                          "network_calls",
+                          "dependency_installation",
+                          "secret_or_private_key_access",
+                          "billing_or_payment_configuration",
+                          "provider_account_configuration",
+                          "authentication_or_authorization_implementation",
+                          "database_changes",
+                          "ci_cd_security_changes",
+                          "deployment_or_production_configuration",
+                          "mutation_capable_mcp_tools",
+                          "artifact_or_branch_cleanup_enforcement"
+                      ],
+    "future_spec_package":  {
+                                "required_specs":  [
+                                                       "product-vision",
+                                                       "mvp-acceptance-criteria",
+                                                       "security-boundaries",
+                                                       "data-and-integration-map",
+                                                       "agent-execution-contracts",
+                                                       "validation-and-audit-plan"
+                                                   ],
+                                "recommended_repository_files":  [
+                                                                     ".specbridge/context/CODEX_CONTEXT.md",
+                                                                     ".specbridge/context/ACCEPTANCE_CRITERIA.md",
+                                                                     ".specbridge/context/DO_NOT_TOUCH.md",
+                                                                     ".specbridge/contracts/\u003ctask\u003e.execution.md",
+                                                                     ".specbridge/scopes/\u003ctask\u003e.scope.json",
+                                                                     ".specbridge/reports/\u003ctask\u003e.final-report.json"
+                                                                 ]
+                            },
+    "agent_architecture":  {
+                               "coordinator":  "SpecBridge converts the starter into contracts, scopes, handoffs, and validation evidence.",
+                               "suggested_roles":  [
+                                                       "planner",
+                                                       "product-spec",
+                                                       "implementer",
+                                                       "tester",
+                                                       "security-reviewer",
+                                                       "docs",
+                                                       "closure"
+                                                   ],
+                               "parallelization_rule":  "Split implementation only after each executor has a non-overlapping write scope and explicit acceptance criteria."
+                           },
+    "validation_plan":  [
+                            "Create execution contract and scope manifest before implementation.",
+                            "Run local validators before PR creation.",
+                            "Run GitHub CI before merge.",
+                            "Run Codex/ChatGPT audit against final report and audit packet.",
+                            "Record post-merge closure evidence before selecting the next task."
+                        ],
+    "security_boundaries":  {
+                                "secrets":  "blocked_until_dedicated_contract",
+                                "production":  "blocked_until_dedicated_contract",
+                                "billing":  "blocked_until_dedicated_contract",
+                                "authentication":  "blocked_until_dedicated_contract",
+                                "authorization":  "blocked_until_dedicated_contract",
+                                "database_destructive_changes":  "blocked",
+                                "dependency_installation":  "blocked_until_dedicated_contract",
+                                "deployment":  "blocked_until_dedicated_contract"
+                            },
+    "security_review_prompts":  [
+                                    "Does the starter require secrets, wallets, private keys, tokens, provider credentials, or payment accounts?",
+                                    "Does any MVP item imply authentication, authorization, billing, production, deployment, or database mutation?",
+                                    "Can the first implementation be proven locally with deterministic tests before external integrations are enabled?",
+                                    "Are future agent scopes non-overlapping and small enough for independent validation and audit?"
+                                ],
+    "next_steps":  [
+                       "Review this starter package with the user.",
+                       "Convert the approved starter into a GitHub issue.",
+                       "Create a dedicated execution contract and scope manifest.",
+                       "Use SpecBridge intake and validation gates before implementation.",
+                       "Delegate implementation to Claude Code only inside the active contract."
+                   ],
+    "standard_boundaries":  {
+                                "creates_external_repository":  false,
+                                "installs_dependencies":  false,
+                                "calls_network":  false,
+                                "reads_secrets":  false,
+                                "changes_billing":  false,
+                                "deploys":  false,
+                                "mutates_mcp_tools":  false,
+                                "cleanup_enforcement":  "none"
+                            }
+}
