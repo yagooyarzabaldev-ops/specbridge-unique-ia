@@ -1,0 +1,129 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-257-finish-specbridge-v2-hardening",
+  "generated_by": "specbridge-audit-packet-generator",
+  "execution_contract_path": ".specbridge/contracts/issue-257-finish-specbridge-v2-hardening.execution.md",
+  "changed_files": [
+    ".specbridge/audit-packets/issue-257-finish-specbridge-v2-hardening.audit-packet.json",
+    ".specbridge/audits/issue-257-finish-specbridge-v2-hardening.chatgpt-audit.json",
+    ".specbridge/contracts/issue-257-finish-specbridge-v2-hardening.execution.md",
+    ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.ci.json",
+    ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.issue.json",
+    ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.repo.json",
+    ".specbridge/reports/issue-257-finish-specbridge-v2-hardening.final-report.json",
+    ".specbridge/scopes/issue-257-finish-specbridge-v2-hardening.scope.json"
+  ],
+  "diff_summary": [
+    {
+      "file": ".specbridge/audit-packets/issue-257-finish-specbridge-v2-hardening.audit-packet.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/audits/issue-257-finish-specbridge-v2-hardening.chatgpt-audit.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/contracts/issue-257-finish-specbridge-v2-hardening.execution.md",
+      "added_lines": 170,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.ci.json",
+      "added_lines": 44,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.issue.json",
+      "added_lines": 12,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.repo.json",
+      "added_lines": 27,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/reports/issue-257-finish-specbridge-v2-hardening.final-report.json",
+      "added_lines": 39,
+      "deleted_lines": 0
+    },
+    {
+      "file": ".specbridge/scopes/issue-257-finish-specbridge-v2-hardening.scope.json",
+      "added_lines": 32,
+      "deleted_lines": 0
+    }
+  ],
+  "validation_commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File D:\\Antigravity\\Infinite Process\\specbridge-v2\\scripts\\test.ps1",
+    "git diff --check in specbridge-v2",
+    "touched-file encoding scan in specbridge-v2",
+    "git push origin master in specbridge-v2",
+    "gh run list --repo yagooyarzabaldev-ops/specbridge-v2 --limit 5 --json databaseId,status,conclusion,workflowName,headSha,createdAt,url",
+    "gh run view 28131633966 --repo yagooyarzabaldev-ops/specbridge-v2 --json status,conclusion,workflowName,headSha,url,jobs",
+    "gh api repos/yagooyarzabaldev-ops/specbridge-v2/branches/master",
+    "gh api -X PUT repos/yagooyarzabaldev-ops/specbridge-v2/branches/master/protection"
+  ],
+  "validation_results": [
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+      "result": "passed before v2 mutation"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+      "result": "passed before v2 mutation"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File D:\\Antigravity\\Infinite Process\\specbridge-v2\\scripts\\test.ps1",
+      "result": "passed after repair with 62 passed and 0 failed"
+    },
+    {
+      "command": "git diff --check in specbridge-v2",
+      "result": "passed"
+    },
+    {
+      "command": "touched-file encoding scan in specbridge-v2",
+      "result": "passed with no BOM and non_ascii_count 0 for all touched files"
+    },
+    {
+      "command": "git push origin master in specbridge-v2",
+      "result": "passed, remote master now at eb9507c4e87b89d2695e64157d12ff3d883f8a57"
+    },
+    {
+      "command": "gh run list --repo yagooyarzabaldev-ops/specbridge-v2",
+      "result": "passed, CI run 28131633966 completed successfully"
+    },
+    {
+      "command": "gh run view 28131633966 --repo yagooyarzabaldev-ops/specbridge-v2",
+      "result": "passed, job test completed successfully"
+    },
+    {
+      "command": "gh api repos/yagooyarzabaldev-ops/specbridge-v2/branches/master",
+      "result": "master protected=false before and after branch protection attempt"
+    },
+    {
+      "command": "gh api -X PUT repos/yagooyarzabaldev-ops/specbridge-v2/branches/master/protection",
+      "result": "blocked with HTTP 403 requiring GitHub Pro or public repository"
+    }
+  ],
+  "final_report_path": ".specbridge/reports/issue-257-finish-specbridge-v2-hardening.final-report.json",
+  "ci_status": "passed",
+  "pr_review_report_path": null,
+  "policy_result": "Within policy for the dedicated issue #257 contract. Branch protection remained blocked by GitHub plan/private visibility and no billing or visibility change was performed.",
+  "unresolved_risks": [
+    "specbridge-v2 master is not branch-protected due GitHub 403 requiring Pro or public visibility.",
+    "The v1 evidence branch is not merged into main.",
+    "actions/checkout@v4 is not pinned to a SHA."
+  ],
+  "completion_status": "completed_with_branch_protection_blocked",
+  "source_files": [
+    ".specbridge/contracts/issue-257-finish-specbridge-v2-hardening.execution.md",
+    ".specbridge/reports/issue-257-finish-specbridge-v2-hardening.final-report.json",
+    ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.repo.json",
+    ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.ci.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths, line-count summaries, validation summaries, CI metadata, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

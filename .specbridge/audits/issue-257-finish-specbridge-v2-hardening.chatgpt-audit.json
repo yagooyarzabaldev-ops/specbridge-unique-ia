@@ -1,0 +1,104 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-257-finish-specbridge-v2-hardening",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-257-finish-specbridge-v2-hardening.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-257-finish-specbridge-v2-hardening.execution.md",
+  "final_report_path": ".specbridge/reports/issue-257-finish-specbridge-v2-hardening.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue #257 authorized bounded v2 operational hardening: minimal CI, docs/policy updates, additive tests, push to private v2 remote, optional protection evidence, and v1 evidence. The final report records those exact outcomes.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "The v2 repo has .github/workflows/ci.yml, operational docs/context/contract/scope, additive tests, pushed commit eb9507c4e87b89d2695e64157d12ff3d883f8a57, local tests passed, and GitHub Actions CI passed. Branch protection was attempted and blocked as allowed by the contract's blocker-recording criterion.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The work did not access secrets, install dependencies, deploy, change production, billing, auth, authorization, database, external AI providers, hosted runtime, MCP mutation, cleanup enforcement, repository visibility, force push, or branch deletion.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The v2 CI workflow has permissions contents: read, runs only the existing test script, and requires no secrets. Branch protection was not enabled because GitHub required Pro or public visibility; no billing/visibility change was made.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "All v1 evidence files are declared in the issue-257 scope manifest. The v2 changed files match the external paths declared in the execution contract.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "SpecBridge v2 local tests passed with 62 passed and 0 failed after repair. v2 git diff --check and touched-file ASCII/no-BOM scan passed.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "needs_human_decision",
+      "evidence": "GitHub Actions run 28131633966 for v2 workflow CI completed successfully on eb9507c4e87b89d2695e64157d12ff3d883f8a57; job test and the Windows PowerShell 5.1 test step succeeded. The v1 evidence branch has not been opened as a PR, so v1 merge CI is not collected.",
+      "blocking": true
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records the successful v2 commit/push/CI, the failed initial local test after a malformed JSON edit, the repaired passing validation, and the exact branch protection blocker.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "medium",
+      "category": "branch_protection",
+      "file": ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.ci.json",
+      "line": null,
+      "evidence": "Branch protection PUT returned HTTP 403 requiring GitHub Pro or making the repository public. Final branch query shows protected=false.",
+      "recommendation": "Enable GitHub Pro or authorize public visibility under a future contract before requiring branch protection on specbridge-v2.",
+      "blocking": false
+    },
+    {
+      "severity": "low",
+      "category": "ci_supply_chain",
+      "file": ".specbridge/reports/issue-257-finish-specbridge-v2-hardening.final-report.json",
+      "line": null,
+      "evidence": "The workflow uses actions/checkout@v4 rather than a pinned SHA.",
+      "recommendation": "Pin third-party GitHub Actions by SHA under a future CI-hardening contract.",
+      "blocking": false
+    },
+    {
+      "severity": "medium",
+      "category": "v1_merge_gate",
+      "file": ".specbridge/reports/issue-257-finish-specbridge-v2-hardening.final-report.json",
+      "line": null,
+      "evidence": "The v1 evidence branch has not been opened as a PR and therefore has no GitHub CI or review gate for merge into main.",
+      "recommendation": "Open a v1 PR for the evidence branch and merge only after required gates pass.",
+      "blocking": true
+    }
+  ],
+  "outcome": "needs_human_decision",
+  "merge_allowed": false,
+  "unresolved_risks": [
+    "specbridge-v2 master is not branch-protected due GitHub plan/private visibility limitation.",
+    "V1 evidence is not merged into main.",
+    "actions/checkout@v4 remains unpinned by SHA."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-257-finish-specbridge-v2-hardening.audit-packet.json",
+    ".specbridge/audits/issue-257-finish-specbridge-v2-hardening.chatgpt-audit.json",
+    ".specbridge/contracts/issue-257-finish-specbridge-v2-hardening.execution.md",
+    ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.ci.json",
+    ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.issue.json",
+    ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.repo.json",
+    ".specbridge/reports/issue-257-finish-specbridge-v2-hardening.final-report.json",
+    ".specbridge/scopes/issue-257-finish-specbridge-v2-hardening.scope.json"
+  ]
+}

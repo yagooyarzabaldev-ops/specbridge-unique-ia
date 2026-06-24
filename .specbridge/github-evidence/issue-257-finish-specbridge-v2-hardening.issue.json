@@ -1,0 +1,12 @@
+{
+  "issue_number": 257,
+  "title": "Finish SpecBridge v2 operational hardening",
+  "url": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/257",
+  "state": "open",
+  "created_at": "2026-06-24T19:17:31Z",
+  "updated_at": "2026-06-24T19:17:31Z",
+  "author": "yagooyarzabaldev-ops",
+  "body_summary": "Authorize bounded SpecBridge v2 operational hardening: minimal CI, v2 policy/docs updates, additive tests, push to the private v2 remote, optional protection evidence, and v1 final evidence. Blocks secrets, dependency installation, deployment, production, billing, auth, authorization, database, destructive git history, and CI weakening.",
+  "source": "github_connector_create_issue",
+  "captured_at": "2026-06-24T19:17:31Z"
+}

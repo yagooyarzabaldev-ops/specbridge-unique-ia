@@ -1,0 +1,29 @@
+{
+  "repository": "yagooyarzabaldev-ops/specbridge-v2",
+  "url": "https://github.com/yagooyarzabaldev-ops/specbridge-v2",
+  "visibility": "PRIVATE",
+  "is_private": true,
+  "default_branch": "master",
+  "local_branch_status": "master...origin/master clean",
+  "previous_remote_head": "f224ff1a5acde330fa12763d34c78666e4b86622",
+  "pushed_head": "eb9507c4e87b89d2695e64157d12ff3d883f8a57",
+  "pushed_commit_summary": "Add operational hardening and CI",
+  "remote_master_ref": "eb9507c4e87b89d2695e64157d12ff3d883f8a57 refs/heads/master",
+  "changed_files": [
+    ".github/workflows/ci.yml",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/context/DO_NOT_TOUCH.md",
+    ".specbridge/context/STYLE_GUIDE.md",
+    ".specbridge/contracts/operational-hardening.execution.md",
+    ".specbridge/scopes/operational-hardening.scope.json",
+    "AGENTS.md",
+    "README.md",
+    "docs/operations.md",
+    "tests/bootstrap.tests.ps1"
+  ],
+  "commit_stat": "10 files changed, 512 insertions, 23 deletions",
+  "local_validation": "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\test.ps1 passed with 62 passed, 0 failed",
+  "encoding_check": "Touched v2 files checked as ASCII with no UTF-8 BOM",
+  "pushed_at": "2026-06-24T21:44:45Z",
+  "captured_at": "2026-06-24T21:46:00Z"
+}

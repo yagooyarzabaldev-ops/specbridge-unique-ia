@@ -1,0 +1,31 @@
+{
+  "contract_id": "issue-257-finish-specbridge-v2-hardening",
+  "run_id": "sb-20260624-0257c1ab",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/contracts/issue-257-finish-specbridge-v2-hardening.execution.md",
+    ".specbridge/scopes/issue-257-finish-specbridge-v2-hardening.scope.json",
+    ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.issue.json",
+    ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.repo.json",
+    ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.ci.json",
+    ".specbridge/reports/issue-257-finish-specbridge-v2-hardening.final-report.json",
+    ".specbridge/audit-packets/issue-257-finish-specbridge-v2-hardening.audit-packet.json",
+    ".specbridge/audits/issue-257-finish-specbridge-v2-hardening.chatgpt-audit.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-255-serious-product-build-pilot.execution.md",
+    ".specbridge/contracts/issue-256-create-upload-specbridge-v2.execution.md",
+    ".specbridge/reports/issue-256-create-upload-specbridge-v2.final-report.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-255-serious-product-build-pilot",
+    "issue-256-create-upload-specbridge-v2"
+  ],
+  "final_report": ".specbridge/reports/issue-257-finish-specbridge-v2-hardening.final-report.json"
+}

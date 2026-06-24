@@ -1,0 +1,38 @@
+{
+  "repository": "yagooyarzabaldev-ops/specbridge-v2",
+  "workflow_name": "CI",
+  "run_id": 28131633966,
+  "run_url": "https://github.com/yagooyarzabaldev-ops/specbridge-v2/actions/runs/28131633966",
+  "head_sha": "eb9507c4e87b89d2695e64157d12ff3d883f8a57",
+  "status": "completed",
+  "conclusion": "success",
+  "created_at": "2026-06-24T21:44:50Z",
+  "jobs": [
+    {
+      "job_id": 83308987093,
+      "name": "test",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-06-24T21:44:55Z",
+      "completed_at": "2026-06-24T21:45:27Z",
+      "steps": [
+        "Set up job: success",
+        "Run actions/checkout@v4: success",
+        "Run SpecBridge v2 test suite (Windows PowerShell 5.1): success",
+        "Post Run actions/checkout@v4: success",
+        "Complete job: success"
+      ]
+    }
+  ],
+  "branch_protection": {
+    "branch": "master",
+    "protected_before_attempt": false,
+    "attempted": true,
+    "attempt_result": "blocked",
+    "http_status": 403,
+    "message": "Upgrade to GitHub Pro or make this repository public to enable this feature.",
+    "protected_after_attempt": false,
+    "policy_decision": "Do not make the repository public and do not change billing plan under this contract."
+  },
+  "captured_at": "2026-06-24T21:46:30Z"
+}

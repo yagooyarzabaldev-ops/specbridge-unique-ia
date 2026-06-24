@@ -1,0 +1,39 @@
+{
+  "summary": "Finished the bounded operational hardening for the private specbridge-v2 repository. The v2 repo now has a minimal read-only GitHub Actions CI workflow, operational docs, style guide, an operational-hardening contract and scope, updated agent policy, updated current-goal/protected-file context, and additive tests. The v2 hardening commit eb9507c4e87b89d2695e64157d12ff3d883f8a57 was pushed to origin/master and GitHub Actions CI passed. Branch protection was attempted but GitHub returned 403 requiring GitHub Pro or public visibility, so that item remains blocked by billing/visibility policy.",
+  "changed_files": [
+    ".specbridge/contracts/issue-257-finish-specbridge-v2-hardening.execution.md",
+    ".specbridge/scopes/issue-257-finish-specbridge-v2-hardening.scope.json",
+    ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.issue.json",
+    ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.repo.json",
+    ".specbridge/github-evidence/issue-257-finish-specbridge-v2-hardening.ci.json",
+    ".specbridge/reports/issue-257-finish-specbridge-v2-hardening.final-report.json",
+    ".specbridge/audit-packets/issue-257-finish-specbridge-v2-hardening.audit-packet.json",
+    ".specbridge/audits/issue-257-finish-specbridge-v2-hardening.chatgpt-audit.json"
+  ],
+  "validations": [
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed before v2 mutation",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed before v2 mutation",
+    "SpecBridge v2 Claude Code executor attempted hardening and timed out after 304 seconds, leaving reviewable partial changes",
+    "SpecBridge v2 powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\test.ps1: initially failed after manual policy edit because operational-hardening.scope.json contained literal newline escapes",
+    "SpecBridge v2 powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\test.ps1: passed after repair with 62 passed, 0 failed",
+    "SpecBridge v2 touched-file encoding scan: passed, all checked files ASCII and no UTF-8 BOM",
+    "SpecBridge v2 git diff --check: passed",
+    "SpecBridge v2 git commit: eb9507c4e87b89d2695e64157d12ff3d883f8a57 Add operational hardening and CI",
+    "SpecBridge v2 git push origin master: passed, f224ff1..eb9507c",
+    "SpecBridge v2 gh run list: CI run 28131633966 completed successfully on eb9507c4e87b89d2695e64157d12ff3d883f8a57",
+    "SpecBridge v2 gh run view 28131633966: job test completed successfully, including Run SpecBridge v2 test suite (Windows PowerShell 5.1)",
+    "SpecBridge v2 branch protection query before attempt: master protected=false",
+    "SpecBridge v2 branch protection PUT attempt: blocked with HTTP 403 requiring GitHub Pro or public repository",
+    "SpecBridge v2 branch protection query after attempt: master protected=false"
+  ],
+  "policy_result": "Within the dedicated issue #257 contract except for branch protection, which was attempted and blocked by GitHub billing/private visibility. The work did not access secrets, install dependencies, change production configuration, billing, authentication, authorization, databases, deployment automation, hosted runtimes, external AI providers, mutation-capable MCP, cleanup enforcement, or repository visibility. No force push or branch deletion was performed.",
+  "risk_result": "High-risk CI work was bounded to a read-only workflow that runs the existing PowerShell 5.1 test suite. Residual risk remains because branch protection cannot be enabled on the private repository without GitHub Pro or public visibility.",
+  "unresolved_risks": [
+    "specbridge-v2 master is not branch-protected because GitHub returned HTTP 403: Upgrade to GitHub Pro or make this repository public.",
+    "The v1 evidence branch is still local and not merged into main.",
+    "The v2 CI workflow uses actions/checkout@v4 rather than a pinned action SHA; this is acceptable for the current MVP but should be revisited under a future CI hardening contract."
+  ],
+  "merge_status": "Not merged into v1 main. V1 evidence remains on branch codex/issue-255-serious-product-build-pilot and requires PR, CI, review, and explicit operator merge authority.",
+  "deployment_status": "Not applicable. No deployment was requested or performed.",
+  "completion_status": "completed_with_branch_protection_blocked"
+}
