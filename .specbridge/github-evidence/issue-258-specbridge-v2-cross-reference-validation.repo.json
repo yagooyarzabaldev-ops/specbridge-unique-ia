@@ -1,0 +1,28 @@
+{
+  "repository": "yagooyarzabaldev-ops/specbridge-v2",
+  "url": "https://github.com/yagooyarzabaldev-ops/specbridge-v2",
+  "visibility": "PRIVATE",
+  "is_private": true,
+  "default_branch": "master",
+  "previous_remote_head": "eb9507c4e87b89d2695e64157d12ff3d883f8a57",
+  "pushed_head": "95870cc672fb2fafe6bea9fd477017a5608e1833",
+  "pushed_commit_summary": "Add cross-reference scope validation",
+  "remote_master_ref": "95870cc672fb2fafe6bea9fd477017a5608e1833 refs/heads/master",
+  "changed_files": [
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/context/DO_NOT_TOUCH.md",
+    ".specbridge/contracts/cross-reference-validation.execution.md",
+    ".specbridge/scopes/cross-reference-validation.scope.json",
+    "AGENTS.md",
+    "README.md",
+    "docs/operations.md",
+    "src/specbridge_v2.ps1",
+    "tests/bootstrap.tests.ps1"
+  ],
+  "commit_stat": "9 files changed, 445 insertions, 25 deletions",
+  "local_validation": "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\test.ps1 passed with 92 passed, 0 failed",
+  "encoding_check": "Touched v2 files checked as ASCII-only with no UTF-8 BOM",
+  "diff_check": "git diff --check passed before commit",
+  "pushed_at": "2026-06-24T23:16:04Z",
+  "captured_at": "2026-06-24T23:16:45Z"
+}

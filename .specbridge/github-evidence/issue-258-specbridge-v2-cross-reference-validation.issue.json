@@ -1,0 +1,12 @@
+{
+  "issue_number": 258,
+  "title": "SpecBridge v2 cross-reference validation",
+  "url": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/258",
+  "state": "open",
+  "created_at": "2026-06-24T22:56:45Z",
+  "updated_at": "2026-06-24T22:56:45Z",
+  "author": "yagooyarzabaldev-ops",
+  "body_summary": "Authorize bounded SpecBridge v2 cross-reference validation: reject missing allowed_paths, reject tracked files matching forbidden_paths, preserve exit/report contracts, add tests/docs/context, push v2, collect CI, and record v1 evidence.",
+  "source": "github_connector_create_issue",
+  "captured_at": "2026-06-24T22:56:45Z"
+}

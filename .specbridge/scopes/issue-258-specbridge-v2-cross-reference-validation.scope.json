@@ -1,0 +1,30 @@
+{
+  "contract_id": "issue-258-specbridge-v2-cross-reference-validation",
+  "run_id": "sb-20260624-0258cafe",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/contracts/issue-258-specbridge-v2-cross-reference-validation.execution.md",
+    ".specbridge/scopes/issue-258-specbridge-v2-cross-reference-validation.scope.json",
+    ".specbridge/github-evidence/issue-258-specbridge-v2-cross-reference-validation.issue.json",
+    ".specbridge/github-evidence/issue-258-specbridge-v2-cross-reference-validation.repo.json",
+    ".specbridge/github-evidence/issue-258-specbridge-v2-cross-reference-validation.ci.json",
+    ".specbridge/runtime-evidence/issue-258-specbridge-v2-claude-output.md",
+    ".specbridge/reports/issue-258-specbridge-v2-cross-reference-validation.final-report.json",
+    ".specbridge/audit-packets/issue-258-specbridge-v2-cross-reference-validation.audit-packet.json",
+    ".specbridge/audits/issue-258-specbridge-v2-cross-reference-validation.chatgpt-audit.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-257-finish-specbridge-v2-hardening.execution.md",
+    ".specbridge/reports/issue-257-finish-specbridge-v2-hardening.final-report.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-257-finish-specbridge-v2-hardening"
+  ],
+  "final_report": ".specbridge/reports/issue-258-specbridge-v2-cross-reference-validation.final-report.json"
+}

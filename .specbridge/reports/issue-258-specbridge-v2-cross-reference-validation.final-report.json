@@ -1,0 +1,41 @@
+{
+  "summary": "Completed the bounded SpecBridge v2 cross-reference validation phase for issue #258. Claude Code ran first and left partial changes after a timeout; Codex reviewed, corrected, completed, tested, committed, pushed, and verified CI. The v2 validator now rejects missing allowed_paths entries, rejects forbidden_paths directory prefixes and wildcard patterns that match tracked files, preserves exact forbidden_paths entries as protected-path declarations, and keeps the exit-code contract and JSON report schema unchanged. The v2 commit 95870cc672fb2fafe6bea9fd477017a5608e1833 was pushed to origin/master and GitHub Actions CI passed.",
+  "changed_files": [
+    ".specbridge/contracts/issue-258-specbridge-v2-cross-reference-validation.execution.md",
+    ".specbridge/scopes/issue-258-specbridge-v2-cross-reference-validation.scope.json",
+    ".specbridge/github-evidence/issue-258-specbridge-v2-cross-reference-validation.issue.json",
+    ".specbridge/github-evidence/issue-258-specbridge-v2-cross-reference-validation.repo.json",
+    ".specbridge/github-evidence/issue-258-specbridge-v2-cross-reference-validation.ci.json",
+    ".specbridge/runtime-evidence/issue-258-specbridge-v2-claude-output.md",
+    ".specbridge/reports/issue-258-specbridge-v2-cross-reference-validation.final-report.json",
+    ".specbridge/audit-packets/issue-258-specbridge-v2-cross-reference-validation.audit-packet.json",
+    ".specbridge/audits/issue-258-specbridge-v2-cross-reference-validation.chatgpt-audit.json"
+  ],
+  "validations": [
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed before v2 mutation",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed before v2 mutation",
+    "SpecBridge v2 Claude Code executor attempted implementation first and timed out after approximately 603 seconds, leaving partial reviewable changes",
+    "SpecBridge v2 powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\test.ps1: passed with 92 passed, 0 failed",
+    "SpecBridge v2 git diff --check: passed",
+    "SpecBridge v2 touched-file encoding scan: passed, all checked files ASCII-only with no UTF-8 BOM",
+    "SpecBridge v2 git commit: 95870cc672fb2fafe6bea9fd477017a5608e1833 Add cross-reference scope validation",
+    "SpecBridge v2 git push origin master: passed, eb9507c..95870cc",
+    "SpecBridge v2 gh run view 28135771572: CI completed successfully on 95870cc672fb2fafe6bea9fd477017a5608e1833",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed after evidence creation",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed after evidence creation",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed after evidence creation",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed after evidence creation",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed after evidence creation",
+    "SpecBridge v1 git diff --check: passed"
+  ],
+  "policy_result": "Within the dedicated issue #258 contract. The work did not access secrets, install dependencies, change production configuration, billing, authentication, authorization, databases, deployment automation, hosted runtimes, external AI providers, mutation-capable MCP tools, repository visibility, CI workflow security, force push, branch deletion, or remote deletion. The only network operation after local validation was the authorized normal non-force push to specbridge-v2 origin/master and GitHub CI/status reads.",
+  "risk_result": "Medium-risk validator work was bounded to declared v2 files and additive tests. Residual risk is limited to v1 evidence not being merged into main and existing v2 branch protection remaining unavailable without GitHub Pro or public visibility.",
+  "unresolved_risks": [
+    "The v1 evidence branch is local and not merged into main.",
+    "specbridge-v2 master remains unprotected because branch protection was previously blocked by GitHub plan/private visibility.",
+    "Exact forbidden_paths entries are declarations, not enforcement against currently tracked files; broad enforcement is limited to directory prefixes and wildcard patterns by design."
+  ],
+  "merge_status": "v2 master updated by normal non-force push. No autonomous merge into v1 main was performed; v1 evidence remains on branch codex/issue-255-serious-product-build-pilot and requires PR, CI, review, and explicit operator merge authority.",
+  "deployment_status": "Not applicable. No deployment was requested or performed.",
+  "completion_status": "completed"
+}

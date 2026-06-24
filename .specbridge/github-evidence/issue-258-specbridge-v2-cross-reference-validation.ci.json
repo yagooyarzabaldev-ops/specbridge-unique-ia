@@ -1,0 +1,31 @@
+{
+  "repository": "yagooyarzabaldev-ops/specbridge-v2",
+  "workflow_name": "CI",
+  "run_id": 28135771572,
+  "run_url": "https://github.com/yagooyarzabaldev-ops/specbridge-v2/actions/runs/28135771572",
+  "head_sha": "95870cc672fb2fafe6bea9fd477017a5608e1833",
+  "status": "completed",
+  "conclusion": "success",
+  "event": "push",
+  "created_at": "2026-06-24T23:16:04Z",
+  "updated_at": "2026-06-24T23:16:31Z",
+  "jobs": [
+    {
+      "job_id": 83322123689,
+      "name": "test",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-06-24T23:16:07Z",
+      "completed_at": "2026-06-24T23:16:31Z",
+      "url": "https://github.com/yagooyarzabaldev-ops/specbridge-v2/actions/runs/28135771572/job/83322123689",
+      "steps": [
+        "Set up job: success",
+        "Run actions/checkout@v4: success",
+        "Run SpecBridge v2 test suite (Windows PowerShell 5.1): success",
+        "Post Run actions/checkout@v4: success",
+        "Complete job: success"
+      ]
+    }
+  ],
+  "captured_at": "2026-06-24T23:16:45Z"
+}

@@ -1,0 +1,96 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-258-specbridge-v2-cross-reference-validation",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-258-specbridge-v2-cross-reference-validation.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-258-specbridge-v2-cross-reference-validation.execution.md",
+  "final_report_path": ".specbridge/reports/issue-258-specbridge-v2-cross-reference-validation.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue #258 authorized bounded v2 cross-reference validation, additive tests, docs/context updates, a normal non-force v2 push, CI evidence, and v1 evidence files. The final report records those exact outcomes.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "The v2 repo has cross-reference contract and scope files, validator support for missing allowed_paths and broad forbidden_paths matching, successful bootstrap and operational-hardening scope validation, additive T12-T15 tests, pushed commit 95870cc672fb2fafe6bea9fd477017a5608e1833, local tests passing, and CI passing.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The work stayed inside declared v1 evidence files and declared v2 implementation/docs/test/context files. It did not access secrets, install dependencies, deploy, change production, billing, auth, authorization, database, external AI providers, hosted runtime, MCP mutation, repository visibility, CI workflow security, force push, or branch deletion.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "No secrets, credentials, keys, production settings, auth, billing, database, deployment, or destructive infrastructure were touched. The only remote mutation was the authorized normal non-force push to v2 origin/master after local tests passed.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "All v1 evidence files are declared in the issue #258 scope manifest. The v2 changed files match the external paths declared in the execution contract and the v2 cross-reference scope.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "SpecBridge v2 local tests passed with 92 passed and 0 failed. v2 git diff --check and touched-file ASCII/no-BOM scan passed.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "needs_human_decision",
+      "evidence": "GitHub Actions run 28135771572 for v2 workflow CI completed successfully on 95870cc672fb2fafe6bea9fd477017a5608e1833. The v1 evidence branch has not been opened as a PR, so v1 merge CI is not collected.",
+      "blocking": true
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records Claude timeout, Codex repair/completion, successful local tests, successful push, successful CI, the v1 merge gate, and the branch-protection residual risk.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "medium",
+      "category": "v1_merge_gate",
+      "file": ".specbridge/reports/issue-258-specbridge-v2-cross-reference-validation.final-report.json",
+      "line": null,
+      "evidence": "The v1 evidence branch has not been opened as a PR and therefore has no GitHub CI or review gate for merge into main.",
+      "recommendation": "Open a v1 PR for the evidence branch and merge only after required gates pass and operator merge authority is explicit.",
+      "blocking": true
+    },
+    {
+      "severity": "low",
+      "category": "branch_protection",
+      "file": ".specbridge/github-evidence/issue-258-specbridge-v2-cross-reference-validation.repo.json",
+      "line": null,
+      "evidence": "specbridge-v2 master remains unprotected due the previously recorded GitHub plan/private visibility limitation.",
+      "recommendation": "Enable GitHub Pro or authorize public visibility under a future contract before requiring branch protection on specbridge-v2.",
+      "blocking": false
+    }
+  ],
+  "outcome": "needs_human_decision",
+  "merge_allowed": false,
+  "unresolved_risks": [
+    "V1 evidence is not merged into main.",
+    "specbridge-v2 master is not branch-protected due GitHub plan/private visibility limitation.",
+    "Exact forbidden_paths entries are protected-path declarations rather than tracked-file conflicts."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-258-specbridge-v2-cross-reference-validation.audit-packet.json",
+    ".specbridge/audits/issue-258-specbridge-v2-cross-reference-validation.chatgpt-audit.json",
+    ".specbridge/contracts/issue-258-specbridge-v2-cross-reference-validation.execution.md",
+    ".specbridge/github-evidence/issue-258-specbridge-v2-cross-reference-validation.ci.json",
+    ".specbridge/github-evidence/issue-258-specbridge-v2-cross-reference-validation.issue.json",
+    ".specbridge/github-evidence/issue-258-specbridge-v2-cross-reference-validation.repo.json",
+    ".specbridge/reports/issue-258-specbridge-v2-cross-reference-validation.final-report.json",
+    ".specbridge/runtime-evidence/issue-258-specbridge-v2-claude-output.md",
+    ".specbridge/scopes/issue-258-specbridge-v2-cross-reference-validation.scope.json"
+  ]
+}
