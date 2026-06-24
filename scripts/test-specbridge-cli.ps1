@@ -4512,6 +4512,259 @@ try {
         }
       }
     }
+
+    # specbridge-final-standardization-status tests
+
+    # 1. Command shape: exits 0, returns JSON with command and ok fields
+    $fssResult = Invoke-Cli -Arguments @("specbridge-final-standardization-status")
+    Assert-Success `
+      -Name "specbridge-final-standardization-status" `
+      -Result $fssResult `
+      -ExpectedPattern '"command"\s*:\s*"specbridge-final-standardization-status"'
+
+    # 2. Deterministic output: two read-only calls produce identical output
+    $fssRepeatResult = Invoke-Cli -Arguments @("specbridge-final-standardization-status")
+    if ($fssResult.ExitCode -eq 0 -and $fssRepeatResult.ExitCode -eq 0) {
+      if ($fssResult.Text.Trim() -ceq $fssRepeatResult.Text.Trim()) {
+        Write-Output "PASS specbridge-final-standardization-status-deterministic: repeated read-only output is stable."
+      } else {
+        Write-Output "FAIL specbridge-final-standardization-status-deterministic: repeated read-only output changed."
+        $script:failed = $true
+      }
+    }
+
+    if ($fssResult.ExitCode -eq 0) {
+      $fssJson = $null
+      try { $fssJson = $fssResult.Text.Trim() | ConvertFrom-Json } catch {}
+
+      if ($null -eq $fssJson) {
+        Write-Output "FAIL specbridge-final-standardization-status: output was not valid JSON."
+        $script:failed = $true
+      } else {
+        if ($fssJson.ok -ne $true) {
+          Write-Output "FAIL specbridge-final-standardization-status: ok field is not true."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-final-standardization-status: ok is true."
+        }
+
+        # 3. Required top-level fields
+        $requiredFssFields = @(
+          "command", "ok", "schema_version", "standardization_completion_pct",
+          "remaining_standardization_pct",
+          "readiness", "recommended_next_action",
+          "remaining_gaps", "blocked_boundaries", "recommended_next_contracts",
+          "validation_expectations",
+          "task_selection", "doctor", "repository_health", "token_context_governance",
+          "mcp_resource_surface", "standard_boundaries", "evidence_sources", "notes"
+        )
+        $fssFieldNames = @($fssJson.PSObject.Properties.Name)
+        $missingFssFields = $requiredFssFields | Where-Object { $fssFieldNames -notcontains $_ }
+        if ($missingFssFields.Count -gt 0) {
+          Write-Output "FAIL specbridge-final-standardization-status: missing fields: $($missingFssFields -join ', ')."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-final-standardization-status: required fields present."
+        }
+
+        # 4. standardization_completion_pct is an integer in 0..100
+        $fssPct = $fssJson.standardization_completion_pct
+        $fssRemainingPct = $fssJson.remaining_standardization_pct
+        if ($fssPct -is [int] -or $fssPct -is [long] -or $fssPct -is [double]) {
+          $fssPctInt = [int] $fssPct
+          if ($fssPctInt -ge 0 -and $fssPctInt -le 100) {
+            Write-Output "PASS specbridge-final-standardization-status: standardization_completion_pct=$fssPctInt is in range 0-100."
+          } else {
+            Write-Output "FAIL specbridge-final-standardization-status: standardization_completion_pct=$fssPctInt is outside 0-100."
+            $script:failed = $true
+          }
+        } else {
+          Write-Output "FAIL specbridge-final-standardization-status: standardization_completion_pct is not numeric."
+          $script:failed = $true
+        }
+        if ($fssRemainingPct -is [int] -or $fssRemainingPct -is [long] -or $fssRemainingPct -is [double]) {
+          $fssRemainingPctInt = [int] $fssRemainingPct
+          if ($fssRemainingPctInt -ge 0 -and $fssRemainingPctInt -le 100 -and ([int] $fssJson.standardization_completion_pct + $fssRemainingPctInt) -eq 100) {
+            Write-Output "PASS specbridge-final-standardization-status: remaining_standardization_pct=$fssRemainingPctInt complements completion percentage."
+          } else {
+            Write-Output "FAIL specbridge-final-standardization-status: remaining_standardization_pct does not complement completion percentage."
+            $script:failed = $true
+          }
+        } else {
+          Write-Output "FAIL specbridge-final-standardization-status: remaining_standardization_pct is not numeric."
+          $script:failed = $true
+        }
+
+        # 5. readiness enum is valid
+        $validFssReadiness = @("ready_for_governed_task_intake", "continue_current_goal", "execute_eligible_task", "review_recommended", "blocked")
+        if ($validFssReadiness -notcontains $fssJson.readiness) {
+          Write-Output "FAIL specbridge-final-standardization-status: invalid readiness '$($fssJson.readiness)'."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-final-standardization-status: readiness enum is valid."
+        }
+
+        # 6. remaining_gaps and blocked_boundaries are non-empty arrays
+        $fssGaps = @($fssJson.remaining_gaps)
+        $fssBlocked = @($fssJson.blocked_boundaries)
+        if ($fssGaps.Count -eq 0) {
+          Write-Output "FAIL specbridge-final-standardization-status: remaining_gaps is empty."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-final-standardization-status: remaining_gaps has $($fssGaps.Count) entries."
+        }
+        $fssMissingGapFields = $false
+        foreach ($gap in $fssGaps) {
+          $gapFields = @($gap.PSObject.Properties.Name)
+          foreach ($gapField in @("category", "gap", "status", "gate")) {
+            if ($gapFields -notcontains $gapField) {
+              Write-Output "FAIL specbridge-final-standardization-status: remaining_gaps entry missing field '$gapField'."
+              $script:failed = $true
+              $fssMissingGapFields = $true
+            }
+          }
+        }
+        if (-not $fssMissingGapFields -and $fssGaps.Count -gt 0) {
+          Write-Output "PASS specbridge-final-standardization-status: remaining_gaps entries have required fields."
+        }
+        if ($fssBlocked.Count -eq 0) {
+          Write-Output "FAIL specbridge-final-standardization-status: blocked_boundaries is empty."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-final-standardization-status: blocked_boundaries has $($fssBlocked.Count) entries."
+        }
+
+        # 7. recommended_next_contracts has required fields
+        $fssContracts = @($fssJson.recommended_next_contracts)
+        $fssMissingContractFields = $false
+        foreach ($rc in $fssContracts) {
+          $rcFields = @($rc.PSObject.Properties.Name)
+          foreach ($rcField in @("contract_slug", "description", "gate")) {
+            if ($rcFields -notcontains $rcField) {
+              Write-Output "FAIL specbridge-final-standardization-status: recommended_next_contracts entry missing field '$rcField'."
+              $script:failed = $true
+              $fssMissingContractFields = $true
+            }
+          }
+        }
+        if (-not $fssMissingContractFields -and $fssContracts.Count -gt 0) {
+          Write-Output "PASS specbridge-final-standardization-status: recommended_next_contracts entries have required fields."
+        }
+
+        # 8. validation_expectations is non-empty
+        $fssExpectations = @($fssJson.validation_expectations)
+        if ($fssExpectations.Count -eq 0) {
+          Write-Output "FAIL specbridge-final-standardization-status: validation_expectations is empty."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-final-standardization-status: validation_expectations has $($fssExpectations.Count) entries."
+        }
+
+        # 9. standard_boundaries: all mutation flags false, writes_output_artifact false by default
+        if ($fssJson.standard_boundaries.launches_claude -eq $false -and
+            $fssJson.standard_boundaries.launches_codex -eq $false -and
+            $fssJson.standard_boundaries.calls_network -eq $false -and
+            $fssJson.standard_boundaries.mutates_github -eq $false -and
+            $fssJson.standard_boundaries.reads_secrets -eq $false -and
+            $fssJson.standard_boundaries.changes_billing -eq $false -and
+            $fssJson.standard_boundaries.changes_ci_cd_security -eq $false -and
+            $fssJson.standard_boundaries.deploys -eq $false -and
+            $fssJson.standard_boundaries.writes_output_artifact -eq $false) {
+          Write-Output "PASS specbridge-final-standardization-status: read-only/no-runtime/no-secret boundaries recorded."
+        } else {
+          Write-Output "FAIL specbridge-final-standardization-status: standard boundary flags mismatch."
+          $script:failed = $true
+        }
+
+        # 10. cleanup/enforcement posture remains none
+        if ($fssJson.repository_health.cleanup_permission -ne "none" -or $fssJson.repository_health.enforcement_status -ne "none") {
+          Write-Output "FAIL specbridge-final-standardization-status: cleanup/enforcement posture must remain none."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-final-standardization-status: cleanup/enforcement posture remains none."
+        }
+      }
+    }
+
+    # 11. No mutation without OutputPath: artifact unchanged
+    $fssArtifact = Join-Path (Get-Location).Path ".specbridge/standard-readiness/final-standardization.status.json"
+    $fssArtifactExistedBefore = Test-Path $fssArtifact
+    $fssArtifactOriginalRaw = $null
+    if ($fssArtifactExistedBefore) {
+      $fssArtifactOriginalRaw = Get-Content $fssArtifact -Raw -Encoding UTF8
+    }
+    Remove-Item $fssArtifact -Force -ErrorAction SilentlyContinue
+    $null = Invoke-Cli -Arguments @("specbridge-final-standardization-status")
+    if (Test-Path $fssArtifact) {
+      Write-Output "FAIL specbridge-final-standardization-status-no-mutation: artifact was written without -OutputPath."
+      $script:failed = $true
+    } else {
+      Write-Output "PASS specbridge-final-standardization-status-no-mutation: no artifact written without -OutputPath."
+    }
+
+    # 12. OutputPath behavior: writes artifact to declared path
+    $fssOutputResult = Invoke-Cli -Arguments @(
+      "specbridge-final-standardization-status",
+      "-OutputPath",
+      ".specbridge/standard-readiness/final-standardization.status.json",
+      "-Force"
+    )
+    Assert-Success `
+      -Name "specbridge-final-standardization-status-output-path" `
+      -Result $fssOutputResult `
+      -ExpectedPattern '"writes_output_artifact"\s*:\s*true'
+
+    if ($fssOutputResult.ExitCode -eq 0) {
+      if (-not (Test-Path $fssArtifact)) {
+        Write-Output "FAIL specbridge-final-standardization-status-output-path: artifact was not written."
+        $script:failed = $true
+      } else {
+        $fssWritten = $null
+        try { $fssWritten = Get-Content $fssArtifact -Raw -Encoding UTF8 | ConvertFrom-Json } catch {}
+        if ($null -eq $fssWritten) {
+          Write-Output "FAIL specbridge-final-standardization-status-output-path: written artifact is not valid JSON."
+          $script:failed = $true
+        } elseif ($fssWritten.command -ne "specbridge-final-standardization-status") {
+          Write-Output "FAIL specbridge-final-standardization-status-output-path: written artifact command mismatch."
+          $script:failed = $true
+        } elseif ($fssWritten.standard_boundaries.writes_output_artifact -ne $true) {
+          Write-Output "FAIL specbridge-final-standardization-status-output-path: writes_output_artifact should be true."
+          $script:failed = $true
+        } else {
+          Write-Output "PASS specbridge-final-standardization-status-output-path: artifact written and valid."
+        }
+      }
+
+      # 13. Force required when replacing
+      $fssExistingResult = Invoke-Cli -Arguments @(
+        "specbridge-final-standardization-status",
+        "-OutputPath",
+        ".specbridge/standard-readiness/final-standardization.status.json"
+      )
+      Assert-Failure `
+        -Name "specbridge-final-standardization-status-output-path-requires-force" `
+        -Result $fssExistingResult `
+        -ExpectedPattern "use -Force"
+    }
+
+    # Restore artifact state after mutation tests
+    if ($fssArtifactExistedBefore) {
+      $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+      [System.IO.File]::WriteAllText($fssArtifact, $fssArtifactOriginalRaw, $utf8NoBom)
+    } else {
+      Remove-Item $fssArtifact -Force -ErrorAction SilentlyContinue
+    }
+
+    # 14. OutputPath outside the contract artifact must fail
+    $fssBadPathResult = Invoke-Cli -Arguments @(
+      "specbridge-final-standardization-status",
+      "-OutputPath",
+      "docs/bad-final-standardization.json"
+    )
+    Assert-Failure `
+      -Name "specbridge-final-standardization-status-bad-output-path" `
+      -Result $fssBadPathResult `
+      -ExpectedPattern "OutputPath must be .specbridge/standard-readiness/final-standardization.status.json"
   }
   finally {
     Pop-Location

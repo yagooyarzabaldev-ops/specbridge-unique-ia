@@ -88,7 +88,9 @@ SpecBridge currently has:
 
 ## Next Recommended Task
 
-No active governed implementation task is selected. Issue #249 (`issue-249-governed-branch-cleanup`) is complete: PR #250 merged the dedicated one-time cleanup authorization, Claude Code read-only classification review, exact cleanup evidence, refreshed branch/repository health artifacts, and dashboards. Issue #249 closed as completed and post-merge closure evidence was recorded.
+Issue #252 (`issue-252-final-standardization-status`) is active. The task creates a deterministic read-only final standardization status surface so the remaining standardization gap is visible as auditable evidence before the next serious product-build pilot.
+
+Issue #249 (`issue-249-governed-branch-cleanup`) is complete: PR #250 merged the dedicated one-time cleanup authorization, Claude Code read-only classification review, exact cleanup evidence, refreshed branch/repository health artifacts, and dashboards. Issue #249 closed as completed and post-merge closure evidence was recorded.
 
 Issue #246 (`issue-246-agent-sdk-light-practices`) is complete: PR #247 merged lightweight Claude Agent SDK loop practices for read-only MCP tool annotations, compaction/summary preservation instructions, and future result/cost/session evidence documentation; issue #246 closed as completed and post-merge closure evidence was recorded.
 

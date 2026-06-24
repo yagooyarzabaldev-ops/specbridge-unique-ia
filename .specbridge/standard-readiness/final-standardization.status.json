@@ -1,0 +1,166 @@
+{
+    "command":  "specbridge-final-standardization-status",
+    "ok":  true,
+    "schema_version":  "1",
+    "standardization_completion_pct":  95,
+    "remaining_standardization_pct":  5,
+    "readiness":  "continue_current_goal",
+    "recommended_next_action":  "continue_current_goal",
+    "remaining_gaps":  [
+                           {
+                               "category":  "serious_pilot",
+                               "gap":  "Next serious product-build pilot has not run against the final standardization status surface.",
+                               "status":  "ready_for_contract",
+                               "gate":  "dedicated_governed_project_pilot_contract"
+                           },
+                           {
+                               "category":  "repository_hygiene",
+                               "gap":  "Branch cleanup enforcement remains disabled after the one-time issue #249 cleanup.",
+                               "status":  "policy_gated",
+                               "gate":  "dedicated_cleanup_activation_contract"
+                           },
+                           {
+                               "category":  "artifact_hygiene",
+                               "gap":  "Artifact retention enforcement remains disabled; inventory and policy evaluation are read-only.",
+                               "status":  "policy_gated",
+                               "gate":  "dedicated_retention_activation_contract"
+                           },
+                           {
+                               "category":  "mcp_runtime",
+                               "gap":  "Mutation-capable MCP tools are not enabled; current MCP tool surface remains read-only local runtime.",
+                               "status":  "blocked_by_default",
+                               "gate":  "dedicated_mutation_capability_contract"
+                           },
+                           {
+                               "category":  "hosted_runtime",
+                               "gap":  "Network MCP transport and hosted server deployment are not implemented.",
+                               "status":  "product_decision_required",
+                               "gate":  "dedicated_hosted_runtime_contract"
+                           }
+                       ],
+    "blocked_boundaries":  [
+                               "branch_cleanup_apply",
+                               "artifact_retention_apply",
+                               "network_mcp_transport",
+                               "hosted_mcp_server",
+                               "claude_launch_inside_command",
+                               "codex_launch_inside_command",
+                               "github_mutation_inside_command",
+                               "dependency_installation",
+                               "deployment_automation",
+                               "production_deployment"
+                           ],
+    "recommended_next_contracts":  [
+                                       {
+                                           "contract_slug":  "serious-product-build-pilot",
+                                           "description":  "Run a real bounded product-build pilot from project starter to contracts, execution evidence, validations, and audit.",
+                                           "gate":  "ready_after_issue_252_merge"
+                                       },
+                                       {
+                                           "contract_slug":  "pr-state-aware-branch-cleanup-maintenance",
+                                           "description":  "Create a new exact-list cleanup contract for post-merge issue branches, preserving unmerged and closed-without-merge branches.",
+                                           "gate":  "dedicated_cleanup_authorization_required"
+                                       },
+                                       {
+                                           "contract_slug":  "artifact-retention-activation",
+                                           "description":  "Move artifact retention from read-only policy to governed enforcement only after exact retention rules and rollback evidence exist.",
+                                           "gate":  "operator_activation_required"
+                                       },
+                                       {
+                                           "contract_slug":  "mutation-capable-mcp-tools",
+                                           "description":  "Design and pilot mutation-capable MCP tools with explicit allowlists, dry-run mode, audit logs, and policy gates.",
+                                           "gate":  "security_review_and_dedicated_contract_required"
+                                       },
+                                       {
+                                           "contract_slug":  "hosted-network-mcp-runtime",
+                                           "description":  "Define hosted/network MCP runtime requirements before any transport, deployment, secret, or production boundary is changed.",
+                                           "gate":  "product_decision_required"
+                                       }
+                                   ],
+    "validation_expectations":  [
+                                    "validate-contracts.ps1",
+                                    "validate-contract-scopes.ps1",
+                                    "validate-final-reports.ps1",
+                                    "validate-audit-packets.ps1",
+                                    "validate-chatgpt-audits.ps1",
+                                    "test-specbridge-cli.ps1",
+                                    "specbridge-smoke.ps1",
+                                    "specbridge-doctor -FixPlan -Offline",
+                                    "specbridge-standard-readiness",
+                                    "specbridge-final-standardization-status"
+                                ],
+    "task_selection":  {
+                           "current_goal_status":  "active",
+                           "current_task_id":  "issue-252-final-standardization-status",
+                           "eligible_task_count":  0,
+                           "excluded_issue_count":  1,
+                           "recommended_action":  "continue_current_goal"
+                       },
+    "doctor":  {
+                   "health":  "healthy",
+                   "mode":  "local",
+                   "action_count":  0,
+                   "blocker_count":  0,
+                   "warning_count":  0,
+                   "online_checks_enabled":  false,
+                   "online_checks_available":  false
+               },
+    "repository_health":  {
+                              "overall_health_posture":  "debt_present_cleanup_blocked",
+                              "cleanup_permission":  "none",
+                              "enforcement_status":  "none",
+                              "branch_cleanup_blocked":  7,
+                              "artifact_retention_blocked":  18,
+                              "total_blocked_actions":  25
+                          },
+    "token_context_governance":  {
+                                     "governance_id":  "specbridge-token-context-governance",
+                                     "status":  "active",
+                                     "provider_source_count":  8,
+                                     "max_budget_usd_default":  "2.00",
+                                     "max_budget_usd_ceiling":  "10.00",
+                                     "max_turns_default":  8,
+                                     "blocked_disclosure_count":  10
+                                 },
+    "mcp_resource_surface":  {
+                                 "mcp_server_status":  "readonly_local_runtime",
+                                 "read_only_policy":  true,
+                                 "resource_count":  3,
+                                 "resource_uris":  [
+                                                       "specbridge://operator/current-goal",
+                                                       "specbridge://operator/doctor-fix-plan",
+                                                       "specbridge://operator/orchestration-summaries"
+                                                   ]
+                             },
+    "standard_boundaries":  {
+                                "launches_claude":  false,
+                                "launches_codex":  false,
+                                "calls_network":  false,
+                                "mutates_github":  false,
+                                "reads_secrets":  false,
+                                "changes_billing":  false,
+                                "changes_ci_cd_security":  false,
+                                "deploys":  false,
+                                "cleanup_permission":  "none",
+                                "retention_enforcement":  "none",
+                                "writes_output_artifact":  true
+                            },
+    "evidence_sources":  [
+                             "scripts/lib/intake-doctor.ps1",
+                             "scripts/lib/standard-readiness.ps1",
+                             "scripts/lib/repository-health-summary.ps1",
+                             "scripts/lib/token-governance.ps1",
+                             "scripts/lib/mcp-resources.ps1",
+                             ".specbridge/state/current-goal.json",
+                             ".specbridge/policies/operator-task-decisions.json",
+                             ".specbridge/policies/token-context-governance.json",
+                             ".specbridge/context/CURRENT_GOAL.md"
+                         ],
+    "notes":  [
+                  "This command is a deterministic read-only final standardization status snapshot.",
+                  "standardization_completion_pct=95 reflects governed infrastructure completeness; remaining 5% is policy-gated or pilot-gated, not an untracked gap.",
+                  "blocked_boundaries are permanent per current policy and require explicit operator authorization to activate.",
+                  "recommended_next_contracts are advisory; each requires standard governed task intake before execution.",
+                  "Run this command before a serious product-build pilot to confirm repository readiness posture."
+              ]
+}

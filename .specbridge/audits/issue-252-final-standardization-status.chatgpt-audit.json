@@ -1,0 +1,106 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-252-final-standardization-status",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-252-final-standardization-status.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-252-final-standardization-status.execution.md",
+  "final_report_path": ".specbridge/reports/issue-252-final-standardization-status.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "The implementation adds the contracted specbridge-final-standardization-status command, wired into scripts/specbridge.ps1, implemented in scripts/lib/standard-completion.ps1, documented in docs/specbridge-final-standardization-status.md and README.md, and covered by CLI tests.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "The command reports readiness, repository health, standardization_completion_pct=95, remaining_standardization_pct=5, categorized remaining_gaps, blocked_boundaries, recommended_next_contracts, validation_expectations, evidence sources, and false mutation/runtime/deployment boundaries. OutputPath is restricted to .specbridge/standard-readiness/final-standardization.status.json and requires Force for replacement.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "No branch cleanup, artifact cleanup, retention enforcement, mutation-capable MCP, hosted/network runtime, GitHub mutation inside the command, dependency installation, workflow security change, production change, secret access, billing, auth, database, or deployment work occurred.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The command sets launches_claude=false, launches_codex=false, calls_network=false, mutates_github=false, reads_secrets=false, changes_billing=false, changes_ci_cd_security=false, deploys=false, cleanup_permission=none, and retention_enforcement=none.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "All changed files are declared in the issue-252 scope manifest exclusive_write list after adding ledger and dashboard evidence.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "validate-contracts, validate-contract-scopes, test-specbridge-cli, specbridge-smoke, validate-final-reports, validate-audit-packets, validate-chatgpt-audits, specbridge-doctor, specbridge-final-standardization-status, and git diff --check passed locally. Doctor is healthy with 0 warnings and 0 blockers after ledger and dashboard evidence refresh.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "Local smoke passed. GitHub PR #253 checks passed: claude-review, validate-foundation, generate-pr-review-report, and review-gate.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report marks completion_status=ready_for_human_merge, records GitHub CI as passed, records agent-side merge as blocked by .claude/rules/specbridge-autonomous-execution.md, and lists unresolved policy-gated future work instead of claiming cleanup, retention, MCP mutation, hosted runtime, or serious pilot execution are complete.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "claude_code_execution",
+      "file": ".specbridge/reports/issue-252-final-standardization-status.final-report.json",
+      "line": null,
+      "evidence": "Claude Code was invoked. The first attempt was blocked by the Claude permission layer, and the second attempt produced the initial command/tests/docs patch before session limit. Codex completed hardening and validation.",
+      "recommendation": "If future tasks require uninterrupted Claude Code writes, add a dedicated contract for Claude permission automation rather than broadening settings inside unrelated work.",
+      "blocking": false
+    },
+    {
+      "severity": "info",
+      "category": "standardization_posture",
+      "file": "scripts/lib/standard-completion.ps1",
+      "line": null,
+      "evidence": "The command records 95 percent complete, 5 percent remaining, and five categorized remaining gaps: serious_pilot, repository_hygiene, artifact_hygiene, mcp_runtime, hosted_runtime.",
+      "recommendation": "Use serious-product-build-pilot as the next governed task after PR merge.",
+      "blocking": false
+    },
+    {
+      "severity": "info",
+      "category": "merge_policy",
+      "file": ".claude/rules/specbridge-autonomous-execution.md",
+      "line": null,
+      "evidence": "GitHub PR #253 is mergeable and checks passed, but repository rules explicitly forbid agents from merging PRs.",
+      "recommendation": "Have the human/operator merge PR #253, then run the normal post-merge memory closure contract.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "Agent-side merge is blocked by repository policy even though CI passed.",
+    "Remaining future work is policy-gated or pilot-gated and requires dedicated contracts."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-252-final-standardization-status.audit-packet.json",
+    ".specbridge/audits/issue-252-final-standardization-status.chatgpt-audit.json",
+    ".specbridge/contracts/issue-252-final-standardization-status.execution.md",
+    ".specbridge/reports/issue-252-final-standardization-status.final-report.json",
+    ".specbridge/scopes/issue-252-final-standardization-status.scope.json",
+    ".specbridge/standard-readiness/final-standardization.status.json",
+    "README.md",
+    "docs/specbridge-final-standardization-status.md",
+    "scripts/lib/standard-completion.ps1",
+    "scripts/specbridge.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "contract_id": "issue-252-final-standardization-status",
+  "run_id": "sb-20260623-0252f1a0",
+  "status": "active",
+  "exclusive_write": [
+    ".specbridge/contracts/issue-252-final-standardization-status.execution.md",
+    ".specbridge/scopes/issue-252-final-standardization-status.scope.json",
+    ".specbridge/reports/issue-252-final-standardization-status.final-report.json",
+    ".specbridge/audit-packets/issue-252-final-standardization-status.audit-packet.json",
+    ".specbridge/audits/issue-252-final-standardization-status.chatgpt-audit.json",
+    ".specbridge/standard-readiness/final-standardization.status.json",
+    ".specbridge/artifact-inventory/current.inventory.json",
+    ".specbridge/repository-health/current.summary.json",
+    ".specbridge/standard-readiness/current.status.json",
+    ".specbridge/ledger/operations.ndjson",
+    ".specbridge/state/current-goal.json",
+    ".specbridge/context/CURRENT_GOAL.md",
+    "README.md",
+    "docs/specbridge-final-standardization-status.md",
+    "docs/status-dashboard.html",
+    "docs/specbridge-studio.html",
+    "scripts/specbridge.ps1",
+    "scripts/lib/standard-completion.ps1",
+    "scripts/test-specbridge-cli.ps1"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/policies/operator-task-decisions.json",
+    ".specbridge/policies/token-context-governance.json",
+    "docs/specbridge-standard-readiness-status.md",
+    "scripts/lib/common.ps1",
+    "scripts/lib/intake-doctor.ps1",
+    "scripts/lib/repository-health-summary.ps1",
+    "scripts/lib/token-governance.ps1",
+    "scripts/lib/mcp-resources.ps1",
+    "scripts/lib/standard-readiness.ps1"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-252-final-standardization-status.final-report.json"
+}
