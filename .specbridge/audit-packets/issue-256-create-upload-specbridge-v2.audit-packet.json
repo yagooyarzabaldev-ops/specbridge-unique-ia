@@ -1,0 +1,146 @@
+﻿{
+    "schema_version":  "1",
+    "task_id":  "issue-256-create-upload-specbridge-v2",
+    "generated_by":  "specbridge-audit-packet-generator",
+    "execution_contract_path":  ".specbridge/contracts/issue-256-create-upload-specbridge-v2.execution.md",
+    "changed_files":  [
+                          ".specbridge/audit-packets/issue-256-create-upload-specbridge-v2.audit-packet.json",
+                          ".specbridge/audits/issue-256-create-upload-specbridge-v2.chatgpt-audit.json",
+                          ".specbridge/contracts/issue-256-create-upload-specbridge-v2.execution.md",
+                          ".specbridge/github-evidence/issue-256-create-upload-specbridge-v2.issue.json",
+                          ".specbridge/github-evidence/issue-256-create-upload-specbridge-v2.repo.json",
+                          ".specbridge/reports/issue-256-create-upload-specbridge-v2.final-report.json",
+                          ".specbridge/scopes/issue-256-create-upload-specbridge-v2.scope.json"
+                      ],
+    "diff_summary":  [
+                         {
+                             "file":  ".specbridge/audit-packets/issue-256-create-upload-specbridge-v2.audit-packet.json",
+                             "added_lines":  null,
+                             "deleted_lines":  null
+                         },
+                         {
+                             "file":  ".specbridge/audits/issue-256-create-upload-specbridge-v2.chatgpt-audit.json",
+                             "added_lines":  null,
+                             "deleted_lines":  null
+                         },
+                         {
+                             "file":  ".specbridge/contracts/issue-256-create-upload-specbridge-v2.execution.md",
+                             "added_lines":  131,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/github-evidence/issue-256-create-upload-specbridge-v2.issue.json",
+                             "added_lines":  16,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/github-evidence/issue-256-create-upload-specbridge-v2.repo.json",
+                             "added_lines":  38,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/reports/issue-256-create-upload-specbridge-v2.final-report.json",
+                             "added_lines":  39,
+                             "deleted_lines":  0
+                         },
+                         {
+                             "file":  ".specbridge/scopes/issue-256-create-upload-specbridge-v2.scope.json",
+                             "added_lines":  28,
+                             "deleted_lines":  0
+                         }
+                     ],
+    "validation_commands":  [
+                                "gh auth status",
+                                "gh repo create yagooyarzabaldev-ops/specbridge-v2 --private --source . --remote origin --push",
+                                "gh repo view yagooyarzabaldev-ops/specbridge-v2 before create",
+                                "gh repo view yagooyarzabaldev-ops/specbridge-v2 --json nameWithOwner,visibility,url,defaultBranchRef,pushedAt,isPrivate",
+                                "gh --version",
+                                "git diff --check",
+                                "git ls-remote --heads origin",
+                                "git remote -v in specbridge-v2",
+                                "git status --short --branch in specbridge-v2",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+                                "powershell -NoProfile -ExecutionPolicy Bypass -File D:\\Antigravity\\Infinite Process\\specbridge-v2\\scripts\\test.ps1"
+                            ],
+    "validation_results":  [
+                               {
+                                   "command":  "gh --version",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "gh auth status",
+                                   "result":  "passed for yagooyarzabaldev-ops with repo scope, token value omitted"
+                               },
+                               {
+                                   "command":  "gh repo view yagooyarzabaldev-ops/specbridge-v2 before create",
+                                   "result":  "repository not found as expected"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File D:\\Antigravity\\Infinite Process\\specbridge-v2\\scripts\\test.ps1",
+                                   "result":  "passed with 33 passed, 0 failed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "gh repo create yagooyarzabaldev-ops/specbridge-v2 --private --source . --remote origin --push",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "gh repo view yagooyarzabaldev-ops/specbridge-v2 --json nameWithOwner,visibility,url,defaultBranchRef,pushedAt,isPrivate",
+                                   "result":  "passed with visibility PRIVATE"
+                               },
+                               {
+                                   "command":  "git status --short --branch in specbridge-v2",
+                                   "result":  "clean, master tracks origin/master"
+                               },
+                               {
+                                   "command":  "git remote -v in specbridge-v2",
+                                   "result":  "origin points to https://github.com/yagooyarzabaldev-ops/specbridge-v2.git"
+                               },
+                               {
+                                   "command":  "git ls-remote --heads origin",
+                                   "result":  "passed with refs/heads/master at f224ff1a5acde330fa12763d34c78666e4b86622"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+                                   "result":  "passed"
+                               },
+                               {
+                                   "command":  "git diff --check",
+                                   "result":  "passed"
+                               }
+                           ],
+    "final_report_path":  ".specbridge/reports/issue-256-create-upload-specbridge-v2.final-report.json",
+    "ci_status":  "not_collected",
+    "pr_review_report_path":  null,
+    "policy_result":  "Within policy for the dedicated issue #256 contract and explicit user authorization. The remote repository was created private, only yagooyarzabaldev-ops/specbridge-v2 was created, local master was pushed without force push, and no dependencies, package managers, secrets, production configuration, billing, authentication, authorization, database changes, CI/CD workflows, deployment, hosted runtime, mutation-capable MCP, cleanup enforcement, retention enforcement, or Qwen integration were touched.",
+    "unresolved_risks":  [
+                             "The v1 evidence branch is local and not merged into main yet.",
+                             "The new specbridge-v2 repository does not yet have GitHub CI because workflow creation was blocked for this contract.",
+                             "The remote repository is private; collaborators, branch protection, and CI policy are not configured yet."
+                         ],
+    "completion_status":  "completed",
+    "source_files":  [
+                         ".specbridge/contracts/issue-256-create-upload-specbridge-v2.execution.md",
+                         ".specbridge/reports/issue-256-create-upload-specbridge-v2.final-report.json"
+                     ],
+    "secret_omission":  "This packet contains repository-relative paths, line-count summaries, validation summaries, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}

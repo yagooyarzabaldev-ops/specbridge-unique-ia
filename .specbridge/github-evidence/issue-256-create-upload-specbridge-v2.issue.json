@@ -1,0 +1,16 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-256-create-upload-specbridge-v2",
+  "run_id": "sb-20260624-0256c0de",
+  "collected_by": "ChatGPT/Codex",
+  "collected_at": "2026-06-24",
+  "repository": "yagooyarzabaldev-ops/specbridge",
+  "issue": {
+    "number": 256,
+    "url": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/256",
+    "title": "Create and upload SpecBridge v2 repository",
+    "state": "open"
+  },
+  "mutation_summary": "Created GitHub issue #256 as the governed v1 anchor for creating and uploading the private specbridge-v2 repository.",
+  "policy_result": "Allowed by explicit user request. This issue authorizes a bounded private repository creation and push for yagooyarzabaldev-ops/specbridge-v2 only."
+}

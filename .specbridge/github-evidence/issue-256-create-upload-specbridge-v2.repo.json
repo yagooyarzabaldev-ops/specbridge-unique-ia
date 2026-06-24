@@ -1,0 +1,38 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-256-create-upload-specbridge-v2",
+  "run_id": "sb-20260624-0256c0de",
+  "collected_by": "ChatGPT/Codex",
+  "collected_at": "2026-06-24",
+  "authorized_by_user_request": "Crear el repositorio y subelo",
+  "repository": {
+    "name_with_owner": "yagooyarzabaldev-ops/specbridge-v2",
+    "url": "https://github.com/yagooyarzabaldev-ops/specbridge-v2",
+    "visibility": "PRIVATE",
+    "is_private": true,
+    "default_branch": "master",
+    "pushed_at": "2026-06-24T18:44:44Z"
+  },
+  "local_repository": {
+    "path": "D:\\Antigravity\\Infinite Process\\specbridge-v2",
+    "branch": "master",
+    "remote": "https://github.com/yagooyarzabaldev-ops/specbridge-v2.git",
+    "tracking": "origin/master",
+    "status": "clean"
+  },
+  "remote_refs": [
+    {
+      "ref": "refs/heads/master",
+      "sha": "f224ff1a5acde330fa12763d34c78666e4b86622"
+    }
+  ],
+  "commands": [
+    "gh repo view yagooyarzabaldev-ops/specbridge-v2 --json nameWithOwner,visibility,url,defaultBranchRef",
+    "gh repo create yagooyarzabaldev-ops/specbridge-v2 --private --source . --remote origin --push",
+    "gh repo view yagooyarzabaldev-ops/specbridge-v2 --json nameWithOwner,visibility,url,defaultBranchRef,pushedAt,isPrivate",
+    "git status --short --branch",
+    "git remote -v",
+    "git ls-remote --heads origin"
+  ],
+  "policy_result": "Passed. Created the private specbridge-v2 GitHub repository and pushed local master without force push. No public visibility, dependency installation, secrets, production, billing, auth, database, CI/CD workflow, deployment, hosted runtime, MCP mutation, cleanup enforcement, retention enforcement, or Qwen integration occurred."
+}

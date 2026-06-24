@@ -1,0 +1,28 @@
+{
+  "contract_id": "issue-256-create-upload-specbridge-v2",
+  "run_id": "sb-20260624-0256c0de",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/contracts/issue-256-create-upload-specbridge-v2.execution.md",
+    ".specbridge/scopes/issue-256-create-upload-specbridge-v2.scope.json",
+    ".specbridge/github-evidence/issue-256-create-upload-specbridge-v2.issue.json",
+    ".specbridge/github-evidence/issue-256-create-upload-specbridge-v2.repo.json",
+    ".specbridge/reports/issue-256-create-upload-specbridge-v2.final-report.json",
+    ".specbridge/audit-packets/issue-256-create-upload-specbridge-v2.audit-packet.json",
+    ".specbridge/audits/issue-256-create-upload-specbridge-v2.chatgpt-audit.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-255-serious-product-build-pilot.execution.md",
+    ".specbridge/runtime-evidence/issue-255-specbridge-v2-claude-output.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-255-serious-product-build-pilot"
+  ],
+  "final_report": ".specbridge/reports/issue-256-create-upload-specbridge-v2.final-report.json"
+}
