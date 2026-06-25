@@ -1,0 +1,43 @@
+{
+  "summary": "Completed the bounded SpecBridge v2 operation-list and report-schema hardening phase for issue #259. Claude Code ran first and produced a useful partial implementation but could not run tests in its permission mode. Codex reviewed, replaced the fragile raw-regex array check with a JSON property scanner, added report-schema regression coverage, corrected v2 push authorization for #259, validated locally, committed, pushed, and verified CI. The v2 commit 17519712a6ed3d6841cc63ed351bb945e7c2915f was pushed to origin/master and GitHub Actions CI passed.",
+  "changed_files": [
+    ".specbridge/contracts/issue-259-specbridge-v2-operation-report-hardening.execution.md",
+    ".specbridge/scopes/issue-259-specbridge-v2-operation-report-hardening.scope.json",
+    ".specbridge/github-evidence/issue-259-specbridge-v2-operation-report-hardening.issue.json",
+    ".specbridge/github-evidence/issue-259-specbridge-v2-operation-report-hardening.repo.json",
+    ".specbridge/github-evidence/issue-259-specbridge-v2-operation-report-hardening.ci.json",
+    ".specbridge/runtime-evidence/issue-259-specbridge-v2-claude-output.md",
+    ".specbridge/reports/issue-259-specbridge-v2-operation-report-hardening.final-report.json",
+    ".specbridge/audit-packets/issue-259-specbridge-v2-operation-report-hardening.audit-packet.json",
+    ".specbridge/audits/issue-259-specbridge-v2-operation-report-hardening.chatgpt-audit.json"
+  ],
+  "validations": [
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed before v2 mutation",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: initially failed due invalid run_id format, then passed after run_id repair",
+    "SpecBridge v1 git diff --check: passed before v2 mutation",
+    "SpecBridge v2 Claude Code first invocation failed before execution because --print prompt input was not accepted",
+    "SpecBridge v2 Claude Code second invocation ran approximately 595 seconds, produced partial implementation, and did not run shell tests due Claude permission mode",
+    "SpecBridge v2 powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\test.ps1: passed with 156 passed, 0 failed",
+    "SpecBridge v2 git diff --check: passed",
+    "SpecBridge v2 touched-file encoding scan: passed, all checked files ASCII-only with no UTF-8 BOM",
+    "SpecBridge v2 git commit: 17519712a6ed3d6841cc63ed351bb945e7c2915f Harden operation and report validation",
+    "SpecBridge v2 git push origin master: passed, 95870cc..1751971",
+    "SpecBridge v2 gh run view 28144078342: CI completed successfully on 17519712a6ed3d6841cc63ed351bb945e7c2915f",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed after evidence creation",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed after evidence creation",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed after evidence creation",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed after evidence creation",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed after evidence creation",
+    "SpecBridge v1 git diff --check: passed"
+  ],
+  "policy_result": "Within the dedicated issue #259 contract. The work did not access secrets, install dependencies, change production configuration, billing, authentication, authorization, databases, deployment automation, hosted runtimes, external AI providers, mutation-capable MCP tools, repository visibility, CI workflow security, force push, branch deletion, or remote deletion. The only remote mutation after local validation was the authorized normal non-force push to specbridge-v2 origin/master and GitHub CI/status reads.",
+  "risk_result": "Medium-risk validator work was bounded to declared v2 files and additive tests. The validator now rejects malformed array fields, blank/non-string list entries, duplicate operation names, and allowed/forbidden operation conflicts while preserving existing exit codes and report fields.",
+  "unresolved_risks": [
+    "The v1 evidence branch is local and not merged into main.",
+    "specbridge-v2 master remains unprotected because branch protection was previously blocked by GitHub plan/private visibility.",
+    "The operation-list validator enforces list shape and internal conflicts, but it does not execute or sandbox operations; runtime enforcement remains future scope."
+  ],
+  "merge_status": "v2 master updated by normal non-force push. No autonomous merge into v1 main was performed; v1 evidence remains on branch codex/issue-255-serious-product-build-pilot and requires PR, CI, review, and explicit operator merge authority.",
+  "deployment_status": "Not applicable. No deployment was requested or performed.",
+  "completion_status": "completed"
+}

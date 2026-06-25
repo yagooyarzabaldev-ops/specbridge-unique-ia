@@ -1,0 +1,28 @@
+{
+  "repository": "yagooyarzabaldev-ops/specbridge-v2",
+  "url": "https://github.com/yagooyarzabaldev-ops/specbridge-v2",
+  "visibility": "PRIVATE",
+  "is_private": true,
+  "default_branch": "master",
+  "previous_remote_head": "95870cc672fb2fafe6bea9fd477017a5608e1833",
+  "pushed_head": "17519712a6ed3d6841cc63ed351bb945e7c2915f",
+  "pushed_commit_summary": "Harden operation and report validation",
+  "remote_master_ref": "17519712a6ed3d6841cc63ed351bb945e7c2915f refs/heads/master",
+  "changed_files": [
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/context/DO_NOT_TOUCH.md",
+    ".specbridge/contracts/operation-report-hardening.execution.md",
+    ".specbridge/scopes/operation-report-hardening.scope.json",
+    "AGENTS.md",
+    "README.md",
+    "docs/operations.md",
+    "src/specbridge_v2.ps1",
+    "tests/bootstrap.tests.ps1"
+  ],
+  "commit_stat": "9 files changed, 730 insertions, 32 deletions",
+  "local_validation": "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\test.ps1 passed with 156 passed, 0 failed",
+  "encoding_check": "Touched v2 files checked as ASCII-only with no UTF-8 BOM",
+  "diff_check": "git diff --check passed before commit",
+  "pushed_at": "2026-06-25T03:05:11Z",
+  "captured_at": "2026-06-25T03:06:00Z"
+}

@@ -1,0 +1,12 @@
+{
+  "issue_number": 259,
+  "title": "SpecBridge v2 operation-list and report-schema hardening",
+  "url": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/259",
+  "state": "open",
+  "created_at": "2026-06-25T02:48:04Z",
+  "updated_at": "2026-06-25T02:48:04Z",
+  "author": "yagooyarzabaldev-ops",
+  "body_summary": "Authorize bounded SpecBridge v2 solidification after cross-reference validation: operation-list validation, explicit report schema regression coverage, docs/context/policy updates, normal non-force v2 push, CI verification, and v1 evidence.",
+  "source": "gh_issue_create_after_connector_token_expired",
+  "captured_at": "2026-06-25T02:48:10Z"
+}

@@ -1,0 +1,30 @@
+{
+  "contract_id": "issue-259-specbridge-v2-operation-report-hardening",
+  "run_id": "sb-20260625-0259fade",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/contracts/issue-259-specbridge-v2-operation-report-hardening.execution.md",
+    ".specbridge/scopes/issue-259-specbridge-v2-operation-report-hardening.scope.json",
+    ".specbridge/github-evidence/issue-259-specbridge-v2-operation-report-hardening.issue.json",
+    ".specbridge/github-evidence/issue-259-specbridge-v2-operation-report-hardening.repo.json",
+    ".specbridge/github-evidence/issue-259-specbridge-v2-operation-report-hardening.ci.json",
+    ".specbridge/runtime-evidence/issue-259-specbridge-v2-claude-output.md",
+    ".specbridge/reports/issue-259-specbridge-v2-operation-report-hardening.final-report.json",
+    ".specbridge/audit-packets/issue-259-specbridge-v2-operation-report-hardening.audit-packet.json",
+    ".specbridge/audits/issue-259-specbridge-v2-operation-report-hardening.chatgpt-audit.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-258-specbridge-v2-cross-reference-validation.execution.md",
+    ".specbridge/reports/issue-258-specbridge-v2-cross-reference-validation.final-report.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-258-specbridge-v2-cross-reference-validation"
+  ],
+  "final_report": ".specbridge/reports/issue-259-specbridge-v2-operation-report-hardening.final-report.json"
+}

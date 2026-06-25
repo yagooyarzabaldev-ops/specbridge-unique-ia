@@ -1,0 +1,143 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-259-specbridge-v2-operation-report-hardening",
+  "generated_by": "ChatGPT/Codex",
+  "execution_contract_path": ".specbridge/contracts/issue-259-specbridge-v2-operation-report-hardening.execution.md",
+  "changed_files": [
+    ".specbridge/contracts/issue-259-specbridge-v2-operation-report-hardening.execution.md",
+    ".specbridge/scopes/issue-259-specbridge-v2-operation-report-hardening.scope.json",
+    ".specbridge/github-evidence/issue-259-specbridge-v2-operation-report-hardening.issue.json",
+    ".specbridge/github-evidence/issue-259-specbridge-v2-operation-report-hardening.repo.json",
+    ".specbridge/github-evidence/issue-259-specbridge-v2-operation-report-hardening.ci.json",
+    ".specbridge/runtime-evidence/issue-259-specbridge-v2-claude-output.md",
+    ".specbridge/reports/issue-259-specbridge-v2-operation-report-hardening.final-report.json",
+    ".specbridge/audit-packets/issue-259-specbridge-v2-operation-report-hardening.audit-packet.json",
+    ".specbridge/audits/issue-259-specbridge-v2-operation-report-hardening.chatgpt-audit.json"
+  ],
+  "diff_summary": [
+    {
+      "file": ".specbridge/contracts/issue-259-specbridge-v2-operation-report-hardening.execution.md",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/scopes/issue-259-specbridge-v2-operation-report-hardening.scope.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-259-specbridge-v2-operation-report-hardening.issue.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-259-specbridge-v2-operation-report-hardening.repo.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-259-specbridge-v2-operation-report-hardening.ci.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/runtime-evidence/issue-259-specbridge-v2-claude-output.md",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/reports/issue-259-specbridge-v2-operation-report-hardening.final-report.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/audit-packets/issue-259-specbridge-v2-operation-report-hardening.audit-packet.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/audits/issue-259-specbridge-v2-operation-report-hardening.chatgpt-audit.json",
+      "added_lines": null,
+      "deleted_lines": null
+    }
+  ],
+  "validation_commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File D:\\Antigravity\\Infinite Process\\specbridge-v2\\scripts\\test.ps1",
+    "git diff --check in specbridge-v2",
+    "touched-file encoding scan in specbridge-v2",
+    "git push origin master in specbridge-v2",
+    "gh run view 28144078342 --repo yagooyarzabaldev-ops/specbridge-v2 --json databaseId,headSha,status,conclusion,url,createdAt,updatedAt,name,displayTitle,event,jobs",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+    "git diff --check in specbridge"
+  ],
+  "validation_results": [
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+      "result": "passed before v2 mutation and after evidence creation"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+      "result": "initially failed for invalid run_id format, then passed after run_id repair and after evidence creation"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File D:\\Antigravity\\Infinite Process\\specbridge-v2\\scripts\\test.ps1",
+      "result": "passed with 156 passed and 0 failed"
+    },
+    {
+      "command": "git diff --check in specbridge-v2",
+      "result": "passed"
+    },
+    {
+      "command": "touched-file encoding scan in specbridge-v2",
+      "result": "passed with no UTF-8 BOM and ASCII-only bytes for touched files"
+    },
+    {
+      "command": "git push origin master in specbridge-v2",
+      "result": "passed, remote master updated to 17519712a6ed3d6841cc63ed351bb945e7c2915f"
+    },
+    {
+      "command": "gh run view 28144078342 --repo yagooyarzabaldev-ops/specbridge-v2",
+      "result": "passed, CI completed successfully"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+      "result": "passed after evidence creation"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+      "result": "passed after evidence creation"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+      "result": "passed after evidence creation"
+    },
+    {
+      "command": "git diff --check in specbridge",
+      "result": "passed"
+    }
+  ],
+  "final_report_path": ".specbridge/reports/issue-259-specbridge-v2-operation-report-hardening.final-report.json",
+  "ci_status": "passed",
+  "pr_review_report_path": null,
+  "policy_result": "Within issue #259 contract and policy. No protected production, billing, secrets, auth, database, deployment, dependency, visibility, CI workflow security, force-push, branch-deletion, or remote-deletion action was performed.",
+  "unresolved_risks": [
+    "The v1 evidence branch is not merged into main.",
+    "specbridge-v2 master is not branch-protected due the previously recorded GitHub plan/private visibility limitation.",
+    "Runtime enforcement of operation permissions remains future scope."
+  ],
+  "completion_status": "completed",
+  "source_files": [
+    ".specbridge/contracts/issue-259-specbridge-v2-operation-report-hardening.execution.md",
+    ".specbridge/scopes/issue-259-specbridge-v2-operation-report-hardening.scope.json",
+    ".specbridge/github-evidence/issue-259-specbridge-v2-operation-report-hardening.issue.json",
+    ".specbridge/github-evidence/issue-259-specbridge-v2-operation-report-hardening.repo.json",
+    ".specbridge/github-evidence/issue-259-specbridge-v2-operation-report-hardening.ci.json",
+    ".specbridge/runtime-evidence/issue-259-specbridge-v2-claude-output.md",
+    ".specbridge/reports/issue-259-specbridge-v2-operation-report-hardening.final-report.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths, line-count summaries, validation summaries, CI metadata, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, tokens, private keys, or credential values."
+}
