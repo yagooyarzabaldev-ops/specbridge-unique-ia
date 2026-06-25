@@ -1,0 +1,134 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-260-specbridge-v2-release-readiness-hardening",
+  "generated_by": "ChatGPT/Codex",
+  "execution_contract_path": ".specbridge/contracts/issue-260-specbridge-v2-release-readiness-hardening.execution.md",
+  "changed_files": [
+    ".specbridge/contracts/issue-260-specbridge-v2-release-readiness-hardening.execution.md",
+    ".specbridge/scopes/issue-260-specbridge-v2-release-readiness-hardening.scope.json",
+    ".specbridge/github-evidence/issue-260-specbridge-v2-release-readiness-hardening.issue.json",
+    ".specbridge/github-evidence/issue-260-specbridge-v2-release-readiness-hardening.repo.json",
+    ".specbridge/github-evidence/issue-260-specbridge-v2-release-readiness-hardening.ci.json",
+    ".specbridge/runtime-evidence/issue-260-specbridge-v2-claude-output.md",
+    ".specbridge/reports/issue-260-specbridge-v2-release-readiness-hardening.final-report.json",
+    ".specbridge/audit-packets/issue-260-specbridge-v2-release-readiness-hardening.audit-packet.json",
+    ".specbridge/audits/issue-260-specbridge-v2-release-readiness-hardening.chatgpt-audit.json"
+  ],
+  "diff_summary": [
+    {
+      "file": ".specbridge/contracts/issue-260-specbridge-v2-release-readiness-hardening.execution.md",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/scopes/issue-260-specbridge-v2-release-readiness-hardening.scope.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-260-specbridge-v2-release-readiness-hardening.issue.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-260-specbridge-v2-release-readiness-hardening.repo.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-260-specbridge-v2-release-readiness-hardening.ci.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/runtime-evidence/issue-260-specbridge-v2-claude-output.md",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/reports/issue-260-specbridge-v2-release-readiness-hardening.final-report.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/audit-packets/issue-260-specbridge-v2-release-readiness-hardening.audit-packet.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/audits/issue-260-specbridge-v2-release-readiness-hardening.chatgpt-audit.json",
+      "added_lines": null,
+      "deleted_lines": null
+    }
+  ],
+  "validation_commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File D:\\Antigravity\\Infinite Process\\specbridge-v2\\scripts\\test.ps1",
+    "git diff --check in specbridge-v2",
+    "touched-file encoding scan in specbridge-v2",
+    "git push origin master in specbridge-v2",
+    "gh run watch 28145621712 --repo yagooyarzabaldev-ops/specbridge-v2 --exit-status",
+    "gh run view 28145621712 --repo yagooyarzabaldev-ops/specbridge-v2 --json databaseId,headSha,status,conclusion,url,createdAt,updatedAt,name,displayTitle,event,jobs",
+    "git diff --check in specbridge"
+  ],
+  "validation_results": [
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+      "result": "passed before v2 mutation"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+      "result": "passed before v2 mutation"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File D:\\Antigravity\\Infinite Process\\specbridge-v2\\scripts\\test.ps1",
+      "result": "passed with 231 passed and 0 failed after Codex repair"
+    },
+    {
+      "command": "git diff --check in specbridge-v2",
+      "result": "passed"
+    },
+    {
+      "command": "touched-file encoding scan in specbridge-v2",
+      "result": "passed with no UTF-8 BOM and ASCII-only bytes for touched files"
+    },
+    {
+      "command": "git push origin master in specbridge-v2",
+      "result": "passed, remote master updated to 1c1def8aa349fa896100bc395702b764c1ede355"
+    },
+    {
+      "command": "gh run watch 28145621712 --repo yagooyarzabaldev-ops/specbridge-v2 --exit-status",
+      "result": "passed"
+    },
+    {
+      "command": "gh run view 28145621712 --repo yagooyarzabaldev-ops/specbridge-v2",
+      "result": "passed, CI completed successfully"
+    },
+    {
+      "command": "git diff --check in specbridge",
+      "result": "passed before final evidence validation"
+    }
+  ],
+  "final_report_path": ".specbridge/reports/issue-260-specbridge-v2-release-readiness-hardening.final-report.json",
+  "ci_status": "passed",
+  "pr_review_report_path": null,
+  "policy_result": "Within issue #260 contract and policy. No protected production, billing, secrets, auth, database, deployment, dependency, visibility, CI workflow security, force-push, branch-deletion, or remote-deletion action was performed.",
+  "unresolved_risks": [
+    "The v1 evidence branch is not merged into main.",
+    "specbridge-v2 master is not branch-protected due the previously recorded GitHub plan/private visibility limitation.",
+    "Runtime operation enforcement remains future scope.",
+    "CI action SHA pinning remains future CI workflow hardening scope."
+  ],
+  "completion_status": "completed",
+  "source_files": [
+    ".specbridge/contracts/issue-260-specbridge-v2-release-readiness-hardening.execution.md",
+    ".specbridge/scopes/issue-260-specbridge-v2-release-readiness-hardening.scope.json",
+    ".specbridge/github-evidence/issue-260-specbridge-v2-release-readiness-hardening.issue.json",
+    ".specbridge/github-evidence/issue-260-specbridge-v2-release-readiness-hardening.repo.json",
+    ".specbridge/github-evidence/issue-260-specbridge-v2-release-readiness-hardening.ci.json",
+    ".specbridge/runtime-evidence/issue-260-specbridge-v2-claude-output.md",
+    ".specbridge/reports/issue-260-specbridge-v2-release-readiness-hardening.final-report.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths, validation summaries, CI metadata, policy result, risks, and status only. It does not embed raw diffs, file contents, secrets, private keys, or credential values."
+}

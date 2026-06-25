@@ -1,0 +1,52 @@
+{
+  "repository": "yagooyarzabaldev-ops/specbridge-v2",
+  "workflow": "CI",
+  "run_id": 28145621712,
+  "run_url": "https://github.com/yagooyarzabaldev-ops/specbridge-v2/actions/runs/28145621712",
+  "event": "push",
+  "display_title": "Harden release readiness",
+  "head_sha": "1c1def8aa349fa896100bc395702b764c1ede355",
+  "status": "completed",
+  "conclusion": "success",
+  "created_at": "2026-06-25T03:51:39Z",
+  "updated_at": "2026-06-25T03:52:28Z",
+  "jobs": [
+    {
+      "name": "test",
+      "database_id": 83352087259,
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-06-25T03:51:43Z",
+      "completed_at": "2026-06-25T03:52:27Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run SpecBridge v2 test suite (Windows PowerShell 5.1)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "source": "gh_run_view",
+  "captured_at": "2026-06-25T03:52:35Z"
+}
