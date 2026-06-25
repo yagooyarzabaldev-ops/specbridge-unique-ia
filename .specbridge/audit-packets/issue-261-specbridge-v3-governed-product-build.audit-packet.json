@@ -1,0 +1,125 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-261-specbridge-v3-governed-product-build",
+  "generated_by": "ChatGPT/Codex",
+  "execution_contract_path": ".specbridge/contracts/issue-261-specbridge-v3-governed-product-build.execution.md",
+  "changed_files": [
+    ".specbridge/contracts/issue-261-specbridge-v3-governed-product-build.execution.md",
+    ".specbridge/scopes/issue-261-specbridge-v3-governed-product-build.scope.json",
+    ".specbridge/github-evidence/issue-261-specbridge-v3-governed-product-build.issue.json",
+    ".specbridge/github-evidence/issue-261-specbridge-v3-governed-product-build.repo.json",
+    ".specbridge/github-evidence/issue-261-specbridge-v3-governed-product-build.ci.json",
+    ".specbridge/runtime-evidence/issue-261-specbridge-v3-claude-output.md",
+    ".specbridge/reports/issue-261-specbridge-v3-governed-product-build.final-report.json",
+    ".specbridge/audit-packets/issue-261-specbridge-v3-governed-product-build.audit-packet.json",
+    ".specbridge/audits/issue-261-specbridge-v3-governed-product-build.chatgpt-audit.json"
+  ],
+  "diff_summary": [
+    {
+      "file": ".specbridge/contracts/issue-261-specbridge-v3-governed-product-build.execution.md",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/scopes/issue-261-specbridge-v3-governed-product-build.scope.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-261-specbridge-v3-governed-product-build.issue.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-261-specbridge-v3-governed-product-build.repo.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-261-specbridge-v3-governed-product-build.ci.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/runtime-evidence/issue-261-specbridge-v3-claude-output.md",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/reports/issue-261-specbridge-v3-governed-product-build.final-report.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/audit-packets/issue-261-specbridge-v3-governed-product-build.audit-packet.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/audits/issue-261-specbridge-v3-governed-product-build.chatgpt-audit.json",
+      "added_lines": null,
+      "deleted_lines": null
+    }
+  ],
+  "validation_commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File D:\\Antigravity\\Infinite Process\\specbridge-v3\\scripts\\test.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File D:\\Antigravity\\Infinite Process\\specbridge-v3\\src\\specbridge_v3.ps1 -ContractPath .specbridge\\contracts\\bootstrap.execution.md -ScopePath .specbridge\\scopes\\bootstrap.scope.json -MinimalismReviewPath .specbridge\\reviews\\bootstrap.minimalism-review.json -ReportPath .specbridge\\reports\\readiness-check.json -Quiet",
+    "git diff --check in specbridge-v3",
+    "gh repo view yagooyarzabaldev-ops/specbridge-v3 --json nameWithOwner,url,visibility,defaultBranchRef,pushedAt,updatedAt",
+    "gh run view 28203941848 --repo yagooyarzabaldev-ops/specbridge-v3 --json databaseId,headSha,status,conclusion,url,createdAt,updatedAt,name,displayTitle,event,jobs"
+  ],
+  "validation_results": [
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+      "result": "passed after #261 contract creation"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+      "result": "passed after #261 scope creation"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File D:\\Antigravity\\Infinite Process\\specbridge-v3\\scripts\\test.ps1",
+      "result": "passed with 177 bootstrap assertions and 24 minimalism-review assertions"
+    },
+    {
+      "command": "direct v3 bootstrap validator with minimalism review",
+      "result": "passed"
+    },
+    {
+      "command": "git diff --check in specbridge-v3",
+      "result": "passed before commit with line-ending warnings only"
+    },
+    {
+      "command": "gh repo view yagooyarzabaldev-ops/specbridge-v3",
+      "result": "passed, repository is PRIVATE and default branch is master"
+    },
+    {
+      "command": "gh run view 28203941848 --repo yagooyarzabaldev-ops/specbridge-v3",
+      "result": "passed, CI completed successfully"
+    }
+  ],
+  "final_report_path": ".specbridge/reports/issue-261-specbridge-v3-governed-product-build.final-report.json",
+  "ci_status": "passed",
+  "pr_review_report_path": null,
+  "policy_result": "Within issue #261 contract and policy. No protected production, billing, secrets, auth, database, deployment, dependency installation, external AI provider integration, hosted runtime, mutation MCP, public visibility, force push, branch deletion, or remote deletion action was performed.",
+  "unresolved_risks": [
+    "The v1 evidence branch is not merged into main.",
+    "specbridge-v3 master is not branch-protected.",
+    "Runtime operation enforcement remains future scope.",
+    "External Claude/provider orchestration remains future scope.",
+    "CI action SHA pinning remains future CI workflow hardening scope."
+  ],
+  "completion_status": "completed",
+  "source_files": [
+    ".specbridge/contracts/issue-261-specbridge-v3-governed-product-build.execution.md",
+    ".specbridge/scopes/issue-261-specbridge-v3-governed-product-build.scope.json",
+    ".specbridge/github-evidence/issue-261-specbridge-v3-governed-product-build.issue.json",
+    ".specbridge/github-evidence/issue-261-specbridge-v3-governed-product-build.repo.json",
+    ".specbridge/github-evidence/issue-261-specbridge-v3-governed-product-build.ci.json",
+    ".specbridge/runtime-evidence/issue-261-specbridge-v3-claude-output.md",
+    ".specbridge/reports/issue-261-specbridge-v3-governed-product-build.final-report.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths, validation summaries, CI metadata, policy result, risks, and status only. It does not embed raw diffs, secrets, private keys, or credential values."
+}

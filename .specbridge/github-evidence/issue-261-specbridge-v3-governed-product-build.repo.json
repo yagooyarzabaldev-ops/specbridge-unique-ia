@@ -1,0 +1,15 @@
+{
+  "nameWithOwner": "yagooyarzabaldev-ops/specbridge-v3",
+  "url": "https://github.com/yagooyarzabaldev-ops/specbridge-v3",
+  "visibility": "PRIVATE",
+  "isPrivate": true,
+  "defaultBranchRef": {
+    "name": "master"
+  },
+  "pushedAt": "2026-06-25T22:15:48Z",
+  "updatedAt": "2026-06-25T22:15:55Z",
+  "local_path": "D:\\Antigravity\\Infinite Process\\specbridge-v3",
+  "pushed_commit": "83ddcfa0358cb302ea11aadf0bdb0fc38f241f71",
+  "source": "gh_repo_create_and_view_after_push",
+  "captured_at": "2026-06-25T22:16:55Z"
+}

@@ -1,0 +1,29 @@
+{
+  "contract_id": "issue-261-specbridge-v3-governed-product-build",
+  "run_id": "sb-20260625-0261feed",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/contracts/issue-261-specbridge-v3-governed-product-build.execution.md",
+    ".specbridge/scopes/issue-261-specbridge-v3-governed-product-build.scope.json",
+    ".specbridge/github-evidence/issue-261-specbridge-v3-governed-product-build.issue.json",
+    ".specbridge/github-evidence/issue-261-specbridge-v3-governed-product-build.repo.json",
+    ".specbridge/github-evidence/issue-261-specbridge-v3-governed-product-build.ci.json",
+    ".specbridge/runtime-evidence/issue-261-specbridge-v3-claude-output.md",
+    ".specbridge/reports/issue-261-specbridge-v3-governed-product-build.final-report.json",
+    ".specbridge/audit-packets/issue-261-specbridge-v3-governed-product-build.audit-packet.json",
+    ".specbridge/audits/issue-261-specbridge-v3-governed-product-build.chatgpt-audit.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/reports/issue-260-specbridge-v2-release-readiness-hardening.final-report.json"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [
+    "issue-260-specbridge-v2-release-readiness-hardening"
+  ],
+  "final_report": ".specbridge/reports/issue-261-specbridge-v3-governed-product-build.final-report.json"
+}

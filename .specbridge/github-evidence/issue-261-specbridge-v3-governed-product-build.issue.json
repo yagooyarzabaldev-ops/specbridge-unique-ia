@@ -1,0 +1,12 @@
+{
+  "issue_number": 261,
+  "title": "SpecBridge v3 governed product build",
+  "url": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/261",
+  "state": "open",
+  "created_at": "2026-06-25T14:44:28Z",
+  "updated_at": "2026-06-25T14:44:28Z",
+  "author": "yagooyarzabaldev-ops",
+  "body_summary": "Authorize bounded SpecBridge v3 product-build pilot as a separate repository, keeping useful Ponytail discipline as local governance/review validation rather than external dependency.",
+  "source": "gh_issue_create_and_view",
+  "captured_at": "2026-06-25T14:44:40Z"
+}
