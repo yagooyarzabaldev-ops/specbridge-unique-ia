@@ -1,0 +1,58 @@
+{
+  "databaseId": 28218116898,
+  "name": "CI",
+  "displayTitle": "Harden operation plan gate and CI pinning",
+  "event": "push",
+  "headSha": "8f9555aef6672580e202c082c0e998cd9a71911d",
+  "status": "completed",
+  "conclusion": "success",
+  "createdAt": "2026-06-26T04:57:32Z",
+  "updatedAt": "2026-06-26T04:58:35Z",
+  "url": "https://github.com/yagooyarzabaldev-ops/specbridge-v3/actions/runs/28218116898",
+  "jobs": [
+    {
+      "databaseId": 83593351641,
+      "name": "test",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-06-26T04:57:35Z",
+      "completedAt": "2026-06-26T04:58:34Z",
+      "url": "https://github.com/yagooyarzabaldev-ops/specbridge-v3/actions/runs/28218116898/job/83593351641",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Checkout",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "Run tests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 6,
+          "name": "Post Checkout",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 7,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "annotation_summary": "GitHub emitted a non-failing annotation that actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 targets Node.js 20 and is being forced to run on Node.js 24.",
+  "captured_at": "2026-06-26T04:58:35Z",
+  "source": "gh run view 28218116898 --repo yagooyarzabaldev-ops/specbridge-v3"
+}

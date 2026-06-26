@@ -1,0 +1,45 @@
+{
+  "summary": "Completed issue #262 SpecBridge v3 pending hardening closure. The v3 workflow now pins actions/checkout to commit 34e114876b0b11c390a56381ad16ebd13914f8d5, v3 now validates operation plans locally against scope allowed_operations, forbidden_operations, and repository-relative allowed_paths without executing operations, and the new operation-plan test suite covers valid, forbidden, unlisted, scope-mismatched, traversal, out-of-scope, non-array, and empty operation plans. The v3 commit 8f9555aef6672580e202c082c0e998cd9a71911d was pushed normally to origin/master and GitHub Actions run 28218116898 passed. Branch protection was attempted and blocked by GitHub with HTTP 403 because private branch protection requires GitHub Pro or public visibility; public visibility changes are blocked by contract.",
+  "changed_files": [
+    ".specbridge/contracts/issue-262-specbridge-v3-pending-hardening-closure.execution.md",
+    ".specbridge/scopes/issue-262-specbridge-v3-pending-hardening-closure.scope.json",
+    ".specbridge/github-evidence/issue-262-specbridge-v3-pending-hardening-closure.issue.json",
+    ".specbridge/github-evidence/issue-262-specbridge-v3-pending-hardening-closure.repo.json",
+    ".specbridge/github-evidence/issue-262-specbridge-v3-pending-hardening-closure.ci.json",
+    ".specbridge/github-evidence/issue-262-specbridge-v3-pending-hardening-closure.branch-protection.json",
+    ".specbridge/runtime-evidence/issue-262-specbridge-v3-hardening-output.md",
+    ".specbridge/reports/issue-262-specbridge-v3-pending-hardening-closure.final-report.json",
+    ".specbridge/audit-packets/issue-262-specbridge-v3-pending-hardening-closure.audit-packet.json",
+    ".specbridge/audits/issue-262-specbridge-v3-pending-hardening-closure.chatgpt-audit.json"
+  ],
+  "validations": [
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed after run_id correction",
+    "SpecBridge v3 powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\test.ps1: passed with 178 bootstrap assertions, 24 minimalism-review assertions, 32 operation-plan assertions, 0 failures",
+    "SpecBridge v3 direct validator with -MinimalismReviewPath and -OperationPlanPath: passed with Status PASS",
+    "SpecBridge v3 git diff --check before commit: passed with line-ending warnings only",
+    "SpecBridge v3 git commit: 8f9555aef6672580e202c082c0e998cd9a71911d Harden operation plan gate and CI pinning",
+    "SpecBridge v3 git push origin master: passed, normal non-force push from 83ddcfa to 8f9555a",
+    "SpecBridge v3 gh repo view yagooyarzabaldev-ops/specbridge-v3: passed, visibility PRIVATE, default branch master",
+    "SpecBridge v3 gh run view 28218116898: CI completed successfully on 8f9555aef6672580e202c082c0e998cd9a71911d",
+    "SpecBridge v3 gh api branch protection read: failed with HTTP 403 exact blocker evidence recorded",
+    "SpecBridge v3 gh api branch protection write: failed with HTTP 403 exact blocker evidence recorded",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1: passed",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1: passed",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1: passed",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1: passed",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1: passed",
+    "SpecBridge v1 git diff --check: passed",
+    "SpecBridge v1 powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1: passed"
+  ],
+  "policy_result": "Within the dedicated issue #262 contract. The work touched only declared v1 evidence artifacts and the authorized external v3 repository. No secrets, dependency installation, package manager execution, production configuration, billing configuration, authentication, authorization, database changes, deployment automation, hosted runtime, external AI provider integration, mutation-capable MCP tools, public repository visibility changes, force push, branch deletion, remote deletion, destructive cleanup, v1 policy changes, v1 main merge, or operation-plan execution were performed.",
+  "risk_result": "The technical v3 hardening items authorized by #262 are complete: CI action pinning is applied, operation-plan validation is implemented and tested, v3 local tests pass, v3 CI passes, and branch protection was attempted. Branch protection remains unresolved only because GitHub blocks private branch protection for the current account or plan unless the repository is made public, which this contract explicitly forbids. V3 still validates operation plans only; executing or sandboxing operations remains future runtime scope.",
+  "unresolved_risks": [
+    "SpecBridge v1 evidence remains on branch codex/issue-255-serious-product-build-pilot and is not merged into main.",
+    "specbridge-v3 master is not branch-protected because GitHub returned HTTP 403 requiring GitHub Pro or public visibility for this private repository.",
+    "GitHub Actions emitted a non-failing Node.js 20 deprecation annotation for the pinned actions/checkout commit; future checkout major-version pinning may be needed under a later CI hardening contract.",
+    "V3 validates operation plans but does not execute or sandbox operations; execution runtime remains future dedicated scope."
+  ],
+  "merge_status": "v3 master was updated by normal non-force push. No autonomous merge into SpecBridge v1 main was performed; v1 evidence remains on branch codex/issue-255-serious-product-build-pilot and requires PR, CI, review, and explicit operator merge authority.",
+  "deployment_status": "Not applicable. No deployment was requested or performed. Rollback v3 by reverting commit 8f9555aef6672580e202c082c0e998cd9a71911d in the specbridge-v3 repository. This removes the operation-plan gate and workflow pinning while preserving the prior commit 83ddcfa0358cb302ea11aadf0bdb0fc38f241f71. No production state or deployed runtime was changed.",
+  "completion_status": "completed"
+}
