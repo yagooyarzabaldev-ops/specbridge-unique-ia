@@ -1,0 +1,85 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-266-public-v2-v3-visibility",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-266-public-v2-v3-visibility.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-266-public-v2-v3-visibility.execution.md",
+  "final_report_path": ".specbridge/reports/issue-266-public-v2-v3-visibility.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue #266 authorized temporary public visibility for specbridge-v2 and specbridge-v3 so branch protection could be applied under GitHub Free.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "Tracked-file audit evidence, public visibility evidence, branch protection evidence, and CI evidence were recorded for both repositories.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The public visibility boundary was explicitly authorized by a dedicated contract. The work did not change production, billing, auth, database, deployment, dependencies, CI workflow code, or source files in v2/v3.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "The tracked-file audit found no protected tracked filenames and no credential-like tracked content except one classified short sk- false positive in v2 STYLE_GUIDE.md.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "SpecBridge v1 file changes are restricted to the declared issue #266 evidence scope. External mutations were limited to repository visibility and branch protection for v2/v3.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "All local validators passed: validate-contracts.ps1, validate-contract-scopes.ps1, validate-final-reports.ps1, validate-audit-packets.ps1, validate-chatgpt-audits.ps1, git diff --check, and specbridge-smoke.ps1.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "The latest v2 and v3 CI runs on the protected heads completed successfully, and branch protection now requires the test check.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records that public exposure can be copied and rollback to private visibility requires a future dedicated contract.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "category": "validation_passed",
+      "file": ".specbridge/reports/issue-266-public-v2-v3-visibility.final-report.json",
+      "line": null,
+      "evidence": "All required local validators passed after evidence files were created: validate-contracts.ps1, validate-contract-scopes.ps1, validate-final-reports.ps1, validate-audit-packets.ps1, validate-chatgpt-audits.ps1, git diff --check, and specbridge-smoke.ps1.",
+      "recommendation": "Proceed with PR open and CI gate.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "Public exposure can be copied while v2/v3 remain public.",
+    "Rollback to private visibility requires a future dedicated contract."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-266-public-v2-v3-visibility.audit-packet.json",
+    ".specbridge/audits/issue-266-public-v2-v3-visibility.chatgpt-audit.json",
+    ".specbridge/contracts/issue-266-public-v2-v3-visibility.execution.md",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.branch-protection.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.secret-audit.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.visibility.json",
+    ".specbridge/reports/issue-266-public-v2-v3-visibility.final-report.json",
+    ".specbridge/scopes/issue-266-public-v2-v3-visibility.scope.json"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "captured_at": "2026-06-28T05:35:00Z",
+  "repositories": [
+    {
+      "name": "yagooyarzabaldev-ops/specbridge-v2",
+      "default_branch": "master",
+      "visibility_before": "private",
+      "head_sha": "1c1def8aa349fa896100bc395702b764c1ede355",
+      "latest_ci_run": 28145621712,
+      "latest_ci_conclusion": "success",
+      "required_check_candidate": "test"
+    },
+    {
+      "name": "yagooyarzabaldev-ops/specbridge-v3",
+      "default_branch": "master",
+      "visibility_before": "private",
+      "head_sha": "8f9555aef6672580e202c082c0e998cd9a71911d",
+      "latest_ci_run": 28218116898,
+      "latest_ci_conclusion": "success",
+      "required_check_candidate": "test"
+    }
+  ]
+}

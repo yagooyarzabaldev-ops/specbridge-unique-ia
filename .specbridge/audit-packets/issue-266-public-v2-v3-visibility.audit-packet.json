@@ -1,0 +1,113 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-266-public-v2-v3-visibility",
+  "generated_by": "ChatGPT/Codex",
+  "execution_contract_path": ".specbridge/contracts/issue-266-public-v2-v3-visibility.execution.md",
+  "changed_files": [
+    ".specbridge/contracts/issue-266-public-v2-v3-visibility.execution.md",
+    ".specbridge/scopes/issue-266-public-v2-v3-visibility.scope.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.issue.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.repo-before.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.secret-audit.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.visibility.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.branch-protection.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.ci.json",
+    ".specbridge/reports/issue-266-public-v2-v3-visibility.final-report.json",
+    ".specbridge/audit-packets/issue-266-public-v2-v3-visibility.audit-packet.json",
+    ".specbridge/audits/issue-266-public-v2-v3-visibility.chatgpt-audit.json"
+  ],
+  "diff_summary": [
+    {
+      "file": ".specbridge/contracts/issue-266-public-v2-v3-visibility.execution.md",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/scopes/issue-266-public-v2-v3-visibility.scope.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.issue.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.repo-before.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.secret-audit.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.visibility.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.branch-protection.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.ci.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/reports/issue-266-public-v2-v3-visibility.final-report.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/audit-packets/issue-266-public-v2-v3-visibility.audit-packet.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/audits/issue-266-public-v2-v3-visibility.chatgpt-audit.json",
+      "added_lines": null,
+      "deleted_lines": null
+    }
+  ],
+  "validation_commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+    "git diff --check",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1"
+  ],
+  "validation_results": [
+    {
+      "command": "SpecBridge evidence validators",
+      "result": "passed"
+    },
+    {
+      "command": "SpecBridge smoke validation",
+      "result": "passed"
+    }
+  ],
+  "final_report_path": ".specbridge/reports/issue-266-public-v2-v3-visibility.final-report.json",
+  "ci_status": "not_collected",
+  "pr_review_report_path": null,
+  "policy_result": "Within issue #266 contract and policy. Public visibility was changed only for specbridge-v2 and specbridge-v3 after explicit operator authorization and tracked-file audit. No blocked source, secret, production, billing, auth, database, dependency, deployment, CI workflow code, force push, branch deletion, remote deletion, or destructive cleanup action was performed.",
+  "unresolved_risks": [
+    "Public exposure can be copied while v2/v3 remain public.",
+    "Rollback to private visibility requires a future dedicated contract."
+  ],
+  "completion_status": "completed",
+  "source_files": [
+    ".specbridge/contracts/issue-266-public-v2-v3-visibility.execution.md",
+    ".specbridge/scopes/issue-266-public-v2-v3-visibility.scope.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.secret-audit.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.visibility.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.branch-protection.json",
+    ".specbridge/reports/issue-266-public-v2-v3-visibility.final-report.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths, validation summaries, policy results, risks, and status only. It does not embed raw file contents, raw diffs, private keys, or credential values."
+}

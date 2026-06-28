@@ -1,0 +1,34 @@
+{
+  "summary": "Completed issue #266 public visibility and branch protection for specbridge-v2 and specbridge-v3. Both repositories were audited for tracked protected files and credential-like markers before visibility changes. Both repositories were changed from private to public with explicit operator authorization, and master branch protection was applied requiring the existing test check with strict status checks, enforcing admins, and blocking force pushes and branch deletion.",
+  "changed_files": [
+    ".specbridge/contracts/issue-266-public-v2-v3-visibility.execution.md",
+    ".specbridge/scopes/issue-266-public-v2-v3-visibility.scope.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.issue.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.repo-before.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.secret-audit.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.visibility.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.branch-protection.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.ci.json",
+    ".specbridge/reports/issue-266-public-v2-v3-visibility.final-report.json",
+    ".specbridge/audit-packets/issue-266-public-v2-v3-visibility.audit-packet.json",
+    ".specbridge/audits/issue-266-public-v2-v3-visibility.chatgpt-audit.json"
+  ],
+  "validations": [
+    "SpecBridge validate-contracts.ps1: passed",
+    "SpecBridge validate-contract-scopes.ps1: passed",
+    "SpecBridge validate-final-reports.ps1: passed",
+    "SpecBridge validate-audit-packets.ps1: passed",
+    "SpecBridge validate-chatgpt-audits.ps1: passed",
+    "git diff --check: passed",
+    "SpecBridge smoke validation: passed"
+  ],
+  "policy_result": "Within issue #266 dedicated contract. Public visibility changes were explicitly authorized for specbridge-v2 and specbridge-v3 only. No secrets, .env files, private keys, production configuration, billing configuration, authentication implementation, authorization implementation, database changes, database credentials, deployment automation, dependency installation, package manager execution, CI/CD workflow code changes, force push, branch deletion, remote deletion, destructive cleanup, or source rewrites were performed.",
+  "risk_result": "The public visibility risk remains real: repository contents may have been copied while public, and that exposure is not fully reversible. The pre-publication audit found no tracked protected filenames and no credential-like tracked content except one classified short sk- false positive in v2 STYLE_GUIDE.md.",
+  "unresolved_risks": [
+    "Public exposure can be copied by third parties while repositories remain public.",
+    "The repositories should be returned to private later through a dedicated rollback contract if public visibility is no longer needed."
+  ],
+  "merge_status": "Local validation passed. Branch pushed. PR open pending CI gate.",
+  "deployment_status": "Not applicable. No deployment was requested or performed. Rollback visibility by changing specbridge-v2 and specbridge-v3 back to private under a future dedicated contract, then recording verification evidence.",
+  "completion_status": "completed"
+}

@@ -1,0 +1,57 @@
+{
+  "captured_at": "2026-06-28T05:40:00Z",
+  "branch_protection": [
+    {
+      "repository": "yagooyarzabaldev-ops/specbridge-v2",
+      "branch": "master",
+      "required_status_checks": {
+        "strict": true,
+        "contexts": [
+          "test"
+        ],
+        "checks": [
+          {
+            "context": "test",
+            "app_id": 15368
+          }
+        ]
+      },
+      "enforce_admins": true,
+      "allow_force_pushes": false,
+      "allow_deletions": false,
+      "required_linear_history": false,
+      "required_conversation_resolution": false,
+      "lock_branch": false,
+      "result": "passed"
+    },
+    {
+      "repository": "yagooyarzabaldev-ops/specbridge-v3",
+      "branch": "master",
+      "required_status_checks": {
+        "strict": true,
+        "contexts": [
+          "test"
+        ],
+        "checks": [
+          {
+            "context": "test",
+            "app_id": 15368
+          }
+        ]
+      },
+      "enforce_admins": true,
+      "allow_force_pushes": false,
+      "allow_deletions": false,
+      "required_linear_history": false,
+      "required_conversation_resolution": false,
+      "lock_branch": false,
+      "result": "passed"
+    }
+  ],
+  "notes": [
+    "The first v2 protection API attempt failed with HTTP 400 because Windows PowerShell 5.1 wrote a BOM-bearing JSON temp file.",
+    "The payload was rewritten as UTF-8 without BOM and the protection API call succeeded.",
+    "The same UTF-8 without BOM payload was used for v3."
+  ],
+  "result": "passed"
+}

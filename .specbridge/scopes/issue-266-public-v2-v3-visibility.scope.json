@@ -1,0 +1,28 @@
+{
+  "contract_id": "issue-266-public-v2-v3-visibility",
+  "run_id": "sb-20260628-0266cafe",
+  "status": "completed",
+  "exclusive_write": [
+    ".specbridge/contracts/issue-266-public-v2-v3-visibility.execution.md",
+    ".specbridge/scopes/issue-266-public-v2-v3-visibility.scope.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.issue.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.repo-before.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.secret-audit.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.visibility.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.branch-protection.json",
+    ".specbridge/github-evidence/issue-266-public-v2-v3-visibility.ci.json",
+    ".specbridge/reports/issue-266-public-v2-v3-visibility.final-report.json",
+    ".specbridge/audit-packets/issue-266-public-v2-v3-visibility.audit-packet.json",
+    ".specbridge/audits/issue-266-public-v2-v3-visibility.chatgpt-audit.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/context/CURRENT_GOAL.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-266-public-v2-v3-visibility.final-report.json"
+}

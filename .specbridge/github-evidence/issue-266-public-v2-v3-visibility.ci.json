@@ -1,0 +1,28 @@
+{
+  "captured_at": "2026-06-28T05:40:00Z",
+  "repositories": [
+    {
+      "repository": "yagooyarzabaldev-ops/specbridge-v2",
+      "head_sha": "1c1def8aa349fa896100bc395702b764c1ede355",
+      "workflow": "CI",
+      "job": "test",
+      "run_id": 28145621712,
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yagooyarzabaldev-ops/specbridge-v2/actions/runs/28145621712"
+    },
+    {
+      "repository": "yagooyarzabaldev-ops/specbridge-v3",
+      "head_sha": "8f9555aef6672580e202c082c0e998cd9a71911d",
+      "workflow": "CI",
+      "job": "test",
+      "run_id": 28218116898,
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yagooyarzabaldev-ops/specbridge-v3/actions/runs/28218116898"
+    }
+  ],
+  "result": "passed"
+}

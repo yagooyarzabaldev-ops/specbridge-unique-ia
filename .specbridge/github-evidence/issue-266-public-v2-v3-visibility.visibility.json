@@ -1,0 +1,33 @@
+{
+  "captured_at": "2026-06-28T05:40:00Z",
+  "visibility_changes": [
+    {
+      "repository": "yagooyarzabaldev-ops/specbridge-v2",
+      "visibility_before": "private",
+      "visibility_after": "public",
+      "command": "gh repo edit yagooyarzabaldev-ops/specbridge-v2 --visibility public --accept-visibility-change-consequences",
+      "result": "passed"
+    },
+    {
+      "repository": "yagooyarzabaldev-ops/specbridge-v3",
+      "visibility_before": "private",
+      "visibility_after": "public",
+      "command": "gh repo edit yagooyarzabaldev-ops/specbridge-v3 --visibility public --accept-visibility-change-consequences",
+      "result": "passed"
+    }
+  ],
+  "verified_visibility": [
+    {
+      "repository": "yagooyarzabaldev-ops/specbridge-v2",
+      "visibility": "public",
+      "default_branch": "master"
+    },
+    {
+      "repository": "yagooyarzabaldev-ops/specbridge-v3",
+      "visibility": "public",
+      "default_branch": "master"
+    }
+  ],
+  "operator_risk_acknowledgement": "Public visibility was explicitly authorized after warning that exposure can be copied and is not fully reversible.",
+  "result": "passed"
+}
