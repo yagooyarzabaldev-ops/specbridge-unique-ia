@@ -1,0 +1,34 @@
+{
+  "contract_id": "issue-263-story-sales-engine",
+  "run_id": "sb-20260628-0263feed",
+  "status": "completed",
+  "exclusive_write": [
+    "modules/story-sales-engine/README.md",
+    "modules/story-sales-engine/story-sales-engine.spec.yaml",
+    "modules/story-sales-engine/prompts/story_calendar_prompt.md",
+    "modules/story-sales-engine/prompts/story_pack_generator.md",
+    "modules/story-sales-engine/workflows/n8n_story_calendar_generator.json",
+    "modules/story-sales-engine/examples/infinite-process-weekly-stories.yaml",
+    "modules/story-sales-engine/examples/whatsapp-mercadopago-funnel.yaml",
+    ".specbridge/contracts/story-sales-engine-v1.md",
+    ".specbridge/scopes/story-sales-engine-v1.scope.yaml",
+    ".specbridge/reports/story-sales-engine-v1-final-report.md",
+    ".specbridge/audits/story-sales-engine-v1-codex-audit.md",
+    ".specbridge/contracts/issue-263-story-sales-engine.execution.md",
+    ".specbridge/scopes/issue-263-story-sales-engine.scope.json",
+    ".specbridge/github-evidence/issue-263-story-sales-engine.issue.json",
+    ".specbridge/reports/issue-263-story-sales-engine.final-report.json",
+    ".specbridge/audit-packets/issue-263-story-sales-engine.audit-packet.json",
+    ".specbridge/audits/issue-263-story-sales-engine.chatgpt-audit.json"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/context/CURRENT_GOAL.md"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-263-story-sales-engine.final-report.json"
+}

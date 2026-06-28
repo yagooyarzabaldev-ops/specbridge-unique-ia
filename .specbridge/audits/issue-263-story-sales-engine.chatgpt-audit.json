@@ -1,0 +1,85 @@
+{
+  "schema_version": "1",
+  "audit_id": "issue-263-story-sales-engine",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/issue-263-story-sales-engine.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/issue-263-story-sales-engine.execution.md",
+  "final_report_path": ".specbridge/reports/issue-263-story-sales-engine.final-report.json",
+  "checked_dimensions": [
+    {
+      "name": "spec_compliance",
+      "result": "pass",
+      "evidence": "Issue #263 requested a documentation/spec module with README, spec YAML, prompts, n8n workflow skeleton, examples, contract, scope, final report, and Codex audit. The files are present in the declared scope.",
+      "blocking": false
+    },
+    {
+      "name": "acceptance_criteria",
+      "result": "pass",
+      "evidence": "The module defines reusable inputs, outputs, workflow, acceptance criteria, blocked scope, prompts, examples, and conceptual WhatsApp and Mercado Pago handoffs only.",
+      "blocking": false
+    },
+    {
+      "name": "policy_boundaries",
+      "result": "pass",
+      "evidence": "The work is documentation/specification only and does not add provider setup, payment processing, production deployment, CI/CD changes, dependency installation, secrets, or provider connection values.",
+      "blocking": false
+    },
+    {
+      "name": "security_rules",
+      "result": "pass",
+      "evidence": "No secrets, private keys, production settings, payment links, or live provider configuration are included.",
+      "blocking": false
+    },
+    {
+      "name": "changed_file_scope",
+      "result": "pass",
+      "evidence": "Changed files are restricted to modules/story-sales-engine and declared .specbridge evidence artifacts for issue #263.",
+      "blocking": false
+    },
+    {
+      "name": "test_evidence",
+      "result": "pass",
+      "evidence": "The n8n workflow JSON parse check passed, all SpecBridge evidence validators passed, git diff --check passed, and ./scripts/specbridge-smoke.ps1 passed.",
+      "blocking": false
+    },
+    {
+      "name": "ci_evidence",
+      "result": "pass",
+      "evidence": "Issue #263 is documentation/specification only and has complete local validation evidence. Repository PR CI remains a separate branch merge gate before merging to main.",
+      "blocking": false
+    },
+    {
+      "name": "final_report_honesty",
+      "result": "pass",
+      "evidence": "The final report records that the module is not a live publisher and that provider integrations remain future dedicated scope.",
+      "blocking": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "low",
+      "category": "future_live_provider_scope",
+      "file": ".specbridge/reports/issue-263-story-sales-engine.final-report.json",
+      "line": null,
+      "evidence": "The module intentionally does not configure live Instagram, WhatsApp, or Mercado Pago providers.",
+      "recommendation": "Use a future dedicated contract before adding provider setup, publishing, or payment processing.",
+      "blocking": false
+    }
+  ],
+  "outcome": "approved",
+  "merge_allowed": true,
+  "unresolved_risks": [
+    "The module is not a live publisher.",
+    "Live provider integrations remain future dedicated scope."
+  ],
+  "source_files": [
+    ".specbridge/audit-packets/issue-263-story-sales-engine.audit-packet.json",
+    ".specbridge/audits/issue-263-story-sales-engine.chatgpt-audit.json",
+    ".specbridge/contracts/issue-263-story-sales-engine.execution.md",
+    ".specbridge/reports/issue-263-story-sales-engine.final-report.json",
+    ".specbridge/scopes/issue-263-story-sales-engine.scope.json",
+    "modules/story-sales-engine/README.md",
+    "modules/story-sales-engine/story-sales-engine.spec.yaml",
+    "modules/story-sales-engine/workflows/n8n_story_calendar_generator.json"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "issue_number": 263,
+  "title": "Add Story Sales Engine module for Instagram Stories monetization",
+  "url": "https://github.com/yagooyarzabaldev-ops/specbridge/issues/263",
+  "state": "open",
+  "created_at": "2026-06-27T04:43:54Z",
+  "updated_at": "2026-06-27T04:43:54Z",
+  "author": "yagooyarzabaldev-ops",
+  "labels": [
+    "enhancement",
+    "codex",
+    "docs"
+  ],
+  "body_summary": "Add a governed documentation/spec module for a reusable Instagram Stories sales engine with prompts, examples, and a manual n8n starter workflow skeleton.",
+  "source": "github_app_issue_fetch",
+  "captured_at": "2026-06-28"
+}

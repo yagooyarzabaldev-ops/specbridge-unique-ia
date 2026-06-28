@@ -1,0 +1,34 @@
+schema_version: "1"
+example_id: whatsapp-mercadopago-funnel
+module_id: story-sales-engine
+status: conceptual_only
+purpose: "Show a manual funnel concept from Instagram Stories to WhatsApp and payment handoff."
+blocked_scope:
+  - live_whatsapp_provider_setup
+  - mercado_pago_account_configuration
+  - payment_link_generation
+  - provider_connection_values
+  - automated_collection
+funnel:
+  trigger:
+    channel: instagram_stories
+    interaction: dm_keyword
+    keyword_placeholder: "DM_KEYWORD"
+  qualification:
+    manual_questions:
+      - "What are you trying to sell this week?"
+      - "How many Stories can you realistically publish?"
+      - "Do you want replies, bookings, or direct checkout?"
+  whatsapp_handoff:
+    mode: manual_concept
+    placeholder: "WHATSAPP_HANDOFF"
+    message_template: "Thanks for replying. I can send the weekly Story plan here and confirm the next step."
+  payment_handoff:
+    mode: manual_concept
+    placeholder: "MERCADO_PAGO_HANDOFF"
+    note: "Use only a manually created payment link outside this repository when the operator authorizes it."
+  follow_up:
+    day_0: "Send offer summary and confirm fit."
+    day_1: "Send first draft calendar."
+    day_2: "Ask for proof points or objections."
+    day_3: "Confirm publication plan."

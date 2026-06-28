@@ -1,0 +1,25 @@
+scope_id: story-sales-engine-v1
+status: completed
+allowed_paths:
+  - modules/story-sales-engine/
+  - .specbridge/contracts/story-sales-engine-v1.md
+  - .specbridge/scopes/story-sales-engine-v1.scope.yaml
+  - .specbridge/reports/story-sales-engine-v1-final-report.md
+  - .specbridge/audits/story-sales-engine-v1-codex-audit.md
+blocked_paths:
+  - .env
+  - .env.*
+  - secrets/
+  - infra/prod/
+  - .github/workflows/
+blocked_operations:
+  - live_instagram_publishing
+  - provider_setup
+  - payment_processing
+  - dependency_installation
+  - deployment
+  - ci_cd_change
+validation:
+  - required_files_exist
+  - n8n_json_parses
+  - no_provider_connection_values

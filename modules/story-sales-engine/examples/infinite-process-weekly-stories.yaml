@@ -1,0 +1,121 @@
+schema_version: "1"
+example_id: infinite-process-weekly-stories
+module_id: story-sales-engine
+offer_name: "Infinite Process implementation sprint"
+target_audience: "founders and operators who want AI-assisted systems without loose automation"
+weekly_goal: "Generate qualified replies for a governed implementation call"
+primary_cta: "Reply with PROCESS"
+weekly_time_budget_minutes: 120
+week:
+  - day: 1
+    stories:
+      - story_type: connection
+        hook: "Your AI workflow is not slow because the model is weak."
+        visual: "short talking-head clip with one messy workflow screenshot blurred"
+        copy_angle: "Name the real problem: no execution contract, no scope, no evidence."
+        cta: "Poll: Do you have this documented?"
+        interaction_mechanic: poll
+        production_note: "Record in one take."
+      - story_type: soft_sale
+        hook: "We turn that chaos into a governed build sprint."
+        visual: "simple checklist slide: spec, scope, execution, validation, review"
+        copy_angle: "Position Infinite Process as the implementation layer."
+        cta: "Reply PROCESS and I will send the sprint map."
+        interaction_mechanic: dm_keyword
+        production_note: "Reuse the checklist for future weeks."
+  - day: 2
+    stories:
+      - story_type: connection
+        hook: "Most automations fail because nobody owns the boundary."
+        visual: "whiteboard or notes app boundary sketch"
+        copy_angle: "Explain blocked scope in plain language."
+        cta: "Question box: where does your process break?"
+        interaction_mechanic: question_box
+        production_note: "Use one sentence per frame."
+      - story_type: soft_sale
+        hook: "A sprint starts by deciding what not to automate."
+        visual: "blocked/allowed scope table"
+        copy_angle: "Make governance feel practical, not bureaucratic."
+        cta: "Reply PROCESS for the intake template."
+        interaction_mechanic: dm_keyword
+        production_note: "Template slide."
+  - day: 3
+    stories:
+      - story_type: connection
+        hook: "If your agent cannot report evidence, it is just vibes."
+        visual: "final report excerpt with sensitive details removed"
+        copy_angle: "Evidence beats confidence."
+        cta: "Poll: evidence or screenshots?"
+        interaction_mechanic: poll
+        production_note: "No private client data."
+      - story_type: soft_sale
+        hook: "Our delivery includes final reports and rollback notes."
+        visual: "delivery package outline"
+        copy_angle: "Reduce perceived risk."
+        cta: "Reply PROCESS to see the package."
+        interaction_mechanic: dm_keyword
+        production_note: "Static slide."
+  - day: 4
+    stories:
+      - story_type: connection
+        hook: "Good systems make progress boring."
+        visual: "calm dashboard or task board"
+        copy_angle: "Contrast repeatable loops with emergency work."
+        cta: "Reply with the task you keep postponing."
+        interaction_mechanic: reply_prompt
+        production_note: "Use a plain background."
+      - story_type: soft_sale
+        hook: "That task can become a scoped sprint."
+        visual: "before/after scope example"
+        copy_angle: "Invite the next step."
+        cta: "Reply PROCESS."
+        interaction_mechanic: dm_keyword
+        production_note: "Reuse prior CTA."
+  - day: 5
+    stories:
+      - story_type: connection
+        hook: "A useful AI system should survive handoff."
+        visual: "handoff checklist"
+        copy_angle: "Explain why docs and tests matter."
+        cta: "Question box: who maintains your automation?"
+        interaction_mechanic: question_box
+        production_note: "Two-frame explanation."
+      - story_type: soft_sale
+        hook: "We ship with operating notes, not just files."
+        visual: "README plus validation command"
+        copy_angle: "Make the deliverable tangible."
+        cta: "Reply PROCESS for the starter brief."
+        interaction_mechanic: dm_keyword
+        production_note: "No private repo details."
+  - day: 6
+    stories:
+      - story_type: connection
+        hook: "The fastest sprint is the one with fewer decisions."
+        visual: "timer plus small checklist"
+        copy_angle: "Show the two-hour planning principle."
+        cta: "Countdown to next sprint intake."
+        interaction_mechanic: countdown
+        production_note: "Use countdown sticker manually."
+      - story_type: soft_sale
+        hook: "Next intake window opens this week."
+        visual: "simple availability slide"
+        copy_angle: "Limited but not pushy."
+        cta: "Reply PROCESS."
+        interaction_mechanic: dm_keyword
+        production_note: "Manual availability only."
+  - day: 7
+    stories:
+      - story_type: connection
+        hook: "One governed loop beats ten disconnected tools."
+        visual: "loop diagram"
+        copy_angle: "Summarize the week."
+        cta: "Poll: want the loop?"
+        interaction_mechanic: poll
+        production_note: "Reuse diagram."
+      - story_type: soft_sale
+        hook: "I can map your first loop."
+        visual: "DM keyword slide"
+        copy_angle: "Clear final invitation."
+        cta: "Reply PROCESS."
+        interaction_mechanic: dm_keyword
+        production_note: "End with one CTA."

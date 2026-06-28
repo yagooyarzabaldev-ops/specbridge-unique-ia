@@ -1,0 +1,97 @@
+schema_version: "1"
+module_id: story-sales-engine
+status: mvp_spec
+owner: specbridge
+purpose: >
+  Generate reusable Instagram Stories calendars that combine connection content,
+  soft-sale content, interaction mechanics, and handoff concepts for Infinite
+  Process and client delivery.
+
+inputs:
+  required:
+    - offer_name
+    - offer_summary
+    - target_audience
+    - audience_pain_or_desire
+    - weekly_goal
+    - primary_cta
+    - brand_voice
+  optional:
+    - proof_points
+    - objections
+    - dm_keyword
+    - whatsapp_handoff_concept
+    - payment_handoff_concept
+    - weekly_time_budget_minutes
+
+outputs:
+  - seven_day_story_calendar
+  - fourteen_story_ideas
+  - daily_connection_story
+  - daily_soft_sale_story
+  - hooks
+  - visual_directions
+  - ctas
+  - interaction_mechanics
+  - dm_triggers
+  - manual_funnel_notes
+
+story_structure:
+  days: 7
+  stories_per_day: 2
+  required_daily_mix:
+    - connection
+    - soft_sale
+  required_fields_per_story:
+    - day
+    - story_type
+    - hook
+    - visual
+    - copy_angle
+    - cta
+    - interaction_mechanic
+    - production_note
+
+interaction_mechanics:
+  allowed:
+    - question_box
+    - poll
+    - countdown
+    - short_video
+    - social_proof
+    - dm_keyword
+    - reply_prompt
+
+workflow:
+  - collect_offer_brief
+  - generate_weekly_calendar
+  - verify_daily_connection_soft_sale_balance
+  - add_interaction_mechanics
+  - add_manual_dm_or_whatsapp_handoff
+  - review_against_time_budget
+
+acceptance_criteria:
+  - calendar_has_7_days
+  - each_day_has_2_story_ideas
+  - each_day_has_connection_and_soft_sale
+  - every_story_has_hook_visual_cta_and_interaction
+  - workflow_can_be_used_under_2_hours_per_week
+  - funnel_handoffs_are_conceptual_only
+  - no_provider_connection_values_are_stored
+
+blocked_scope:
+  - live_instagram_publishing
+  - meta_provider_setup
+  - whatsapp_provider_setup
+  - mercado_pago_provider_setup
+  - payment_processing
+  - secrets
+  - production_deployment
+  - ci_cd_changes
+
+validation:
+  local_review:
+    - required_files_exist
+    - n8n_workflow_json_parses
+    - examples_use_placeholders_only
+    - final_report_and_audit_exist

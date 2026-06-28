@@ -1,0 +1,174 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-263-story-sales-engine",
+  "generated_by": "ChatGPT/Codex",
+  "execution_contract_path": ".specbridge/contracts/issue-263-story-sales-engine.execution.md",
+  "changed_files": [
+    "modules/story-sales-engine/README.md",
+    "modules/story-sales-engine/story-sales-engine.spec.yaml",
+    "modules/story-sales-engine/prompts/story_calendar_prompt.md",
+    "modules/story-sales-engine/prompts/story_pack_generator.md",
+    "modules/story-sales-engine/workflows/n8n_story_calendar_generator.json",
+    "modules/story-sales-engine/examples/infinite-process-weekly-stories.yaml",
+    "modules/story-sales-engine/examples/whatsapp-mercadopago-funnel.yaml",
+    ".specbridge/contracts/story-sales-engine-v1.md",
+    ".specbridge/scopes/story-sales-engine-v1.scope.yaml",
+    ".specbridge/reports/story-sales-engine-v1-final-report.md",
+    ".specbridge/audits/story-sales-engine-v1-codex-audit.md",
+    ".specbridge/contracts/issue-263-story-sales-engine.execution.md",
+    ".specbridge/scopes/issue-263-story-sales-engine.scope.json",
+    ".specbridge/github-evidence/issue-263-story-sales-engine.issue.json",
+    ".specbridge/reports/issue-263-story-sales-engine.final-report.json",
+    ".specbridge/audit-packets/issue-263-story-sales-engine.audit-packet.json",
+    ".specbridge/audits/issue-263-story-sales-engine.chatgpt-audit.json"
+  ],
+  "diff_summary": [
+    {
+      "file": "modules/story-sales-engine/README.md",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": "modules/story-sales-engine/story-sales-engine.spec.yaml",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": "modules/story-sales-engine/prompts/story_calendar_prompt.md",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": "modules/story-sales-engine/prompts/story_pack_generator.md",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": "modules/story-sales-engine/workflows/n8n_story_calendar_generator.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": "modules/story-sales-engine/examples/infinite-process-weekly-stories.yaml",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": "modules/story-sales-engine/examples/whatsapp-mercadopago-funnel.yaml",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/contracts/story-sales-engine-v1.md",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/scopes/story-sales-engine-v1.scope.yaml",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/reports/story-sales-engine-v1-final-report.md",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/audits/story-sales-engine-v1-codex-audit.md",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/contracts/issue-263-story-sales-engine.execution.md",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/scopes/issue-263-story-sales-engine.scope.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/github-evidence/issue-263-story-sales-engine.issue.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/reports/issue-263-story-sales-engine.final-report.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/audit-packets/issue-263-story-sales-engine.audit-packet.json",
+      "added_lines": null,
+      "deleted_lines": null
+    },
+    {
+      "file": ".specbridge/audits/issue-263-story-sales-engine.chatgpt-audit.json",
+      "added_lines": null,
+      "deleted_lines": null
+    }
+  ],
+  "validation_commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -Command \"Get-Content -Encoding UTF8 -Raw modules/story-sales-engine/workflows/n8n_story_calendar_generator.json | ConvertFrom-Json | Out-Null\"",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+    "git diff --check",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1"
+  ],
+  "validation_results": [
+    {
+      "command": "n8n workflow JSON parse validation",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contracts.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-final-reports.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-audit-packets.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1",
+      "result": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/specbridge-smoke.ps1",
+      "result": "passed"
+    }
+  ],
+  "final_report_path": ".specbridge/reports/issue-263-story-sales-engine.final-report.json",
+  "ci_status": "not_collected",
+  "pr_review_report_path": null,
+  "policy_result": "Within issue #263 contract and policy. Documentation/specification only. No protected production, billing, secrets, auth, authorization, database, deployment, dependency installation, provider setup, CI/CD change, public visibility change, force push, branch deletion, remote deletion, or destructive cleanup was performed.",
+  "unresolved_risks": [
+    "The module is not a live publisher.",
+    "Live provider integrations remain future dedicated scope."
+  ],
+  "completion_status": "completed",
+  "source_files": [
+    "modules/story-sales-engine/README.md",
+    "modules/story-sales-engine/story-sales-engine.spec.yaml",
+    "modules/story-sales-engine/workflows/n8n_story_calendar_generator.json",
+    ".specbridge/contracts/issue-263-story-sales-engine.execution.md",
+    ".specbridge/scopes/issue-263-story-sales-engine.scope.json",
+    ".specbridge/reports/issue-263-story-sales-engine.final-report.json"
+  ],
+  "secret_omission": "This packet contains repository-relative paths, validation summaries, policy result, risks, and status only. It does not embed raw diffs, private keys, or provider connection values."
+}

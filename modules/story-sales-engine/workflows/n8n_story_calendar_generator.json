@@ -1,0 +1,105 @@
+{
+  "name": "Story Sales Engine - Manual Calendar Generator",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "offer_name",
+              "value": "PLACEHOLDER_OFFER"
+            },
+            {
+              "name": "target_audience",
+              "value": "PLACEHOLDER_AUDIENCE"
+            },
+            {
+              "name": "weekly_goal",
+              "value": "Generate qualified replies from Instagram Stories"
+            },
+            {
+              "name": "primary_cta",
+              "value": "Reply with DM_KEYWORD"
+            }
+          ],
+          "number": [
+            {
+              "name": "weekly_time_budget_minutes",
+              "value": 120
+            }
+          ]
+        }
+      },
+      "id": "set-brief",
+      "name": "Set Story Brief",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const brief = $input.first().json;\nconst mechanics = ['question_box', 'poll', 'short_video', 'social_proof', 'dm_keyword', 'reply_prompt', 'countdown'];\nconst week = [];\nfor (let day = 1; day <= 7; day++) {\n  week.push({\n    day,\n    stories: [\n      {\n        story_type: 'connection',\n        hook: `Day ${day}: name the audience problem in plain language`,\n        visual: 'simple talking-head or behind-the-scenes clip',\n        copy_angle: `Connect ${brief.offer_name} to a real weekly pain point`,\n        cta: 'Use a low-pressure reply prompt',\n        interaction_mechanic: mechanics[(day - 1) % mechanics.length],\n        production_note: 'Record or assemble in under 10 minutes'\n      },\n      {\n        story_type: 'soft_sale',\n        hook: `Day ${day}: invite one small next step`,\n        visual: 'offer screenshot, proof snippet, or simple text slide',\n        copy_angle: `Position ${brief.offer_name} as the next practical step`,\n        cta: brief.primary_cta,\n        interaction_mechanic: 'dm_keyword',\n        production_note: 'Reuse the connection story context'\n      }\n    ]\n  });\n}\nreturn [{ json: { module_id: 'story-sales-engine', generated_at: new Date().toISOString(), brief, week } }];"
+      },
+      "id": "generate-calendar",
+      "name": "Generate Calendar Skeleton",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Story Brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Story Brief": {
+      "main": [
+        [
+          {
+            "node": "Generate Calendar Skeleton",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "staticData": null,
+  "tags": [
+    {
+      "name": "specbridge"
+    },
+    {
+      "name": "story-sales-engine"
+    }
+  ]
+}
