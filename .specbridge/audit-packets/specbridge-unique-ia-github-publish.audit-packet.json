@@ -1,0 +1,50 @@
+{
+  "schema_version": "1",
+  "task_id": "specbridge-unique-ia-github-publish",
+  "generated_by": "ChatGPT/Codex",
+  "execution_contract_path": ".specbridge/contracts/specbridge-unique-ia-github-publish.execution.md",
+  "changed_files": [
+    ".specbridge/contracts/specbridge-unique-ia-github-publish.execution.md",
+    ".specbridge/scopes/specbridge-unique-ia-github-publish.scope.json",
+    ".specbridge/reports/specbridge-unique-ia-github-publish.final-report.json",
+    ".specbridge/audit-packets/specbridge-unique-ia-github-publish.audit-packet.json",
+    ".specbridge/audits/specbridge-unique-ia-github-publish.chatgpt-audit.json"
+  ],
+  "diff_summary": [
+    {"file": ".specbridge/contracts/specbridge-unique-ia-github-publish.execution.md", "added_lines": null, "deleted_lines": null},
+    {"file": ".specbridge/scopes/specbridge-unique-ia-github-publish.scope.json", "added_lines": null, "deleted_lines": null},
+    {"file": ".specbridge/reports/specbridge-unique-ia-github-publish.final-report.json", "added_lines": null, "deleted_lines": null}
+  ],
+  "validation_commands": [
+    "gh auth status",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\test.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\validate-contract-scopes.ps1",
+    "git diff --check",
+    "gh repo view yagooyarzabaldev-ops/specbridge-unique-ia --json nameWithOwner,visibility,defaultBranchRef,url",
+    "git ls-remote --heads origin main"
+  ],
+  "validation_results": [
+    {"command": "authentication and target-owner verification", "result": "passed"},
+    {"command": "secret and environment-file scan", "result": "passed"},
+    {"command": "product test suite", "result": "passed: 64 passed, 0 failed"},
+    {"command": "contract and scope validation", "result": "passed"},
+    {"command": "public repository creation", "result": "passed"},
+    {"command": "non-force push of main", "result": "passed"},
+    {"command": "remote main and default branch verification", "result": "passed"}
+  ],
+  "final_report_path": ".specbridge/reports/specbridge-unique-ia-github-publish.final-report.json",
+  "ci_status": "not_collected",
+  "pr_review_report_path": null,
+  "policy_result": "Passed within the explicit GitHub publication contract.",
+  "unresolved_risks": [
+    "Public exposure is persistent and the repository has no branch protection or required CI yet.",
+    "No live apply-mode provider pilot has run."
+  ],
+  "completion_status": "completed",
+  "source_files": [
+    ".specbridge/contracts/specbridge-unique-ia-github-publish.execution.md",
+    ".specbridge/reports/specbridge-unique-ia-github-publish.final-report.json"
+  ],
+  "secret_omission": "This packet contains repository metadata and validation summaries only; it embeds no tokens, credentials, keys, or raw secret values."
+}

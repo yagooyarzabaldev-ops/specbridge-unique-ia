@@ -1,0 +1,33 @@
+{
+  "schema_version": "1",
+  "audit_id": "specbridge-unique-ia-github-publish",
+  "auditor": "ChatGPT/Codex",
+  "audit_packet_path": ".specbridge/audit-packets/specbridge-unique-ia-github-publish.audit-packet.json",
+  "execution_contract_path": ".specbridge/contracts/specbridge-unique-ia-github-publish.execution.md",
+  "final_report_path": ".specbridge/reports/specbridge-unique-ia-github-publish.final-report.json",
+  "checked_dimensions": [
+    {"name": "spec_compliance", "result": "pass", "evidence": "The repository was created and pushed only after a dedicated publication contract and scope passed validation.", "blocking": false},
+    {"name": "acceptance_criteria", "result": "pass", "evidence": "The public repository exists, main is the default branch, origin is exact, remote main contains the committed MVP, and the local branch tracks it.", "blocking": false},
+    {"name": "policy_boundaries", "result": "pass", "evidence": "No force push, workflow mutation, release, deployment, dependency, secret, production, billing, auth, or database operation occurred.", "blocking": false},
+    {"name": "security_rules", "result": "pass", "evidence": "Pre-push scans found no tracked environment files and no recognized credential or private-key patterns.", "blocking": false},
+    {"name": "changed_file_scope", "result": "pass", "evidence": "Local publication changes are limited to the declared contract, scope, report, audit packet, and audit files.", "blocking": false},
+    {"name": "test_evidence", "result": "pass", "evidence": "The product suite passed 64 checks with zero failures before publication.", "blocking": false},
+    {"name": "ci_evidence", "result": "needs_human_decision", "evidence": "No branch protection or required CI was configured under this publication-only contract.", "blocking": true},
+    {"name": "final_report_honesty", "result": "pass", "evidence": "The report records public visibility, direct initial publication, no deployment, and remaining protection and live-pilot risks.", "blocking": false}
+  ],
+  "findings": [
+    {"severity": "medium", "category": "repository_protection", "file": ".specbridge/reports/specbridge-unique-ia-github-publish.final-report.json", "line": null, "evidence": "Remote main is public but has no verified branch protection or required CI checks.", "recommendation": "Create a dedicated governance contract before enabling branch protection and CI requirements.", "blocking": true}
+  ],
+  "outcome": "needs_human_decision",
+  "merge_allowed": false,
+  "unresolved_risks": [
+    "Branch protection and required CI are not configured.",
+    "A real provider apply-mode pilot remains pending."
+  ],
+  "source_files": [
+    ".specbridge/contracts/specbridge-unique-ia-github-publish.execution.md",
+    ".specbridge/scopes/specbridge-unique-ia-github-publish.scope.json",
+    ".specbridge/reports/specbridge-unique-ia-github-publish.final-report.json",
+    ".specbridge/audit-packets/specbridge-unique-ia-github-publish.audit-packet.json"
+  ]
+}

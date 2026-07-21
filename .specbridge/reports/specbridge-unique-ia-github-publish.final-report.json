@@ -1,0 +1,33 @@
+{
+  "summary": "Created the public GitHub repository yagooyarzabaldev-ops/specbridge-unique-ia and uploaded the complete committed SpecBridge Unique IA MVP and publication contract to remote main.",
+  "changed_files": [
+    ".specbridge/contracts/specbridge-unique-ia-github-publish.execution.md",
+    ".specbridge/scopes/specbridge-unique-ia-github-publish.scope.json",
+    ".specbridge/reports/specbridge-unique-ia-github-publish.final-report.json",
+    ".specbridge/audit-packets/specbridge-unique-ia-github-publish.audit-packet.json",
+    ".specbridge/audits/specbridge-unique-ia-github-publish.chatgpt-audit.json"
+  ],
+  "validations": [
+    "GitHub CLI authentication: passed for yagooyarzabaldev-ops",
+    "tracked environment-file scan: passed with zero matches",
+    "credential-pattern scan: passed with zero matches",
+    "scripts/test.ps1: passed with 64 passed and 0 failed",
+    "validate-contracts.ps1: passed",
+    "validate-contract-scopes.ps1: passed",
+    "git diff --check: passed",
+    "GitHub repository visibility: PUBLIC",
+    "remote default branch: main",
+    "origin URL verification: passed",
+    "remote main verification: passed at 389d56b1e24a71a3cdb40eaf1d5d420ed040d81f"
+  ],
+  "policy_result": "Passed. The user explicitly authorized repository creation and upload. Publication used a dedicated contract, public visibility matching SpecBridge v2/v3, a non-force push, and no workflow, secret, dependency, production, billing, auth, database, release, merge, or deployment mutation.",
+  "risk_result": "Medium. The source is now publicly accessible and can be copied. No credentials or local run artifacts were included.",
+  "unresolved_risks": [
+    "The repository is public, so future commits must continue to pass secret scanning.",
+    "No branch protection or required GitHub checks were configured because CI/CD security changes were outside this contract.",
+    "No live apply-mode provider pilot has been executed."
+  ],
+  "merge_status": "Initial publication completed directly on the new repository main branch; no branch merge was required.",
+  "deployment_status": "Not deployed. Repository publication only.",
+  "completion_status": "completed"
+}
