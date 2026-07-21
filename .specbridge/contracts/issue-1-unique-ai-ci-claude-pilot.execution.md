@@ -49,6 +49,7 @@ High. The task changes CI workflows and branch protection on a public repository
 
 ```text
 .github/workflows/unique-ai-ci.yml
+.github/workflows/foundation-validation.yml (modify but retain)
 .github/workflows/claude-review-non-blocking.yml (delete only)
 .github/workflows/codex-review.example.yml (delete only)
 .github/workflows/claude-code-review.example.yml (delete only)
@@ -96,7 +97,7 @@ autonomous changes beyond issue 1
 ## Acceptance Criteria
 
 1. Claude Code performs the first bounded implementation pass on the issue branch.
-2. `.github/workflows/unique-ai-ci.yml` runs on pull requests and pushes to `main` using no provider secret and exposes a stable `unique-ai-ci` job/check.
+2. `.github/workflows/unique-ai-ci.yml` runs on pull requests and pushes to `main` using no provider secret and exposes a stable `unique-ai-ci` job/check; `foundation-validation.yml` remains present but is aligned to the provider-neutral deterministic validation set.
 3. The new CI runs `scripts/test.ps1`, contract validation, scope validation, final-report validation, audit-packet validation, ChatGPT audit validation, and `git diff --check` or equivalent deterministic checks.
 4. Inherited active Claude/Codex review workflow files listed in scope are deleted so CI no longer depends on a second AI provider.
 5. Workflow authorization policy contains a current, bounded human authorization for exactly the listed workflow changes.

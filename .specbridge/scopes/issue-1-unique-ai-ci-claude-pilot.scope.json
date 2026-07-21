@@ -4,6 +4,7 @@
   "status": "active",
   "exclusive_write": [
     ".github/workflows/unique-ai-ci.yml",
+    ".github/workflows/foundation-validation.yml",
     ".github/workflows/claude-review-non-blocking.yml",
     ".github/workflows/codex-review.example.yml",
     ".github/workflows/claude-code-review.example.yml",
@@ -25,7 +26,6 @@
     "SPECBRIDGE.md",
     "AGENTS.md",
     ".specbridge/policy.yaml",
-    ".github/workflows/foundation-validation.yml",
     ".github/workflows/specbridge-review-gate.yml",
     "scripts/test.ps1",
     "scripts/validate-contracts.ps1",
