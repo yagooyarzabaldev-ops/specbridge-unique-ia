@@ -37,11 +37,10 @@
   "policy_result": "Passed. The high-risk CI change was explicitly authorized by the user, bounded by issue #1 and an unexpired exact-path workflow authorization. No secrets, provider action, dependency, production, deployment, billing, auth, database, force push, branch deletion, or unlisted workflow change occurred.",
   "risk_result": "High but controlled. CI and review-gate behavior changed on a public repository. Local and GitHub deterministic gates pass, and the PR remains unmerged until this audit evidence is revalidated.",
   "unresolved_risks": [
-    "Main branch protection requiring unique-ai-ci remains pending until after merge.",
     "The real provider apply-mode pilot exercises Claude as implementation worker but does not authorize production deployment.",
     "The workflow authorization expires on 2026-07-27; later CI changes require renewed authority."
   ],
-  "merge_status": "Ready for merge under explicit user authority after the audit-evidence commit passes all required PR checks.",
+  "merge_status": "PR #2 merged by squash at 2026-07-21T00:48:57Z with merge commit 0d6e47fdc35ab9f1ee57dd63f443f7112f965fcb. Issue #1 is closed. Main protection requires strict unique-ai-ci, enforces admins and conversation resolution, and blocks force pushes and deletions.",
   "deployment_status": "Not deployed. Deployment is blocked.",
-  "completion_status": "ready_for_merge"
+  "completion_status": "completed"
 }
