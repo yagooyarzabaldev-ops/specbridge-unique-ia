@@ -1,0 +1,47 @@
+{
+  "summary": "Claude Code performed the first bounded implementation pass for provider-neutral Unique IA CI. Codex audited the diff, restored the security gate to both deterministic workflows, fixed the review gate to handle authorized workflow deletions, and verified 128 local tests plus all four GitHub PR checks.",
+  "changed_files": [
+    ".github/workflows/unique-ai-ci.yml",
+    ".github/workflows/foundation-validation.yml",
+    ".github/workflows/claude-review-non-blocking.yml",
+    ".github/workflows/codex-review.example.yml",
+    ".github/workflows/claude-code-review.example.yml",
+    ".github/workflows/claude-code-execute.example.yml",
+    ".specbridge/policies/workflow-change-authorizations.json",
+    ".specbridge/contracts/issue-1-unique-ai-ci-claude-pilot.execution.md",
+    ".specbridge/scopes/issue-1-unique-ai-ci-claude-pilot.scope.json",
+    ".specbridge/runtime-evidence/issue-1-unique-ai-ci-claude-pilot.md",
+    ".specbridge/reports/issue-1-unique-ai-ci-claude-pilot.final-report.json",
+    ".specbridge/audit-packets/issue-1-unique-ai-ci-claude-pilot.audit-packet.json",
+    ".specbridge/audits/issue-1-unique-ai-ci-claude-pilot.chatgpt-audit.json",
+    "docs/specbridge-ci-authority-standard.md",
+    "docs/unique-ai/ci-and-claude-pilot.md",
+    "scripts/validate-standard-ci-authority.ps1",
+    "scripts/validate-review-gate.ps1",
+    "tests/unique-ai/test-ci.ps1"
+  ],
+  "validations": [
+    "Claude Code bounded first pass: completed",
+    "scripts/test.ps1: 128 passed, 0 failed",
+    "validate-contracts.ps1: passed",
+    "validate-contract-scopes.ps1: passed",
+    "validate-standard-ci-authority.ps1: passed",
+    "validate-security-gates.ps1: passed",
+    "validate-review-gate.ps1 against PR range: passed",
+    "git diff --check: passed",
+    "GitHub unique-ai-ci: passed https://github.com/yagooyarzabaldev-ops/specbridge-unique-ia/actions/runs/29791182478",
+    "GitHub validate-foundation: passed https://github.com/yagooyarzabaldev-ops/specbridge-unique-ia/actions/runs/29791182485",
+    "GitHub review-gate: passed https://github.com/yagooyarzabaldev-ops/specbridge-unique-ia/actions/runs/29791182530",
+    "GitHub generate-pr-review-report: passed https://github.com/yagooyarzabaldev-ops/specbridge-unique-ia/actions/runs/29791182501"
+  ],
+  "policy_result": "Passed. The high-risk CI change was explicitly authorized by the user, bounded by issue #1 and an unexpired exact-path workflow authorization. No secrets, provider action, dependency, production, deployment, billing, auth, database, force push, branch deletion, or unlisted workflow change occurred.",
+  "risk_result": "High but controlled. CI and review-gate behavior changed on a public repository. Local and GitHub deterministic gates pass, and the PR remains unmerged until this audit evidence is revalidated.",
+  "unresolved_risks": [
+    "Main branch protection requiring unique-ai-ci remains pending until after merge.",
+    "The real provider apply-mode pilot exercises Claude as implementation worker but does not authorize production deployment.",
+    "The workflow authorization expires on 2026-07-27; later CI changes require renewed authority."
+  ],
+  "merge_status": "Ready for merge under explicit user authority after the audit-evidence commit passes all required PR checks.",
+  "deployment_status": "Not deployed. Deployment is blocked.",
+  "completion_status": "ready_for_merge"
+}

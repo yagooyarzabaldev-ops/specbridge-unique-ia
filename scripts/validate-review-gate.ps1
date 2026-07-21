@@ -29,11 +29,7 @@ $blockedWorkflowActivationPatterns = @(
   "codex-review.example"
 )
 
-$approvedWorkflowSecrets = @{
-  ".github/workflows/claude-review-non-blocking.yml" = @(
-    "ANTHROPIC_API_KEY"
-  )
-}
+$approvedWorkflowSecrets = @{}
 
 function Get-ChangedFiles {
   $candidates = @()
@@ -94,7 +90,12 @@ foreach ($changedFile in $changedFiles) {
   }
 
   if ($normalizedPath -match "^\.github/workflows/.+\.ya?ml$") {
-    $workflowContent = Get-Content $normalizedPath -Raw
+    if (-not (Test-Path -LiteralPath $normalizedPath -PathType Leaf)) {
+      Write-Output "Workflow deletion detected; no file content to inspect: $normalizedPath"
+      continue
+    }
+
+    $workflowContent = Get-Content -LiteralPath $normalizedPath -Raw -Encoding UTF8
 
     foreach ($pattern in $blockedWorkflowActivationPatterns) {
       if ($workflowContent -match $pattern) {

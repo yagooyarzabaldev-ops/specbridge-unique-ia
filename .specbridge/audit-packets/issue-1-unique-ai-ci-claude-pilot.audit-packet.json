@@ -1,0 +1,67 @@
+{
+  "schema_version": "1",
+  "task_id": "issue-1-unique-ai-ci-claude-pilot",
+  "generated_by": "ChatGPT/Codex",
+  "execution_contract_path": ".specbridge/contracts/issue-1-unique-ai-ci-claude-pilot.execution.md",
+  "changed_files": [
+    ".github/workflows/unique-ai-ci.yml",
+    ".github/workflows/foundation-validation.yml",
+    ".github/workflows/claude-review-non-blocking.yml",
+    ".github/workflows/codex-review.example.yml",
+    ".github/workflows/claude-code-review.example.yml",
+    ".github/workflows/claude-code-execute.example.yml",
+    ".specbridge/policies/workflow-change-authorizations.json",
+    ".specbridge/contracts/issue-1-unique-ai-ci-claude-pilot.execution.md",
+    ".specbridge/scopes/issue-1-unique-ai-ci-claude-pilot.scope.json",
+    ".specbridge/runtime-evidence/issue-1-unique-ai-ci-claude-pilot.md",
+    ".specbridge/reports/issue-1-unique-ai-ci-claude-pilot.final-report.json",
+    ".specbridge/audit-packets/issue-1-unique-ai-ci-claude-pilot.audit-packet.json",
+    ".specbridge/audits/issue-1-unique-ai-ci-claude-pilot.chatgpt-audit.json",
+    "docs/specbridge-ci-authority-standard.md",
+    "docs/unique-ai/ci-and-claude-pilot.md",
+    "scripts/validate-standard-ci-authority.ps1",
+    "scripts/validate-review-gate.ps1",
+    "tests/unique-ai/test-ci.ps1"
+  ],
+  "diff_summary": [
+    {"file": ".github/workflows/unique-ai-ci.yml", "added_lines": null, "deleted_lines": null},
+    {"file": ".github/workflows/foundation-validation.yml", "added_lines": null, "deleted_lines": null},
+    {"file": "scripts/validate-review-gate.ps1", "added_lines": null, "deleted_lines": null},
+    {"file": "tests/unique-ai/test-ci.ps1", "added_lines": null, "deleted_lines": null}
+  ],
+  "validation_commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\test.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\validate-contracts.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\validate-contract-scopes.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\validate-standard-ci-authority.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\validate-security-gates.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\validate-review-gate.ps1",
+    "git diff --check",
+    "gh pr checks 2"
+  ],
+  "validation_results": [
+    {"command": "Claude Code first implementation pass", "result": "passed"},
+    {"command": "local Unique IA suite", "result": "passed"},
+    {"command": "contract and scope validators", "result": "passed"},
+    {"command": "CI authority, security, and review gates", "result": "passed"},
+    {"command": "GitHub unique-ai-ci", "result": "passed"},
+    {"command": "GitHub validate-foundation", "result": "passed"},
+    {"command": "GitHub review-gate", "result": "passed"},
+    {"command": "GitHub generate-pr-review-report", "result": "passed"}
+  ],
+  "final_report_path": ".specbridge/reports/issue-1-unique-ai-ci-claude-pilot.final-report.json",
+  "ci_status": "passed",
+  "pr_review_report_path": null,
+  "policy_result": "Passed under the explicit high-risk issue #1 contract and exact workflow authorization.",
+  "unresolved_risks": [
+    "Branch protection is a post-merge operation and remains pending.",
+    "Workflow authorization expires on 2026-07-27."
+  ],
+  "completion_status": "ready_for_merge",
+  "source_files": [
+    ".specbridge/contracts/issue-1-unique-ai-ci-claude-pilot.execution.md",
+    ".specbridge/runtime-evidence/issue-1-unique-ai-ci-claude-pilot.md",
+    ".specbridge/reports/issue-1-unique-ai-ci-claude-pilot.final-report.json"
+  ],
+  "secret_omission": "This packet includes bounded repository metadata and validation summaries only; it embeds no tokens, credentials, keys, secrets, or provider output."
+}
