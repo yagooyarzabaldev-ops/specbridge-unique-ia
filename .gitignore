@@ -5,3 +5,6 @@
 smoke-output.txt
 *.output.txt
 .specbridge/standard-loop-runs/cli-fixture.standard-loop-run.json
+
+# Unique IA runtime run directories (not evidence unless explicitly staged)
+.unique-ai/runs/

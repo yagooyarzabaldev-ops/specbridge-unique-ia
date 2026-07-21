@@ -1,0 +1,25 @@
+{
+  "schema_version": "1",
+  "provider": {
+    "provider_id": "claude-code-local",
+    "model": "configured-default",
+    "executable": "claude",
+    "arguments": ["--print", "--no-session-persistence"]
+  },
+  "limits": {
+    "max_retries": 2,
+    "timeout_seconds": 300,
+    "budget_usd": 2.0,
+    "estimated_cost_per_invocation_usd": 0.25,
+    "max_invocations": 6
+  },
+  "blocked_paths": [
+    ".env",
+    ".env.*",
+    ".github/workflows/**",
+    "scripts/validate-security-gates.ps1",
+    "scripts/specbridge.ps1"
+  ],
+  "validation_scripts": ["scripts/test.ps1"],
+  "review_label": "fresh_session_self_review"
+}

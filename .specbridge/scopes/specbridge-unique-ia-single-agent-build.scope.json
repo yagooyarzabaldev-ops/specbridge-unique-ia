@@ -1,0 +1,29 @@
+{
+  "contract_id": "specbridge-unique-ia-single-agent-build",
+  "run_id": "sb-20260720-270a1b2c",
+  "status": "active",
+  "exclusive_write": [
+    ".specbridge/project-starters/specbridge-unique-ia-single-agent.project-starter.json",
+    ".specbridge/contracts/specbridge-unique-ia-single-agent-build.execution.md",
+    ".specbridge/scopes/specbridge-unique-ia-single-agent-build.scope.json",
+    ".specbridge/runtime-evidence/specbridge-unique-ia-claude-output.md",
+    ".specbridge/reports/specbridge-unique-ia-single-agent-build.final-report.json",
+    ".specbridge/audit-packets/specbridge-unique-ia-single-agent-build.audit-packet.json",
+    ".specbridge/audits/specbridge-unique-ia-single-agent-build.chatgpt-audit.json",
+    "docs/specbridge-unique-ia-product-build.md"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    ".specbridge/context/CURRENT_GOAL.md",
+    ".specbridge/contracts/issue-255-serious-product-build-pilot.execution.md",
+    "docs/specbridge-standard-loop-v1.md",
+    "scripts/validate-contracts.ps1",
+    "scripts/validate-contract-scopes.ps1"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/specbridge-unique-ia-single-agent-build.final-report.json"
+}

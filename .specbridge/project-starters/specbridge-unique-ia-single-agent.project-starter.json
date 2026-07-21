@@ -1,0 +1,39 @@
+{
+  "schema_version": "1",
+  "task_id": "specbridge-unique-ia-single-agent-build",
+  "title": "Build SpecBridge Unique IA as a provider-neutral single-agent repository",
+  "goal": "Create a clean local sibling copy of SpecBridge that runs the governed development lifecycle through one configured AI provider without depending on a second AI product.",
+  "repository_mode": "new_local_sibling_copy",
+  "target_path": "D:\\Antigravity\\Infinite Process\\specbridge-unique-ia",
+  "status": "approved_for_contract",
+  "product_principles": [
+    "one configured provider identity for every lifecycle phase",
+    "provider-neutral command adapter",
+    "fresh invocation boundaries between plan implementation review and closure",
+    "deterministic tests policy and repository evidence remain authoritative",
+    "fail closed on scope policy validation or provider failure",
+    "no secrets production deployment billing auth database or CI security changes"
+  ],
+  "required_mvp_surfaces": [
+    "single-agent configuration and example",
+    "provider-neutral executable adapter",
+    "plan implement validate review close lifecycle",
+    "dry-run default and explicit apply gate",
+    "scope and protected-path enforcement",
+    "structured run evidence and resumable state",
+    "doctor command",
+    "local tests and operational documentation"
+  ],
+  "blocked_boundaries": [
+    "remote repository creation",
+    "remote mutation",
+    "dependency installation",
+    "secret access",
+    "production configuration",
+    "billing",
+    "authentication or authorization security",
+    "database changes",
+    "CI/CD security changes",
+    "deployment"
+  ]
+}

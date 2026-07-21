@@ -1,0 +1,19 @@
+{
+  "schema_version": "1",
+  "provider": {
+    "provider_id": "your-provider",
+    "model": "your-model",
+    "executable": "your-provider-cli",
+    "arguments": ["--non-interactive"]
+  },
+  "limits": {
+    "max_retries": 2,
+    "timeout_seconds": 300,
+    "budget_usd": 2.0,
+    "estimated_cost_per_invocation_usd": 0.25,
+    "max_invocations": 6
+  },
+  "blocked_paths": [".env", ".env.*", ".github/workflows/**"],
+  "validation_scripts": ["scripts/test.ps1"],
+  "review_label": "fresh_session_self_review"
+}
