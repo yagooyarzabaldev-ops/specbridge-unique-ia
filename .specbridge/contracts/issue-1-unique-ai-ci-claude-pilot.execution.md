@@ -61,6 +61,9 @@ High. The task changes CI workflows and branch protection on a public repository
 .specbridge/audit-packets/issue-1-unique-ai-ci-claude-pilot.audit-packet.json
 .specbridge/audits/issue-1-unique-ai-ci-claude-pilot.chatgpt-audit.json
 docs/unique-ai/ci-and-claude-pilot.md
+docs/specbridge-ci-authority-standard.md
+scripts/validate-standard-ci-authority.ps1
+tests/unique-ai/test-ci.ps1
 branch codex/unique-ai-ci-pilot
 pull request to main
 non-force branch push
@@ -97,13 +100,14 @@ autonomous changes beyond issue 1
 3. The new CI runs `scripts/test.ps1`, contract validation, scope validation, final-report validation, audit-packet validation, ChatGPT audit validation, and `git diff --check` or equivalent deterministic checks.
 4. Inherited active Claude/Codex review workflow files listed in scope are deleted so CI no longer depends on a second AI provider.
 5. Workflow authorization policy contains a current, bounded human authorization for exactly the listed workflow changes.
-6. Local tests and governance validators pass.
-7. Codex audits Claude's diff and records any corrections.
-8. A pull request is opened; GitHub checks pass.
-9. The PR is merged only after CI and review gates pass under this explicit user authorization.
-10. `main` protection requires the stable `unique-ai-ci` status check, enforces admins, strict checks, and blocks force pushes and deletions.
-11. Remote `main`, PR state, issue state, and protection are verified live.
-12. No secret, dependency, production, deployment, billing, auth, database, or force-push action occurs.
+6. The CI authority validator and documentation require the provider-neutral Unique IA workflow and no longer require a Claude-specific workflow.
+7. Deterministic tests reject active workflow dependencies on Claude, Codex, Anthropic/OpenAI actions, or provider API-key secrets.
+8. Codex audits Claude's diff and records any corrections.
+9. A pull request is opened; GitHub checks pass.
+10. The PR is merged only after CI and review gates pass under this explicit user authorization.
+11. `main` protection requires the stable `unique-ai-ci` status check, enforces admins, strict checks, and blocks force pushes and deletions.
+12. Remote `main`, PR state, issue state, and protection are verified live.
+13. No secret, dependency, production, deployment, billing, auth, database, or force-push action occurs.
 
 ## Required Validations
 

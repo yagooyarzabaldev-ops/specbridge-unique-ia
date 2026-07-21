@@ -15,7 +15,10 @@
     ".specbridge/reports/issue-1-unique-ai-ci-claude-pilot.final-report.json",
     ".specbridge/audit-packets/issue-1-unique-ai-ci-claude-pilot.audit-packet.json",
     ".specbridge/audits/issue-1-unique-ai-ci-claude-pilot.chatgpt-audit.json",
-    "docs/unique-ai/ci-and-claude-pilot.md"
+    "docs/unique-ai/ci-and-claude-pilot.md",
+    "docs/specbridge-ci-authority-standard.md",
+    "scripts/validate-standard-ci-authority.ps1",
+    "tests/unique-ai/test-ci.ps1"
   ],
   "read_only": [
     "README.md",
@@ -29,8 +32,7 @@
     "scripts/validate-contract-scopes.ps1",
     "scripts/validate-final-reports.ps1",
     "scripts/validate-audit-packets.ps1",
-    "scripts/validate-chatgpt-audits.ps1",
-    "scripts/validate-standard-ci-authority.ps1"
+    "scripts/validate-chatgpt-audits.ps1"
   ],
   "coordinator_owned": [],
   "dependencies": [],
