@@ -9,48 +9,51 @@ authority. A task is not complete until the pull request checks pass.
 
 ## Current GitHub CI Authority
 
-Standard Loop v1 depends on these existing workflows:
+Provider-neutral deterministic CI for Unique IA depends on these workflows:
 
+- `.github/workflows/unique-ai-ci.yml`
 - `.github/workflows/foundation-validation.yml`
 - `.github/workflows/specbridge-review-gate.yml`
 - `.github/workflows/specbridge-pr-review-report.yml`
-- `.github/workflows/claude-review-non-blocking.yml`
 
-These workflows are read-only for this standardization package.
+These workflows are read-only except under an active, unexpired workflow-change
+authorization entry in `.specbridge/policies/workflow-change-authorizations.json`.
 
 ## Required Local Gates
 
 Before push:
 
 - standard validation profile
-- smoke validation
-- CLI tests
-- negative validation tests
-- schema validation
-- template validation
-- runtime execution validation
-- security gate
-- review gate
+- contract validation
+- scope validation
+- final report validation
 - audit packet validation
 - ChatGPT audit validation
+- CI authority validation
 - git diff whitespace check
+- security gate
+- review gate
 
 ## Required GitHub Gates
 
 Before merge:
 
-- GitHub CI passes
+- GitHub CI passes (unique-ai-ci check must pass)
+- Foundation Validation passes
 - SpecBridge Review Gate passes
 - SpecBridge PR Review Report passes
-- Foundation Validation passes
-- Claude Review Non Blocking completes successfully or remains non-blocking by policy
 
 ## Security Boundary
 
-`.github/workflows/**` is a CI/CD security boundary. This package does not modify
-workflow files. Any future change to workflow permissions, triggers, secrets, or
-merge behavior requires a dedicated execution contract and explicit security
-review.
+`.github/workflows/**` is a CI/CD security boundary. Workflow changes are
+blocked by default. Any change requires an unexpired entry in the
+workflow-change authorization registry, a dedicated execution contract with
+`risk_level: high`, and explicit human operator authorization.
+
+Provider-specific AI actions (anthropics/, openai/, codex actions) and
+provider API-key secrets (ANTHROPIC_API_KEY, OPENAI_API_KEY) are not permitted
+in any active workflow. Deterministic, provider-neutral CI is the Unique IA
+security gate and review gate standard.
 
 ## Validation
 

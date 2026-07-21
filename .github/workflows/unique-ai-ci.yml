@@ -1,10 +1,10 @@
-name: Foundation Validation
+name: Unique IA CI
 
 on:
-  push:
+  pull_request:
     branches:
       - main
-  pull_request:
+  push:
     branches:
       - main
 
@@ -12,7 +12,8 @@ permissions:
   contents: read
 
 jobs:
-  validate-foundation:
+  unique-ai-ci:
+    name: unique-ai-ci
     runs-on: windows-latest
 
     steps:
@@ -21,14 +22,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Provider-neutral deterministic validation set.
-      # Does not call specbridge-smoke.ps1 because that script includes
-      # validate-claude-review-workflow.ps1, which is incompatible with the
-      # provider-neutral CI hardening in issue #1 (workflow-change-authorization
-      # wf-auth-20260720-unique-ai-ci-pilot).
-      - name: Validate foundation
+      - name: Run Unique IA tests
         shell: pwsh
-        run: powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-foundation.ps1
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test.ps1
 
       - name: Validate contracts
         shell: pwsh
@@ -37,10 +33,6 @@ jobs:
       - name: Validate contract scopes
         shell: pwsh
         run: powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-contract-scopes.ps1
-
-      - name: Validate schemas
-        shell: pwsh
-        run: powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-schemas.ps1
 
       - name: Validate final reports
         shell: pwsh
@@ -54,7 +46,7 @@ jobs:
         shell: pwsh
         run: powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-chatgpt-audits.ps1
 
-      - name: Validate standard CI authority
+      - name: Validate CI authority
         shell: pwsh
         run: powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-standard-ci-authority.ps1
 
@@ -62,14 +54,22 @@ jobs:
         shell: pwsh
         run: powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-security-gates.ps1
 
-      - name: Validate orchestrations
+      - name: Whitespace check (pull request)
+        if: github.event_name == 'pull_request'
         shell: pwsh
-        run: powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-orchestrations.ps1
+        run: |
+          $base = "${{ github.event.pull_request.base.sha }}"
+          git diff --check "$base" HEAD
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-      - name: Validate agent review reports
+      - name: Whitespace check (push)
+        if: github.event_name == 'push'
         shell: pwsh
-        run: powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-agent-review-reports.ps1
-
-      - name: Run Unique IA tests
-        shell: pwsh
-        run: powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test.ps1
+        run: |
+          $before = "${{ github.event.before }}"
+          if ($before -match '^0+$') {
+            Write-Output "First push to branch - skipping whitespace check."
+            exit 0
+          }
+          git diff --check "$before" "${{ github.sha }}"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

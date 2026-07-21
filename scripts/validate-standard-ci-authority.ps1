@@ -13,7 +13,7 @@ $requiredWorkflows = @(
   ".github/workflows/foundation-validation.yml",
   ".github/workflows/specbridge-review-gate.yml",
   ".github/workflows/specbridge-pr-review-report.yml",
-  ".github/workflows/claude-review-non-blocking.yml"
+  ".github/workflows/unique-ai-ci.yml"
 )
 
 function Write-Failure {

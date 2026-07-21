@@ -11,6 +11,21 @@
       "authorized_by": "repository owner (operator chat session, 2026-06-09)",
       "granted_at": "2026-06-09",
       "expires_at": "2026-06-16"
+    },
+    {
+      "id": "wf-auth-20260720-unique-ai-ci-pilot",
+      "files": [
+        ".github/workflows/unique-ai-ci.yml",
+        ".github/workflows/foundation-validation.yml",
+        ".github/workflows/claude-review-non-blocking.yml",
+        ".github/workflows/codex-review.example.yml",
+        ".github/workflows/claude-code-review.example.yml",
+        ".github/workflows/claude-code-execute.example.yml"
+      ],
+      "reason": "Issue #1 provider-neutral CI hardening for SpecBridge Unique IA: create unique-ai-ci.yml as the stable deterministic CI check; align foundation-validation.yml to the provider-neutral validation entrypoint; delete inherited active Claude and Codex review workflows that are incompatible with the Unique IA single-provider architecture.",
+      "authorized_by": "repository owner through explicit operator chat instruction on 2026-07-20",
+      "granted_at": "2026-07-20",
+      "expires_at": "2026-07-27"
     }
   ]
 }
