@@ -29,8 +29,8 @@
 ### scripts/test.ps1
 
 ```
-Results: 126 passed, 0 failed
-  [PASS] test-ci.ps1 (62 passed, 0 failed)
+Results: 128 passed, 0 failed
+  [PASS] test-ci.ps1 (64 passed, 0 failed)
   [PASS] test-doctor.ps1 (10 passed, 0 failed)
   [PASS] test-lifecycle.ps1 (8 passed, 0 failed)
   [PASS] test-negative.ps1 (23 passed, 0 failed)
@@ -88,6 +88,8 @@ Not run locally in this session. ChatGPT audit is a Codex-owned artifact. Valida
 ## Codex Audit Correction
 
 Codex found that Claude's first pass documented the security gate as required but did not execute it in `unique-ai-ci.yml` or `foundation-validation.yml`. Codex added the existing `validate-security-gates.ps1` to both workflows and added deterministic assertions for both. No security validator was weakened. The corrected suite passed 126 checks and the security gate passed.
+
+GitHub's first PR run then exposed a deletion-handling bug in `validate-review-gate.ps1`: it attempted to read deleted workflow paths and failed before evaluating policy. Codex updated the gate to record authorized workflow deletions without reading nonexistent files, removed the obsolete provider-secret exception, and added regression tests. The corrected suite passed 128 checks and the review gate passed locally against the PR range.
 
 ## Policy Result
 

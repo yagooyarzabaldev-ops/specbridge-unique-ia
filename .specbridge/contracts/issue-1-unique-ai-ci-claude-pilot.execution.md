@@ -64,6 +64,7 @@ High. The task changes CI workflows and branch protection on a public repository
 docs/unique-ai/ci-and-claude-pilot.md
 docs/specbridge-ci-authority-standard.md
 scripts/validate-standard-ci-authority.ps1
+scripts/validate-review-gate.ps1
 tests/unique-ai/test-ci.ps1
 branch codex/unique-ai-ci-pilot
 pull request to main
@@ -103,12 +104,13 @@ autonomous changes beyond issue 1
 5. Workflow authorization policy contains a current, bounded human authorization for exactly the listed workflow changes.
 6. The CI authority validator and documentation require the provider-neutral Unique IA workflow and no longer require a Claude-specific workflow.
 7. Deterministic tests reject active workflow dependencies on Claude, Codex, Anthropic/OpenAI actions, or provider API-key secrets.
-8. Codex audits Claude's diff and records any corrections.
-9. A pull request is opened; GitHub checks pass.
-10. The PR is merged only after CI and review gates pass under this explicit user authorization.
-11. `main` protection requires the stable `unique-ai-ci` status check, enforces admins, strict checks, and blocks force pushes and deletions.
-12. Remote `main`, PR state, issue state, and protection are verified live.
-13. No secret, dependency, production, deployment, billing, auth, database, or force-push action occurs.
+8. The deterministic review gate handles deleted workflow files without trying to read nonexistent paths, while continuing to inspect every changed workflow that exists.
+9. Codex audits Claude's diff and records any corrections.
+10. A pull request is opened; GitHub checks pass.
+11. The PR is merged only after CI and review gates pass under this explicit user authorization.
+12. `main` protection requires the stable `unique-ai-ci` status check, enforces admins, strict checks, and blocks force pushes and deletions.
+13. Remote `main`, PR state, issue state, and protection are verified live.
+14. No secret, dependency, production, deployment, billing, auth, database, or force-push action occurs.
 
 ## Required Validations
 

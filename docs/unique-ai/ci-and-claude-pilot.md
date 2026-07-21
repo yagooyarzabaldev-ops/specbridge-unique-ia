@@ -129,6 +129,6 @@ To revert this change:
 | CI authority documentation updated | Completed |
 | test-ci.ps1 deterministic tests | Completed |
 | Branch protection update (main) | Pending — human operator action after merge |
-| Codex audit of Claude diff | Completed — security gate added to both deterministic workflows |
+| Codex audit of Claude diff | Completed — security gate restored and deleted-workflow review handling fixed |
 | PR open and checks passing | Pending — push and CI execution required |
 | Issue #1 closure | Pending — requires verified merge |

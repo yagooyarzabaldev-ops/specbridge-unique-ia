@@ -127,6 +127,17 @@ if ($validatorExists) {
     )
 }
 
+$reviewGatePath = Join-Path $RepoRoot 'scripts\validate-review-gate.ps1'
+$reviewGateContent = Get-Content -LiteralPath $reviewGatePath -Raw -Encoding UTF8
+Assert-Condition 'review gate handles deleted workflow paths' (
+    $reviewGateContent -match 'Workflow deletion detected' -and
+    $reviewGateContent -match 'Test-Path -LiteralPath'
+)
+Assert-Condition 'review gate has no approved provider secret exception' (
+    $reviewGateContent -notmatch 'ANTHROPIC_API_KEY' -and
+    $reviewGateContent -notmatch 'OPENAI_API_KEY'
+)
+
 # --- 5. Workflow authorization covers changed paths and is current ---
 
 $registryPath = Join-Path $RepoRoot '.specbridge\policies\workflow-change-authorizations.json'

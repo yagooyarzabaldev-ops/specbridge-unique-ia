@@ -19,6 +19,7 @@
     "docs/unique-ai/ci-and-claude-pilot.md",
     "docs/specbridge-ci-authority-standard.md",
     "scripts/validate-standard-ci-authority.ps1",
+    "scripts/validate-review-gate.ps1",
     "tests/unique-ai/test-ci.ps1"
   ],
   "read_only": [
