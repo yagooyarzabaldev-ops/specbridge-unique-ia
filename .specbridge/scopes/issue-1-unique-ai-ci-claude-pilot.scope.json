@@ -1,0 +1,38 @@
+{
+  "contract_id": "issue-1-unique-ai-ci-claude-pilot",
+  "run_id": "sb-20260720-001c1a1d",
+  "status": "active",
+  "exclusive_write": [
+    ".github/workflows/unique-ai-ci.yml",
+    ".github/workflows/claude-review-non-blocking.yml",
+    ".github/workflows/codex-review.example.yml",
+    ".github/workflows/claude-code-review.example.yml",
+    ".github/workflows/claude-code-execute.example.yml",
+    ".specbridge/policies/workflow-change-authorizations.json",
+    ".specbridge/contracts/issue-1-unique-ai-ci-claude-pilot.execution.md",
+    ".specbridge/scopes/issue-1-unique-ai-ci-claude-pilot.scope.json",
+    ".specbridge/runtime-evidence/issue-1-unique-ai-ci-claude-pilot.md",
+    ".specbridge/reports/issue-1-unique-ai-ci-claude-pilot.final-report.json",
+    ".specbridge/audit-packets/issue-1-unique-ai-ci-claude-pilot.audit-packet.json",
+    ".specbridge/audits/issue-1-unique-ai-ci-claude-pilot.chatgpt-audit.json",
+    "docs/unique-ai/ci-and-claude-pilot.md"
+  ],
+  "read_only": [
+    "README.md",
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    ".github/workflows/foundation-validation.yml",
+    ".github/workflows/specbridge-review-gate.yml",
+    "scripts/test.ps1",
+    "scripts/validate-contracts.ps1",
+    "scripts/validate-contract-scopes.ps1",
+    "scripts/validate-final-reports.ps1",
+    "scripts/validate-audit-packets.ps1",
+    "scripts/validate-chatgpt-audits.ps1",
+    "scripts/validate-standard-ci-authority.ps1"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/issue-1-unique-ai-ci-claude-pilot.final-report.json"
+}
