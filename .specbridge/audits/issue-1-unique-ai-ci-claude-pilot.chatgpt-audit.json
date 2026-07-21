@@ -16,12 +16,11 @@
     {"name": "final_report_honesty", "result": "pass", "evidence": "The report distinguishes ready-for-merge state from pending merge, branch protection, issue closure, and deployment.", "blocking": false}
   ],
   "findings": [
-    {"severity": "info", "category": "post_merge_protection", "file": ".specbridge/reports/issue-1-unique-ai-ci-claude-pilot.final-report.json", "line": null, "evidence": "Main protection cannot require the new check until it has been observed and merged.", "recommendation": "After merge, require unique-ai-ci with strict checks, admin enforcement, force-push disabled, and deletion disabled.", "blocking": false}
+    {"severity": "info", "category": "post_merge_protection", "file": ".specbridge/reports/issue-1-unique-ai-ci-claude-pilot.final-report.json", "line": null, "evidence": "Main protection was applied after merge with strict unique-ai-ci, admin enforcement, conversation resolution, force-push disabled, and deletion disabled.", "recommendation": "Keep the required check stable and renew workflow authorization before any future CI change.", "blocking": false}
   ],
   "outcome": "approved",
   "merge_allowed": true,
   "unresolved_risks": [
-    "Branch protection and issue closure remain required post-merge steps.",
     "No production deployment is authorized."
   ],
   "source_files": [

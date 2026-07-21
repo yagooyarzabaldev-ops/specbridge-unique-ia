@@ -121,4 +121,4 @@ remove the wf-auth-20260720-unique-ai-ci-pilot authorization entry.
 
 ## Status
 
-COMPLETE (implementation plus Codex local audit). Pending: PR, GitHub CI, merge, branch protection update, issue closure.
+COMPLETE. PR #2 passed all four checks and merged as `0d6e47fdc35ab9f1ee57dd63f443f7112f965fcb`; issue #1 is closed; main protection requires strict `unique-ai-ci`, enforces admins and conversation resolution, and blocks force pushes and deletions.

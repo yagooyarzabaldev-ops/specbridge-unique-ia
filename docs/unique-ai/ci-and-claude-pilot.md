@@ -128,7 +128,7 @@ To revert this change:
 | CI authority validator updated | Completed |
 | CI authority documentation updated | Completed |
 | test-ci.ps1 deterministic tests | Completed |
-| Branch protection update (main) | Pending — human operator action after merge |
+| Branch protection update (main) | Completed — strict unique-ai-ci, admins enforced, force-push and deletion blocked |
 | Codex audit of Claude diff | Completed — security gate restored and deleted-workflow review handling fixed |
-| PR open and checks passing | Pending — push and CI execution required |
-| Issue #1 closure | Pending — requires verified merge |
+| PR open and checks passing | Completed — PR #2 merged as 0d6e47f |
+| Issue #1 closure | Completed |
