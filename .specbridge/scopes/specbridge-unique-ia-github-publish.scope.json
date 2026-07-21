@@ -1,0 +1,25 @@
+{
+  "contract_id": "specbridge-unique-ia-github-publish",
+  "run_id": "sb-20260720-270b1c2d",
+  "status": "active",
+  "exclusive_write": [
+    ".specbridge/contracts/specbridge-unique-ia-github-publish.execution.md",
+    ".specbridge/scopes/specbridge-unique-ia-github-publish.scope.json",
+    ".specbridge/reports/specbridge-unique-ia-github-publish.final-report.json",
+    ".specbridge/audit-packets/specbridge-unique-ia-github-publish.audit-packet.json",
+    ".specbridge/audits/specbridge-unique-ia-github-publish.chatgpt-audit.json"
+  ],
+  "read_only": [
+    "SPECBRIDGE.md",
+    "AGENTS.md",
+    ".specbridge/policy.yaml",
+    ".unique-ai/evidence/claude-build-report.md",
+    "docs/unique-ai/milestones.md",
+    "scripts/test.ps1",
+    "scripts/validate-contracts.ps1",
+    "scripts/validate-contract-scopes.ps1"
+  ],
+  "coordinator_owned": [],
+  "dependencies": [],
+  "final_report": ".specbridge/reports/specbridge-unique-ia-github-publish.final-report.json"
+}
